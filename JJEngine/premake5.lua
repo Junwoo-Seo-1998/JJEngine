@@ -3,8 +3,17 @@ workspace "JJEngine"
     configurations  { "Debug", "Release" }    
     startproject "Game"
 
-IncludeDir={}
+include "Libs/glfw"
+include "Libs/glad"
+include "Libs/imgui"
 
+IncludeDir={}
+IncludeDir["GLFW"]="Libs/glfw/glfw/include/"
+IncludeDir["GLAD"]="Libs/glad/"
+IncludeDir["GLM"]="Libs/glm/"
+IncludeDir["ENTT"]="Libs/entt/"
+IncludeDir["IMGUI"]="Libs/imgui/"
+IncludeDir["STB_IMAGE"]="Libs/stb_image/"
 
 
 project "JJEngine"
@@ -16,13 +25,22 @@ project "JJEngine"
     objdir "bin/%{cfg.buildcfg}-obj"
     architecture "x86_64"
     links {
-
+        "GLFW",
+        "GLAD",
+        "opengl32.lib",
+        "ImGui"
     }
 
     disablewarnings {}
     linkoptions {}
     includedirs
     {
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.GLAD}",
+        "%{IncludeDir.GLM}",
+        "%{IncludeDir.ENTT}",
+        "%{IncludeDir.IMGUI}",
+        "%{IncludeDir.STB_IMAGE}"
     }
     files {
         "JJEngine/**.h",
