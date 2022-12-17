@@ -55,13 +55,14 @@ project "Game"
     objdir "bin/%{cfg.buildcfg}-obj"
     architecture "x86_64"
     links {
-    
+        "JJEngine",
     }
     
     disablewarnings {}
     linkoptions {}
     includedirs
     {
+        "JJEngine"
     }
     files {
         "Game/**.h",
