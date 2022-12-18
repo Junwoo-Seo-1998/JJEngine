@@ -9,6 +9,8 @@ End Header-------------------------------------------------------- */
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include "Input/Input.h"
+
 Window::Window()
 {
 	if (!glfwInit())
@@ -46,6 +48,31 @@ Window::Window()
 		glfwTerminate();
 		return;
 	}
+	//glfwSetWindowUserPointer(window, &m_WindowData);
+	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
+		{
+			//WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			switch (action)
+			{
+				case GLFW_PRESS:
+				{
+					Input::instance()->SetKey(static_cast<KeyCode>(key), true, false);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					Input::instance()->SetKey(static_cast<KeyCode>(key), false, false);
+					break;
+				}
+				case GLFW_REPEAT:
+				{
+					Input::instance()->SetKey(static_cast<KeyCode>(key), true, true);
+					break;
+				}
+			}
+		});
+
 
 	//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 }
@@ -55,12 +82,14 @@ Window::~Window()
 	glfwTerminate();
 }
 
-void Window::update()
+void Window::update(std::function<void()> updateCallback)
 {
 	glfwGetWindowSize(window, &windowWidth, &windowHeight);
 	glViewport(0, 0, windowWidth, windowHeight);
-	glfwSwapBuffers(window);
+	Input::instance()->Reset();
 	glfwPollEvents();
+	updateCallback();
+	glfwSwapBuffers(window);
 }
 
 bool Window::shouldClose()

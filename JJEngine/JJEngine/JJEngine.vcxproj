@@ -21,13 +21,13 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Win64|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -93,13 +93,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Engine.h" />
-    <ClInclude Include="Core\test.h" />
+    <ClInclude Include="Core\Input\Input.h" />
+    <ClInclude Include="Core\Input\InputKeyCodes.h" />
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Engine.cpp" />
-    <ClCompile Include="Core\test.cpp" />
+    <ClCompile Include="Core\Input\Input.cpp" />
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Core\test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libs\glfw\GLFW.vcxproj">

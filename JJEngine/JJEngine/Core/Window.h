@@ -5,6 +5,7 @@ Platform: x64
 Date: 12/16/2022
 End Header-------------------------------------------------------- */
 #pragma once
+#include <functional>
 struct GLFWwindow;
 class Window
 {
@@ -13,7 +14,7 @@ class Window
 public:
 	Window();
 	~Window();
-	void update();
+	void update(std::function<void()> updateCallback);
 	bool shouldClose();
 
 };

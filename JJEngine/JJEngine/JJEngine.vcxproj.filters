@@ -13,6 +13,8 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\Input\Input.h" />
+    <ClInclude Include="Core\Input\InputKeyCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\test.cpp">
@@ -20,5 +22,6 @@
     </ClCompile>
     <ClCompile Include="Core\Engine.cpp" />
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Core\Input\Input.cpp" />
   </ItemGroup>
 </Project>

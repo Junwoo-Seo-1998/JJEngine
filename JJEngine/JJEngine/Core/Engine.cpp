@@ -7,9 +7,14 @@ End Header-------------------------------------------------------- */
 
 #include "Engine.h"
 #include "Window.h"
+#include "Input/Input.h"
+
 namespace statics
 {
-	std::shared_ptr<JJEngine> instance = nullptr;
+	std::shared_ptr<JJEngine> createInstance() {
+		return std::shared_ptr<JJEngine>(new JJEngine{});
+	}
+	std::shared_ptr<JJEngine> instance = createInstance();
 }
 JJEngine::JJEngine()
 {
@@ -23,7 +28,6 @@ JJEngine::~JJEngine()
 
 std::shared_ptr<JJEngine> JJEngine::instance()
 {
-	if (statics::instance == nullptr) statics::instance = std::make_shared<JJEngine>(*(new JJEngine{}));
 	return statics::instance;
 }
 
@@ -37,7 +41,13 @@ void JJEngine::update()
 			engineLoop = false;
 		}
 
-		window->update();
+		window->update([&]()
+		{
+			if(Input::IsKeyPressed(KeyCode::A))
+			{
+				std::cout << "test" << std::endl;
+			}
+		});
 
 	} while (engineLoop);
 }
