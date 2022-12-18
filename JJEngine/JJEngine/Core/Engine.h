@@ -13,16 +13,24 @@ namespace statics
 }
 
 class Window;
+class SceneManager;
 class JJEngine
 {
 	friend std::shared_ptr<JJEngine> statics::createInstance();
 	JJEngine();
 
+	SceneManager* sceneManager{};
 	Window* window{};
 
 public:
 	~JJEngine();
 	static std::shared_ptr<JJEngine> instance();
-	void update();
+	static void update();
+
+	static SceneManager* GetSceneManager();
+	static Window* GetWindow();
 };
 
+namespace JJ {
+	
+}

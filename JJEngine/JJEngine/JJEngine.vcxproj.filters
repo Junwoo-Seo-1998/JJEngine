@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Core">
-      <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
+    <Filter Include="Input">
+      <UniqueIdentifier>{953A660D-014F-8EBE-CAD0-311E36A48AEF}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\Engine.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="Core\Engine.h" />
+    <ClInclude Include="Core\Input\Input.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="Core\test.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="Core\Input\InputKeyCodes.h">
+      <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Scene.h" />
+    <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Input\Input.h" />
-    <ClInclude Include="Core\Input\InputKeyCodes.h" />
+    <ClInclude Include="Core\test.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\test.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Engine.cpp" />
+    <ClCompile Include="Core\Input\Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\Input\Input.cpp" />
+    <ClCompile Include="Core\test.cpp" />
   </ItemGroup>
 </Project>

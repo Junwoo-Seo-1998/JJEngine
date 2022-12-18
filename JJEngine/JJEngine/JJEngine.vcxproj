@@ -95,12 +95,15 @@
     <ClInclude Include="Core\Engine.h" />
     <ClInclude Include="Core\Input\Input.h" />
     <ClInclude Include="Core\Input\InputKeyCodes.h" />
+    <ClInclude Include="Core\Scene.h" />
+    <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Engine.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
+    <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
   </ItemGroup>
