@@ -7,15 +7,25 @@ End Header-------------------------------------------------------- */
 #pragma once
 #include <memory>
 class Window;
+class SceneManager;
 class JJEngine
 {
 	JJEngine();
 
+	SceneManager* sceneManager{};
 	Window* window{};
 
 public:
 	~JJEngine();
 	static std::shared_ptr<JJEngine> instance();
-	void update();
+	static void EngineOn();
+	static void update();
+	static void EngineOff();
+
+	static SceneManager* GetSceneManager();
+	static Window* GetWindow();
 };
 
+namespace JJ {
+	
+}

@@ -93,11 +93,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Engine.h" />
+    <ClInclude Include="Core\Scene.h" />
+    <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="Core\test.h" />
     <ClInclude Include="Core\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Engine.cpp" />
+    <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Core\test.cpp" />
     <ClCompile Include="Core\Window.cpp" />
   </ItemGroup>

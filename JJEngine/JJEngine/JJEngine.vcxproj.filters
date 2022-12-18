@@ -13,6 +13,8 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\SceneManager.h" />
+    <ClInclude Include="Core\Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\test.cpp">
@@ -20,5 +22,6 @@
     </ClCompile>
     <ClCompile Include="Core\Engine.cpp" />
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Core\SceneManager.cpp" />
   </ItemGroup>
 </Project>
