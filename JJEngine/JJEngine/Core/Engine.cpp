@@ -9,7 +9,7 @@ End Header-------------------------------------------------------- */
 #include "Window.h"
 #include "Input/Input.h"
 #include "SceneManager.h"
-
+#include "Script/ScriptEngine.h"
 namespace statics
 {
 	std::shared_ptr<JJEngine> createInstance() {
@@ -34,6 +34,11 @@ std::shared_ptr<JJEngine> JJEngine::instance()
 	return statics::instance;
 }
 
+void JJEngine::init()
+{
+	ScriptEngine::Init();
+}
+
 void JJEngine::update()
 {
 	bool engineLoop{ true };
@@ -56,6 +61,11 @@ void JJEngine::update()
 		lastTick = now;
 
 	} while (engineLoop);
+}
+
+void JJEngine::shutdown()
+{
+	ScriptEngine::Shutdown();
 }
 
 SceneManager* JJEngine::GetSceneManager()

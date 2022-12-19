@@ -4,6 +4,9 @@
     <Filter Include="Input">
       <UniqueIdentifier>{953A660D-014F-8EBE-CAD0-311E36A48AEF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{9AFBBAD0-869D-E5A6-6F58-F9FA5B996CF7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Engine.h" />
@@ -15,6 +18,9 @@
     </ClInclude>
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
+    <ClInclude Include="Core\Script\ScriptEngine.h">
+      <Filter>Script</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\test.h" />
   </ItemGroup>
@@ -24,6 +30,9 @@
       <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="Core\SceneManager.cpp" />
+    <ClCompile Include="Core\Script\ScriptEngine.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
   </ItemGroup>

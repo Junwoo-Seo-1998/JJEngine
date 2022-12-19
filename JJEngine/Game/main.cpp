@@ -4,6 +4,7 @@
 #include "TestScene.h"
 int main(void)
 {
+	JJEngine::init();
 	TestScene test1{" test 1 "};
 	TestScene test2{" test 2 "};
 
@@ -11,6 +12,7 @@ int main(void)
 	JJEngine::GetSceneManager()->enrollScene(1, test2);
 	JJEngine::GetSceneManager()->setNextScene(1);
 	JJEngine::update();
+	JJEngine::shutdown();
 	hello();
 	return 0;
 }

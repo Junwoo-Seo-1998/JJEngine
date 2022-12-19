@@ -25,8 +25,9 @@ class JJEngine
 public:
 	~JJEngine();
 	static std::shared_ptr<JJEngine> instance();
+	static void init();
 	static void update();
-
+	static void shutdown();
 	static SceneManager* GetSceneManager();
 	static Window* GetWindow();
 };
