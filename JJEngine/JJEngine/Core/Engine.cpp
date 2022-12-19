@@ -36,7 +36,7 @@ std::shared_ptr<JJEngine> JJEngine::instance()
 
 void JJEngine::init()
 {
-	ScriptEngine::Init();
+	ScriptEngine::instance()->Init();
 }
 
 void JJEngine::update()
@@ -65,7 +65,7 @@ void JJEngine::update()
 
 void JJEngine::shutdown()
 {
-	ScriptEngine::Shutdown();
+	ScriptEngine::instance()->Shutdown();
 }
 
 SceneManager* JJEngine::GetSceneManager()

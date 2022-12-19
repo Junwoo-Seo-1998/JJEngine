@@ -3,10 +3,11 @@ workspace "JJEngine"
     configurations  { "Debug", "Release" }    
     startproject "Game"
 
+group "Libs"
 include "Libs/glfw"
 include "Libs/glad"
 include "Libs/imgui"
-
+group ""
 --inc
 IncludeDir={}
 IncludeDir["GLFW"]="Libs/glfw/glfw/include/"
@@ -30,6 +31,7 @@ Library["WinMM"] = "Winmm.lib"
 Library["WinVersion"] = "Version.lib"
 Library["BCrypt"] = "Bcrypt.lib"
 
+group "JJEngine"
 project "JJEngine"
     location "JJEngine"
     kind "StaticLib"
@@ -102,8 +104,36 @@ project "JJEngine"
         {
             "%{Library.Mono_Release}",
         }
+group ""
 
+group "JJEngine"
+project "JJEngine-ScriptCore"
+    kind "SharedLib"
+    language "C#"
+    dotnetframework "4.8"
+    location "JJEngine-ScriptCore"
+    targetdir ("RuntimeDependencies/Resources/Scripts")
+    --objdir ("..Intermediates")
 
+    files 
+    {
+        "**.cs",
+    }
+
+    filter "configurations:Debug"
+        optimize "Off"
+        symbols "Default"
+
+    filter "configurations:Release"
+        optimize "On"
+        symbols "Default"
+
+    filter "configurations:Dist"
+        optimize "Full"
+        symbols "Off"
+    
+
+group "JJGame"
 project "Game"
     location "Game"
     kind "ConsoleApp"
@@ -144,3 +174,4 @@ project "Game"
     filter "configurations:Release"
         defines { "NDEBUG" }
         optimize "On"
+group ""
