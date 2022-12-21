@@ -23,6 +23,7 @@
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\test.h" />
+    <ClInclude Include="Core\Graphics\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Engine.cpp" />
@@ -35,5 +36,6 @@
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
+    <ClCompile Include="Core\Graphics\Shader.cpp" />
   </ItemGroup>
 </Project>
