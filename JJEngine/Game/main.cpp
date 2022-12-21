@@ -8,7 +8,7 @@ int main(void)
 	JJEngine::init();
 	TestScene test1{" test 1 "};
 	TestScene test2{" test 2 "};
-	auto shader = Shader::CreateShaderFromString({ 
+	auto shader = Shader::CreateShaderFromFile({ 
 		{ ShaderType::VertexShader,{"common.glsl","vertex.vert"}},
 		{ ShaderType::FragmentShader,{"vertex.frag"} }
 	});
