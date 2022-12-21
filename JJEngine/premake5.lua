@@ -51,6 +51,7 @@ project "JJEngine"
     linkoptions {}
     includedirs
     {
+        "JJEngine",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.GLAD}",
         "%{IncludeDir.GLM}",
@@ -150,7 +151,8 @@ project "Game"
     linkoptions {}
     includedirs
     {
-        "JJEngine"
+        "JJEngine",
+        "%{IncludeDir.GLM}",
     }
     files {
         "Game/**.h",
