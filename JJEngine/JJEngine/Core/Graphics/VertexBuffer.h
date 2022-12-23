@@ -35,6 +35,7 @@ public:
 
 	unsigned int GetStride() const { return m_Stride; }
 
+	[[nodiscard]] int GetSize() const { return static_cast<int>(m_DescribedData.size()); }
 	[[nodiscard]]std::vector<DataAndLayoutLocation>::iterator begin() { return m_DescribedData.begin(); }
 	[[nodiscard]]std::vector<DataAndLayoutLocation>::iterator end() { return m_DescribedData.end(); }
 	[[nodiscard]]std::vector<DataAndLayoutLocation>::const_iterator begin() const { return m_DescribedData.cbegin(); }

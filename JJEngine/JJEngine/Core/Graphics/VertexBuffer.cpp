@@ -5,6 +5,9 @@ Platform: x64
 Date: 12/20/2022
 End Header-------------------------------------------------------- */
 #include "VertexBuffer.h"
+
+#include <cassert>
+
 #include "glad.h"
 
 DataAndLayoutLocation::DataAndLayoutLocation(unsigned layout_location, DataType data, bool normalize)
@@ -119,6 +122,7 @@ void VertexBuffer::Bind() const
 
 void VertexBuffer::BindToVertexArray() const
 {
+	assert(("There should be at least one data type", m_DescribedData.GetSize() > 0));
 	Bind();
 	for (const auto& description : m_DescribedData)
 	{
