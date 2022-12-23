@@ -101,6 +101,7 @@
     <ClInclude Include="Core\Graphics\Shader.h" />
     <ClInclude Include="Core\Graphics\Texture.h" />
     <ClInclude Include="Core\Graphics\VertexArray.h" />
+    <ClInclude Include="Core\Graphics\VertexBuffer.h" />
     <ClInclude Include="Core\Input\Input.h" />
     <ClInclude Include="Core\Input\InputKeyCodes.h" />
     <ClInclude Include="Core\Scene.h" />
@@ -116,6 +117,7 @@
     <ClCompile Include="Core\Graphics\Shader.cpp" />
     <ClCompile Include="Core\Graphics\Texture.cpp" />
     <ClCompile Include="Core\Graphics\VertexArray.cpp" />
+    <ClCompile Include="Core\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp" />
