@@ -3,6 +3,7 @@
 #include "Core/SceneManager.h"
 #include "Core/Graphics/Shader.h"
 #include "TestScene.h"
+#include "Core/ComponentManager.h"
 int main(void)
 {
 	JJEngine::init();

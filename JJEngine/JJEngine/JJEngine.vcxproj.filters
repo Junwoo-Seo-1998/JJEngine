@@ -16,11 +16,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Camera.h" />
+    <ClInclude Include="Core\ComponentManager.h" />
     <ClInclude Include="Core\Engine.h" />
     <ClInclude Include="Core\Graphics\Shader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\Texture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\VertexArray.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Core\Input\Input.h">
@@ -39,15 +43,18 @@
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\test.h" />
-    <ClInclude Include="Core\Graphics\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Camera.cpp" />
+    <ClCompile Include="Core\ComponentManager.cpp" />
     <ClCompile Include="Core\Engine.cpp" />
     <ClCompile Include="Core\Graphics\Shader.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Texture.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\VertexArray.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Input\Input.cpp">
@@ -65,6 +72,5 @@
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
-    <ClCompile Include="Core\Graphics\VertexArray.cpp" />
   </ItemGroup>
 </Project>
