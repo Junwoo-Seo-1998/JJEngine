@@ -4,7 +4,9 @@
 #include <iostream>
 
 #include "glad.h"
+#include "Core/Graphics/Shader.h"
 #include "Core/Graphics/VertexArray.h"
+#include "Core/Graphics/VertexBuffer.h"
 
 class TestScene: public Scene
 {
@@ -27,13 +29,34 @@ public:
 		 0.5f, -0.5f, 0.0f,
 		 0.0f,  0.5f, 0.0f
 		};
+		float colors[] = {
+			// colors
+			1.0f, 0.0f, 0.0f,   // bottom right
+			0.0f, 1.0f, 0.0f,   // bottom left
+			0.0f, 0.0f, 1.0f    // top 
+		};
+		float verticesWithColor[] = {
+			// positions         // colors
+			 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+			-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
+			 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
+		};
+		
 		auto vertex_array = VertexArray::CreateVertexArray();
 		vertex_array->Bind();
 		auto vertex_buffer = VertexBuffer::CreateVertexBuffer(1024);
 		vertex_buffer->SetData(sizeof(vertices), vertices);
 		vertex_buffer->Bind();
+		
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
+
+		auto vertex_color_buffer = VertexBuffer::CreateVertexBuffer(1024);
+		vertex_color_buffer->SetData(sizeof(colors), colors);
+		vertex_color_buffer->Bind();
+
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
