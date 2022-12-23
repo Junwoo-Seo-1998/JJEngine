@@ -145,6 +145,8 @@ project "Game"
     architecture "x86_64"
     links {
         "JJEngine",
+        "GLAD",
+        "opengl32.lib",
     }
     
     disablewarnings {}
@@ -153,6 +155,8 @@ project "Game"
     {
         "JJEngine",
         "%{IncludeDir.GLM}",
+        "%{IncludeDir.GLAD}",
+        "%{IncludeDir.IMGUI}",
     }
     files {
         "Game/**.h",

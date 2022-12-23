@@ -20,6 +20,8 @@ Window::Window()
 
 		return;
 	}
+	/*
+	 *no need for glad
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -29,6 +31,7 @@ Window::Window()
 	glfwWindowHint(GLFW_BLUE_BITS, 8);
 	glfwWindowHint(GLFW_ALPHA_BITS, 8);
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+	*/
 
 	window = glfwCreateWindow(windowWidth, windowHeight, "JJEngine",
 		nullptr, // which monitor (if full-screen mode)
@@ -39,7 +42,7 @@ Window::Window()
 		return;
 	}
 	glfwMakeContextCurrent(window);
-	glfwSwapInterval(1);
+	//glfwSwapInterval(1);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	int err = gladLoadGL();

@@ -27,6 +27,9 @@
     <ClInclude Include="Core\Graphics\VertexArray.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Graphics\VertexBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Input\Input.h">
       <Filter>Input</Filter>
     </ClInclude>
@@ -55,6 +58,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\VertexArray.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\VertexBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Input\Input.cpp">

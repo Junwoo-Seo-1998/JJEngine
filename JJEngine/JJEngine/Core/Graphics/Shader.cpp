@@ -94,7 +94,7 @@ Shader::Shader(const ShaderSource& shaderSrc, bool is_file)
 			{
 				loaded_strings.push_back(File::ReadFileToString(filePath));
 			}
-			shader = CompileShader(type, src);
+			shader = CompileShader(type, loaded_strings);
 		}
 		else
 		{
