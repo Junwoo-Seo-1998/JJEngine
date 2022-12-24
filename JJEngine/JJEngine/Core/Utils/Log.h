@@ -9,7 +9,7 @@ public:
 	template <typename... Args>
 	static void Trace(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_EngineLogger->trace(fmt, args);
+		s_EngineLogger->trace(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Trace(const T& msg)
@@ -20,7 +20,7 @@ public:
 	template <typename... Args>
 	static void Info(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_EngineLogger->info(fmt, args);
+		s_EngineLogger->info(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Info(const T& msg)
@@ -31,7 +31,7 @@ public:
 	template <typename... Args>
 	static void Warn(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_EngineLogger->warn(fmt, args);
+		s_EngineLogger->warn(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Warn(const T& msg)
@@ -42,7 +42,7 @@ public:
 	template <typename... Args>
 	static void Error(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_EngineLogger->error(fmt, args);
+		s_EngineLogger->error(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Error(const T& msg)
@@ -53,7 +53,7 @@ public:
 	template <typename... Args>
 	static void Critical(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_EngineLogger->critical(fmt, args);
+		s_EngineLogger->critical(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Critical(const T& msg)
@@ -64,7 +64,7 @@ public:
 	template <typename... Args>
 	static void Debug(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_EngineLogger->debug(fmt, args);
+		s_EngineLogger->debug(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Debug(const T& msg)
@@ -82,7 +82,7 @@ public:
 	template <typename... Args>
 	static void Trace(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_ClientLogger->trace(fmt, args);
+		s_ClientLogger->trace(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Trace(const T& msg)
@@ -93,7 +93,7 @@ public:
 	template <typename... Args>
 	static void Info(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_ClientLogger->info(fmt, args);
+		s_ClientLogger->info(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Info(const T& msg)
@@ -104,7 +104,7 @@ public:
 	template <typename... Args>
 	static void Warn(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_ClientLogger->warn(fmt, args);
+		s_ClientLogger->warn(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Warn(const T& msg)
@@ -115,7 +115,7 @@ public:
 	template <typename... Args>
 	static void Error(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_ClientLogger->error(fmt, args);
+		s_ClientLogger->error(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Error(const T& msg)
@@ -126,7 +126,7 @@ public:
 	template <typename... Args>
 	static void Critical(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_ClientLogger->critical(fmt, args);
+		s_ClientLogger->critical(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Critical(const T& msg)
@@ -137,7 +137,7 @@ public:
 	template <typename... Args>
 	static void Debug(spdlog::format_string_t<Args...> fmt, Args &&... args)
 	{
-		s_ClientLogger->debug(fmt, args);
+		s_ClientLogger->debug(fmt, std::forward<Args>(args)...);
 	}
 	template<typename T>
 	static void Debug(const T& msg)

@@ -15,7 +15,13 @@ int main(void)
 	JJEngine::GetSceneManager()->enrollScene(0, test1);
 	JJEngine::GetSceneManager()->enrollScene(1, test2);
 	JJEngine::GetSceneManager()->setNextScene(1);
-	Log::Info("hello! from game");
+	Log::Warn("Warn");
+	Log::Info("Info");
+	Log::Trace("Trace");
+	Log::Critical("Critical");
+	Log::Debug("Debug");
+	Log::Error("Error");
+	Log::Error("Some error message.. with format {} ,{}", 1, 3.23);
 	JJEngine::update();
 	JJEngine::shutdown();
 	hello();
