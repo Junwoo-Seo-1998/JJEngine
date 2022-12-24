@@ -71,6 +71,9 @@
     <ClCompile Include="Core\Utils\File.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Utils\IMGUI_IMPL.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Utils\STB_IMPL.cpp">
       <Filter>Utils</Filter>
     </ClCompile>

@@ -156,6 +156,7 @@ project "Game"
         "JJEngine",
         "%{IncludeDir.GLM}",
         "%{IncludeDir.GLAD}",
+        "%{IncludeDir.ENTT}",
         "%{IncludeDir.IMGUI}",
     }
     files {

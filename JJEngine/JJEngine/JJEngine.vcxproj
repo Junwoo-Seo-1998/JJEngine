@@ -122,6 +122,7 @@
     <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp" />
     <ClCompile Include="Core\Utils\File.cpp" />
+    <ClCompile Include="Core\Utils\IMGUI_IMPL.cpp" />
     <ClCompile Include="Core\Utils\STB_IMPL.cpp" />
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
