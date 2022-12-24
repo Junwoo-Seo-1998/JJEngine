@@ -35,10 +35,11 @@ public:
 
 	unsigned int GetStride() const { return m_Stride; }
 
-	std::vector<DataAndLayoutLocation>::iterator begin() { return m_DescribedData.begin(); }
-	std::vector<DataAndLayoutLocation>::iterator end() { return m_DescribedData.end(); }
-	std::vector<DataAndLayoutLocation>::const_iterator begin() const { return m_DescribedData.cbegin(); }
-	std::vector<DataAndLayoutLocation>::const_iterator end() const { return m_DescribedData.cend(); }
+	[[nodiscard]] int GetSize() const { return static_cast<int>(m_DescribedData.size()); }
+	[[nodiscard]]std::vector<DataAndLayoutLocation>::iterator begin() { return m_DescribedData.begin(); }
+	[[nodiscard]]std::vector<DataAndLayoutLocation>::iterator end() { return m_DescribedData.end(); }
+	[[nodiscard]]std::vector<DataAndLayoutLocation>::const_iterator begin() const { return m_DescribedData.cbegin(); }
+	[[nodiscard]]std::vector<DataAndLayoutLocation>::const_iterator end() const { return m_DescribedData.cend(); }
 private:
 	std::vector<DataAndLayoutLocation> m_DescribedData;
 	unsigned int m_Stride;
@@ -51,11 +52,14 @@ public:
 	~VertexBuffer();
 	static std::shared_ptr<VertexBuffer> CreateVertexBuffer(int byte_size);
 	void Bind() const;
+	void BindToVertexArray() const;
 	void UnBind() const;
 	void SetData(int size, const void* data, unsigned offset=0);
+	void SetDataTypes(const DescribedData& data);
 private:
 	
 	VertexBuffer(int byte_size);
 	void CreateBuffer(int size, const void* data);
 	unsigned m_Buffer;
+	DescribedData m_DescribedData;
 };

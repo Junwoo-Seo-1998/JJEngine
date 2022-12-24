@@ -44,20 +44,15 @@ public:
 		
 		auto vertex_array = VertexArray::CreateVertexArray();
 		vertex_array->Bind();
-		auto vertex_buffer = VertexBuffer::CreateVertexBuffer(1024);
+		auto vertex_buffer = VertexBuffer::CreateVertexBuffer(sizeof(vertices));
 		vertex_buffer->SetData(sizeof(vertices), vertices);
-		vertex_buffer->Bind();
-		
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
+		vertex_buffer->SetDataTypes({ {0, DataType::Float3} });
+		vertex_buffer->BindToVertexArray();
 
-		auto vertex_color_buffer = VertexBuffer::CreateVertexBuffer(1024);
+		auto vertex_color_buffer = VertexBuffer::CreateVertexBuffer(sizeof(colors));
 		vertex_color_buffer->SetData(sizeof(colors), colors);
-		vertex_color_buffer->Bind();
-
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
-
+		vertex_color_buffer->SetDataTypes({ {1,DataType::Float3} });
+		vertex_color_buffer->BindToVertexArray();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
 	void Draw() override {}
