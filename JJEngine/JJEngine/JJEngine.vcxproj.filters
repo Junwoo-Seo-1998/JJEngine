@@ -43,6 +43,9 @@
     <ClInclude Include="Core\Utils\File.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Utils\Log.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\test.h" />
   </ItemGroup>
@@ -72,6 +75,9 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Utils\IMGUI_IMPL.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utils\Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Utils\STB_IMPL.cpp">
