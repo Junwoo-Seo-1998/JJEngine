@@ -6,8 +6,8 @@ Date: 12/20/2022
 End Header-------------------------------------------------------- */
 #include "Camera.h"
 
-Camera::Camera(float Fov, float AR, float Distance, float Near, float Far): 
-	fov(Fov),ar(AR),distance(Distance),near(Near),far(Far)
+Camera::Camera(float Fov, float AR, float Distance, float Near, float Far) :
+	fov(Fov), ar(AR), distance(Distance), near(Near), far(Far)
 {
 }
 

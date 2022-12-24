@@ -33,6 +33,7 @@ class Camera {
 	void matrixUpdateFunc();
 
 public:
+	// Todo: projections
 	Camera(float Fov = 1.4f, float AR = 1.5f, float Distance = 500.f, float Near = 0.1f, float Far = 1000.f);
 	void Update(double dt);
 	void resetAngle();

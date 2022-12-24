@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Camera.h" />
+    <ClInclude Include="Core\ComponentManager.h" />
     <ClInclude Include="Core\Engine.h" />
     <ClInclude Include="Core\Graphics\Shader.h">
       <Filter>Graphics</Filter>
@@ -51,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Camera.cpp" />
+    <ClCompile Include="Core\ComponentManager.cpp" />
     <ClCompile Include="Core\Engine.cpp" />
     <ClCompile Include="Core\Graphics\Shader.cpp">
       <Filter>Graphics</Filter>
