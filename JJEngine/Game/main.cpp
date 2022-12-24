@@ -2,12 +2,9 @@
 #include "Core/Engine.h"
 #include "Core/SceneManager.h"
 #include "TestScene.h"
-<<<<<<< HEAD
 #include "Core/Utils/Log.h"
+//#include "Core/ComponentManager.h"
 
-=======
-#include "Core/ComponentManager.h"
->>>>>>> bb24d807c6c67e6c73ee69313d0366e5f3ebe72c
 int main(void)
 {
 	EngineLog::Info("Engine Init!");
