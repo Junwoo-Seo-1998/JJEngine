@@ -86,7 +86,7 @@ project "JJEngine"
 		}
     -- All of these settings will appear in the Debug configuration
     filter "configurations:Debug"
-        defines { "DEBUG" }
+        defines { "DEBUG", "JJ_DEBUG" }
         symbols "On"
         libdirs 
         {
@@ -179,7 +179,7 @@ project "Game"
     
     -- All of these settings will appear in the Debug configuration
     filter "configurations:Debug"
-        defines { "DEBUG" }
+        defines { "DEBUG", "JJ_DEBUG" }
         symbols "On"
     filter "configurations:Release"
         defines { "NDEBUG" }

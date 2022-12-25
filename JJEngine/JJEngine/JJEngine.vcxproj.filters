@@ -40,10 +40,19 @@
     <ClInclude Include="Core\Script\ScriptEngine.h">
       <Filter>Script</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Utils\Assert.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utils\DebugDetection.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Utils\File.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Utils\Log.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utils\PlatformDetection.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />

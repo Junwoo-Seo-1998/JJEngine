@@ -55,7 +55,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;DEBUG;JJ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -107,8 +107,11 @@
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h" />
+    <ClInclude Include="Core\Utils\Assert.h" />
+    <ClInclude Include="Core\Utils\DebugDetection.h" />
     <ClInclude Include="Core\Utils\File.h" />
     <ClInclude Include="Core\Utils\Log.h" />
+    <ClInclude Include="Core\Utils\PlatformDetection.h" />
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\test.h" />
   </ItemGroup>
