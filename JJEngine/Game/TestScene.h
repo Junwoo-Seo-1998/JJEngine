@@ -22,8 +22,6 @@ public:
 	{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.frag"} }
 			});
 		shader->Use();
-		//DescribedData te{ {0,DataType::Float3} };
-		//DescribedDataBlock test{{{0,DataType::Float3}},{{0,DataType::Float3}},{{0,DataType::Float3}}};
 		float vertices[] = {
 		-0.5f, -0.5f, 0.0f,
 		 0.5f, -0.5f, 0.0f,

@@ -9,6 +9,7 @@ End Header-------------------------------------------------------- */
 #include <cassert>
 
 #include "glad.h"
+#include "Core/Utils/Assert.h"
 
 DataAndLayoutLocation::DataAndLayoutLocation(unsigned layout_location, DataType data, bool normalize)
 	:m_DataType(data), m_LayoutLocation(layout_location), m_Size(0), m_ElementCount(0), m_Offset(0), m_Normalize(normalize)
@@ -122,7 +123,8 @@ void VertexBuffer::Bind() const
 
 void VertexBuffer::BindToVertexArray() const
 {
-	assert(("There should be at least one data type", m_DescribedData.GetSize() > 0));
+	ENGINE_ASSERT(m_DescribedData.GetSize() > 0, "There should be at least one described data. \
+	\nExample:\nvertex_buffer->SetDataTypes({ {0, DataType::Float3} });//layout location, data type");
 	Bind();
 	for (const auto& description : m_DescribedData)
 	{
