@@ -3,7 +3,6 @@
 #include "Core/SceneManager.h"
 #include "TestScene.h"
 #include "Core/Utils/Log.h"
-//#include "Core/ComponentManager.h"
 
 int main(void)
 {

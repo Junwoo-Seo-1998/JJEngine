@@ -8,6 +8,22 @@
 #include "Core/Graphics/VertexArray.h"
 #include "Core/Graphics/VertexBuffer.h"
 
+
+// for testing component manager
+#include "Core/Entity.h"
+#include "Core/ComponentManager.h"
+
+class A: public Entity {
+	int a{ 1 };
+public:
+	void Update(double )override { std::cout << "A" << std::endl; }
+};
+class B : public Entity {
+	short b{2};
+public:
+	void Update(double) override { std::cout << "B" << std::endl; }
+};
+
 class TestScene: public Scene
 {
 	std::string text{};
@@ -15,8 +31,9 @@ public:
 	TestScene(std::string);
 	~TestScene();
 	void Load() override{ std::cout << text << std::endl; };
-	void Update(double) override
+	void Update(double dt) override
 	{
+		Scene::Update(dt);
 		auto shader = Shader::CreateShaderFromFile({
 	{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.vert"}},
 	{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.frag"} }
@@ -61,6 +78,9 @@ private:
 
 TestScene::TestScene(std::string t):Scene(),text(t)
 {
+	components->AddComponent<A>(A{});
+	components->AddComponent<B>(B{});
+
 }
 
 TestScene::~TestScene()
