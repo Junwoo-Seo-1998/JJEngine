@@ -6,7 +6,7 @@ Date: 12/17/2022
 End Header-------------------------------------------------------- */
 #pragma once
 #include <memory>
-#include "entt/entt.hpp"
+#include "entt.h"
 
 class ComponentManager;
 class Scene
@@ -21,5 +21,5 @@ public:
 	virtual void Unload() = 0;
 protected:
 	std::shared_ptr<ComponentManager> components{};
-	entt::entity ID{};
+	ID id{};
 };

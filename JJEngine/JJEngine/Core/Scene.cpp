@@ -7,11 +7,11 @@ End Header-------------------------------------------------------- */
 #include "Scene.h"
 #include "ComponentManager.h"
 
-Scene::Scene():components(std::make_shared<ComponentManager>()),ID(components->GetNewEntityID())
+Scene::Scene():components(std::make_shared<ComponentManager>()),id(components->GetNewEntityID())
 {
 }
 
 void Scene::Update(double dt)
 {
-	components->Update(dt);
+	//components->Update(dt);
 }
