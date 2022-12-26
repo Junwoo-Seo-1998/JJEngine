@@ -8,8 +8,13 @@ End Header-------------------------------------------------------- */
 #include <memory>
 #include "entt.h"
 
+class Component {
+public:
+	virtual void Update(double) = 0;
+};
+
 class ComponentManager;
-class Entity{
+class Entity:public Component{
 protected:
 	ID id{};
 	std::shared_ptr<ComponentManager> components;
@@ -18,5 +23,5 @@ public:
 	Entity(std::shared_ptr<ComponentManager> cm,ID newID);
 	void SetID(ID);
 	ID GetID();
-	virtual void Update(double ) {};
+	void Update(double) override {};
 };
