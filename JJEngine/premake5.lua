@@ -120,7 +120,7 @@ project "JJEngine-ScriptCore"
 
     files 
     {
-        "**.cs",
+        "JJEngine-ScriptCore/**.cs",
     }
 
     filter "configurations:Debug"

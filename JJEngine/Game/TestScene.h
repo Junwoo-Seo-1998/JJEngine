@@ -18,11 +18,14 @@
 class A: public Entity {
 	int a{ 1 };
 public:
+	using Entity::Entity;
 	void Update(double )override { std::cout << "A" << std::endl; }
 };
 class B : public Entity {
 	short b{2};
 public:
+	using Entity::Entity;
+
 	void Update(double) override { std::cout << "B" << std::endl; }
 };
 
@@ -99,8 +102,11 @@ private:
 
 TestScene::TestScene(std::string t):Scene(),text(t)
 {
-	//components->AddComponent<A>(A{});
-	//components->AddComponent<B>(B{});
+	ID Aid =  components->GetNewEntityID();
+	ID Bid = components->GetNewEntityID();
+
+	//components->AddComponent<A>(Aid,A{ components,Aid });
+	//components->AddComponent<B>(Bid,B{ components,Bid });
 
 }
 
