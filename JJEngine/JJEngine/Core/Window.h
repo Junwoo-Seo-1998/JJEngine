@@ -17,4 +17,6 @@ public:
 	void update(std::function<void()> updateCallback);
 	bool shouldClose();
 
+	GLFWwindow* GetGLFWWindow();
+	std::tuple<int, int> GetWidthAndHeight();
 };

@@ -9,6 +9,7 @@ End Header-------------------------------------------------------- */
 #include "Window.h"
 #include "Input/Input.h"
 #include "SceneManager.h"
+#include "ImGui/ImGuiRenderer.h"
 #include "Script/ScriptEngine.h"
 namespace statics
 {
@@ -36,6 +37,7 @@ std::shared_ptr<JJEngine> JJEngine::instance()
 
 void JJEngine::init()
 {
+	ImGuiRenderer::Instance()->Init(GetWindow()->GetGLFWWindow());
 	ScriptEngine::instance()->Init();
 }
 
@@ -55,7 +57,9 @@ void JJEngine::update()
 
 		instance()->window->update([&]()
 		{
+			ImGuiRenderer::Instance()->GuiBegin();
 			instance()->sceneManager->update(dt);
+			ImGuiRenderer::Instance()->GuiEnd();
 		});
 
 		lastTick = now;
@@ -66,6 +70,7 @@ void JJEngine::update()
 void JJEngine::shutdown()
 {
 	ScriptEngine::instance()->Shutdown();
+	ImGuiRenderer::Instance()->Shutdown();
 }
 
 SceneManager* JJEngine::GetSceneManager()

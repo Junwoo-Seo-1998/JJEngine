@@ -40,6 +40,7 @@ void ScriptEngine::InitMono()
 	s_data.AppDomain = mono_domain_create_appdomain("JJEngineAppDomain", nullptr);
 	mono_thread_set_main(mono_thread_current());
 
+	/*
 	//for testing
 	MonoAssembly* assembly = LoadCSharpAssembly("Resources/Scripts/JJEngine-ScriptCore.dll");
 	PrintAssemblyTypes(assembly);
@@ -55,6 +56,7 @@ void ScriptEngine::InitMono()
 
 	// Call the parameterless (default) constructor
 	mono_runtime_object_init(classInstance);
+	*/
 }
 
 void ScriptEngine::ShutdownMono()

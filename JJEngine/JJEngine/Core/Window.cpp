@@ -89,6 +89,7 @@ void Window::update(std::function<void()> updateCallback)
 {
 	glfwGetWindowSize(window, &windowWidth, &windowHeight);
 	glViewport(0, 0, windowWidth, windowHeight);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	Input::instance()->Reset();
 	glfwPollEvents();
 	updateCallback();
@@ -98,4 +99,14 @@ void Window::update(std::function<void()> updateCallback)
 bool Window::shouldClose()
 {
 	return glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) != 0;
+}
+
+GLFWwindow* Window::GetGLFWWindow()
+{
+	return window;
+}
+
+std::tuple<int, int> Window::GetWidthAndHeight()
+{
+	return { windowWidth, windowHeight };
 }

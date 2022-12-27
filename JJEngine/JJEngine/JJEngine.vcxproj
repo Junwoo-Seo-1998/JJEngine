@@ -97,11 +97,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Camera.h" />
+    <ClInclude Include="Core\ComponentManager.h" />
     <ClInclude Include="Core\Engine.h" />
+    <ClInclude Include="Core\Entity.h" />
+    <ClInclude Include="Core\Graphics\FrameBuffer.h" />
     <ClInclude Include="Core\Graphics\Shader.h" />
     <ClInclude Include="Core\Graphics\Texture.h" />
     <ClInclude Include="Core\Graphics\VertexArray.h" />
     <ClInclude Include="Core\Graphics\VertexBuffer.h" />
+    <ClInclude Include="Core\ImGui\ImGuiRenderer.h" />
     <ClInclude Include="Core\Input\Input.h" />
     <ClInclude Include="Core\Input\InputKeyCodes.h" />
     <ClInclude Include="Core\Scene.h" />
@@ -113,16 +117,22 @@
     <ClInclude Include="Core\Utils\Log.h" />
     <ClInclude Include="Core\Utils\PlatformDetection.h" />
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\entt.h" />
     <ClInclude Include="Core\test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Camera.cpp" />
+    <ClCompile Include="Core\ComponentManager.cpp" />
     <ClCompile Include="Core\Engine.cpp" />
+    <ClCompile Include="Core\Entity.cpp" />
+    <ClCompile Include="Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Shader.cpp" />
     <ClCompile Include="Core\Graphics\Texture.cpp" />
     <ClCompile Include="Core\Graphics\VertexArray.cpp" />
     <ClCompile Include="Core\Graphics\VertexBuffer.cpp" />
+    <ClCompile Include="Core\ImGui\ImGuiRenderer.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
+    <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp" />
     <ClCompile Include="Core\Utils\File.cpp" />

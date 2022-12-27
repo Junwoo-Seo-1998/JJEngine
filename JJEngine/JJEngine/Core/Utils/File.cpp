@@ -3,12 +3,15 @@
 #include <iostream>
 #include <sstream>
 #include <stb_image.h>
+#include <format>
+#include "Assert.h"
+#include "Log.h"
 #include "Core/Graphics/Texture.h"
 std::string File::ReadFileToString(const std::string& file_name)
 {
     if(!std::filesystem::exists(file_name))
     {
-        std::cout << "There is no file : " << file_name << std::endl;
+        Log::Error("There is no file : {}", file_name);
         return {};
     }
     std::ifstream file(file_name);
@@ -19,6 +22,11 @@ std::string File::ReadFileToString(const std::string& file_name)
 
 std::shared_ptr<TextureData> File::ReadImageToTexture(const std::string& file_name)
 {
+    if (!std::filesystem::exists(file_name))
+    {
+        Log::Error("There is no file : {}", file_name);
+        return {};
+    }
     std::shared_ptr<TextureData> texture = std::make_shared<TextureData>();
     stbi_set_flip_vertically_on_load(true);
     unsigned char* img = stbi_load(file_name.c_str(), &(texture->width), &(texture->height), &(texture->number_of_channels), 3);

@@ -13,5 +13,5 @@ Scene::Scene():components(std::make_shared<ComponentManager>()),ID(components->G
 
 void Scene::Update(double dt)
 {
-	components->Update(dt);
+	//components->Update(dt);
 }
