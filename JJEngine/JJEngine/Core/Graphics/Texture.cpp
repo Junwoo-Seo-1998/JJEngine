@@ -26,36 +26,23 @@ unsigned int Texture::GetTextureID() const
 	return m_TextureID;
 }
 
-void Texture::Bind()
+void Texture::BindTexture(unsigned int unit)
 {
-	glBindTexture(GL_TEXTURE_2D, m_TextureID);
-}
-
-void Texture::BindAndActivate(unsigned int unit)
-{
-	glActiveTexture(GL_TEXTURE0 + unit);
-	glBindTexture(GL_TEXTURE_2D, m_TextureID);
-}
-
-void Texture::UnBind()
-{
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTextureUnit(unit, m_TextureID);
 }
 
 Texture::Texture(std::shared_ptr<TextureData> texture_data)
 	:m_Width(texture_data->width), m_Height(texture_data->height)
 {
-	glGenTextures(1, &m_TextureID);
-	glBindTexture(GL_TEXTURE_2D, m_TextureID);
+	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
+	
+	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture_data->data.get());
-	glGenerateMipmap(GL_TEXTURE_2D);
+	glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTextureStorage2D(m_TextureID, 1, GL_RGBA8, m_Width, m_Height);
+	glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, GL_RGB, GL_UNSIGNED_BYTE, texture_data->data.get());
+	glGenerateTextureMipmap(m_TextureID);
 }

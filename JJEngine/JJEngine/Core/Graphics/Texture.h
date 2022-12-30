@@ -7,6 +7,16 @@ End Header-------------------------------------------------------- */
 #pragma once
 #include<memory>
 #include<tuple>
+enum class TextureChannel
+{
+
+};
+
+class TextureChannelData
+{
+	unsigned ShaderDataTypeToOpenGLBaseType() const;
+};
+
 struct TextureData
 {
 	int width = 0;
@@ -22,10 +32,7 @@ public:
 	virtual ~Texture();
 	std::tuple<int, int> GetWidthHeight() const;
 	unsigned int GetTextureID() const;
-	void Bind();
-	void BindAndActivate(unsigned int unit = 0);
-	void UnBind();
-	
+	void BindTexture(unsigned int unit = 0);
 private:
 	Texture(std::shared_ptr<TextureData> texture_data);
 	int m_Width;

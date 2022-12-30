@@ -66,30 +66,48 @@ public:
 			 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
 		};
 
+		float textureQuad[] = {
+			// positions        // texture coords
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   // top right
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,   // bottom left
+			0.5f, -0.5f, 0.0f, 1.0f, 0.0f,   // bottom right
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,    // top left 
+			- 0.5f, -0.5f, 0.0f, 0.0f, 0.0f,   // bottom left
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   // top right
+		};
+
 		vertex_array = VertexArray::CreateVertexArray();
 		vertex_array->Bind();
-		vertex_buffer = VertexBuffer::CreateVertexBuffer(sizeof(vertices));
-		vertex_buffer->SetData(sizeof(vertices), vertices);
-		vertex_buffer->SetDataTypes({ {0, DataType::Float3} });
+		vertex_buffer = VertexBuffer::CreateVertexBuffer(sizeof(textureQuad));
+		vertex_buffer->SetData(sizeof(textureQuad), textureQuad);
+		vertex_buffer->SetDataTypes({ 
+			{0, DataType::Float3},//location=0, pos
+			{1, DataType::Float2},//location=1, uv
+		});
 		vertex_buffer->BindToVertexArray();
 
-		vertex_color_buffer = VertexBuffer::CreateVertexBuffer(sizeof(colors));
-		vertex_color_buffer->SetData(sizeof(colors), colors);
-		vertex_color_buffer->SetDataTypes({ {1,DataType::Float3} });
-		vertex_color_buffer->BindToVertexArray();
+		//vertex_color_buffer = VertexBuffer::CreateVertexBuffer(sizeof(colors));
+		//vertex_color_buffer->SetData(sizeof(colors), colors);
+		//vertex_color_buffer->SetDataTypes({ {1,DataType::Float3} });
+		//vertex_color_buffer->BindToVertexArray();
 		
 
 		test_texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
 	};
 	void Update(double dt) override
 	{
+
 		Scene::Update(dt);
+		//draw test
 		shader->Use();
 		vertex_array->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		constexpr ImVec2 size{ 100,100 };
+		shader->SetInt("testTexture", 0);
+		test_texture->BindTexture();
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		//for imgui test
 		ImGui::Begin("test");
-		
+		constexpr ImVec2 size{ 100,100 };
 		unsigned textureID = test_texture->GetTextureID();
 		ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(textureID)), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 		ImGui::End();
