@@ -15,6 +15,7 @@
 #include "Core/Graphics/Texture.h"
 #include "Core/Utils/File.h"
 #include "imgui.h"
+#include "Core/Graphics/FrameBuffer.h"
 class A: public Entity {
 	int a{ 1 };
 public:
@@ -35,6 +36,7 @@ class TestScene: public Scene
 	std::shared_ptr<VertexArray> vertex_array;
 	std::shared_ptr<VertexBuffer> vertex_buffer;
 	std::shared_ptr<VertexBuffer> vertex_color_buffer;
+	std::shared_ptr<FrameBuffer> framebuffer;
 	std::shared_ptr<Shader> shader;
 	std::shared_ptr<Texture> test_texture;
 public:
@@ -93,22 +95,28 @@ public:
 		
 
 		test_texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
+
+		framebuffer = FrameBuffer::CreateFrameBuffer({ 1200, 800, { FrameBufferFormat::RGB } });
+		glClearColor(0.3, 0.7, 0.3, 1.0);
 	};
 	void Update(double dt) override
 	{
 
 		Scene::Update(dt);
+		framebuffer->Bind();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		//draw test
 		shader->Use();
 		vertex_array->Bind();
 		shader->SetInt("testTexture", 0);
 		test_texture->BindTexture();
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-
-		//for imgui test
-		ImGui::Begin("test");
-		constexpr ImVec2 size{ 100,100 };
-		unsigned textureID = test_texture->GetTextureID();
+		framebuffer->UnBind();
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		//for imgui test and framebuffer
+		ImGui::Begin("framebuffer test");
+		constexpr ImVec2 size{ 480,320 };
+		unsigned textureID = framebuffer->GetColorTexture(0)->GetTextureID();
 		ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(textureID)), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 		ImGui::End();
 	}

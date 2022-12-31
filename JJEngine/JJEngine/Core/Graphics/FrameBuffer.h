@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
+#include "Texture.h"
 enum class FrameBufferFormat
 {
 	None = 0,
+	RGB,
 	RGBA,
 	Depth,
 };
@@ -28,8 +30,9 @@ struct FrameBufferSpecification
 class FrameBuffer
 {
 public:
+	static std::shared_ptr<FrameBuffer> CreateFrameBuffer(const FrameBufferSpecification& spec);
 	FrameBuffer() = delete;
-	~FrameBuffer();
+	virtual ~FrameBuffer();
 
 	void Bind() const;
 	void UnBind() const;
@@ -37,8 +40,8 @@ public:
 	void Resize(unsigned int width, unsigned int height);
 
 	unsigned int GetFrameBufferID() const;
-	unsigned int GetColorTexture(int index) const;
-	unsigned int GetDepthTexture() const;
+	std::shared_ptr<Texture> GetColorTexture(int index);
+	std::shared_ptr<Texture> GetDepthTexture();
 
 private:
 	FrameBuffer(const FrameBufferSpecification& spec);
@@ -46,8 +49,8 @@ private:
 	FrameBufferSpecification m_DescribedFrameBuffer;
 	std::vector<FrameBufferFormat> m_ColorFormats;
 	FrameBufferFormat m_DepthFormat;
-
+	
 	unsigned int m_FrameBufferID;
-	std::vector<unsigned int> m_ColorBufferIDs;
-	unsigned int m_DepthBufferID;
+	std::vector<std::shared_ptr<Texture>> m_ColorTextures;
+	std::shared_ptr<Texture> m_DepthTexture;
 };
