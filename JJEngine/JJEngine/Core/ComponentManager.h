@@ -38,6 +38,8 @@ public:
 
 	template<typename T>
 	auto HasTEntities();
+
+	//has types entities
 };
 
 //template<typename T>
