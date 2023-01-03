@@ -10,24 +10,20 @@
 
 
 // for testing component manager
-#include "Core/Entity.h"
 #include "Core/ComponentManager.h"
 #include "Core/Graphics/Texture.h"
 #include "Core/Utils/File.h"
 #include "imgui.h"
 #include "Core/Graphics/FrameBuffer.h"
-class A: public Entity {
+class A {
 	int a{ 1 };
 public:
-	using Entity::Entity;
-	void Update(double )override { std::cout << "A" << std::endl; }
+	void Update(double ) { std::cout << "A" << std::endl; }
 };
-class B : public Entity {
+class B {
 	short b{2};
 public:
-	using Entity::Entity;
-
-	void Update(double) override { std::cout << "B" << std::endl; }
+	void Update(double)  { std::cout << "B" << std::endl; }
 };
 
 class TestScene: public Scene
@@ -131,9 +127,18 @@ TestScene::TestScene(std::string t):Scene(),text(t)
 	ID Aid =  components->GetNewEntityID();
 	ID Bid = components->GetNewEntityID();
 
-	//components->AddComponent<A>(Aid,A{ components,Aid });
-	//components->AddComponent<B>(Bid,B{ components,Bid });
+	components->AddComponent<A>(Aid,A{ });
 
+	components->AddComponent<B>(Bid,B{ });
+	components->AddComponent<A>(Bid,A{ });
+
+
+
+	components->GetComponent<B>(Bid).Update(1.);
+
+	for (auto enttity: components->HasTEntities<A>()) {
+		components->GetComponent<A>(enttity).Update(1.);
+	}
 }
 
 TestScene::~TestScene()

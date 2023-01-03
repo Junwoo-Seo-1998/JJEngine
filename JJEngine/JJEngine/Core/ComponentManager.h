@@ -15,10 +15,13 @@ public:
 	ComponentManager();
 	~ComponentManager();
 
-	entt::entity GetNewEntityID();
+	entt::registry& GetRegistry();
 
-	template<typename T>
-	void AddComponent(ID id, T& data);
+	ID GetNewEntityID();
+	void DeleteEntityID(ID id);
+
+	/*template<typename T>
+	void AddComponent(ID id, T& data);*/
 	template<typename T>
 	void AddComponent(ID id, T&& data);
 
@@ -29,15 +32,19 @@ public:
 
 	template<typename T>
 	void RemoveComponents();
+
 	template<typename T>
-	std::vector<T&> GetComponents();
+	std::vector<T*> GetComponents();
+
+	template<typename T>
+	auto HasTEntities();
 };
 
-template<typename T>
-void ComponentManager::AddComponent(ID id, T& data)
-{
-	registry.emplace<T>(id, data);
-}
+//template<typename T>
+//void ComponentManager::AddComponent(ID id, T& data)
+//{
+//	registry.emplace<T>(id, data);
+//}
 
 template<typename T>
 inline void ComponentManager::AddComponent(ID id, T&& data)
@@ -66,11 +73,17 @@ void ComponentManager::RemoveComponents() {
 }
 
 template<typename T>
-std::vector<T&> ComponentManager::GetComponents() {
-	std::vector<T&> data{};
+inline auto ComponentManager::HasTEntities()
+{
+	return registry.view<T>();
+}
+
+template<typename T>
+std::vector<T*> ComponentManager::GetComponents() {
+	std::vector<T*> data{};
 	auto view = registry.view<T>();
 	for (auto entity : view) {
-		data.push_back(registry.get<T>(entity));
+		data.push_back(&registry.get<T>(entity));
 	}
 	return data;
 }

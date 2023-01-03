@@ -5,7 +5,6 @@ Platform: x64
 Date: 12/23/2022
 End Header-------------------------------------------------------- */
 #include "ComponentManager.h"
-#include "Entity.h"
 
 ComponentManager::ComponentManager()
 {
@@ -15,7 +14,17 @@ ComponentManager::~ComponentManager()
 {
 }
 
+entt::registry& ComponentManager::GetRegistry()
+{
+	return registry;
+}
+
 entt::entity ComponentManager::GetNewEntityID()
 {
 	return registry.create();
+}
+
+void ComponentManager::DeleteEntityID(ID id)
+{
+	registry.destroy(id);
 }
