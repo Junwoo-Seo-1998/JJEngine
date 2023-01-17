@@ -15,6 +15,8 @@
 #include "Core/Utils/File.h"
 #include "imgui.h"
 #include "Core/Graphics/FrameBuffer.h"
+#include "Core/Graphics/IndexBuffer.h"
+
 class A {
 	int a{ 1 };
 public:
@@ -31,6 +33,7 @@ class TestScene: public Scene
 	std::string text{};
 	std::shared_ptr<VertexArray> vertex_array;
 	std::shared_ptr<VertexBuffer> vertex_buffer;
+	std::shared_ptr<IndexBuffer> index_buffer;
 	std::shared_ptr<VertexBuffer> vertex_color_buffer;
 	std::shared_ptr<FrameBuffer> framebuffer;
 	std::shared_ptr<Shader> shader;
@@ -74,16 +77,33 @@ public:
 			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   // top right
 		};
 
+		float textureQuadIndexed[] = {
+			// positions        // texture coords
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,   // bottom left
+			0.5f, -0.5f, 0.0f, 1.0f, 0.0f,   // bottom right
+			0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   // top right
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,    // top left 
+		};
+
 		vertex_array = VertexArray::CreateVertexArray();
 		vertex_array->Bind();
-		vertex_buffer = VertexBuffer::CreateVertexBuffer(sizeof(textureQuad));
-		vertex_buffer->SetData(sizeof(textureQuad), textureQuad);
+		vertex_buffer = VertexBuffer::CreateVertexBuffer(sizeof(textureQuadIndexed));
+		vertex_buffer->SetData(sizeof(textureQuadIndexed), textureQuadIndexed);
 		vertex_buffer->SetDataTypes({ 
 			{0, DataType::Float3},//location=0, pos
 			{1, DataType::Float2},//location=1, uv
 		});
 		vertex_buffer->BindToVertexArray();
 
+
+		unsigned int textureQuadIndices[] = {
+			0,1,2,
+			0,2,3,
+		};
+
+		index_buffer = IndexBuffer::CreateIndexBuffer(sizeof(textureQuadIndices));
+		index_buffer->SetData(sizeof(textureQuadIndices), textureQuadIndices);
+		index_buffer->BindToVertexArray();
 		//vertex_color_buffer = VertexBuffer::CreateVertexBuffer(sizeof(colors));
 		//vertex_color_buffer->SetData(sizeof(colors), colors);
 		//vertex_color_buffer->SetDataTypes({ {1,DataType::Float3} });
@@ -106,9 +126,11 @@ public:
 		vertex_array->Bind();
 		shader->SetInt("testTexture", 0);
 		test_texture->BindTexture();
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 		framebuffer->UnBind();
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 		//for imgui test and framebuffer
 		ImGui::Begin("framebuffer test");
 		constexpr ImVec2 size{ 480,320 };
