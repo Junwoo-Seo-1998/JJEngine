@@ -21,7 +21,6 @@
     <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\ComponentManager.h" />
     <ClInclude Include="Core\Engine.h" />
-    <ClInclude Include="Core\Entity.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -46,6 +45,7 @@
     <ClInclude Include="Core\Input\InputKeyCodes.h">
       <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="Core\LayerManager.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h">
@@ -69,12 +69,12 @@
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\entt.h" />
     <ClInclude Include="Core\test.h" />
+    <ClInclude Include="Core\Graphics\IndexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\ComponentManager.cpp" />
     <ClCompile Include="Core\Engine.cpp" />
-    <ClCompile Include="Core\Entity.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -96,6 +96,7 @@
     <ClCompile Include="Core\Input\Input.cpp">
       <Filter>Input</Filter>
     </ClCompile>
+    <ClCompile Include="Core\LayerManager.cpp" />
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp">
@@ -115,5 +116,6 @@
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
+    <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />
   </ItemGroup>
 </Project>

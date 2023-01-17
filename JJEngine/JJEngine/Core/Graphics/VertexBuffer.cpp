@@ -100,6 +100,7 @@ void VertexBuffer::SetDataTypes(const DescribedData& data)
 }
 
 VertexBuffer::VertexBuffer(int byte_size)
+	:m_Buffer(0), m_DescribedData()
 {
 	CreateBuffer(byte_size, nullptr);
 }
