@@ -136,7 +136,7 @@ project "JJEngine-ScriptCore"
         symbols "Off"
     
 
-group "JJGame"
+group "Executable"
 project "Game"
     location "Game"
     kind "ConsoleApp"
@@ -184,4 +184,54 @@ project "Game"
     filter "configurations:Release"
         defines { "NDEBUG" }
         optimize "On"
+
+project "Editor"
+    location "Editor"
+    kind "ConsoleApp"
+    language "C++"
+    cppdialect "c++17"
+    targetdir "bin/%{cfg.buildcfg}"
+    objdir "bin/%{cfg.buildcfg}-obj"
+    architecture "x86_64"
+    links {
+        "JJEngine",
+        "GLAD",
+        "opengl32.lib",
+    }
+    
+    disablewarnings {}
+    linkoptions {}
+    includedirs
+    {
+        "JJEngine",
+        "%{IncludeDir.GLM}",
+        "%{IncludeDir.GLAD}",
+        "%{IncludeDir.ENTT}",
+        "%{IncludeDir.IMGUI}",
+        "%{IncludeDir.SPDLOG}",
+    }
+    files {
+        "Editor/**.h",
+        "Editor/**.cpp"
+    }
+    defines{
+        "GLFW_INCLUDE_NONE",
+        "_CRT_SECURE_NO_WARNINGS"
+    }
+    
+    postbuildcommands {
+        "{COPYDIR} \"../RuntimeDependencies/Mono\" \"../bin/%{cfg.buildcfg}/Mono\"",
+    }
+
+    debugdir "RuntimeDependencies"
+    
+    -- All of these settings will appear in the Debug configuration
+    filter "configurations:Debug"
+        defines { "DEBUG", "JJ_DEBUG" }
+        symbols "On"
+    filter "configurations:Release"
+        defines { "NDEBUG" }
+        optimize "On"
+
+        
 group ""

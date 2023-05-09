@@ -6,13 +6,35 @@
 #include "Assert.h"
 #include "Log.h"
 #include "Core/Graphics/Texture.h"
+
+bool File::CheckExists(const std::string& path)
+{
+    if (!std::filesystem::exists(path))
+    {
+        Log::Error("There is no file : {}", path);
+        return false;
+    }
+    return true;
+}
+
+std::vector<std::string> File::GetFileLists(const std::string& dir_path)
+{
+    if (!CheckExists(dir_path))
+        return {};
+
+    std::vector<std::string> file_lists;
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(dir_path))
+    {
+        file_lists.push_back(entry.path().string());
+    }
+
+    return file_lists;
+}
+
 std::string File::ReadFileToString(const std::string& file_name)
 {
-    if(!std::filesystem::exists(file_name))
-    {
-        Log::Error("There is no file : {}", file_name);
-        return {};
-    }
+    if (!CheckExists(file_name)) return {};
+
     std::ifstream file(file_name);
     std::stringstream ss;
     ss << file.rdbuf();

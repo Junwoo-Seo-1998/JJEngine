@@ -24,6 +24,9 @@
     <ClInclude Include="Core\Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Graphics\IndexBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Graphics\Shader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -69,13 +72,15 @@
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\entt.h" />
     <ClInclude Include="Core\test.h" />
-    <ClInclude Include="Core\Graphics\IndexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\ComponentManager.cpp" />
     <ClCompile Include="Core\Engine.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\IndexBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Shader.cpp">
@@ -116,6 +121,5 @@
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
-    <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />
   </ItemGroup>
 </Project>
