@@ -8,3 +8,4 @@ End Header-------------------------------------------------------- */
 #include "entt/entt.hpp"
 
 using ID = entt::entity;
+using Registry = entt::registry;

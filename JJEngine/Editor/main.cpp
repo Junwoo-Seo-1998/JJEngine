@@ -11,10 +11,8 @@ int main(void)
 	SceneManager* sceneManager = new SceneManager{};
 	ImGuiRenderer::Instance()->Init(window->GetGLFWWindow());
 	TestScene test1{ " editor eeeeeeeeeeeeeeee " };
-	TestScene test2{ " editor eeeeeeeeeeeeeeee 2" };
 	sceneManager->enrollScene(0, test1);
-	sceneManager->enrollScene(1, test2);
-	sceneManager->setNextScene(1);
+	sceneManager->setNextScene(0);
 	bool engineLoop{ true };
 	std::chrono::system_clock::time_point lastTick = std::chrono::system_clock::now();
 	double dt{ };

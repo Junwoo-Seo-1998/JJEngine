@@ -16,8 +16,18 @@
 #include "Core/Graphics/FrameBuffer.h"
 #include "Core/Graphics/IndexBuffer.h"
 
+#include <Core/Utils/Log.h>
+#include <Core/entt.h>
+#include <Core/EventManager.h>
+#include <Core/EventListener.h>
+
+
 class TestScene : public Scene
 {
+	Registry registry{};
+	ID eventListener{};
+	EventManager* evManager{};
+
 	std::string text{};
 	std::shared_ptr<VertexArray> vertex_array;
 	std::shared_ptr<VertexBuffer> vertex_buffer;
@@ -102,6 +112,11 @@ public:
 
 		framebuffer = FrameBuffer::CreateFrameBuffer({ 1200, 800, { FrameBufferFormat::RGB } });
 		glClearColor(0.3, 0.7, 0.3, 1.0);
+
+
+		eventListener = registry.create();
+		registry.emplace<EventListener>(eventListener);
+		evManager = new EventManager{&registry};
 	};
 	void Update(double dt) override
 	{
@@ -119,6 +134,34 @@ public:
 		framebuffer->UnBind();
 		//glDrawArrays(GL_TRIANGLES, 0, 6);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		
+		ImGui::Begin("Button test");
+		if (ImGui::Button("Button 1")) {
+			evManager->notifyEvent(1);
+			Log::Info("event notified");
+		}
+		if (ImGui::Button("Button 2")) {
+			evManager->notifyEvent(2);
+			Log::Info("event notified");
+		}
+		if (ImGui::Button("Button 3")) {
+			evManager->notifyEvent(3);
+			Log::Info("event notified");
+		}
+		ImGui::End();
+		evManager->Update();
+		EventListener& listener = registry.get<EventListener>(eventListener);
+		int ev = listener.GetNextEvent();
+		if (ev == 1) {
+			Log::Info("Button_1 clicked");
+		}
+		if (ev == 2) {
+			Log::Info("Button_2 clicked");
+		}
+		if (ev == 3) {
+			Log::Info("Button_3 clicked");
+		}
+		
 		//for imgui test and framebuffer
 		ImGui::Begin("framebuffer test");
 		constexpr ImVec2 size{ 480,320 };
@@ -139,4 +182,5 @@ TestScene::TestScene(std::string t) :Scene(), text(t)
 
 TestScene::~TestScene()
 {
+	delete evManager;
 }
