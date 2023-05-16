@@ -18,7 +18,7 @@ class JJEngine
 {
 	friend std::shared_ptr<JJEngine> statics::createInstance();
 	JJEngine();
-
+	
 	SceneManager* sceneManager{};
 	Window* window{};
 
@@ -30,6 +30,7 @@ public:
 	static void shutdown();
 	static SceneManager* GetSceneManager();
 	static Window* GetWindow();
+	static void ReloadScript();//testing remove later
 };
 
 namespace JJ {

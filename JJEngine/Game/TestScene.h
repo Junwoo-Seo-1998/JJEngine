@@ -16,6 +16,7 @@
 #include "imgui.h"
 #include "Core/Graphics/FrameBuffer.h"
 #include "Core/Graphics/IndexBuffer.h"
+#include "Core/Input/Input.h"
 
 class A {
 	int a{ 1 };
@@ -119,6 +120,12 @@ public:
 	{
 
 		Scene::Update(dt);
+		if(Input::IsKeyPressed(KeyCode::R))
+		{
+			JJEngine::ReloadScript();
+		}
+
+
 		framebuffer->Bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		//draw test

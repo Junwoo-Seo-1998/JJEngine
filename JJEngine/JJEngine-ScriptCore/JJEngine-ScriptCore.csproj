@@ -21,7 +21,8 @@
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>obj\Win64\Debug\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -33,7 +34,8 @@
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>obj\Win64\Release\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -42,6 +44,7 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Win64|x64' ">
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InternalCalls.cs" />
     <Compile Include="main.cs" />
     <Compile Include="obj\Win64\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
   </ItemGroup>

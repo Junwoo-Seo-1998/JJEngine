@@ -3,6 +3,7 @@
 #include <string>
 #include <mono/metadata/image.h>
 #include <mono/utils/mono-forward.h>
+
 class ScriptEngine;
 static std::shared_ptr<ScriptEngine> createInstance();
 class ScriptEngine
@@ -10,6 +11,7 @@ class ScriptEngine
 public:
 	static std::shared_ptr<ScriptEngine> instance();
 	void Init();
+	void InitCore();//testing
 	void Shutdown();
 private:
 	void InitMono();

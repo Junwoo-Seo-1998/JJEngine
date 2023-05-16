@@ -5,11 +5,16 @@
 #include "mono/jit/jit.h"
 #include "mono/metadata/assembly.h"
 #include "mono/metadata/threads.h"
+#include "glad.h"
 static std::shared_ptr<ScriptEngine> createInstance()
 {
 	return std::make_shared<ScriptEngine>();
 }
-
+void test_clearColor(float r, float g, float b)
+{
+	std::cout << "test_clearColor" << std::endl;
+	glClearColor(r, g, b, 1.0f);
+}
 std::shared_ptr<ScriptEngine> ScriptEngine::s_instance= createInstance();
 //ScriptEngine::ScriptEngineData ScriptEngine::s_data;
 
@@ -23,10 +28,70 @@ void ScriptEngine::Init()
 	InitMono();
 }
 
+void ScriptEngine::InitCore()
+{
+	s_data.AppDomain = mono_domain_create_appdomain("JJEngineAppDomain", nullptr);
+	mono_domain_set(s_data.AppDomain, false);
+#pragma region test
+	mono_add_internal_call("JJEngine_ScriptCore.InternalCalls::Graphics_SetClearColor", (void*)test_clearColor);
+	//for testing
+	MonoAssembly* assembly = LoadCSharpAssembly("Resources/Scripts/JJEngine-ScriptCore.dll");
+	PrintAssemblyTypes(assembly);
+
+	MonoImage* image = mono_assembly_get_image(assembly);
+
+	MonoClass* mainclass = mono_class_from_name(image, "JJEngine_ScriptCore", "main");
+	if (mainclass == nullptr)
+	{
+		// Log error here
+		std::cout << "error!";
+	}
+	// Allocate an instance of our class
+	MonoObject* classInstance = mono_object_new(s_data.AppDomain, mainclass);
+	// Call the parameterless (default) constructor
+	mono_runtime_object_init(classInstance);
+
+	MonoClass* testclass = mono_class_from_name(image, "JJEngine_ScriptCore", "test");
+
+	MonoObject* classInstance2 = mono_object_new(s_data.AppDomain, testclass);
+	mono_runtime_object_init(classInstance2);
+
+	MonoMethod* method = mono_class_get_method_from_name(testclass, "run", 1);
+	MonoProperty* property = mono_class_get_property_from_name(testclass, "test_str");
+	MonoString* mono_string = (MonoString*)mono_property_get_value(property, classInstance2, nullptr, nullptr);
+	int len = mono_string_length(mono_string);
+	std::cout << "len:" << std::to_string(len) << std::endl;
+	char* csharp_str = mono_string_to_utf8(mono_string);
+	std::string s = csharp_str;
+	std::cout << s << std::endl;
+	mono_free(csharp_str);
+
+
+
+	MonoClassField* field = mono_class_get_field_from_name(testclass, "iamstr");
+	MonoString* strval;
+	mono_field_get_value(classInstance2, field, &strval);
+	csharp_str = mono_string_to_utf8(strval);
+	s = csharp_str;
+	mono_free(csharp_str);
+
+	//s = arr;
+	std::cout << s << std::endl;
+
+
+
+	float val = 20;
+	void* params[1] = { &val };
+	mono_runtime_invoke(method, classInstance2, params, nullptr);
+#pragma endregion  
+}
+
 void ScriptEngine::Shutdown()
 {
 	ShutdownMono();
 }
+
+
 
 void ScriptEngine::InitMono()
 {
@@ -38,13 +103,21 @@ void ScriptEngine::InitMono()
 		throw;
 	}
 	s_data.AppDomain = mono_domain_create_appdomain("JJEngineAppDomain", nullptr);
+	mono_domain_set(s_data.AppDomain, false);
 	mono_thread_set_main(mono_thread_current());
+	mono_add_internal_call("JJEngine_ScriptCore.InternalCalls::Graphics_SetClearColor", (void*)test_clearColor);
 
-	/*
+#pragma region test
 	//for testing
 	MonoAssembly* assembly = LoadCSharpAssembly("Resources/Scripts/JJEngine-ScriptCore.dll");
 	PrintAssemblyTypes(assembly);
+
 	MonoImage* image = mono_assembly_get_image(assembly);
+
+
+	
+
+
 	MonoClass* mainclass = mono_class_from_name(image, "JJEngine_ScriptCore", "main");
 	if (mainclass == nullptr)
 	{
@@ -53,10 +126,42 @@ void ScriptEngine::InitMono()
 	}
 	// Allocate an instance of our class
 	MonoObject* classInstance = mono_object_new(s_data.AppDomain, mainclass);
-
 	// Call the parameterless (default) constructor
 	mono_runtime_object_init(classInstance);
-	*/
+
+	MonoClass* testclass = mono_class_from_name(image, "JJEngine_ScriptCore", "test");
+
+	MonoObject* classInstance2 = mono_object_new(s_data.AppDomain, testclass);
+	mono_runtime_object_init(classInstance2);
+
+	MonoMethod* method = mono_class_get_method_from_name(testclass, "run", 1);
+	MonoProperty* property = mono_class_get_property_from_name(testclass, "test_str");
+	MonoString* mono_string = (MonoString*)mono_property_get_value(property, classInstance2, nullptr, nullptr);
+	int len = mono_string_length(mono_string);
+	std::cout << "len:" << std::to_string(len) << std::endl;
+	char* csharp_str = mono_string_to_utf8(mono_string);
+	std::string s = csharp_str;
+	std::cout << s << std::endl;
+	mono_free(csharp_str);
+
+	
+
+	MonoClassField* field=mono_class_get_field_from_name(testclass, "iamstr");
+	MonoString* strval;
+	mono_field_get_value(classInstance2, field, &strval);
+	csharp_str = mono_string_to_utf8(strval);
+	s = csharp_str;
+	mono_free(csharp_str);
+
+	//s = arr;
+	std::cout << s << std::endl;
+
+	
+
+	float val = 20;
+	void* params[1] = { &val };
+	mono_runtime_invoke(method, classInstance2, params, nullptr);
+#pragma endregion  
 }
 
 void ScriptEngine::ShutdownMono()
@@ -106,7 +211,7 @@ MonoAssembly* ScriptEngine::LoadCSharpAssembly(const std::string& assemblyPath)
 	// NOTE: We can't use this image for anything other than loading the assembly because this image doesn't have a reference to the assembly
 	MonoImageOpenStatus status;
 	MonoImage* image = mono_image_open_from_data_full(fileData.get(), fileSize, 1, &status, 0);
-
+	
 	if (status != MONO_IMAGE_OK)
 	{
 		const char* errorMessage = mono_image_strerror(status);

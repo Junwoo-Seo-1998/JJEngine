@@ -18,6 +18,7 @@ IncludeDir["IMGUI"]="Libs/imgui/"
 IncludeDir["STB_IMAGE"]="Libs/stb_image/"
 IncludeDir["MONO"]="Libs/mono/include"
 IncludeDir["SPDLOG"]="Libs/spdlog/include"
+IncludeDir["FILEWATCH"]="Libs/filewatch/"
 --lib dir
 LibraryDir = {}
 LibraryDir["Mono_Debug"]="Libs/mono/lib/Debug"
@@ -61,6 +62,7 @@ project "JJEngine"
         "%{IncludeDir.STB_IMAGE}",
         "%{IncludeDir.MONO}",
         "%{IncludeDir.SPDLOG}",
+        "%{IncludeDir.FILEWATCH}",
     }
     files {
         "JJEngine/**.h",
@@ -161,6 +163,7 @@ project "Game"
         "%{IncludeDir.ENTT}",
         "%{IncludeDir.IMGUI}",
         "%{IncludeDir.SPDLOG}",
+        "%{IncludeDir.FILEWATCH}",
     }
     files {
         "Game/**.h",
@@ -209,6 +212,7 @@ project "Editor"
         "%{IncludeDir.ENTT}",
         "%{IncludeDir.IMGUI}",
         "%{IncludeDir.SPDLOG}",
+        "%{IncludeDir.FILEWATCH}",
     }
     files {
         "Editor/**.h",

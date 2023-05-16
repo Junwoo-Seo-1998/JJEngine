@@ -24,6 +24,11 @@ JJEngine::JJEngine()
 	sceneManager = new SceneManager{};
 }
 
+void JJEngine::ReloadScript()
+{
+	ScriptEngine::instance()->InitCore();
+}
+
 JJEngine::~JJEngine()
 {
 	delete window;
