@@ -8,6 +8,7 @@ public:
 	~ImGuiRenderer() = default;
 	void Init(void* window);
 	void GuiBegin();
+	void GuiDrawDockSpace();
 	void GuiEnd();
 	void Shutdown();
 private:

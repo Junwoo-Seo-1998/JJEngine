@@ -134,7 +134,8 @@ public:
 		framebuffer->UnBind();
 		//glDrawArrays(GL_TRIANGLES, 0, 6);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-		
+		ImGuiRenderer::Instance()->GuiDrawDockSpace();
+
 		ImGui::Begin("Button test");
 		if (ImGui::Button("Button 1")) {
 			evManager->notifyEvent(1);
@@ -161,13 +162,15 @@ public:
 		if (ev == 3) {
 			Log::Info("Button_3 clicked");
 		}
-		
+
 		//for imgui test and framebuffer
 		ImGui::Begin("framebuffer test");
 		constexpr ImVec2 size{ 480,320 };
 		unsigned textureID = framebuffer->GetColorTexture(0)->GetTextureID();
 		ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(textureID)), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 		ImGui::End();
+
+		
 	}
 	void Draw() override {}
 	void Unload()  override {}
