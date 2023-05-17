@@ -20,14 +20,14 @@ namespace JJEngine_ScriptCore
     {
         public main()
         {
-            Console.WriteLine("Script Core!!!!! 12314 ");
+            Console.WriteLine("yeay!");
             test();
         }
 
         public void test()
         {
-            Console.WriteLine("test!!!!!");
-            Graphics.SetClearColor(1.0f, 0.5f, 0.3f);
+            Console.WriteLine("color change");
+            Graphics.SetClearColor(1.0f, 0.8f, 0.3f);
         }
     }
 

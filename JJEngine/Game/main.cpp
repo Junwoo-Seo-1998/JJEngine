@@ -26,6 +26,7 @@ int main(void)
 			break;
 		case filewatch::Event::modified:
 			std::cout << "The file was modified. This can be a change in the time stamp or attributes." << '\n';
+			//JJEngine::ReloadScript();
 			break;
 		case filewatch::Event::renamed_old:
 			std::cout << "The file was renamed and this is the old name." << '\n';

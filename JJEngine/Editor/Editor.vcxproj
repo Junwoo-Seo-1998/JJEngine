@@ -96,6 +96,10 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="JJGameEditor.h" />
+    <ClInclude Include="TestScene.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
