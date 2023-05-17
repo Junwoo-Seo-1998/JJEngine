@@ -99,6 +99,8 @@
     <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\ComponentManager.h" />
     <ClInclude Include="Core\Engine.h" />
+    <ClInclude Include="Core\EventListener.h" />
+    <ClInclude Include="Core\EventManager.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h" />
     <ClInclude Include="Core\Graphics\IndexBuffer.h" />
     <ClInclude Include="Core\Graphics\Shader.h" />
@@ -125,6 +127,7 @@
     <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\ComponentManager.cpp" />
     <ClCompile Include="Core\Engine.cpp" />
+    <ClCompile Include="Core\EventManager.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Shader.cpp" />
