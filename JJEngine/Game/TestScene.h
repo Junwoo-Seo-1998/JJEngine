@@ -16,6 +16,7 @@
 #include "imgui.h"
 #include "Core/Graphics/FrameBuffer.h"
 #include "Core/Graphics/IndexBuffer.h"
+#include "Core/ImGui/ImGuiRenderer.h"
 #include "Core/Input/Input.h"
 
 class A {
@@ -118,7 +119,7 @@ public:
 	};
 	void Update(double dt) override
 	{
-
+		
 		Scene::Update(dt);
 		if(Input::IsKeyPressed(KeyCode::R))
 		{
@@ -139,11 +140,15 @@ public:
 		//glDrawArrays(GL_TRIANGLES, 0, 6);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 		//for imgui test and framebuffer
+		ImGuiRenderer::Instance()->GuiDrawDockSpaceBegin();
+	
 		ImGui::Begin("framebuffer test");
 		constexpr ImVec2 size{ 480,320 };
 		unsigned textureID = framebuffer->GetColorTexture(0)->GetTextureID();
 		ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(textureID)), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 		ImGui::End();
+
+		ImGuiRenderer::Instance()->GuiDrawDockSpaceEnd();
 	}
 	void Draw() override {}
 	void Unload()  override {}

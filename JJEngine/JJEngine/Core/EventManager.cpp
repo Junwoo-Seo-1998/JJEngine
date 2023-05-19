@@ -20,7 +20,7 @@ EventManager::EventManager(Registry* reg ) : registry(reg)
 
 void EventManager::Update()
 {
-	auto& listeners = registry->view<EventListener>();
+	auto listeners = registry->view<EventListener>();
 	while (eventQueue.empty() == false) {
 		type& temp = eventQueue.front();
 		for (auto& e:listeners) {

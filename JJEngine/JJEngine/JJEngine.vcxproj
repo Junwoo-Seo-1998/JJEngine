@@ -56,10 +56,10 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;DEBUG;JJ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;..\Libs\stduuid\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -76,13 +76,13 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;..\Libs\stduuid\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -96,9 +96,13 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Asset\Asset.h" />
+    <ClInclude Include="Core\Asset\AssetType.h" />
+    <ClInclude Include="Core\Asset\Manager\AssetManagerBase.h" />
     <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\ComponentManager.h" />
     <ClInclude Include="Core\Engine.h" />
+    <ClInclude Include="Core\Event\StringEvent.h" />
     <ClInclude Include="Core\EventListener.h" />
     <ClInclude Include="Core\EventManager.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h" />
@@ -119,6 +123,7 @@
     <ClInclude Include="Core\Utils\File.h" />
     <ClInclude Include="Core\Utils\Log.h" />
     <ClInclude Include="Core\Utils\PlatformDetection.h" />
+    <ClInclude Include="Core\Utils\UUIDGenerator.h" />
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\entt.h" />
     <ClInclude Include="Core\test.h" />
@@ -127,6 +132,7 @@
     <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\ComponentManager.cpp" />
     <ClCompile Include="Core\Engine.cpp" />
+    <ClCompile Include="Core\Event\StringEvent.cpp" />
     <ClCompile Include="Core\EventManager.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />
@@ -144,6 +150,7 @@
     <ClCompile Include="Core\Utils\IMGUI_IMPL.cpp" />
     <ClCompile Include="Core\Utils\Log.cpp" />
     <ClCompile Include="Core\Utils\STB_IMPL.cpp" />
+    <ClCompile Include="Core\Utils\UUIDGenerator.cpp" />
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
   </ItemGroup>

@@ -19,6 +19,7 @@ IncludeDir["STB_IMAGE"]="Libs/stb_image/"
 IncludeDir["MONO"]="Libs/mono/include"
 IncludeDir["SPDLOG"]="Libs/spdlog/include"
 IncludeDir["FILEWATCH"]="Libs/filewatch/"
+IncludeDir["STDUUID"]="Libs/stduuid/include"
 --lib dir
 LibraryDir = {}
 LibraryDir["Mono_Debug"]="Libs/mono/lib/Debug"
@@ -38,7 +39,7 @@ project "JJEngine"
     location "JJEngine"
     kind "StaticLib"
     language "C++"
-    cppdialect "c++17"
+    cppdialect "c++20"
     targetdir "bin/%{cfg.buildcfg}"
     objdir "bin/%{cfg.buildcfg}-obj"
     architecture "x86_64"
@@ -63,6 +64,7 @@ project "JJEngine"
         "%{IncludeDir.MONO}",
         "%{IncludeDir.SPDLOG}",
         "%{IncludeDir.FILEWATCH}",
+        "%{IncludeDir.STDUUID}",
     }
     files {
         "JJEngine/**.h",
@@ -143,7 +145,7 @@ project "Game"
     location "Game"
     kind "ConsoleApp"
     language "C++"
-    cppdialect "c++17"
+    cppdialect "c++20"
     targetdir "bin/%{cfg.buildcfg}"
     objdir "bin/%{cfg.buildcfg}-obj"
     architecture "x86_64"
@@ -164,6 +166,7 @@ project "Game"
         "%{IncludeDir.IMGUI}",
         "%{IncludeDir.SPDLOG}",
         "%{IncludeDir.FILEWATCH}",
+        "%{IncludeDir.STDUUID}",
     }
     files {
         "Game/**.h",
@@ -192,7 +195,7 @@ project "Editor"
     location "Editor"
     kind "ConsoleApp"
     language "C++"
-    cppdialect "c++17"
+    cppdialect "c++20"
     targetdir "bin/%{cfg.buildcfg}"
     objdir "bin/%{cfg.buildcfg}-obj"
     architecture "x86_64"
@@ -213,6 +216,7 @@ project "Editor"
         "%{IncludeDir.IMGUI}",
         "%{IncludeDir.SPDLOG}",
         "%{IncludeDir.FILEWATCH}",
+        "%{IncludeDir.STDUUID}",
     }
     files {
         "Editor/**.h",

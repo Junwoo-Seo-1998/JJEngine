@@ -97,7 +97,7 @@ void ImGuiRenderer::GuiBegin()
 	ImGui::NewFrame();
 }
 
-void ImGuiRenderer::GuiDrawDockSpace()
+void ImGuiRenderer::GuiDrawDockSpaceBegin()
 {
 	static bool opt_fullscreen = true;
 	static bool opt_padding = false;
@@ -161,8 +161,10 @@ void ImGuiRenderer::GuiDrawDockSpace()
 		}
 		ImGui::EndMenuBar();
 	}
+}
 
-
+void ImGuiRenderer::GuiDrawDockSpaceEnd()
+{
 	ImGui::End();
 }
 

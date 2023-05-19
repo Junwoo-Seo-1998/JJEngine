@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Asset">
+      <UniqueIdentifier>{253FD80C-9153-00BE-5AD5-A31DC6A8FCEE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Manager">
+      <UniqueIdentifier>{4FD03F4C-BB90-BB82-84CB-0400F04A005F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event">
+      <UniqueIdentifier>{E70B220D-5320-4ABE-1CA2-ED1D887546EF}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics">
       <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
     </Filter>
@@ -18,9 +27,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Asset\Asset.h">
+      <Filter>Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Asset\AssetType.h">
+      <Filter>Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Asset\Manager\AssetManagerBase.h">
+      <Filter>Asset\Manager</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\ComponentManager.h" />
     <ClInclude Include="Core\Engine.h" />
+    <ClInclude Include="Core\Event\StringEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
     <ClInclude Include="Core\EventListener.h" />
     <ClInclude Include="Core\EventManager.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h">
@@ -71,6 +92,9 @@
     <ClInclude Include="Core\Utils\PlatformDetection.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Utils\UUIDGenerator.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\entt.h" />
     <ClInclude Include="Core\test.h" />
@@ -79,6 +103,9 @@
     <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\ComponentManager.cpp" />
     <ClCompile Include="Core\Engine.cpp" />
+    <ClCompile Include="Core\Event\StringEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
     <ClCompile Include="Core\EventManager.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp">
       <Filter>Graphics</Filter>
@@ -120,6 +147,9 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Utils\STB_IMPL.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utils\UUIDGenerator.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />

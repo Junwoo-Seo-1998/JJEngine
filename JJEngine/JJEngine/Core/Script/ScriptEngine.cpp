@@ -6,6 +6,9 @@
 #include "mono/metadata/assembly.h"
 #include "mono/metadata/threads.h"
 #include "glad.h"
+
+static std::string AppDomainName="JJ_AppDomain";
+
 static std::shared_ptr<ScriptEngine> createInstance()
 {
 	return std::make_shared<ScriptEngine>();
@@ -30,7 +33,7 @@ void ScriptEngine::Init()
 
 void ScriptEngine::InitCore()
 {
-	s_data.AppDomain = mono_domain_create_appdomain("JJEngineAppDomain", nullptr);
+	s_data.AppDomain = mono_domain_create_appdomain(AppDomainName.data(), nullptr);
 	mono_domain_set(s_data.AppDomain, false);
 #pragma region test
 	mono_add_internal_call("JJEngine_ScriptCore.InternalCalls::Graphics_SetClearColor", (void*)test_clearColor);
@@ -102,12 +105,12 @@ void ScriptEngine::InitMono()
 		std::cerr << "mono jit init failed" << std::endl;
 		throw;
 	}
-	s_data.AppDomain = mono_domain_create_appdomain("JJEngineAppDomain", nullptr);
+	s_data.AppDomain = mono_domain_create_appdomain(AppDomainName.data(), nullptr);
 	mono_domain_set(s_data.AppDomain, false);
-	mono_thread_set_main(mono_thread_current());
+	//mono_thread_set_main(mono_thread_current());
 	mono_add_internal_call("JJEngine_ScriptCore.InternalCalls::Graphics_SetClearColor", (void*)test_clearColor);
 
-#pragma region test
+/*#pragma region test
 	//for testing
 	MonoAssembly* assembly = LoadCSharpAssembly("Resources/Scripts/JJEngine-ScriptCore.dll");
 	PrintAssemblyTypes(assembly);
@@ -161,7 +164,7 @@ void ScriptEngine::InitMono()
 	float val = 20;
 	void* params[1] = { &val };
 	mono_runtime_invoke(method, classInstance2, params, nullptr);
-#pragma endregion  
+#pragma endregion  */
 }
 
 void ScriptEngine::ShutdownMono()
@@ -170,7 +173,7 @@ void ScriptEngine::ShutdownMono()
 
 	mono_domain_unload(s_data.AppDomain);
 	s_data.AppDomain = nullptr;
-
+	
 	mono_jit_cleanup(s_data.RootDomain);
 	s_data.RootDomain = nullptr;
 }

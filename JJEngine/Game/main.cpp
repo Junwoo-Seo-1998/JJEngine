@@ -15,6 +15,7 @@ int main(void)
 	TestScene test1{" test 1 "};
 	TestScene test2{" test 2 "};
 
+
 	filewatch::FileWatch<std::string> watch("./Resources/Scripts/JJEngine-ScriptCore.dll", [](const std::string & path, const filewatch::Event change_type) {
 		switch (change_type)
 		{
