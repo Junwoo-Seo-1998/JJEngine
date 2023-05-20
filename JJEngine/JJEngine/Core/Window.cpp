@@ -74,6 +74,7 @@ void Window::update(std::function<void()> updateCallback)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	Input::Reset();
 	glfwPollEvents();
+	Input::PostEventUpdate();
 	updateCallback();
 	glfwSwapBuffers(window);
 }
