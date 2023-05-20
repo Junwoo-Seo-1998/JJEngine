@@ -18,6 +18,7 @@
 #include "Core/Graphics/IndexBuffer.h"
 #include "Core/ImGui/ImGuiRenderer.h"
 #include "Core/Input/Input.h"
+#include "Core/Utils/Log.h"
 
 class A {
 	int a{ 1 };
@@ -121,11 +122,16 @@ public:
 	{
 		
 		Scene::Update(dt);
-		if(Input::IsKeyPressed(KeyCode::R))
+		if(Input::IsPressed(KeyCode::R))
 		{
 			JJEngine::ReloadScript();
 		}
-
+		if(Input::IsRepeating(KeyCode::T))
+		{
+			Log::Critical("testing repeat");
+		}
+		if(Input::IsPressed(MouseCode::Left))
+			Log::Critical("mouse");
 
 		framebuffer->Bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

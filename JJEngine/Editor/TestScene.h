@@ -21,6 +21,8 @@
 #include <Core/EventManager.h>
 #include <Core/EventListener.h>
 
+#include "Core/Event/StringEvent.h"
+
 
 class TestScene : public Scene
 {
@@ -144,6 +146,11 @@ public:
 		if (ImGui::Button("Button 2")) {
 			evManager->notifyEvent(2);
 			Log::Info("event notified");
+
+			StringEvent test("1234");
+			StringEvent test2("1234");
+			Log::Warn(test.eventID);
+			Log::Warn(test2.eventID);
 		}
 		if (ImGui::Button("Button 3")) {
 			evManager->notifyEvent(3);

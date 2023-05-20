@@ -1,11 +1,9 @@
-/* Start Header -------------------------------------------------------
-Project: JJEngine
-Members: Junwoo Seo, Junsu Jang
-Platform: x64
-Date: 12/16/2022
-End Header-------------------------------------------------------- */
 #pragma once
+/* Start Header -------------------------------------------------------
+Author: Junwoo Seo
+End Header --------------------------------------------------------*/
 #include <iostream>
+//enums From glfw3.h however for easy use i made my engine one that converts glfw api to mine
 
 typedef enum class KeyCode : unsigned short
 {
@@ -143,6 +141,19 @@ typedef enum class KeyCode : unsigned short
 	Last
 } Key;
 
+typedef enum class MouseCode : unsigned short
+{
+	Left = 0,
+	Right,
+	Middle,
+	Button_4,
+	Button_5,
+	Button_6,
+	Button_7,
+	Button_Last,
+	Last,//for size
+} Mouse;
+
 inline std::ostream& operator<<(std::ostream& os, KeyCode keyCode)
 {
 	os << static_cast<int>(keyCode);
@@ -275,3 +286,17 @@ inline std::ostream& operator<<(std::ostream& os, KeyCode keyCode)
 #define KEY_RIGHT_ALT       KeyCode::RightAlt
 #define KEY_RIGHT_SUPER     KeyCode::RightSuper
 #define KEY_MENU            KeyCode::Menu
+
+
+#define MOUSE_BUTTON_1         MouseCode::Left
+#define MOUSE_BUTTON_2         MouseCode::Right
+#define MOUSE_BUTTON_3         MouseCode::Middle
+#define MOUSE_BUTTON_4         MouseCode::Button_4
+#define MOUSE_BUTTON_5         MouseCode::Button_5
+#define MOUSE_BUTTON_6         MouseCode::Button_6
+#define MOUSE_BUTTON_7         MouseCode::Button_7
+#define MOUSE_BUTTON_8         MouseCode::Button_Last
+#define MOUSE_BUTTON_LAST      MOUSE_BUTTON_8
+#define MOUSE_BUTTON_LEFT      MOUSE_BUTTON_1
+#define MOUSE_BUTTON_RIGHT     MOUSE_BUTTON_2
+#define MOUSE_BUTTON_MIDDLE    MOUSE_BUTTON_3

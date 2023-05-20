@@ -7,3 +7,8 @@ StringEvent::StringEvent(const std::string& eventName)
 {
 
 }
+
+StringEvent::StringEvent(const StringEvent& r_event)
+	:eventID(r_event.eventID)
+{
+}

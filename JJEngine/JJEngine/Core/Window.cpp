@@ -51,31 +51,11 @@ Window::Window()
 		glfwTerminate();
 		return;
 	}
-	//glfwSetWindowUserPointer(window, &m_WindowData);
-	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
-		{
-			//WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+	
 
-			switch (action)
-			{
-				case GLFW_PRESS:
-				{
-					Input::instance()->SetKey(static_cast<KeyCode>(key), true, false);
-					break;
-				}
-				case GLFW_RELEASE:
-				{
-					Input::instance()->SetKey(static_cast<KeyCode>(key), false, false);
-					break;
-				}
-				case GLFW_REPEAT:
-				{
-					Input::instance()->SetKey(static_cast<KeyCode>(key), true, true);
-					break;
-				}
-			}
-		});
-
+	glfwSetKeyCallback(window, GLFWKeyCallback);
+	glfwSetMouseButtonCallback(window, GLFWMouseCallback);
+	glfwSetCursorPosCallback(window, GLFWMousePositionCallback);
 
 	//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
@@ -92,7 +72,7 @@ void Window::update(std::function<void()> updateCallback)
 	glfwGetWindowSize(window, &windowWidth, &windowHeight);
 	glViewport(0, 0, windowWidth, windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	Input::instance()->Reset();
+	Input::Reset();
 	glfwPollEvents();
 	updateCallback();
 	glfwSwapBuffers(window);
@@ -111,4 +91,57 @@ GLFWwindow* Window::GetGLFWWindow()
 std::tuple<int, int> Window::GetWidthAndHeight()
 {
 	return { windowWidth, windowHeight };
+}
+
+void Window::GLFWKeyCallback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
+{
+	if (key < 0)
+		return;
+	switch (action)
+	{
+	case GLFW_PRESS:
+	{
+		Input::SetKey(static_cast<KeyCode>(key), true);
+		break;
+	}
+	case GLFW_RELEASE:
+	{
+		Input::SetKey(static_cast<KeyCode>(key), false);
+		break;
+	}
+	case GLFW_REPEAT:
+	{
+		Input::SetKey(static_cast<KeyCode>(key), true);
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void Window::GLFWMouseCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	switch (action)
+	{
+	case GLFW_PRESS:
+	{
+		Input::SetMouseButton(static_cast<Mouse>(button), true);
+		break;
+	}
+	case GLFW_RELEASE:
+	{
+		Input::SetMouseButton(static_cast<Mouse>(button), false);
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void Window::GLFWMousePositionCallback(GLFWwindow* window, double xposIn, double yposIn)
+{
+	float xpos = static_cast<float>(xposIn);
+	float ypos = static_cast<float>(yposIn);
+
+	Input::SetMousePosition(xpos, ypos);
 }

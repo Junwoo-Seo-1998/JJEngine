@@ -1,13 +1,8 @@
 /* Start Header -------------------------------------------------------
-Project: JJEngine
-Members: Junwoo Seo, Junsu Jang
-Platform: x64
-Date: 12/16/2022
-End Header-------------------------------------------------------- */
+Author: Junwoo Seo
+End Header --------------------------------------------------------*/
 #pragma once
-#include <array>
 #include <memory>
-#include <stack>
 #include "InputKeyCodes.h"
 
 class Window;
@@ -19,17 +14,23 @@ namespace InputStatics
 
 class Input
 {
-	friend std::shared_ptr<Input> InputStatics::createInstance();
 	friend Window;
 public:
-	static std::shared_ptr<Input> instance();
-	static bool IsKeyPressed(KeyCode key);
-	static bool IsTriggered(KeyCode key);
-	static bool IsRepeating(KeyCode key);
-	static bool IsKeyReleased(KeyCode key);
+	Input() = delete;
+
+	static bool IsPressed(Key key);
+	static bool IsPressed(Mouse button);
+	static bool IsTriggered(Key key);
+	static bool IsRepeating(Key key);
+	static bool IsReleased(Key key);
+	static bool IsReleased(Mouse button);
+
+	static std::tuple<float, float> GetMousePosition();
+	static std::tuple<float, float> GetMouseOffset();
 private:
-	Input() = default;
 	static void Reset();
-	static void SetKey(KeyCode key, bool state, bool repeating);
+	static void SetKey(Key key, bool state);
+	static void SetMouseButton(Mouse button, bool state);
+	static void SetMousePosition(float x, float y);
 
 };
