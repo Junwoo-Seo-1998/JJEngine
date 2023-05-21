@@ -2,6 +2,8 @@
 #include "Core/Engine.h"
 #include "Core/SceneManager.h"
 #include "TestScene.h"
+#include "ShadowScene.h"
+
 #include "Core/Utils/Log.h"
 #include "FileWatch.hpp"
 #include <filesystem>
@@ -14,7 +16,7 @@ int main(void)
 	JJEngine::init();
 	TestScene test1{" test 1 "};
 	TestScene test2{" test 2 "};
-
+	ShadowScene shadowScene;
 
 	filewatch::FileWatch<std::string> watch("./Resources/Scripts/JJEngine-ScriptCore.dll", [](const std::string & path, const filewatch::Event change_type) {
 		switch (change_type)
@@ -46,7 +48,10 @@ int main(void)
 	}*/
 	JJEngine::GetSceneManager()->enrollScene(0, test1);
 	JJEngine::GetSceneManager()->enrollScene(1, test2);
+	JJEngine::GetSceneManager()->enrollScene(2, shadowScene);
+
 	JJEngine::GetSceneManager()->setNextScene(1);
+
 	Log::Warn("Warn");
 	Log::Info("Info");
 	Log::Trace("Trace");

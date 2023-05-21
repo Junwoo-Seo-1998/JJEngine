@@ -96,10 +96,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ShadowScene.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ShadowScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JJEngine\JJEngine.vcxproj">
