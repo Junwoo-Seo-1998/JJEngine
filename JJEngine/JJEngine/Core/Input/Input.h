@@ -28,7 +28,11 @@ public:
 	static bool IsReleased(Key key);
 	static bool IsReleased(Mouse button);
 
+	static void SetMouseCursorEnable(bool input);
+
 	static std::tuple<float, float> GetMousePosition();
+	static std::tuple<float, float> GetLastMousePosition();
+
 	static std::tuple<float, float> GetMouseOffset();
 private:
 	static void Reset();
@@ -36,5 +40,6 @@ private:
 	static void SetKey(Key key, bool state);
 	static void SetMouseButton(Mouse button, bool state);
 	static void SetMousePosition(float x, float y);
+private:
 
 };

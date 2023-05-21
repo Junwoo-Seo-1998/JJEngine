@@ -8,6 +8,9 @@ Project: junwoo.seo_cs350_1
 Author: Junwoo Seo, junwoo.seo, 0055213
 End Header --------------------------------------------------------*/
 #include "Input.h"
+#include "Core/Engine.h"
+#include "Core/Window.h"
+#include <GLFW/glfw3.h>
 #include <array>
 #include <stack>
 
@@ -73,9 +76,19 @@ bool Input::IsReleased(Mouse button)
 	return InputStatics::s_mouse_released[static_cast<unsigned short>(button)];
 }
 
+void Input::SetMouseCursorEnable(bool input)
+{
+	glfwSetInputMode(JJEngine::GetWindow()->GetGLFWWindow(), GLFW_CURSOR, input ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+}
+
 std::tuple<float, float> Input::GetMousePosition()
 {
 	return InputStatics::s_MousePos;
+}
+
+std::tuple<float, float> Input::GetLastMousePosition()
+{
+	return InputStatics::s_LastMousePos;
 }
 
 std::tuple<float, float> Input::GetMouseOffset()

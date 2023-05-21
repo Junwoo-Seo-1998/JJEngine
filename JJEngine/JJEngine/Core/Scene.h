@@ -19,6 +19,8 @@ public:
 	virtual void Update(double dt) ;
 	virtual void Draw() = 0;
 	virtual void Unload() = 0;
+
+	std::shared_ptr<ComponentManager>& GetCM();
 protected:
 	std::shared_ptr<ComponentManager> components{};
 	ID id{};

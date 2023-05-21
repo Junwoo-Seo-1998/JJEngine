@@ -15,3 +15,8 @@ void Scene::Update(double dt)
 {
 	//components->Update(dt);
 }
+
+std::shared_ptr<ComponentManager>& Scene::GetCM()
+{
+	return components;
+}
