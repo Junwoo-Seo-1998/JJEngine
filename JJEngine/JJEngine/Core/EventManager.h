@@ -7,10 +7,11 @@ End Header-------------------------------------------------------- */
 #pragma once
 #include <queue>
 #include "entt.h"
+#include "Event/StringEvent.h"
 
 class Scene;
 class EventManager {
-	using type = int;
+	using type = StringEvent;
 	std::queue<type> eventQueue{};
 	//std::vector<type> events{};
 	Registry* registry{};

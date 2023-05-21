@@ -124,20 +124,20 @@ public:
 		ImGuiSubWindow* sub_window = &registry.emplace<ImGuiSubWindow>(registry.create(), "Button event test");
 		sub_window->Push_ImGuiCommand([&]()->void {
 				if (ImGui::Button("Button 1")) {
-					evManager->notifyEvent(1);
+					evManager->notifyEvent(StringEvent{"Button 1 clicked"});
 				}
 			});
 		sub_window->Push_ImGuiCommand([&]()->void {
 			if (ImGui::Button("Button 2")) {
-				evManager->notifyEvent(2);
+				evManager->notifyEvent(StringEvent{ "Button 2 clicked" });
 			}
 			});
 		sub_window->Push_ImGuiCommand([&]()->void {
 			if (ImGui::Button("Button 3")) {
-				evManager->notifyEvent(3);
+				evManager->notifyEvent(StringEvent{ "Button 3 clicked" });
 			}
 			});
-		sub_window = &registry.emplace<ImGuiSubWindow>(registry.create(), "File_system");
+		sub_window = &registry.emplace<ImGuiSubWindow>(registry.create(), "Assets");
 		sub_window = &registry.emplace<ImGuiSubWindow>(registry.create(), "framebuffer test");
 		sub_window->Push_ImGuiCommand([&]()->void {
 			//for imgui test and framebuffer
@@ -172,15 +172,18 @@ public:
 
 		evManager->Update();
 		EventListener& listener = registry.get<EventListener>(eventListener);
-		int ev = listener.GetNextEvent();
-		if (ev == 1) {
+		StringEvent ev = listener.GetNextEvent();
+		if (ev == StringEvent{ "Button 1 clicked" }) {
 			Log::Info("Button_1 clicked");
+			Log::Info("Button_1 event\n");
 		}
-		if (ev == 2) {
+		if (ev == StringEvent{ "Button 2 clicked" }) {
 			Log::Info("Button_2 clicked");
+			Log::Info("Button_2 event\n");
 		}
-		if (ev == 3) {
+		if (ev == StringEvent{ "Button 3 clicked" }) {
 			Log::Info("Button_3 clicked");
+			Log::Info("Button_3 event\n");
 		}
 	}
 

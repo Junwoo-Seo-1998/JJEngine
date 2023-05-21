@@ -11,7 +11,7 @@ End Header-------------------------------------------------------- */
 #include <string>
 
 class ImGuiSubWindow {
-	std::vector<ImGuiContent*> contents{};
+	std::vector<ImGuiContent*> contents{}; // change to entt registry?
 	std::string windowName{};
 public:
 	ImGuiSubWindow(std::string window_name);

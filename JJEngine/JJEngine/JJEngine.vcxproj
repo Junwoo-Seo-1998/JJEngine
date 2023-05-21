@@ -111,7 +111,10 @@
     <ClInclude Include="Core\Graphics\Texture.h" />
     <ClInclude Include="Core\Graphics\VertexArray.h" />
     <ClInclude Include="Core\Graphics\VertexBuffer.h" />
+    <ClInclude Include="Core\ImGui\ImGuiCommand.h" />
+    <ClInclude Include="Core\ImGui\ImGuiContent.h" />
     <ClInclude Include="Core\ImGui\ImGuiRenderer.h" />
+    <ClInclude Include="Core\ImGui\ImGuiSubWindow.h" />
     <ClInclude Include="Core\Input\Input.h" />
     <ClInclude Include="Core\Input\InputKeyCodes.h" />
     <ClInclude Include="Core\LayerManager.h" />
@@ -140,7 +143,9 @@
     <ClCompile Include="Core\Graphics\Texture.cpp" />
     <ClCompile Include="Core\Graphics\VertexArray.cpp" />
     <ClCompile Include="Core\Graphics\VertexBuffer.cpp" />
+    <ClCompile Include="Core\ImGui\ImGuiCommand.cpp" />
     <ClCompile Include="Core\ImGui\ImGuiRenderer.cpp" />
+    <ClCompile Include="Core\ImGui\ImGuiSubWindow.cpp" />
     <ClCompile Include="Core\Input\Input.cpp" />
     <ClCompile Include="Core\LayerManager.cpp" />
     <ClCompile Include="Core\Scene.cpp" />
