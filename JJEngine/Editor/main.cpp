@@ -10,7 +10,7 @@ int main(void)
 	Window* window = new Window{};
 	SceneManager* sceneManager = new SceneManager{};
 	ImGuiRenderer::Instance()->Init(window->GetGLFWWindow());
-	TestScene test1{ " editor eeeeeeeeeeeeeeee " };
+	TestScene test1{ "editor" };
 	sceneManager->enrollScene(0, test1);
 	sceneManager->setNextScene(0);
 	bool engineLoop{ true };

@@ -23,6 +23,7 @@
 
 #include "Core/Event/StringEvent.h"
 
+#include <Core/ImGui/ImGuiSubWindow.h>
 
 class TestScene : public Scene
 {
@@ -43,7 +44,7 @@ public:
 	~TestScene();
 	void Load() override
 	{
-		std::cout << text << std::endl;
+		Log::Info("Scene: " + text);
 		shader = Shader::CreateShaderFromFile({
 	{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.vert"}},
 	{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.frag"} }
@@ -119,6 +120,31 @@ public:
 		eventListener = registry.create();
 		registry.emplace<EventListener>(eventListener);
 		evManager = new EventManager{&registry};
+
+		ImGuiSubWindow* sub_window = &registry.emplace<ImGuiSubWindow>(registry.create(), "Button event test");
+		sub_window->Push_ImGuiCommand([&]()->void {
+				if (ImGui::Button("Button 1")) {
+					evManager->notifyEvent(1);
+				}
+			});
+		sub_window->Push_ImGuiCommand([&]()->void {
+			if (ImGui::Button("Button 2")) {
+				evManager->notifyEvent(2);
+			}
+			});
+		sub_window->Push_ImGuiCommand([&]()->void {
+			if (ImGui::Button("Button 3")) {
+				evManager->notifyEvent(3);
+			}
+			});
+		sub_window = &registry.emplace<ImGuiSubWindow>(registry.create(), "File_system");
+		sub_window = &registry.emplace<ImGuiSubWindow>(registry.create(), "framebuffer test");
+		sub_window->Push_ImGuiCommand([&]()->void {
+			//for imgui test and framebuffer
+			constexpr ImVec2 size{ 480,320 };
+			unsigned textureID = framebuffer->GetColorTexture(0)->GetTextureID();
+			ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(textureID)), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+			});
 	};
 	void Update(double dt) override
 	{
@@ -136,24 +162,15 @@ public:
 		framebuffer->UnBind();
 		//glDrawArrays(GL_TRIANGLES, 0, 6);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
 		ImGuiRenderer::Instance()->GuiDrawDockSpaceBegin();
+		auto subWindow = registry.view<ImGuiSubWindow>();
+		for (auto& id: subWindow) {
+			subWindow.get<ImGuiSubWindow>(id).Update();
+		}
+		ImGuiRenderer::Instance()->GuiDrawDockSpaceEnd();
 
-		ImGui::Begin("Button test");
-		if (ImGui::Button("Button 1")) {
-			evManager->notifyEvent(1);
-			Log::Info("event notified");
-		}
-		if (ImGui::Button("Button 2")) {
-			evManager->notifyEvent(2);
-			Log::Info("event notified");
-		}
-		if (ImGui::Button("Button 3")) {
-			evManager->notifyEvent(3);
-			Log::Info("event notified");
-		}
-		ImGui::End();
-
-		/*evManager->Update();
+		evManager->Update();
 		EventListener& listener = registry.get<EventListener>(eventListener);
 		int ev = listener.GetNextEvent();
 		if (ev == 1) {
@@ -164,17 +181,9 @@ public:
 		}
 		if (ev == 3) {
 			Log::Info("Button_3 clicked");
-		}*/
-
-		//for imgui test and framebuffer
-		/*ImGui::Begin("framebuffer test");
-		constexpr ImVec2 size{ 480,320 };
-		unsigned textureID = framebuffer->GetColorTexture(0)->GetTextureID();
-		ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(textureID)), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-		ImGui::End();*/
-
-		ImGuiRenderer::Instance()->GuiDrawDockSpaceEnd();
+		}
 	}
+
 	void Draw() override {}
 	void Unload()  override {}
 private:
