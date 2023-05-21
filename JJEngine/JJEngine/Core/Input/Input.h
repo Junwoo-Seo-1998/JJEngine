@@ -21,7 +21,10 @@ public:
 	static bool IsPressed(Key key);
 	static bool IsPressed(Mouse button);
 	static bool IsTriggered(Key key);
+	static bool IsTriggered(Mouse button);
 	static bool IsRepeating(Key key);
+	//window doesn't support repeating event for mouse
+	//static bool IsRepeating(Mouse button);
 	static bool IsReleased(Key key);
 	static bool IsReleased(Mouse button);
 
@@ -33,6 +36,7 @@ public:
 	static std::tuple<float, float> GetMouseOffset();
 private:
 	static void Reset();
+	static void PostEventUpdate();
 	static void SetKey(Key key, bool state);
 	static void SetMouseButton(Mouse button, bool state);
 	static void SetMousePosition(float x, float y);

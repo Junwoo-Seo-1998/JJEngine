@@ -7,10 +7,12 @@ End Header-------------------------------------------------------- */
 
 #include "EventManager.h"
 #include "EventListener.h"
+#include "Utils/Log.h"
 
 void EventManager::notifyEvent(type e)
 {
 	eventQueue.push(e);
+	Log::Info("event notified");
 }
 
 EventManager::EventManager(Registry* reg ) : registry(reg)

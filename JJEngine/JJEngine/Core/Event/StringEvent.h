@@ -1,13 +1,13 @@
 #pragma once
 #include "uuid.h"
-using StringEventID = uuids::uuid;
-using UUIDNamespace = uuids::uuid;
 class StringEvent
 {
+	using StringEventID = uuids::uuid;
 public:
-
-	StringEventID eventID;
 	StringEvent() = delete;
 	StringEvent(const std::string& eventName);
 	StringEvent(const StringEvent& r_event);
+	bool operator==(const StringEvent& r_event) const;
+private:
+	StringEventID eventID;
 };
