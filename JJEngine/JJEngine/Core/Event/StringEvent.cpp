@@ -12,3 +12,8 @@ StringEvent::StringEvent(const StringEvent& r_event)
 	:eventID(r_event.eventID)
 {
 }
+
+bool StringEvent::operator==(const StringEvent& r_event) const
+{
+	return eventID == r_event.eventID;
+}
