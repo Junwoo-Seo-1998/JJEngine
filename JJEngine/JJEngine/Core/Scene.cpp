@@ -7,7 +7,29 @@ End Header-------------------------------------------------------- */
 #include "Scene.h"
 #include "ComponentManager.h"
 
-Scene::Scene():components(std::make_shared<ComponentManager>()),id(components->GetNewEntityID())
+Scene::Scene()
+	:m_scene_name("unnamed-scene")
+{
+}
+
+Scene::Scene(const std::string& scene_name)
+	:m_scene_name(scene_name)
+{
+}
+
+Scene::~Scene()
+{
+}
+
+void Scene::Awake()
+{
+}
+
+void Scene::OnEnable()
+{
+}
+
+void Scene::Start()
 {
 }
 
@@ -15,7 +37,14 @@ void Scene::Update()
 {
 }
 
-std::shared_ptr<ComponentManager>& Scene::GetCM()
+void Scene::PostUpdate()
 {
-	return components;
+}
+
+void Scene::OnDisable()
+{
+}
+
+void Scene::OnDestroy()
+{
 }

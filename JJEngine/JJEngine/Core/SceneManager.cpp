@@ -61,7 +61,7 @@ void SceneManager::update()
 	case SceneManager::SceneManagerState::Load:
 		prevScene = nowScene;
 		nowScene = nextScene;
-		nowScene->Load();
+		nowScene->Start();
 		nowState = SceneManagerState::Update;
 		break;
 	case SceneManager::SceneManagerState::Update:
@@ -70,15 +70,15 @@ void SceneManager::update()
 		}
 		else {
 			nowScene->Update();
-			nowScene->Draw();
+			nowScene->PostUpdate();
 		}
 		break;
 	case SceneManager::SceneManagerState::Unload:
 		nowState = SceneManagerState::Load;
-		nowScene->Unload();
+		nowScene->OnDisable();
 		break;
 	case SceneManager::SceneManagerState::Exit:
-		if (nowScene != nullptr) { nowScene->Unload(); }
+		if (nowScene != nullptr) { nowScene->OnDisable(); }
 		break;
 	default:
 		break;

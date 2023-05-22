@@ -13,15 +13,17 @@ class Scene
 {
 public:
 	Scene();
-	//Scene(std::string) {};
-	virtual ~Scene() {};
-	virtual void Load() = 0;
-	virtual void Update();
-	virtual void Draw() = 0;
-	virtual void Unload() = 0;
+	Scene(const std::string& scene_name);
+	virtual ~Scene();
 
-	std::shared_ptr<ComponentManager>& GetCM();
+	virtual void Awake();
+	virtual void OnEnable();
+	virtual void Start();
+	virtual void Update();
+	virtual void PostUpdate();
+	virtual void OnDisable();
+	virtual void OnDestroy();
+
 protected:
-	std::shared_ptr<ComponentManager> components{};
-	ID id{};
+	std::string m_scene_name;
 };

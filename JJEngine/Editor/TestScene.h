@@ -30,10 +30,6 @@
 
 class TestScene : public Scene
 {
-	Registry registry{};
-	ID eventListener{};
-	EventManager* evManager{};
-
 	std::string text{};
 	std::shared_ptr<VertexArray> vertex_array;
 	std::shared_ptr<VertexBuffer> vertex_buffer;
@@ -45,7 +41,7 @@ class TestScene : public Scene
 public:
 	TestScene(std::string);
 	~TestScene();
-	void Load() override
+	void Start() override
 	{
 		Log::Info("Scene: " + text);
 		shader = Shader::CreateShaderFromFile({
@@ -118,36 +114,6 @@ public:
 
 		framebuffer = FrameBuffer::CreateFrameBuffer({ 1200, 800, { FrameBufferFormat::RGB } });
 		glClearColor(0.3, 0.7, 0.3, 1.0);
-
-
-		eventListener = registry.create();
-		registry.emplace<EventListener>(eventListener);
-		evManager = new EventManager{&registry};
-
-		ImGuiSubWindow* sub_window = &registry.emplace<ImGuiSubWindow>(registry.create(), "Button event test");
-		sub_window->Push_ImGuiCommand([&]()->void {
-				if (ImGui::Button("Button 1")) {
-					evManager->notifyEvent(StringEvent{"Button 1 clicked"});
-				}
-			});
-		sub_window->Push_ImGuiCommand([&]()->void {
-			if (ImGui::Button("Button 2")) {
-				evManager->notifyEvent(StringEvent{ "Button 2 clicked" });
-			}
-			});
-		sub_window->Push_ImGuiCommand([&]()->void {
-			if (ImGui::Button("Button 3")) {
-				evManager->notifyEvent(StringEvent{ "Button 3 clicked" });
-			}
-			});
-		sub_window = &registry.emplace<ImGuiSubWindow>(registry.create(), "Assets");
-		sub_window = &registry.emplace<ImGuiSubWindow>(registry.create(), "framebuffer test");
-		sub_window->Push_ImGuiCommand([&]()->void {
-			//for imgui test and framebuffer
-			constexpr ImVec2 size{ 480,320 };
-			unsigned textureID = framebuffer->GetColorTexture(0)->GetTextureID();
-			ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(textureID)), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-			});
 	};
 	void Update() override
 	{
@@ -166,41 +132,21 @@ public:
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 		ImGuiRenderer::Instance()->GuiDrawDockSpaceBegin();
-		auto subWindow = registry.view<ImGuiSubWindow>();
-		for (auto& id: subWindow) {
-			subWindow.get<ImGuiSubWindow>(id).Update();
-		}
-		ImGuiRenderer::Instance()->GuiDrawDockSpaceEnd();
 
-		evManager->Update();
-		EventListener& listener = registry.get<EventListener>(eventListener);
-		StringEvent ev = listener.GetNextEvent();
-		if (ev == StringEvent{ "Button 1 clicked" }) {
-			Log::Info("Button_1 clicked");
-			Log::Info("Button_1 event\n");
-		}
-		if (ev == StringEvent{ "Button 2 clicked" }) {
-			Log::Info("Button_2 clicked");
-			Log::Info("Button_2 event\n");
-		}
-		if (ev == StringEvent{ "Button 3 clicked" }) {
-			Log::Info("Button_3 clicked");
-			Log::Info("Button_3 event\n");
-		}
+		ImGuiRenderer::Instance()->GuiDrawDockSpaceEnd();
 	}
 
-	void Draw() override {}
-	void Unload()  override {}
+	void PostUpdate() override {}
+	void OnDisable()  override {}
 private:
 
 };
 
-TestScene::TestScene(std::string t) :Scene(), text(t)
+TestScene::TestScene(std::string t) :Scene(t)
 {
 
 }
 
 TestScene::~TestScene()
 {
-	delete evManager;
 }

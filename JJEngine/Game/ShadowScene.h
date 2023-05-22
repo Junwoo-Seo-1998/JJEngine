@@ -12,10 +12,10 @@ class ShadowScene : public Scene
 	std::shared_ptr<VertexArray> shadowSceneVAO;
 	std::shared_ptr<Shader> shader;
 public:
-	virtual void Load() override;
+	virtual void Start() override;
 	virtual void Update() override;
-	virtual void Draw() override;
-	virtual void Unload() override {};
+	virtual void PostUpdate() override;
+	virtual void OnDisable() override {};
 	void AddObject(const Model& obj)
 	{
 		objectGroups.push_back(obj);

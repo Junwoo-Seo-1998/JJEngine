@@ -97,7 +97,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ShadowScene.h" />
-    <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShadowScene.cpp" />

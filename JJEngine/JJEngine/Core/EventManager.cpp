@@ -4,7 +4,7 @@ Members: Junwoo Seo, Junsu Jang, Daehyeon Kim
 Platform: x64
 Date: 05/14/2023
 End Header-------------------------------------------------------- */
-
+#include "entt/entt.hpp"
 #include "EventManager.h"
 #include "EventListener.h"
 #include "Utils/Log.h"

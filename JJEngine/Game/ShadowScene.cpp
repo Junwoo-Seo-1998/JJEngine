@@ -1,7 +1,7 @@
 #include "ShadowScene.h"
 #include "Core/Graphics/Graphics.h"
 #include <glad.h>
-void ShadowScene::Load()
+void ShadowScene::Start()
 {
 	Model model;
 	model.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreateSphere(20, 20, 1.f, { 0.f, 0.f, 0.f })));
@@ -29,13 +29,6 @@ void ShadowScene::Update()
 {
 	glClearColor(0.3, 0.7, 0.3, 1.0);
 
-
-
-
-}
-
-void ShadowScene::Draw()
-{
 	VariableContainerType variables;
 	variables.emplace("Model", objectGroups[0]);
 	variables.emplace("Shader", shader);
@@ -44,4 +37,9 @@ void ShadowScene::Draw()
 	Graphics::GetInstance()->AddRenderCommand(CommandType::Draw, variables);
 
 	Graphics::GetInstance()->ExecuteRenderCommands();
+}
+
+void ShadowScene::PostUpdate()
+{
+	
 }

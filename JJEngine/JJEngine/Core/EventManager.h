@@ -6,12 +6,12 @@ Date: 05/14/2023
 End Header-------------------------------------------------------- */
 #pragma once
 #include <queue>
-#include "entt.h"
 #include "Event/StringEvent.h"
 
 class Scene;
 class EventManager {
 	using type = StringEvent;
+	using Registry = entt::registry;
 	std::queue<type> eventQueue{};
 	//std::vector<type> events{};
 	Registry* registry{};
