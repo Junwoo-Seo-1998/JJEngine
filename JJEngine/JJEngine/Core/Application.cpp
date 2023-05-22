@@ -9,6 +9,7 @@ End Header-------------------------------------------------------- */
 #include "Window.h"
 #include "Input/Input.h"
 #include "SceneManager.h"
+#include "Time.h"
 #include "ImGui/ImGuiRenderer.h"
 #include "Script/ScriptEngine.h"
 
@@ -32,12 +33,9 @@ bool Application::Init()
 void Application::Update()
 {
 	bool engineLoop{ true };
-	std::chrono::system_clock::time_point lastTick = std::chrono::system_clock::now();
-	double dt{ };
 	do
 	{
-		const std::chrono::time_point now{ std::chrono::system_clock::now() };
-		dt = { std::chrono::duration<double>(now - lastTick).count() };
+		Time::Update();
 		if (window->shouldClose() == true) {
 			sceneManager->exit();
 			engineLoop = false;
@@ -46,12 +44,9 @@ void Application::Update()
 		window->update([&]()
 		{
 			ImGuiRenderer::Instance()->GuiBegin();
-			sceneManager->update(dt);
+			sceneManager->update();
 			ImGuiRenderer::Instance()->GuiEnd();
 		});
-
-		lastTick = now;
-
 	} while (engineLoop);
 }
 

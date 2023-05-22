@@ -115,6 +115,7 @@
     <ClInclude Include="Core\entt.h" />
     <ClInclude Include="Core\test.h" />
     <ClInclude Include="Core\EntryPoint.h" />
+    <ClInclude Include="Core\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Camera.cpp" />
@@ -184,5 +185,6 @@
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
+    <ClCompile Include="Core\Time.cpp" />
   </ItemGroup>
 </Project>

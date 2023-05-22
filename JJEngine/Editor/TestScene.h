@@ -25,6 +25,7 @@
 
 #include <Core/ImGui/ImGuiSubWindow.h>
 
+#include "Core/Time.h"
 #include "Core/ImGui/ImGuiRenderer.h"
 
 class TestScene : public Scene
@@ -148,10 +149,9 @@ public:
 			ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(textureID)), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 			});
 	};
-	void Update(double dt) override
+	void Update() override
 	{
-
-		Scene::Update(dt);
+		float dt = Time::GetDelta();
 		framebuffer->Bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		//draw test

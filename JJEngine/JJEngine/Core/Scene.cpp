@@ -11,9 +11,8 @@ Scene::Scene():components(std::make_shared<ComponentManager>()),id(components->G
 {
 }
 
-void Scene::Update(double dt)
+void Scene::Update()
 {
-	//components->Update(dt);
 }
 
 std::shared_ptr<ComponentManager>& Scene::GetCM()

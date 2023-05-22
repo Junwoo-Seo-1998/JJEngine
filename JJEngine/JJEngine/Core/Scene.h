@@ -16,7 +16,7 @@ public:
 	//Scene(std::string) {};
 	virtual ~Scene() {};
 	virtual void Load() = 0;
-	virtual void Update(double dt) ;
+	virtual void Update();
 	virtual void Draw() = 0;
 	virtual void Unload() = 0;
 

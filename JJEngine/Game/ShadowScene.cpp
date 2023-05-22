@@ -25,7 +25,7 @@ void ShadowScene::Load()
 		});
 }
 
-void ShadowScene::Update(double dt)
+void ShadowScene::Update()
 {
 	glClearColor(0.3, 0.7, 0.3, 1.0);
 

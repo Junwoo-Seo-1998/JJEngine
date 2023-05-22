@@ -13,7 +13,7 @@ class ShadowScene : public Scene
 	std::shared_ptr<Shader> shader;
 public:
 	virtual void Load() override;
-	virtual void Update(double dt) override;
+	virtual void Update() override;
 	virtual void Draw() override;
 	virtual void Unload() override {};
 	void AddObject(const Model& obj)

@@ -44,7 +44,7 @@ void SceneManager::Init()
 {
 }
 
-void SceneManager::update(double dt)
+void SceneManager::update()
 {
 	switch (nowState)
 	{
@@ -69,7 +69,7 @@ void SceneManager::update(double dt)
 			nowState = SceneManagerState::Unload;
 		}
 		else {
-			nowScene->Update(dt);
+			nowScene->Update();
 			nowScene->Draw();
 		}
 		break;

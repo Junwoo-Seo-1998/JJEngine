@@ -125,6 +125,7 @@
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h" />
+    <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Core\Utils\Assert.h" />
     <ClInclude Include="Core\Utils\DebugDetection.h" />
     <ClInclude Include="Core\Utils\File.h" />
@@ -158,6 +159,7 @@
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp" />
+    <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Core\Utils\File.cpp" />
     <ClCompile Include="Core\Utils\IMGUI_IMPL.cpp" />
     <ClCompile Include="Core\Utils\Log.cpp" />

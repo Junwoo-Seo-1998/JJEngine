@@ -14,6 +14,7 @@
 #include "Core/Graphics/Texture.h"
 #include "Core/Utils/File.h"
 #include "imgui.h"
+#include "Core/Time.h"
 #include "Core/Graphics/FrameBuffer.h"
 #include "Core/Graphics/IndexBuffer.h"
 #include "Core/ImGui/ImGuiRenderer.h"
@@ -118,14 +119,10 @@ public:
 		framebuffer = FrameBuffer::CreateFrameBuffer({ 1200, 800, { FrameBufferFormat::RGB } });
 		glClearColor(0.3, 0.7, 0.3, 1.0);
 	};
-	void Update(double dt) override
+	void Update() override
 	{
-		
-		Scene::Update(dt);
-		if(Input::IsPressed(KeyCode::R))
-		{
+		float dt = Time::GetDelta();
 
-		}
 		if(Input::IsRepeating(KeyCode::T))
 		{
 			Log::Critical("testing repeat");

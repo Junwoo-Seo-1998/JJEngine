@@ -20,7 +20,7 @@ public:
 	void setNextScene(int i);
 	void returnPrevScene();
 	void Init();
-	void update(double dt);
+	void update();
 	void exit();
 private:
 	enum class SceneManagerState {
