@@ -1,43 +1,18 @@
-#include <Core/Window.h>
+#include "Core/EntryPoint.h"
 #include <Core/SceneManager.h>
-#include <Core/ImGui/ImGuiRenderer.h>
 #include "TestScene.h"
 
-int main(void)
+class EditorApp : public Application
 {
-	// Editor engine??
-
-	Window* window = new Window{};
-	SceneManager* sceneManager = new SceneManager{};
-	ImGuiRenderer::Instance()->Init(window->GetGLFWWindow());
 	TestScene test1{ "editor" };
-	sceneManager->enrollScene(0, test1);
-	sceneManager->setNextScene(0);
-	bool engineLoop{ true };
-	std::chrono::system_clock::time_point lastTick = std::chrono::system_clock::now();
-	double dt{ };
-	do
+	virtual void UserDefinedInit() override
 	{
-		const std::chrono::time_point now{ std::chrono::system_clock::now() };
-		dt = { std::chrono::duration<double>(now - lastTick).count() };
-		if (window->shouldClose() == true) {
-			sceneManager->exit();
-			engineLoop = false;
-		}
+		GetSceneManager()->enrollScene(0, test1);
+		GetSceneManager()->setNextScene(0);
+	}
+};
 
-		window->update([&]()
-			{
-				ImGuiRenderer::Instance()->GuiBegin();
-				sceneManager->update(dt);
-				ImGuiRenderer::Instance()->GuiEnd();
-			});
-
-		lastTick = now;
-
-	} while (engineLoop);
-
-
-	ImGuiRenderer::Instance()->Shutdown();
-
-	return 0;
+std::shared_ptr<Application> CoreMain()
+{
+	return std::make_shared<EditorApp>();
 }

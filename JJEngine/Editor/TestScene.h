@@ -25,6 +25,8 @@
 
 #include <Core/ImGui/ImGuiSubWindow.h>
 
+#include "Core/ImGui/ImGuiRenderer.h"
+
 class TestScene : public Scene
 {
 	Registry registry{};
