@@ -116,6 +116,8 @@
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Core\Entity\Entity.h" />
     <ClInclude Include="Core\Utils\Math\MatrixMath.h" />
+    <ClInclude Include="Core\Component\TransformComponent.h" />
+    <ClInclude Include="Core\Component\CameraComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Camera.cpp" />
@@ -187,5 +189,7 @@
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Core\Entity\Entity.cpp" />
     <ClCompile Include="Core\Utils\Math\MatrixMath.cpp" />
+    <ClCompile Include="Core\Component\TransformComponent.cpp" />
+    <ClCompile Include="Core\Component\CameraComponent.cpp" />
   </ItemGroup>
 </Project>

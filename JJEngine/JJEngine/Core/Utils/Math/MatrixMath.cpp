@@ -3,7 +3,7 @@
 #undef far
 #undef near
 
-glm::mat4 Math::BuildCameraMatrix(glm::vec3 cam_position, glm::vec3 target, glm::vec3 world_up)
+glm::mat4 MatrixMath::BuildCameraMatrix(glm::vec3 cam_position, glm::vec3 target, glm::vec3 world_up)
 {
 	//just studying purpose.. it uses my own matrix instead glm matrix on debug
 #ifdef DEBUG
@@ -37,7 +37,7 @@ glm::mat4 Math::BuildCameraMatrix(glm::vec3 cam_position, glm::vec3 target, glm:
 #endif
 }
 
-glm::mat4 Math::BuildCameraMatrixWithDirection(const glm::vec3& cam_position, const glm::vec3& lookAt,
+glm::mat4 MatrixMath::BuildCameraMatrixWithDirection(const glm::vec3& cam_position, const glm::vec3& lookAt,
 	const glm::vec3& world_up)
 {
 	if (lookAt == world_up)
@@ -67,7 +67,7 @@ glm::mat4 Math::BuildCameraMatrixWithDirection(const glm::vec3& cam_position, co
 	return toret;
 }
 
-glm::mat4 Math::BuildPerspectiveProjectionMatrix(float width, float height, float near, float far)
+glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrix(float width, float height, float near, float far)
 {
 	float projection_plane = near;
 	glm::mat4 perspective =
@@ -80,7 +80,7 @@ glm::mat4 Math::BuildPerspectiveProjectionMatrix(float width, float height, floa
 	return perspective;
 }
 
-glm::mat4 Math::BuildPerspectiveProjectionMatrixFovx(float fov_x, float aspect_ratio, float near, float far)
+glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrixFovx(float fov_x, float aspect_ratio, float near, float far)
 {
 	float cot = 1.f / glm::tan(fov_x / 2.f);
 	glm::mat4 perspective =
@@ -93,7 +93,7 @@ glm::mat4 Math::BuildPerspectiveProjectionMatrixFovx(float fov_x, float aspect_r
 	return perspective;
 }
 
-glm::mat4 Math::BuildPerspectiveProjectionMatrixFovy(float fov_y, float aspect_ratio, float near, float far)
+glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrixFovy(float fov_y, float aspect_ratio, float near, float far)
 {
 	//just studying purpose.. it uses my own matrix instead glm matrix on debug
 #ifdef DEBUG 

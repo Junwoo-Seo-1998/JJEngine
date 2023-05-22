@@ -101,6 +101,8 @@
     <ClInclude Include="Core\Asset\Manager\AssetManagerBase.h" />
     <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\Application.h" />
+    <ClInclude Include="Core\Component\CameraComponent.h" />
+    <ClInclude Include="Core\Component\TransformComponent.h" />
     <ClInclude Include="Core\Entity\Entity.h" />
     <ClInclude Include="Core\EntryPoint.h" />
     <ClInclude Include="Core\Event\StringEvent.h" />
@@ -139,6 +141,8 @@
   <ItemGroup>
     <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Component\CameraComponent.cpp" />
+    <ClCompile Include="Core\Component\TransformComponent.cpp" />
     <ClCompile Include="Core\Entity\Entity.cpp" />
     <ClCompile Include="Core\Event\StringEvent.cpp" />
     <ClCompile Include="Core\EventManager.cpp" />
