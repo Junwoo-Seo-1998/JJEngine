@@ -25,7 +25,7 @@ public:
 	virtual void OnDisable();
 	virtual void OnDestroy();
 
-	Entity CreateEntity();
+	Entity CreateEntity(const std::string& name = "");
 
 	entt::registry& GetRegistry();
 protected:

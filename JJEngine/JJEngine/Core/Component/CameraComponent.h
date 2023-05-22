@@ -3,6 +3,7 @@
 
 struct CameraComponent
 {
+public:
 	float fov_y = 45.f; //degree
 	float aspect_ratio = 1.0f;
 	float near = 1.0f;

@@ -7,7 +7,7 @@ End Header-------------------------------------------------------- */
 #include "Scene.h"
 #include "Entity/Entity.hpp"
 #include "Component/TransformComponent.h"
-
+#include "Component/NameComponent.h"
 Scene::Scene()
 	:m_scene_name("unnamed-scene")
 {
@@ -50,10 +50,12 @@ void Scene::OnDestroy()
 {
 }
 
-Entity Scene::CreateEntity()
+Entity Scene::CreateEntity(const std::string& name)
 {
 	Entity entity{ m_Registry.create(),this };
 	entity.AddComponent<TransformComponent>();
+	if (!name.empty())
+		entity.AddComponent<NameComponent>(name);
 	return entity;
 }
 
