@@ -124,7 +124,7 @@ public:
 		Scene::Update(dt);
 		if(Input::IsPressed(KeyCode::R))
 		{
-			JJEngine::ReloadScript();
+
 		}
 		if(Input::IsRepeating(KeyCode::T))
 		{

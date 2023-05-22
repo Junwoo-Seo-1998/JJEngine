@@ -100,8 +100,8 @@
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="ShadowScene.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JJEngine\JJEngine.vcxproj">

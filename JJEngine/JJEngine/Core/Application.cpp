@@ -5,48 +5,33 @@ Platform: x64
 Date: 12/16/2022
 End Header-------------------------------------------------------- */
 #include <chrono>
-#include "Engine.h"
+#include "Application.h"
 #include "Window.h"
 #include "Input/Input.h"
 #include "SceneManager.h"
 #include "ImGui/ImGuiRenderer.h"
 #include "Script/ScriptEngine.h"
-namespace statics
-{
-	std::shared_ptr<JJEngine> createInstance() {
-		return std::shared_ptr<JJEngine>(new JJEngine{});
-	}
-	std::shared_ptr<JJEngine> instance = createInstance();
-}
-JJEngine::JJEngine()
+
+Application::Application()
 {
 	window = new Window{};
 	sceneManager = new SceneManager{};
 }
 
-void JJEngine::ReloadScript()
-{
-	ScriptEngine::instance()->InitCore();
-}
-
-JJEngine::~JJEngine()
+Application::~Application()
 {
 	delete window;
 	delete sceneManager;
 }
 
-std::shared_ptr<JJEngine> JJEngine::instance()
-{
-	return statics::instance;
-}
-
-void JJEngine::init()
+bool Application::Init()
 {
 	ImGuiRenderer::Instance()->Init(GetWindow()->GetGLFWWindow());
 	ScriptEngine::instance()->Init();
+	return true;//just for now
 }
 
-void JJEngine::update()
+void Application::Update()
 {
 	bool engineLoop{ true };
 	std::chrono::system_clock::time_point lastTick = std::chrono::system_clock::now();
@@ -55,15 +40,15 @@ void JJEngine::update()
 	{
 		const std::chrono::time_point now{ std::chrono::system_clock::now() };
 		dt = { std::chrono::duration<double>(now - lastTick).count() };
-		if (instance()->window->shouldClose() == true) {
-			instance()->sceneManager->exit();
+		if (window->shouldClose() == true) {
+			sceneManager->exit();
 			engineLoop = false;
 		}
 
-		instance()->window->update([&]()
+		window->update([&]()
 		{
 			ImGuiRenderer::Instance()->GuiBegin();
-			instance()->sceneManager->update(dt);
+			sceneManager->update(dt);
 			ImGuiRenderer::Instance()->GuiEnd();
 		});
 
@@ -72,18 +57,18 @@ void JJEngine::update()
 	} while (engineLoop);
 }
 
-void JJEngine::shutdown()
+void Application::Shutdown()
 {
 	ScriptEngine::instance()->Shutdown();
 	ImGuiRenderer::Instance()->Shutdown();
 }
 
-SceneManager* JJEngine::GetSceneManager()
+SceneManager* Application::GetSceneManager()
 {
-	return instance()->sceneManager;
+	return sceneManager;
 }
 
-Window* JJEngine::GetWindow()
+Window* Application::GetWindow()
 {
-	return instance()->window;
+	return window;
 }
