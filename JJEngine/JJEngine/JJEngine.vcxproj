@@ -100,8 +100,8 @@
     <ClInclude Include="Core\Asset\AssetType.h" />
     <ClInclude Include="Core\Asset\Manager\AssetManagerBase.h" />
     <ClInclude Include="Core\Camera.h" />
-    <ClInclude Include="Core\ComponentManager.h" />
     <ClInclude Include="Core\Application.h" />
+    <ClInclude Include="Core\Entity\Entity.h" />
     <ClInclude Include="Core\EntryPoint.h" />
     <ClInclude Include="Core\Event\StringEvent.h" />
     <ClInclude Include="Core\EventListener.h" />
@@ -133,13 +133,12 @@
     <ClInclude Include="Core\Utils\PlatformDetection.h" />
     <ClInclude Include="Core\Utils\UUIDGenerator.h" />
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\entt.h" />
     <ClInclude Include="Core\test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Camera.cpp" />
-    <ClCompile Include="Core\ComponentManager.cpp" />
     <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Entity\Entity.cpp" />
     <ClCompile Include="Core\Event\StringEvent.cpp" />
     <ClCompile Include="Core\EventManager.cpp" />
     <ClCompile Include="Core\GameObject.cpp" />

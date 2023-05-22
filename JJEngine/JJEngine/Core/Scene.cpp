@@ -5,7 +5,7 @@ Platform: x64
 Date: 12/23/2022
 End Header-------------------------------------------------------- */
 #include "Scene.h"
-#include "ComponentManager.h"
+
 
 Scene::Scene()
 	:m_scene_name("unnamed-scene")

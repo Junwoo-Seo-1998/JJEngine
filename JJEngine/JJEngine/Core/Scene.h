@@ -6,11 +6,13 @@ Date: 12/17/2022
 End Header-------------------------------------------------------- */
 #pragma once
 #include <memory>
-#include "entt.h"
+#include <string>
+#include <entt/entt.hpp>
 
-class ComponentManager;
+class Entity;
 class Scene
 {
+	friend class Entity;
 public:
 	Scene();
 	Scene(const std::string& scene_name);
@@ -26,4 +28,6 @@ public:
 
 protected:
 	std::string m_scene_name;
+	entt::registry m_Registry;
+	//Entity MainCamera;
 };

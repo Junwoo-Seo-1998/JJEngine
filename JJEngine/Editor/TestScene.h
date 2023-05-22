@@ -9,7 +9,7 @@
 #include "Core/Graphics/VertexBuffer.h"
 
 // for testing component manager
-#include "Core/ComponentManager.h"
+
 #include "Core/Graphics/Texture.h"
 #include "Core/Utils/File.h"
 #include "imgui.h"
@@ -17,7 +17,7 @@
 #include "Core/Graphics/IndexBuffer.h"
 
 #include <Core/Utils/Log.h>
-#include <Core/entt.h>
+
 #include <Core/EventManager.h>
 #include <Core/EventListener.h>
 
