@@ -14,14 +14,12 @@ End Header-------------------------------------------------------- */
 
 Application::Application()
 {
-	window = new Window{};
-	sceneManager = new SceneManager{};
+	window = std::make_shared<Window>();
+	sceneManager = std::make_shared<SceneManager>();
 }
 
 Application::~Application()
 {
-	delete window;
-	delete sceneManager;
 }
 
 bool Application::Init()
@@ -63,12 +61,12 @@ void Application::Shutdown()
 	ImGuiRenderer::Instance()->Shutdown();
 }
 
-SceneManager* Application::GetSceneManager()
+std::shared_ptr<SceneManager> Application::GetSceneManager()
 {
 	return sceneManager;
 }
 
-Window* Application::GetWindow()
+std::shared_ptr<Window> Application::GetWindow()
 {
 	return window;
 }

@@ -20,11 +20,11 @@ public:
 	bool Init();
 	void Update();
 	void Shutdown();
-	SceneManager* GetSceneManager();
-	Window* GetWindow();
+	std::shared_ptr<SceneManager> GetSceneManager();
+	std::shared_ptr<Window> GetWindow();
 
 	virtual void UserDefinedInit() {};
 private:
-	SceneManager* sceneManager{};
-	Window* window{};
+	std::shared_ptr<SceneManager> sceneManager;
+	std::shared_ptr<Window> window;
 };
