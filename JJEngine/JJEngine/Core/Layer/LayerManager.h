@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
 #include <queue>
+
 class Application;
 class Layer;
-
 class LayerManager
 {
 	friend Application;

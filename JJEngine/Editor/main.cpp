@@ -1,6 +1,9 @@
+#include "Core/Application.h"
 #include "Core/EntryPoint.h"
 #include <Core/SceneManager.h>
+#include "EditorLayer.h"
 #include "TestScene.h"
+#include "Core/Layer/LayerManager.h"
 
 class EditorApp : public Application
 {
@@ -9,6 +12,8 @@ class EditorApp : public Application
 	{
 		GetSceneManager()->enrollScene(0, test1);
 		GetSceneManager()->setNextScene(0);
+
+		GetLayerManager()->PushLayer(std::make_shared<EditorLayer>());
 	}
 };
 

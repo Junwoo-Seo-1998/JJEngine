@@ -7,11 +7,11 @@ End Header-------------------------------------------------------- */
 #pragma once
 #include <memory>
 
-#include "Layer/LayerManager.h"
 class Application;
 
 class Window;
 class SceneManager;
+class LayerManager;
 class Application
 {
 protected:

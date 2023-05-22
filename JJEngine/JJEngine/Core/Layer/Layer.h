@@ -4,8 +4,9 @@
 class Layer
 {
 public:
-	Layer(const std::string& name = "Layer");
-	virtual ~Layer();
+	Layer(const std::string& name = "Layer")
+		:m_Name(name) {}
+	virtual ~Layer() {}
 
 	virtual void OnAttach() {}
 	virtual void OnDetach() {}

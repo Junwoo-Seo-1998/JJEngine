@@ -11,7 +11,8 @@ End Header-------------------------------------------------------- */
 #include "SceneManager.h"
 #include "Time.h"
 #include "ImGui/ImGuiRenderer.h"
-#include "Layer/Layer.h"
+#include "Core/Layer/Layer.h"
+#include "Core/Layer/LayerManager.h"
 #include "Script/ScriptEngine.h"
 #include "Utils/Assert.h"
 
@@ -50,13 +51,15 @@ void Application::Update()
 
 		window->update([&]()
 		{
-			ImGuiRenderer::Instance()->GuiBegin();
-
 			for (auto layer : layerManager->GetOverLays())
 				layer->OnUpdate();
 			for (auto layer : layerManager->GetLayers())
 				layer->OnUpdate();
-
+			ImGuiRenderer::Instance()->GuiBegin();
+			for (auto layer : layerManager->GetOverLays())
+				layer->OnImGuiRender();
+			for (auto layer : layerManager->GetLayers())
+				layer->OnImGuiRender();
 			sceneManager->update();
 			ImGuiRenderer::Instance()->GuiEnd();
 		});
