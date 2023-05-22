@@ -6,6 +6,8 @@ Date: 12/16/2022
 End Header-------------------------------------------------------- */
 #pragma once
 #include <memory>
+
+#include "Layer/LayerManager.h"
 class Application;
 
 class Window;
@@ -22,7 +24,7 @@ public:
 	void Shutdown();
 	std::shared_ptr<SceneManager> GetSceneManager();
 	std::shared_ptr<Window> GetWindow();
-
+	std::shared_ptr<LayerManager> GetLayerManager();
 	virtual void UserDefinedInit() {};
 
 
@@ -30,7 +32,7 @@ public:
 private:
 	static Application* s_Instance;
 
-
 	std::shared_ptr<SceneManager> sceneManager;
 	std::shared_ptr<Window> window;
+	std::shared_ptr<LayerManager> layerManager;
 };

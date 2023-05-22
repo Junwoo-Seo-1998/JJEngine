@@ -11,6 +11,7 @@ End Header-------------------------------------------------------- */
 #include "SceneManager.h"
 #include "Time.h"
 #include "ImGui/ImGuiRenderer.h"
+#include "Layer/Layer.h"
 #include "Script/ScriptEngine.h"
 #include "Utils/Assert.h"
 
@@ -22,6 +23,7 @@ Application::Application()
 	s_Instance = this;
 	window = std::make_shared<Window>();
 	sceneManager = std::make_shared<SceneManager>();
+	layerManager = std::make_shared<LayerManager>();
 }
 
 Application::~Application()
@@ -49,9 +51,17 @@ void Application::Update()
 		window->update([&]()
 		{
 			ImGuiRenderer::Instance()->GuiBegin();
+
+			for (auto layer : layerManager->GetOverLays())
+				layer->OnUpdate();
+			for (auto layer : layerManager->GetLayers())
+				layer->OnUpdate();
+
 			sceneManager->update();
 			ImGuiRenderer::Instance()->GuiEnd();
 		});
+
+		layerManager->ClearDeleteQueue();
 	} while (engineLoop);
 }
 
@@ -69,4 +79,9 @@ std::shared_ptr<SceneManager> Application::GetSceneManager()
 std::shared_ptr<Window> Application::GetWindow()
 {
 	return window;
+}
+
+std::shared_ptr<LayerManager> Application::GetLayerManager()
+{
+	return layerManager;
 }
