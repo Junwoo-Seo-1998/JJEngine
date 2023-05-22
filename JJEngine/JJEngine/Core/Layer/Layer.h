@@ -10,7 +10,11 @@ public:
 
 	virtual void OnAttach() {}
 	virtual void OnDetach() {}
+	virtual void OnStart() {}
 	virtual void OnUpdate() {}
+	virtual void OnPreRender() {}
+	virtual void OnRender() {}
+	virtual void OnPostRender() {}
 	virtual void OnImGuiRender() {}
 
 	inline const std::string& Name() const { return m_Name; }

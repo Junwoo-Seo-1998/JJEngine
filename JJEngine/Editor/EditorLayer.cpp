@@ -18,7 +18,7 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate()
 {
-
+	//get something from scene
 }
 
 void EditorLayer::OnImGuiRender()
