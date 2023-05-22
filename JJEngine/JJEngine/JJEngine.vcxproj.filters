@@ -7,6 +7,12 @@
     <Filter Include="Asset\Manager">
       <UniqueIdentifier>{4FD03F4C-BB90-BB82-84CB-0400F04A005F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{F8BD1DB3-6428-D229-AD66-83CF1910B07E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{A2E9DAB0-8E8B-0587-7746-19DB63878CD7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Event">
       <UniqueIdentifier>{E70B220D-5320-4ABE-1CA2-ED1D887546EF}</UniqueIdentifier>
     </Filter>
@@ -25,8 +31,12 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Math">
+      <UniqueIdentifier>{8FDAE4C5-7B92-2613-E499-FF6ED070C103}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Application.h" />
     <ClInclude Include="Core\Asset\Asset.h">
       <Filter>Asset</Filter>
     </ClInclude>
@@ -37,7 +47,16 @@
       <Filter>Asset\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Core\Camera.h" />
-    <ClInclude Include="Core\Application.h" />
+    <ClInclude Include="Core\Component\CameraComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component\TransformComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Entity\Entity.hpp">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\EntryPoint.h" />
     <ClInclude Include="Core\Event\StringEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
@@ -92,6 +111,7 @@
     <ClInclude Include="Core\Script\ScriptEngine.h">
       <Filter>Script</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Core\Utils\Assert.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -104,6 +124,9 @@
     <ClInclude Include="Core\Utils\Log.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Utils\Math\MatrixMath.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Utils\PlatformDetection.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -112,16 +135,16 @@
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\test.h" />
-    <ClInclude Include="Core\EntryPoint.h" />
-    <ClInclude Include="Core\Time.h" />
-    <ClInclude Include="Core\Entity\Entity.h" />
-    <ClInclude Include="Core\Utils\Math\MatrixMath.h" />
-    <ClInclude Include="Core\Component\TransformComponent.h" />
-    <ClInclude Include="Core\Component\CameraComponent.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Camera.cpp" />
+    <ClCompile Include="Core\Component\CameraComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Component\TransformComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Event\StringEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
@@ -169,6 +192,7 @@
     <ClCompile Include="Core\Script\ScriptEngine.cpp">
       <Filter>Script</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Core\Utils\File.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -178,6 +202,9 @@
     <ClCompile Include="Core\Utils\Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Utils\Math\MatrixMath.cpp">
+      <Filter>Utils\Math</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Utils\STB_IMPL.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -186,10 +213,5 @@
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
-    <ClCompile Include="Core\Time.cpp" />
-    <ClCompile Include="Core\Entity\Entity.cpp" />
-    <ClCompile Include="Core\Utils\Math\MatrixMath.cpp" />
-    <ClCompile Include="Core\Component\TransformComponent.cpp" />
-    <ClCompile Include="Core\Component\CameraComponent.cpp" />
   </ItemGroup>
 </Project>

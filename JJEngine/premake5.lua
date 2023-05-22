@@ -68,7 +68,8 @@ project "JJEngine"
     }
     files {
         "JJEngine/**.h",
-        "JJEngine/**.cpp"
+        "JJEngine/**.cpp",
+        "JJEngine/**.hpp"
     }
     defines{
         "GLFW_INCLUDE_NONE",

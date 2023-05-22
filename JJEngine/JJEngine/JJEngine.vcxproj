@@ -96,14 +96,14 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Application.h" />
     <ClInclude Include="Core\Asset\Asset.h" />
     <ClInclude Include="Core\Asset\AssetType.h" />
     <ClInclude Include="Core\Asset\Manager\AssetManagerBase.h" />
     <ClInclude Include="Core\Camera.h" />
-    <ClInclude Include="Core\Application.h" />
     <ClInclude Include="Core\Component\CameraComponent.h" />
     <ClInclude Include="Core\Component\TransformComponent.h" />
-    <ClInclude Include="Core\Entity\Entity.h" />
+    <ClInclude Include="Core\Entity\Entity.hpp" />
     <ClInclude Include="Core\EntryPoint.h" />
     <ClInclude Include="Core\Event\StringEvent.h" />
     <ClInclude Include="Core\EventListener.h" />
@@ -139,11 +139,10 @@
     <ClInclude Include="Core\test.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\Component\CameraComponent.cpp" />
     <ClCompile Include="Core\Component\TransformComponent.cpp" />
-    <ClCompile Include="Core\Entity\Entity.cpp" />
     <ClCompile Include="Core\Event\StringEvent.cpp" />
     <ClCompile Include="Core\EventManager.cpp" />
     <ClCompile Include="Core\GameObject.cpp" />

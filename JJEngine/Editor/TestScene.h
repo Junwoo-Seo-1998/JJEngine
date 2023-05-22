@@ -1,8 +1,6 @@
 #pragma once
 #include "Core/Scene.h"
 #include <string>
-#include <iostream>
-
 #include "glad.h"
 #include "Core/Graphics/Shader.h"
 #include "Core/Graphics/VertexArray.h"
@@ -17,17 +15,9 @@
 #include "Core/Graphics/IndexBuffer.h"
 
 #include <Core/Utils/Log.h>
-
-#include <Core/EventManager.h>
-#include <Core/EventListener.h>
-
-#include "Core/Event/StringEvent.h"
-
-#include <Core/ImGui/ImGuiSubWindow.h>
-
 #include "Core/Time.h"
 #include "Core/ImGui/ImGuiRenderer.h"
-
+#include "Core/Entity/Entity.hpp"
 class TestScene : public Scene
 {
 	std::string text{};
@@ -43,6 +33,7 @@ public:
 	~TestScene();
 	void Start() override
 	{
+		CreateEntity();
 		Log::Info("Scene: " + text);
 		shader = Shader::CreateShaderFromFile({
 	{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.vert"}},

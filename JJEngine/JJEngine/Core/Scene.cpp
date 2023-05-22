@@ -5,7 +5,8 @@ Platform: x64
 Date: 12/23/2022
 End Header-------------------------------------------------------- */
 #include "Scene.h"
-
+#include "Entity/Entity.hpp"
+#include "Component/TransformComponent.h"
 
 Scene::Scene()
 	:m_scene_name("unnamed-scene")
@@ -47,4 +48,16 @@ void Scene::OnDisable()
 
 void Scene::OnDestroy()
 {
+}
+
+Entity Scene::CreateEntity()
+{
+	Entity entity{ m_Registry.create(),this };
+	entity.AddComponent<TransformComponent>();
+	return entity;
+}
+
+entt::registry& Scene::GetRegistry()
+{
+	return m_Registry;
 }

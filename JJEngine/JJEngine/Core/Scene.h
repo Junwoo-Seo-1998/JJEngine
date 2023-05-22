@@ -5,7 +5,6 @@ Platform: x64
 Date: 12/17/2022
 End Header-------------------------------------------------------- */
 #pragma once
-#include <memory>
 #include <string>
 #include <entt/entt.hpp>
 
@@ -26,8 +25,10 @@ public:
 	virtual void OnDisable();
 	virtual void OnDestroy();
 
+	Entity CreateEntity();
+
+	entt::registry& GetRegistry();
 protected:
 	std::string m_scene_name;
 	entt::registry m_Registry;
-	//Entity MainCamera;
 };
