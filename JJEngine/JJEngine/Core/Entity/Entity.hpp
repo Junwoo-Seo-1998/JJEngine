@@ -39,9 +39,6 @@ public:
 
 	template <typename Comp_type>
 	void RemoveComponent();
-
-private:
-	Entity(const std::string& name);
 private:
 	entt::entity m_EntityHandle = entt::null;
 	Scene* m_Scene = nullptr;
