@@ -13,6 +13,7 @@ End Header --------------------------------------------------------*/
 #include <array>
 #include <stack>
 
+#include "Core/Application.h"
 #include "Core/Utils/Log.h"
 
 namespace InputStatics
@@ -77,7 +78,7 @@ bool Input::IsReleased(Mouse button)
 
 void Input::SetMouseCursorEnable(bool input)
 {
-	//glfwSetInputMode(Application::GetWindow()->GetGLFWWindow(), GLFW_CURSOR, input ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(Application::Instance().GetWindow()->GetGLFWWindow(), GLFW_CURSOR, input ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
 
 std::tuple<float, float> Input::GetMousePosition()

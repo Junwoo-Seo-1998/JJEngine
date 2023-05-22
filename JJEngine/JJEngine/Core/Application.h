@@ -24,7 +24,13 @@ public:
 	std::shared_ptr<Window> GetWindow();
 
 	virtual void UserDefinedInit() {};
+
+
+	static inline Application& Instance() { return *s_Instance; }
 private:
+	static Application* s_Instance;
+
+
 	std::shared_ptr<SceneManager> sceneManager;
 	std::shared_ptr<Window> window;
 };

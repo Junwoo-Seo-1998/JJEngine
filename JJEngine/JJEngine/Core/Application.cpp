@@ -12,9 +12,14 @@ End Header-------------------------------------------------------- */
 #include "Time.h"
 #include "ImGui/ImGuiRenderer.h"
 #include "Script/ScriptEngine.h"
+#include "Utils/Assert.h"
+
+Application* Application::s_Instance = nullptr;
 
 Application::Application()
 {
+	ASSERT(s_Instance == nullptr, "You are making Application Twice!!");
+	s_Instance = this;
 	window = std::make_shared<Window>();
 	sceneManager = std::make_shared<SceneManager>();
 }
