@@ -115,6 +115,7 @@
     <ClInclude Include="Core\EntryPoint.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Core\Entity\Entity.h" />
+    <ClInclude Include="Core\Utils\Math\MatrixMath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Camera.cpp" />
@@ -185,5 +186,6 @@
     <ClCompile Include="Core\test.cpp" />
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Core\Entity\Entity.cpp" />
+    <ClCompile Include="Core\Utils\Math\MatrixMath.cpp" />
   </ItemGroup>
 </Project>
