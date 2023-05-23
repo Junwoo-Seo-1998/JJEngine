@@ -34,7 +34,7 @@ public:
 	FrameBuffer() = delete;
 	virtual ~FrameBuffer();
 
-	void Bind() const;
+	void Bind(bool clear = false) const;
 	void UnBind() const;
 
 	void Resize(unsigned int width, unsigned int height);
