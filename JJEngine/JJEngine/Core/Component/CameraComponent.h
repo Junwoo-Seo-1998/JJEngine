@@ -9,5 +9,5 @@ public:
 	float near = 1.0f;
 	float far = 1000000.f;
 
-	[[nodiscard]] glm::mat4 GetPerspective() const;
+	[[nodiscard]] glm::mat4 GetMatrix() const;
 };

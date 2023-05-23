@@ -33,7 +33,8 @@ public:
 	~TestScene();
 	void Start() override
 	{
-		CreateEntity();
+		
+
 		Log::Info("Scene: " + text);
 		shader = Shader::CreateShaderFromFile({
 	{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.vert"}},
@@ -103,13 +104,13 @@ public:
 
 		test_texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
 
-		framebuffer = FrameBuffer::CreateFrameBuffer({ 1200, 800, { FrameBufferFormat::RGB } });
+		framebuffer = FrameBuffer::CreateFrameBuffer({ 1200, 800, { FrameBufferFormat::RGBA } });
 		glClearColor(0.3, 0.7, 0.3, 1.0);
 	};
 	void Update() override
 	{
 		float dt = Time::GetDelta();
-		framebuffer->Bind();
+		/*framebuffer->Bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		//draw test
 		shader->Use();
@@ -120,11 +121,7 @@ public:
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 		framebuffer->UnBind();
 		//glDrawArrays(GL_TRIANGLES, 0, 6);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-		ImGuiRenderer::Instance()->GuiDrawDockSpaceBegin();
-
-		ImGuiRenderer::Instance()->GuiDrawDockSpaceEnd();
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);*/
 	}
 
 	void PostUpdate() override {}
@@ -135,7 +132,7 @@ private:
 
 TestScene::TestScene(std::string t) :Scene(t)
 {
-
+	CreateEntity("Test Entity");
 }
 
 TestScene::~TestScene()

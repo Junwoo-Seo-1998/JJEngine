@@ -6,6 +6,7 @@ Date: 12/16/2022
 End Header-------------------------------------------------------- */
 #include <chrono>
 #include "Application.h"
+#include "glad.h"
 #include "Window.h"
 #include "Input/Input.h"
 #include "SceneManager.h"
@@ -16,6 +17,7 @@ End Header-------------------------------------------------------- */
 #include "Script/ScriptEngine.h"
 #include "Utils/Assert.h"
 
+#include "Graphics/Renderer/Renderer2D.h"
 Application* Application::s_Instance = nullptr;
 
 Application::Application()
@@ -33,13 +35,27 @@ Application::~Application()
 
 bool Application::Init()
 {
+	Renderer2D::Init();
 	ImGuiRenderer::Instance()->Init(GetWindow()->GetGLFWWindow());
 	ScriptEngine::instance()->Init();
+	
+	
 	return true;//just for now
 }
 
 void Application::Update()
 {
+	{//layer start
+		auto& overlays = layerManager->GetOverLays();
+		auto& layers = layerManager->GetLayers();
+		{
+			for (auto layer : layers)
+				layer->OnStart();
+			for (auto layer : overlays)
+				layer->OnStart();
+		}
+	}
+
 	bool engineLoop{ true };
 	do
 	{
@@ -53,41 +69,40 @@ void Application::Update()
 		{
 			auto& overlays = layerManager->GetOverLays();
 			auto& layers = layerManager->GetLayers();
-				
-			{
-				for (auto layer : layers)
-					layer->OnUpdate();
-				for (auto layer : overlays)
-					layer->OnUpdate();
-			}
-
-			//scene-update should be here
-
-			{
-				for (auto layer : layers)
-					layer->OnPreRender();
-				for (auto layer : overlays)
-					layer->OnPreRender();
-			}
-
-			{
-				for (auto layer : layers)
-					layer->OnRender();
-				for (auto layer : overlays)
-					layer->OnRender();
-			}
-
-			{
-				for (auto layer : layers)
-					layer->OnPostRender();
-				for (auto layer : overlays)
-					layer->OnPostRender();
-			}
 
 			//imgui
-
 			ImGuiRenderer::Instance()->GuiBegin();
+
 			sceneManager->update();// this will be moved up later
+
+			{
+				for (auto layer : layers)
+					layer->OnUpdate();
+				for (auto layer : overlays)
+					layer->OnUpdate();
+			}
+
+			{
+				for (auto layer : layers)
+					layer->OnPreRender();
+				for (auto layer : overlays)
+					layer->OnPreRender();
+			}
+
+			{
+				for (auto layer : layers)
+					layer->OnRender();
+				for (auto layer : overlays)
+					layer->OnRender();
+			}
+
+			{
+				for (auto layer : layers)
+					layer->OnPostRender();
+				for (auto layer : overlays)
+					layer->OnPostRender();
+			}
+
 			{
 				for (auto layer : layers)
 					layer->OnImGuiRender();
@@ -102,6 +117,7 @@ void Application::Update()
 
 void Application::Shutdown()
 {
+	Renderer2D::Shutdown();
 	ScriptEngine::instance()->Shutdown();
 	ImGuiRenderer::Instance()->Shutdown();
 }

@@ -19,11 +19,17 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Renderer">
+      <UniqueIdentifier>{7C6F0F98-E885-0D2E-31FD-984F9D52DEB5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ImGui">
       <UniqueIdentifier>{C0FF640D-2C14-8DBE-F595-301E616989EF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{953A660D-014F-8EBE-CAD0-311E36A48AEF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Layer">
+      <UniqueIdentifier>{6287950D-CE9B-BDBE-971D-611E03F1B9EF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Script">
       <UniqueIdentifier>{9AFBBAD0-869D-E5A6-6F58-F9FA5B996CF7}</UniqueIdentifier>
@@ -50,6 +56,12 @@
     <ClInclude Include="Core\Component\CameraComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Component\NameComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component\SpriteRendererComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Component\TransformComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -66,13 +78,16 @@
     <ClInclude Include="Core\Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Graphics\RenderingLayer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Graphics\IndexBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\Mesh.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h">
+      <Filter>Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\RenderingLayer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\Shader.h">
@@ -105,6 +120,12 @@
     <ClInclude Include="Core\Input\InputKeyCodes.h">
       <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Layer\Layer.h">
+      <Filter>Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Layer\LayerManager.h">
+      <Filter>Layer</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h">
@@ -134,9 +155,6 @@
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\test.h" />
-    <ClInclude Include="Core\Component\NameComponent.h" />
-    <ClInclude Include="Core\Layer\Layer.h" />
-    <ClInclude Include="Core\Layer\LayerManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -155,13 +173,16 @@
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Graphics\RenderingLayer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Mesh.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp">
+      <Filter>Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\RenderingLayer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Shader.cpp">
@@ -187,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="Core\Input\Input.cpp">
       <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Layer\LayerManager.cpp">
+      <Filter>Layer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
@@ -214,6 +238,5 @@
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\test.cpp" />
-    <ClCompile Include="Core\Layer\LayerManager.cpp" />
   </ItemGroup>
 </Project>
