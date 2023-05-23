@@ -8,14 +8,14 @@ void LayerManager::PushLayer(std::shared_ptr<Layer> layer)
 {
 	m_Layers.emplace_back(layer);
 	layer->OnAttach();
-	layer->OnStart();
+
 }
 
 void LayerManager::PushOverlay(std::shared_ptr<Layer> overlay)
 {
 	m_Overlays.emplace_back(overlay);
 	overlay->OnAttach();
-	overlay->OnStart();
+
 }
 
 void LayerManager::PopLayer(std::shared_ptr<Layer> layer)

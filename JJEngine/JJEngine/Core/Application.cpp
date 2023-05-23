@@ -37,11 +37,22 @@ bool Application::Init()
 {
 	ImGuiRenderer::Instance()->Init(GetWindow()->GetGLFWWindow());
 	ScriptEngine::instance()->Init();
+	
+	
 	return true;//just for now
 }
 
 void Application::Update()
 {
+	auto& overlays = layerManager->GetOverLays();
+	auto& layers = layerManager->GetLayers();
+	{
+		for (auto layer : layers)
+			layer->OnStart();
+		for (auto layer : overlays)
+			layer->OnStart();
+	}
+
 	bool engineLoop{ true };
 	do
 	{

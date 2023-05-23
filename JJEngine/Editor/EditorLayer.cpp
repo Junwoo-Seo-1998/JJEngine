@@ -30,6 +30,7 @@ void EditorLayer::OnStart()
 	scene_hierarchy_panel.SetScene(Application::Instance().GetSceneManager()->GetCurrentScene());
 	entt::entity ID{ editorRegistry.create() };
 	ImGuiSubWindow* temp = &editorRegistry.emplace<ImGuiSubWindow>(ID, "Asset browser");
+	ABP.Set();
 	temp->Push_ImGuiCommand([&]()->void {ABP.OnImGuiRender(); });
 
 }
