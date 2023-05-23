@@ -51,19 +51,51 @@ void Application::Update()
 
 		window->update([&]()
 		{
-			for (auto layer : layerManager->GetOverLays())
-				layer->OnUpdate();
-			for (auto layer : layerManager->GetLayers())
-				layer->OnUpdate();
+			auto& overlays = layerManager->GetOverLays();
+			auto& layers = layerManager->GetLayers();
+				
+			{
+				for (auto layer : layers)
+					layer->OnUpdate();
+				for (auto layer : overlays)
+					layer->OnUpdate();
+			}
+
+			//scene-update should be here
+
+			{
+				for (auto layer : layers)
+					layer->OnPreRender();
+				for (auto layer : overlays)
+					layer->OnPreRender();
+			}
+
+			{
+				for (auto layer : layers)
+					layer->OnRender();
+				for (auto layer : overlays)
+					layer->OnRender();
+			}
+
+			{
+				for (auto layer : layers)
+					layer->OnPostRender();
+				for (auto layer : overlays)
+					layer->OnPostRender();
+			}
+
+			//imgui
+
 			ImGuiRenderer::Instance()->GuiBegin();
-			for (auto layer : layerManager->GetOverLays())
-				layer->OnImGuiRender();
-			for (auto layer : layerManager->GetLayers())
-				layer->OnImGuiRender();
-			sceneManager->update();
+			sceneManager->update();// this will be moved up later
+			{
+				for (auto layer : layers)
+					layer->OnImGuiRender();
+				for (auto layer : overlays)
+					layer->OnImGuiRender();
+			}
 			ImGuiRenderer::Instance()->GuiEnd();
 		});
-
 		layerManager->ClearDeleteQueue();
 	} while (engineLoop);
 }
