@@ -6,7 +6,6 @@ Date: 12/16/2022
 End Header-------------------------------------------------------- */
 #include <chrono>
 #include "Application.h"
-
 #include "glad.h"
 #include "Window.h"
 #include "Input/Input.h"
@@ -18,6 +17,7 @@ End Header-------------------------------------------------------- */
 #include "Script/ScriptEngine.h"
 #include "Utils/Assert.h"
 
+#include "Graphics/Renderer/Renderer2D.h"
 Application* Application::s_Instance = nullptr;
 
 Application::Application()
@@ -35,6 +35,7 @@ Application::~Application()
 
 bool Application::Init()
 {
+	Renderer2D::Init();
 	ImGuiRenderer::Instance()->Init(GetWindow()->GetGLFWWindow());
 	ScriptEngine::instance()->Init();
 	
@@ -44,13 +45,15 @@ bool Application::Init()
 
 void Application::Update()
 {
-	auto& overlays = layerManager->GetOverLays();
-	auto& layers = layerManager->GetLayers();
-	{
-		for (auto layer : layers)
-			layer->OnStart();
-		for (auto layer : overlays)
-			layer->OnStart();
+	{//layer start
+		auto& overlays = layerManager->GetOverLays();
+		auto& layers = layerManager->GetLayers();
+		{
+			for (auto layer : layers)
+				layer->OnStart();
+			for (auto layer : overlays)
+				layer->OnStart();
+		}
 	}
 
 	bool engineLoop{ true };
@@ -114,6 +117,7 @@ void Application::Update()
 
 void Application::Shutdown()
 {
+	Renderer2D::Shutdown();
 	ScriptEngine::instance()->Shutdown();
 	ImGuiRenderer::Instance()->Shutdown();
 }

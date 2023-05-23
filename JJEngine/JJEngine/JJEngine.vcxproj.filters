@@ -19,6 +19,9 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Renderer">
+      <UniqueIdentifier>{7C6F0F98-E885-0D2E-31FD-984F9D52DEB5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ImGui">
       <UniqueIdentifier>{C0FF640D-2C14-8DBE-F595-301E616989EF}</UniqueIdentifier>
     </Filter>
@@ -56,6 +59,9 @@
     <ClInclude Include="Core\Component\NameComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Component\SpriteRendererComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Component\TransformComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -77,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="Core\Graphics\Mesh.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h">
+      <Filter>Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\RenderingLayer.h">
       <Filter>Graphics</Filter>
@@ -169,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="Core\Graphics\Mesh.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp">
+      <Filter>Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\RenderingLayer.cpp">
       <Filter>Graphics</Filter>

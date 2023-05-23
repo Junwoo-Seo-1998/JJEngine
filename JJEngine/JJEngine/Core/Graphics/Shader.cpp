@@ -9,6 +9,7 @@ End Header-------------------------------------------------------- */
 #include <iostream>
 #include "glm/gtc/type_ptr.hpp"
 #include "Core/Utils/File.h"
+#include "Core/Utils/Log.h"
 
 Shader::~Shader()
 {
@@ -127,6 +128,7 @@ int Shader::GetUniformLocation(const std::string& name) const
 	if (location == -1)
 	{
 		//std::cout << "error on shader location! - " << name << std::endl;
+		EngineLog::Warn("error on shader location! - {}", name);
 		return -1;
 	}
 	return location;

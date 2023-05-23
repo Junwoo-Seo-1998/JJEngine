@@ -3,7 +3,8 @@
 #include "Panel/SceneHierarchyPanel.h"
 #include "Panel/AssetBrowserPanel.h"
 #include <entt/entt.hpp>
-
+#include <memory>
+class Scene;
 class FrameBuffer;
 class EditorLayer : public Layer
 {
@@ -18,6 +19,9 @@ public:
 	void OnPostRender() override;
 	void OnImGuiRender() override;
 private:
+	std::shared_ptr<Scene> active_scene;
+
+
 	SceneHierarchyPanel scene_hierarchy_panel;
 	AssetBrowserPanel ABP{};
 	entt::registry editorRegistry{};
