@@ -27,7 +27,7 @@ void SceneHierarchyPanel::OnImGuiRender()
 		{
 			Entity entity{ entityID, m_scene.get() };
 			auto& name = entity.GetComponent<NameComponent>();
-			ImGui::Text("%s", name.Name);
+			ImGui::Text("%s", name.Name.c_str());
 		});
 	ImGui::End();
 }
