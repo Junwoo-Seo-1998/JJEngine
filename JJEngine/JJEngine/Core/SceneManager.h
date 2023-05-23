@@ -15,13 +15,18 @@ class SceneManager
 public:
 	SceneManager();
 	~SceneManager();
-	void enrollScene(int i, Scene& scene);
+
+	std::shared_ptr<Scene> GetCurrentScene();
+
+	void enrollScene(int i, std::shared_ptr<Scene> scene);
 	void enrollScene(int i, std::string path);
 	void setNextScene(int i);
 	void returnPrevScene();
 	void Init();
 	void update();
 	void exit();
+
+	
 private:
 	enum class SceneManagerState {
 		start,
@@ -31,11 +36,11 @@ private:
 		Exit,
 	};
 
-	Scene* nowScene{};
-	Scene* nextScene{};
-	Scene* prevScene{};
+	std::shared_ptr<Scene> nowScene{};
+	std::shared_ptr<Scene> nextScene{};
+	std::shared_ptr<Scene> prevScene{};
 	SceneManagerState nowState{};
 
-	std::map<int, Scene*> scenes{};
+	std::map<int, std::shared_ptr<Scene>> scenes{};
 };
 

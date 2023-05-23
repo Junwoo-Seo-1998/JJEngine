@@ -9,10 +9,9 @@
 
 class GameApp : public Application
 {
-	ShadowScene shadowScene;
-
 	virtual void UserDefinedInit() override
 	{
+		auto shadowScene = std::make_shared<ShadowScene>();
 		GetSceneManager()->enrollScene(0, shadowScene);
 		GetSceneManager()->setNextScene(0);
 		//todo: remove this

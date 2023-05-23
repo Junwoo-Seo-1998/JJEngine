@@ -61,7 +61,7 @@ void Application::Update()
 					layer->OnUpdate();
 			}
 
-			
+			//scene-update should be here
 
 			{
 				for (auto layer : layers)

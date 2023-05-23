@@ -16,9 +16,14 @@ SceneManager::~SceneManager()
 {
 }
 
-void SceneManager::enrollScene(int i, Scene& scene)
+std::shared_ptr<Scene> SceneManager::GetCurrentScene()
 {
-	scenes[i] = &scene;
+	return nowScene;
+}
+
+void SceneManager::enrollScene(int i, std::shared_ptr<Scene> scene)
+{
+	scenes[i] = scene;
 }
 
 void SceneManager::enrollScene(int /*i*/, std::string /*path*/)

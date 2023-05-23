@@ -7,9 +7,9 @@
 
 class EditorApp : public Application
 {
-	TestScene test1{ "editor" };
 	virtual void UserDefinedInit() override
 	{
+		auto test1 = std::make_shared<TestScene>("Test");
 		GetSceneManager()->enrollScene(0, test1);
 		GetSceneManager()->setNextScene(0);
 
