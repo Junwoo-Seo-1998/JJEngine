@@ -66,7 +66,7 @@
     <ClInclude Include="Core\Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Graphics\Graphics.h">
+    <ClInclude Include="Core\Graphics\RenderingLayer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\IndexBuffer.h">
@@ -155,7 +155,7 @@
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Graphics\Graphics.cpp">
+    <ClCompile Include="Core\Graphics\RenderingLayer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp">

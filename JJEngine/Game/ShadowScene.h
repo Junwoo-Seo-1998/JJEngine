@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/Scene.h"
-#include "Core/Graphics/Graphics.h"
+#include "Core/Graphics/RenderingLayer.h"
 
 #include "Core/Graphics/VertexArray.h"
 #include "Core/Camera.h"
@@ -8,7 +8,7 @@
 class ShadowScene : public Scene
 {
 	FreeCamera freeCam;
-	Graphics graphics;
+	RenderingLayer graphics;
 	std::shared_ptr<VertexArray> shadowSceneVAO;
 	std::shared_ptr<Shader> shader;
 public:

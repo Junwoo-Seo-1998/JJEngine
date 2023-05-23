@@ -1,5 +1,5 @@
 #include "ShadowScene.h"
-#include "Core/Graphics/Graphics.h"
+#include "Core/Graphics/RenderingLayer.h"
 #include <glad.h>
 void ShadowScene::Start()
 {
@@ -34,9 +34,7 @@ void ShadowScene::Update()
 	variables.emplace("Shader", shader);
 	variables.emplace("VAO", shadowSceneVAO);
 
-	Graphics::GetInstance()->AddRenderCommand(CommandType::Draw, variables);
-
-	Graphics::GetInstance()->ExecuteRenderCommands();
+	RenderingLayer::GetInstance()->AddRenderCommand(CommandType::Draw, variables);
 }
 
 void ShadowScene::PostUpdate()
