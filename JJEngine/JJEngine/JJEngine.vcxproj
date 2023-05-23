@@ -111,9 +111,9 @@
     <ClInclude Include="Core\EventManager.h" />
     <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h" />
-    <ClInclude Include="Core\Graphics\RenderingLayer.h" />
     <ClInclude Include="Core\Graphics\IndexBuffer.h" />
     <ClInclude Include="Core\Graphics\Mesh.h" />
+    <ClInclude Include="Core\Graphics\RenderingLayer.h" />
     <ClInclude Include="Core\Graphics\Shader.h" />
     <ClInclude Include="Core\Graphics\Texture.h" />
     <ClInclude Include="Core\Graphics\VertexArray.h" />
@@ -149,9 +149,9 @@
     <ClCompile Include="Core\EventManager.cpp" />
     <ClCompile Include="Core\GameObject.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp" />
-    <ClCompile Include="Core\Graphics\RenderingLayer.cpp" />
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Mesh.cpp" />
+    <ClCompile Include="Core\Graphics\RenderingLayer.cpp" />
     <ClCompile Include="Core\Graphics\Shader.cpp" />
     <ClCompile Include="Core\Graphics\Texture.cpp" />
     <ClCompile Include="Core\Graphics\VertexArray.cpp" />
