@@ -23,6 +23,20 @@ std::vector<std::string> File::GetFileLists(const std::string& dir_path)
         return {};
 
     std::vector<std::string> file_lists;
+    for (const auto& entry : std::filesystem::directory_iterator(dir_path))
+    {
+        file_lists.push_back(entry.path().string());
+    }
+
+    return file_lists;
+}
+
+std::vector<std::string> File::GetFileListsRecv(const std::string& dir_path)
+{
+    if (!CheckExists(dir_path))
+        return {};
+
+    std::vector<std::string> file_lists;
     for (const auto& entry : std::filesystem::recursive_directory_iterator(dir_path))
     {
         file_lists.push_back(entry.path().string());
