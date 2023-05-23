@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Core/Layer/Layer.h"
 enum class CommandType
 {
 	Transform,
@@ -23,12 +24,22 @@ struct RenderCommand
 	VariableContainerType variables;
 };
 
-class Graphics
+class RenderingLayer : public Layer
 {
 public:
-	static std::shared_ptr<Graphics> GetInstance()
+	void OnAttach() override
 	{
-		static std::shared_ptr<Graphics> instance(new Graphics());
+		RenderingLayer::GetInstance();
+	}
+
+	void OnUpdate() override
+	{
+		RenderingLayer::GetInstance()->ExecuteRenderCommands();
+	}
+
+	static std::shared_ptr<RenderingLayer> GetInstance()
+	{
+		static std::shared_ptr<RenderingLayer> instance(new RenderingLayer());
 		return instance;
 	}
 
