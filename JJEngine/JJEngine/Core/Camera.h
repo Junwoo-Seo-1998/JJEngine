@@ -33,7 +33,18 @@ public:
 	bool camMove = false;
 
 public:
-	FreeCamera(GLFWwindow*, int, int);
+	FreeCamera(GLFWwindow* window_ptr, int windowWidth, int windowHeight) : window_ptr(window_ptr)
+	{
+		Reset();
+		camMove = false;
+		nearPlane = 0.1f;
+		farPlane = 100.0f;
+		topPlane = 0.6f * nearPlane;
+		bottomPlane = -topPlane;
+		aspect = 1.0f * windowWidth / windowHeight;
+		rightPlane = topPlane * aspect;
+		leftPlane = -rightPlane;
+	}
 	FreeCamera()
 	{
 		window_ptr = nullptr;

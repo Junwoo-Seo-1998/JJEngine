@@ -8,18 +8,7 @@ End Header-------------------------------------------------------- */
 #include "Input/Input.h"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-FreeCamera::FreeCamera(GLFWwindow* window_ptr, int windowWidth, int windowHeight) : window_ptr(window_ptr)
-{
-	Reset();
-	camMove = false;
-	nearPlane = 0.1f;
-	farPlane = 100.0f;
-	topPlane = 0.6f * nearPlane;
-	bottomPlane = -topPlane;
-	aspect = 1.0f * windowWidth / windowHeight;
-	rightPlane = topPlane * aspect;
-	leftPlane = -rightPlane;
-}
+
 
 void FreeCamera::ComputeViewProjMats()
 {
@@ -131,8 +120,8 @@ void FreeCamera::mouseCam(double xpos, double ypos)
 {
 	if (camMove)
 	{
-		double xoffset = get<0>(Input::GetMousePosition()) - get<0>(Input::GetLastMousePosition());
-		double yoffset = get<1>(Input::GetMousePosition()) - get<1>(Input::GetLastMousePosition());
+		double xoffset = get<0>(Input::GetMouseOffset());
+		double yoffset = get<1>(Input::GetMouseOffset());
 
 		lastX = static_cast<float>(xpos);
 		lastY = static_cast<float>(ypos);
