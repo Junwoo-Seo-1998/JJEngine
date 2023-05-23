@@ -1,6 +1,8 @@
 #pragma once
 #include "Core/Layer/Layer.h"
 #include "Panel/SceneHierarchyPanel.h"
+
+class FrameBuffer;
 class EditorLayer : public Layer
 {
 public:
@@ -15,4 +17,8 @@ public:
 	void OnImGuiRender() override;
 private:
 	SceneHierarchyPanel scene_hierarchy_panel;
+
+
+
+	std::shared_ptr<FrameBuffer> editor_viewport;
 };

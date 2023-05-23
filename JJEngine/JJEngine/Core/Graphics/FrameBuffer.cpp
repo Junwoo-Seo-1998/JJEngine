@@ -22,9 +22,11 @@ FrameBuffer::~FrameBuffer()
 	UnBind();
 	glDeleteFramebuffers(1, &m_FrameBufferID);
 }
-void FrameBuffer::Bind() const
+void FrameBuffer::Bind(bool clear) const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBufferID);
+	if (clear)
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 void FrameBuffer::UnBind() const

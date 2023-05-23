@@ -6,6 +6,8 @@ Date: 12/16/2022
 End Header-------------------------------------------------------- */
 #include <chrono>
 #include "Application.h"
+
+#include "glad.h"
 #include "Window.h"
 #include "Input/Input.h"
 #include "SceneManager.h"
