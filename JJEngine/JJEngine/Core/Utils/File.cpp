@@ -7,7 +7,7 @@
 #include "Log.h"
 #include "Core/Graphics/Texture.h"
 
-bool File::CheckExists(const std::string& path)
+bool File::CheckExists(const std::filesystem::path& path)
 {
     if (!std::filesystem::exists(path))
     {
@@ -17,12 +17,12 @@ bool File::CheckExists(const std::string& path)
     return true;
 }
 
-std::vector<std::string> File::GetFileLists(const std::string& dir_path)
+std::vector<std::filesystem::path> File::GetFileLists(const std::filesystem::path& dir_path)
 {
     if (!CheckExists(dir_path))
         return {};
 
-    std::vector<std::string> file_lists;
+    std::vector<std::filesystem::path> file_lists;
     for (const auto& entry : std::filesystem::directory_iterator(dir_path))
     {
         file_lists.push_back(entry.path().string());
@@ -31,12 +31,12 @@ std::vector<std::string> File::GetFileLists(const std::string& dir_path)
     return file_lists;
 }
 
-std::vector<std::string> File::GetFileListsRecv(const std::string& dir_path)
+std::vector<std::filesystem::path> File::GetFileListsRecv(const std::filesystem::path& dir_path)
 {
     if (!CheckExists(dir_path))
         return {};
 
-    std::vector<std::string> file_lists;
+    std::vector<std::filesystem::path> file_lists;
     for (const auto& entry : std::filesystem::recursive_directory_iterator(dir_path))
     {
         file_lists.push_back(entry.path().string());
