@@ -9,9 +9,11 @@ End Header-------------------------------------------------------- */
 #include <entt/entt.hpp>
 
 class Entity;
+class SceneHierarchyPanel;
 class Scene
 {
 	friend class Entity;
+	friend class SceneHierarchyPanel;
 public:
 	Scene();
 	Scene(const std::string& scene_name);

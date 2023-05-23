@@ -53,41 +53,40 @@ void Application::Update()
 		{
 			auto& overlays = layerManager->GetOverLays();
 			auto& layers = layerManager->GetLayers();
-				
-			{
-				for (auto layer : layers)
-					layer->OnUpdate();
-				for (auto layer : overlays)
-					layer->OnUpdate();
-			}
-
-			//scene-update should be here
-
-			{
-				for (auto layer : layers)
-					layer->OnPreRender();
-				for (auto layer : overlays)
-					layer->OnPreRender();
-			}
-
-			{
-				for (auto layer : layers)
-					layer->OnRender();
-				for (auto layer : overlays)
-					layer->OnRender();
-			}
-
-			{
-				for (auto layer : layers)
-					layer->OnPostRender();
-				for (auto layer : overlays)
-					layer->OnPostRender();
-			}
 
 			//imgui
-
 			ImGuiRenderer::Instance()->GuiBegin();
+
 			sceneManager->update();// this will be moved up later
+
+			{
+				for (auto layer : layers)
+					layer->OnUpdate();
+				for (auto layer : overlays)
+					layer->OnUpdate();
+			}
+
+			{
+				for (auto layer : layers)
+					layer->OnPreRender();
+				for (auto layer : overlays)
+					layer->OnPreRender();
+			}
+
+			{
+				for (auto layer : layers)
+					layer->OnRender();
+				for (auto layer : overlays)
+					layer->OnRender();
+			}
+
+			{
+				for (auto layer : layers)
+					layer->OnPostRender();
+				for (auto layer : overlays)
+					layer->OnPostRender();
+			}
+
 			{
 				for (auto layer : layers)
 					layer->OnImGuiRender();

@@ -97,11 +97,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="EditorLayer.h" />
+    <ClInclude Include="Panel\SceneHierarchyPanel.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorLayer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Panel\SceneHierarchyPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JJEngine\JJEngine.vcxproj">

@@ -33,7 +33,8 @@ public:
 	~TestScene();
 	void Start() override
 	{
-		CreateEntity();
+		
+
 		Log::Info("Scene: " + text);
 		shader = Shader::CreateShaderFromFile({
 	{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.vert"}},
@@ -121,10 +122,6 @@ public:
 		framebuffer->UnBind();
 		//glDrawArrays(GL_TRIANGLES, 0, 6);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-		ImGuiRenderer::Instance()->GuiDrawDockSpaceBegin();
-
-		ImGuiRenderer::Instance()->GuiDrawDockSpaceEnd();
 	}
 
 	void PostUpdate() override {}
@@ -135,7 +132,7 @@ private:
 
 TestScene::TestScene(std::string t) :Scene(t)
 {
-
+	CreateEntity("Test Entity");
 }
 
 TestScene::~TestScene()
