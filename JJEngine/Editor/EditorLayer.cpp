@@ -41,13 +41,14 @@ void EditorLayer::OnDetach()
 void EditorLayer::OnStart()
 {
 
-
+	component_panel.SetScene(Application::Instance().GetSceneManager()->GetCurrentScene());
 	scene_hierarchy_panel.SetScene(Application::Instance().GetSceneManager()->GetCurrentScene());
+	scene_hierarchy_panel.SetSlected_EntityFunc([&](entt::entity ID)->void {selected_entityID = ID; });
+
 	entt::entity ID{ editorRegistry.create() };
 	ImGuiSubWindow* temp = &editorRegistry.emplace<ImGuiSubWindow>(ID, "Asset browser");
 	ABP.Set();
 	temp->Push_ImGuiCommand([&]()->void {ABP.OnImGuiRender(); });
-
 
 
 	auto test_texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
@@ -107,5 +108,8 @@ void EditorLayer::OnImGuiRender()
 
 
 	scene_hierarchy_panel.OnImGuiRender();
+	component_panel.SetSelevted_EntityHandle(selected_entityID);
+	component_panel.OnImGuiRender();
+
 	ImGuiRenderer::Instance()->GuiDrawDockSpaceEnd();
 }
