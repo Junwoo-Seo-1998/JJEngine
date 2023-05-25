@@ -30,7 +30,7 @@ public:
 	virtual void OnDisable();
 	virtual void OnDestroy();
 
-	Entity CreateEntity(const std::string& name = "");
+	Entity CreateEntity(const std::string& name = {});
 
 	Entity GetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(UUIDType uuid) const;
@@ -38,9 +38,12 @@ public:
 
 	entt::registry& GetRegistry();
 protected:
+	void SortEntityMap();
+
 	std::string m_scene_name;
 	entt::registry m_Registry;
 
 	//to register entities based on uuid
 	EntityMap m_entity_map;
+	
 };

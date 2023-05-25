@@ -16,8 +16,11 @@ public:
 
 	bool operator==(const Entity& other) const;
 	bool operator!=(const Entity& other) const;
+	bool operator<(const Entity& other) const;
+
 	//check it's valid entity
 	operator bool() const;
+	
 
 	Entity GetParent() const;
 

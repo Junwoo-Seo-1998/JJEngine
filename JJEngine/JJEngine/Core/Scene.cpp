@@ -66,6 +66,9 @@ Entity Scene::CreateEntity(const std::string& name)
 	entity.AddComponent<RelationshipComponent>();
 	m_entity_map[uuidComponent.UUID] = entity;
 
+	//for editor view
+	SortEntityMap();
+
 	return entity;
 }
 
@@ -85,4 +88,14 @@ Entity Scene::TryGetEntity(UUIDType uuid) const
 entt::registry& Scene::GetRegistry()
 {
 	return m_Registry;
+}
+
+void Scene::SortEntityMap()
+{
+	m_Registry.sort<UUIDComponent>([&](const auto left, const auto right)
+	{
+		auto leftEntity = m_entity_map.find(left.UUID);
+		auto rightEntity = m_entity_map.find(right.UUID);
+		return leftEntity->second < rightEntity->second;
+	});
 }

@@ -16,6 +16,11 @@ bool Entity::operator!=(const Entity& other) const
 	return !(*this == other);
 }
 
+bool Entity::operator<(const Entity& other) const
+{
+	return m_EntityHandle < other.m_EntityHandle;
+}
+
 Entity::operator bool() const
 {
 	return (m_EntityHandle != entt::null) && (m_Scene != nullptr) && m_Scene->m_Registry.valid(m_EntityHandle);
