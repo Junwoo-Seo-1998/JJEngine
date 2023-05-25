@@ -2,6 +2,7 @@
 #include "Core/Layer/Layer.h"
 #include "Panel/SceneHierarchyPanel.h"
 #include "Panel/AssetBrowserPanel.h"
+#include "Panel/ComponentPanel.h"
 #include <entt/entt.hpp>
 #include <memory>
 class Scene;
@@ -20,10 +21,12 @@ public:
 	void OnImGuiRender() override;
 private:
 	std::shared_ptr<Scene> active_scene;
+	entt::entity selected_entityID{entt::null};
 
-
+	ComponentPanel component_panel;
 	SceneHierarchyPanel scene_hierarchy_panel;
 	AssetBrowserPanel ABP{};
+
 	entt::registry editorRegistry{};
 	std::shared_ptr<FrameBuffer> editor_viewport;
 };

@@ -100,12 +100,14 @@
   <ItemGroup>
     <ClInclude Include="EditorLayer.h" />
     <ClInclude Include="Panel\AssetBrowserPanel.h" />
+    <ClInclude Include="Panel\ComponentPanel.h" />
     <ClInclude Include="Panel\SceneHierarchyPanel.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorLayer.cpp" />
     <ClCompile Include="Panel\AssetBrowserPanel.cpp" />
+    <ClCompile Include="Panel\ComponentPanel.cpp" />
     <ClCompile Include="Panel\SceneHierarchyPanel.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
