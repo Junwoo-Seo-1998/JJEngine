@@ -1,6 +1,9 @@
 #pragma once
 #include <entt/entt.hpp>
-#include "Core/Component/NameComponent.h"
+//default component
+#include "Core/Entity/NameComponent.h"
+#include "Core/Entity/UUIDComponent.h"
+#include "Core/Entity/RelationshipComponent.h"
 
 class Scene;
 class Entity
@@ -8,22 +11,25 @@ class Entity
 	friend class Scene;
 public:
 	Entity() = default;
-	Entity(entt::entity entity_handle, Scene* scene) :m_EntityHandle(entity_handle), m_Scene(scene)
-	{}
+	Entity(entt::entity entity_handle, Scene* scene);
 	Entity(const Entity& other) = default;
 
-	bool operator==(const Entity& other) const
-	{
-		return m_EntityHandle == other.m_EntityHandle && m_Scene == other.m_Scene;
-	}
+	bool operator==(const Entity& other) const;
+	bool operator!=(const Entity& other) const;
+	//check it's valid entity
+	operator bool() const;
 
-	bool operator!=(const Entity& other) const
-	{
-		return !(*this == other);
-	}
+	Entity GetParent() const;
 
-	std::string& Name() { return HasComponent<NameComponent>() ? GetComponent<NameComponent>().Name : s_EmptyName; }
-	const std::string& Name() const { return HasComponent<NameComponent>() ? GetComponent<NameComponent>().Name : s_EmptyName; }
+	UUIDType GetUUID() const;
+	UUIDType GetParentUUID() const;
+	void SetParentUUID(UUIDType parentUUID);
+	//to Set Children use this function
+	std::vector<UUIDType>& GetChildrenUUID();
+	const std::vector<UUIDType>& GetChildrenUUID() const;
+
+	std::string& Name();
+	const std::string& Name() const;
 
 	template<typename Comp_type, typename... Args>
 	Comp_type& AddComponent(Args&&... args);
@@ -42,7 +48,7 @@ public:
 private:
 	entt::entity m_EntityHandle = entt::null;
 	Scene* m_Scene = nullptr;
-	inline static std::string s_EmptyName = "UnnamedEnitiy";
+	inline static std::string s_EmptyName = "UnnamedEntity";
 };
 
 template <typename Comp_type, typename ... Args>

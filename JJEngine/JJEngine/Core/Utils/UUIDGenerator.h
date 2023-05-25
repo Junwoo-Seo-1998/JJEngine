@@ -1,11 +1,9 @@
 #pragma once
-#include "uuid.h"
-
-using UUID = uuids::uuid;
+#include "Core/Type.h"
 
 class UUIDGenerator
 {
 public:
-	static UUID Generate();
-	static UUID Generate(const std::string& str);
+	static UUIDType Generate();
+	static UUIDType Generate(const std::string& str);
 };

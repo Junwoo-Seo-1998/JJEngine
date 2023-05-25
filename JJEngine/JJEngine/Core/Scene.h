@@ -7,9 +7,12 @@ End Header-------------------------------------------------------- */
 #pragma once
 #include <string>
 #include <entt/entt.hpp>
+#include "Type.h"
 
 class Entity;
 class SceneHierarchyPanel;
+using EntityMap = std::unordered_map<UUIDType, Entity>;
+
 class Scene
 {
 	friend class Entity;
@@ -29,8 +32,15 @@ public:
 
 	Entity CreateEntity(const std::string& name = "");
 
+	Entity GetEntity(UUIDType uuid) const;
+	Entity TryGetEntity(UUIDType uuid) const;
+
+
 	entt::registry& GetRegistry();
 protected:
 	std::string m_scene_name;
 	entt::registry m_Registry;
+
+	//to register entities based on uuid
+	EntityMap m_entity_map;
 };

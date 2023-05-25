@@ -7,7 +7,9 @@ End Header-------------------------------------------------------- */
 #include "Scene.h"
 #include "Entity/Entity.hpp"
 #include "Component/TransformComponent.h"
-#include "Component/NameComponent.h"
+#include "Utils/Assert.h"
+#include "Utils/UUIDGenerator.h"
+
 Scene::Scene()
 	:m_scene_name("unnamed-scene")
 {
@@ -53,10 +55,31 @@ void Scene::OnDestroy()
 Entity Scene::CreateEntity(const std::string& name)
 {
 	Entity entity{ m_Registry.create(),this };
+
+	auto& uuidComponent = entity.AddComponent<UUIDComponent>();
+	uuidComponent.UUID = UUIDGenerator::Generate();
+
 	entity.AddComponent<TransformComponent>();
 	if (!name.empty())
 		entity.AddComponent<NameComponent>(name);
+
+	entity.AddComponent<RelationshipComponent>();
+	m_entity_map[uuidComponent.UUID] = entity;
+
 	return entity;
+}
+
+Entity Scene::GetEntity(UUIDType uuid) const
+{
+	ENGINE_ASSERT(m_entity_map.find(uuid) != m_entity_map.end(), "There is no entity with given UUID");
+	return m_entity_map.at(uuid);
+}
+
+Entity Scene::TryGetEntity(UUIDType uuid) const
+{
+	if (const auto found = m_entity_map.find(uuid); found != m_entity_map.end())
+		return found->second;
+	return Entity{};
 }
 
 entt::registry& Scene::GetRegistry()

@@ -3,7 +3,6 @@
 #include "Core/Application.h"
 #include "Core/Scene.h"
 #include "Core/SceneManager.h"
-#include "Core/Component/NameComponent.h"
 #include "Core/Entity/Entity.hpp"
 
 SceneHierarchyPanel::SceneHierarchyPanel(std::shared_ptr<Scene> scene)

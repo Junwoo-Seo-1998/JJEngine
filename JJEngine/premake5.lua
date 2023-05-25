@@ -50,7 +50,9 @@ project "JJEngine"
         "ImGui",
     }
 
-    disablewarnings {}
+    disablewarnings {
+        "4819","4996","4005"
+    }
     linkoptions {}
     includedirs
     {
@@ -156,7 +158,9 @@ project "Game"
         "opengl32.lib",
     }
     
-    disablewarnings {}
+    disablewarnings {
+        "4819","4996","4005"
+    }
     linkoptions {}
     includedirs
     {
@@ -206,7 +210,9 @@ project "Editor"
         "opengl32.lib",
     }
     
-    disablewarnings {}
+    disablewarnings {
+        "4819","4996","4005"
+    }
     linkoptions {}
     includedirs
     {
