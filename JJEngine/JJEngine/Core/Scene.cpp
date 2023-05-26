@@ -60,7 +60,7 @@ Entity Scene::CreateEntity(const std::string& name)
 	uuidComponent.UUID = UUIDGenerator::Generate();
 
 	entity.AddComponent<TransformComponent>();
-	if (!name.empty())
+	if(!name.empty())
 		entity.AddComponent<NameComponent>(name);
 
 	entity.AddComponent<RelationshipComponent>();
@@ -80,18 +80,18 @@ Entity Scene::GetEntity(UUIDType uuid) const
 
 Entity Scene::TryGetEntity(UUIDType uuid) const
 {
-	if (const auto found = m_entity_map.find(uuid); found != m_entity_map.end())
+	if(const auto found = m_entity_map.find(uuid); found != m_entity_map.end())
 		return found->second;
 	return Entity{};
 }
 
-Entity Scene::TryGetEntity(const std::string& name) const
+Entity Scene::TryGetEntity(const std::string& name)
 {
-	auto entities = m_Registry.view<NameComponent>();
-	for (auto entity : entities)
+	const auto entities = m_Registry.view<NameComponent>();
+	for(auto entity : entities)
 	{
 		if (entities.get<NameComponent>(entity).Name == name)
-			return { entity, const_cast<Scene*>(this) };
+			return { entity, this };
 	}
 	return {};
 }
