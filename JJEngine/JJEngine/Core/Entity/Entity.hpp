@@ -24,13 +24,17 @@ public:
 	
 
 	Entity GetParent() const;
+	void SetParent(Entity parent);
 
 	UUIDType GetUUID() const;
 	UUIDType GetParentUUID() const;
 	void SetParentUUID(UUIDType parentUUID);
+
 	//to Set Children use this function
 	std::vector<UUIDType>& GetChildrenUUID();
 	const std::vector<UUIDType>& GetChildrenUUID() const;
+
+	bool RemoveChild(Entity child);
 
 	//default get set
 	std::string& Name();

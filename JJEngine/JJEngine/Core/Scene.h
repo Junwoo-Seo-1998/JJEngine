@@ -38,6 +38,7 @@ public:
 
 
 	entt::registry& GetRegistry();
+	const EntityMap& GetEntityMap() const;
 protected:
 	void SortEntityMap();
 

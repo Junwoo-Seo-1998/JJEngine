@@ -101,6 +101,11 @@ entt::registry& Scene::GetRegistry()
 	return m_Registry;
 }
 
+const EntityMap& Scene::GetEntityMap() const
+{
+	return m_entity_map;
+}
+
 void Scene::SortEntityMap()
 {
 	m_Registry.sort<UUIDComponent>([&](const auto left, const auto right)

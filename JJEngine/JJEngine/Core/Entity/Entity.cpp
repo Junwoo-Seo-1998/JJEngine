@@ -31,6 +31,29 @@ Entity Entity::GetParent() const
 	return m_Scene->TryGetEntity(GetParentUUID());
 }
 
+void Entity::SetParent(Entity parent)
+{
+	Entity currentParent = GetParent();
+	if (currentParent == parent)
+		return;
+
+	// if there is parent already remove child from it
+	if (currentParent)
+		currentParent.RemoveChild(*this);
+
+	SetParentUUID(parent.GetUUID());
+
+	// if it's existing entity add this to children
+	if (parent)
+	{
+		std::vector<UUIDType>& children = parent.GetChildrenUUID();
+		UUIDType uuid = GetUUID();
+		//check this is already child of the parent
+		if (std::find(children.begin(), children.end(), uuid) == children.end())
+			children.emplace_back(GetUUID());
+	}
+}
+
 UUIDType Entity::GetUUID() const
 {
 	return GetComponent<UUIDComponent>().UUID;
@@ -54,6 +77,22 @@ std::vector<UUIDType>& Entity::GetChildrenUUID()
 const std::vector<UUIDType>& Entity::GetChildrenUUID() const
 {
 	return GetComponent<RelationshipComponent>().Children;
+}
+
+bool Entity::RemoveChild(Entity child)
+{
+	//(jun) : when remove child from parent should make the child to be null(?)
+	UUIDType toDelete = child.GetUUID();
+
+	std::vector<UUIDType>& children = GetChildrenUUID();
+	auto found = std::find(children.begin(), children.end(), toDelete);
+	if (found != children.end())
+	{
+		children.erase(found);
+		return true;
+	}
+
+	return false;
 }
 
 std::string& Entity::Name()
