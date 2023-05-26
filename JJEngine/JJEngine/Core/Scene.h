@@ -34,7 +34,7 @@ public:
 
 	Entity GetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(UUIDType uuid) const;
-	Entity TryGetEntity(const std::string& name);
+	Entity TryGetEntity(const std::string& name) const;
 
 
 	entt::registry& GetRegistry();
