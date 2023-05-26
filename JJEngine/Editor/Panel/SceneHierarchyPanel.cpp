@@ -22,18 +22,20 @@ void SceneHierarchyPanel::SetScene(std::shared_ptr<Scene> scene)
 	m_scene = scene;
 }
 
-void SceneHierarchyPanel::DrawEntityTree(entt::entity& entityID)
+void SceneHierarchyPanel::DrawEntityTree(entt::entity entityID)
 {
-	ImGuiTreeNodeFlags flag{ImGuiTreeNodeFlags_OpenOnArrow};
 	Entity entity{ entityID, m_scene.get() };
+	std::vector<UUIDType>& child = entity.GetChildrenUUID();
+	ImGuiTreeNodeFlags flag{ child.empty() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow};
 	auto& name = entity.Name();
 	bool opened = ImGui::TreeNodeEx(name.c_str(), flag);
 	if (ImGui::IsItemClicked()) {
 		setSelectedEntity(entityID);
-		//Log::Info(name);
 	}
 	if (opened == true) {
-		ImGui::Text(name.c_str());
+		for (auto& c:child) {
+			DrawEntityTree(m_scene->GetEntity(c).GetEntityHandle());
+		}
 		ImGui::TreePop();
 	}
 }
@@ -48,7 +50,10 @@ void SceneHierarchyPanel::OnImGuiRender()
 	std::vector < entt::entity > rootEntity{};
 	m_scene->m_Registry.each([&](auto entityID)
 		{
-			rootEntity.push_back(entityID);
+			Entity entity{ entityID, m_scene.get() };
+			if (entity.GetParentUUID().is_nil() == true) {
+				rootEntity.push_back(entityID);
+			}
 		});
 
 	for (auto& e : rootEntity) {
