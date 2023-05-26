@@ -26,6 +26,7 @@ public:
 	Entity GetParent() const;
 	void SetParent(Entity parent);
 
+	entt::entity GetEntityHandle() const;
 	UUIDType GetUUID() const;
 	UUIDType GetParentUUID() const;
 	void SetParentUUID(UUIDType parentUUID);

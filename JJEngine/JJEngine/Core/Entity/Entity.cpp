@@ -54,6 +54,11 @@ void Entity::SetParent(Entity parent)
 	}
 }
 
+entt::entity Entity::GetEntityHandle() const
+{
+	return m_EntityHandle;
+}
+
 UUIDType Entity::GetUUID() const
 {
 	return GetComponent<UUIDComponent>().UUID;
