@@ -85,6 +85,17 @@ Entity Scene::TryGetEntity(UUIDType uuid) const
 	return Entity{};
 }
 
+Entity Scene::TryGetEntity(const std::string& name)
+{
+	auto entities = m_Registry.view<NameComponent>();
+	for (auto entity : entities)
+	{
+		if (entities.get<NameComponent>(entity).Name == name)
+			return { entity, this };
+	}
+	return {};
+}
+
 entt::registry& Scene::GetRegistry()
 {
 	return m_Registry;

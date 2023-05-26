@@ -65,3 +65,13 @@ const std::string& Entity::Name() const
 {
 	return HasComponent<NameComponent>() ? GetComponent<NameComponent>().Name : s_EmptyName;
 }
+
+TransformComponent& Entity::Transform()
+{
+	return m_Scene->m_Registry.get<TransformComponent>(m_EntityHandle);
+}
+
+const TransformComponent& Entity::Transform() const
+{
+	return m_Scene->m_Registry.get<TransformComponent>(m_EntityHandle);
+}

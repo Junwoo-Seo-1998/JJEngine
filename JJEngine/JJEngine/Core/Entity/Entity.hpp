@@ -1,6 +1,7 @@
 #pragma once
 #include <entt/entt.hpp>
 //default component
+#include "Core/Component/TransformComponent.h"
 #include "Core/Entity/NameComponent.h"
 #include "Core/Entity/UUIDComponent.h"
 #include "Core/Entity/RelationshipComponent.h"
@@ -31,8 +32,11 @@ public:
 	std::vector<UUIDType>& GetChildrenUUID();
 	const std::vector<UUIDType>& GetChildrenUUID() const;
 
+	//default get set
 	std::string& Name();
 	const std::string& Name() const;
+	TransformComponent& Transform();
+	const TransformComponent& Transform() const;
 
 	template<typename Comp_type, typename... Args>
 	Comp_type& AddComponent(Args&&... args);
