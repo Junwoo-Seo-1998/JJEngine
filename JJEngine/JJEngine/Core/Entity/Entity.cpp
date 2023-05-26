@@ -119,3 +119,19 @@ const TransformComponent& Entity::Transform() const
 {
 	return m_Scene->m_Registry.get<TransformComponent>(m_EntityHandle);
 }
+
+glm::mat4 Entity::GetWorldSpaceTransformMatrix() const
+{
+	return GetWorldSpaceTransformMatrixHelper(*this);
+}
+
+glm::mat4 Entity::GetWorldSpaceTransformMatrixHelper(Entity entity) const
+{
+	glm::mat4 transform(1.0f);
+
+	Entity parent = entity.GetParent();
+	if (parent)
+		transform = GetWorldSpaceTransformMatrixHelper(parent);
+
+	return transform * entity.Transform().GetTransform();
+}

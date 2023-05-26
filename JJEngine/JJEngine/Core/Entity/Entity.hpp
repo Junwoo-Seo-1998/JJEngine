@@ -42,6 +42,7 @@ public:
 	const std::string& Name() const;
 	TransformComponent& Transform();
 	const TransformComponent& Transform() const;
+	glm::mat4 GetWorldSpaceTransformMatrix() const;
 
 	template<typename Comp_type, typename... Args>
 	Comp_type& AddComponent(Args&&... args);
@@ -58,6 +59,8 @@ public:
 	template <typename Comp_type>
 	void RemoveComponent();
 private:
+	glm::mat4 GetWorldSpaceTransformMatrixHelper(Entity entity) const;
+
 	entt::entity m_EntityHandle = entt::null;
 	Scene* m_Scene = nullptr;
 	inline static std::string s_EmptyName = "UnnamedEntity";

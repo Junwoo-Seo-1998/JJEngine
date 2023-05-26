@@ -69,22 +69,18 @@ void EditorLayer::OnPreRender()
 
 void EditorLayer::OnRender()
 {
-	glm::mat4 identity(1.0f);
 	auto& reg = active_scene->GetRegistry();
-	auto viewProj = identity;
-	
-	viewProj *= glm::perspective(400.f, 1.f, 0.001f, 100.f);
+	glm::mat4 viewProj = glm::perspective(400.f, 1.f, 0.001f, 100.f);
 	viewProj *=MatrixMath::BuildCameraMatrixWithDirection({ 0,0,1 }, { 0,0,-1.f });
 
 	Renderer2D::BeginScene(viewProj);
 
-	auto group=reg.group<TransformComponent, SpriteRendererComponent>();
+	auto view = reg.view<SpriteRendererComponent>();
 
-	for (auto entity:group)
+	for (auto e: view)
 	{
-		auto [trans, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-		trans.Scale = {1.2,1.1,1 };
-		Renderer2D::DrawQuad(trans.GetTransform(), { 1,1,1,1});
+		Entity entity{ e, active_scene.get() };
+		Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), { 1,1,1,1 });
 	}
 	Renderer2D::EndScene();
 }
