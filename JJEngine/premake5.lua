@@ -7,6 +7,7 @@ group "Libs"
 include "Libs/glfw"
 include "Libs/glad"
 include "Libs/imgui"
+include "Libs/yaml-cpp"
 group ""
 --inc
 IncludeDir={}
@@ -20,6 +21,7 @@ IncludeDir["MONO"]="Libs/mono/include"
 IncludeDir["SPDLOG"]="Libs/spdlog/include"
 IncludeDir["FILEWATCH"]="Libs/filewatch/"
 IncludeDir["STDUUID"]="Libs/stduuid/include"
+IncludeDir["YAML_CPP"]="Libs/yaml-cpp/include"
 --lib dir
 LibraryDir = {}
 LibraryDir["Mono_Debug"]="Libs/mono/lib/Debug"
@@ -48,6 +50,7 @@ project "JJEngine"
         "GLAD",
         "opengl32.lib",
         "ImGui",
+        "yaml-cpp",
     }
 
     disablewarnings {
