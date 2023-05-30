@@ -143,11 +143,24 @@ void EditorLayer::OnImGuiRender()
 
 void EditorLayer::DrawToolBar()
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.f,2.f });
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2{ 0.f,0.f });
+
+	auto& color = ImGui::GetStyle().Colors;
+	const auto& buttonHovered = color[ImGuiCol_ButtonHovered];
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0,0,0,0 });
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f });
+	const auto& buttonActive = color[ImGuiCol_ButtonActive];
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ buttonActive.x, buttonActive.y, buttonActive.z,0 });
+
 	ImGui::Begin("##toolbar", nullptr,
 		ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
 	std::shared_ptr<Texture> TextureToUse = scene_state == SceneState::Play ? PlayIcon : StopIcon;
-	if (ImGui::ImageButton((ImTextureID)TextureToUse->GetTextureID(), ImVec2{ 20.f, 20.f }))
+	float buttonSize = ImGui::GetWindowHeight() - 4.0f;
+	ImGui::SameLine((ImGui::GetContentRegionMax().x * 0.5f) - (buttonSize * 0.5f));
+	if (ImGui::ImageButton((ImTextureID)TextureToUse->GetTextureID(), 
+		ImVec2{ buttonSize, buttonSize }, ImVec2{ 0.f, 0.f }, ImVec2{ 1.f, 1.f }, 0))
 	{
 		if (scene_state == SceneState::Edit)
 		{
@@ -158,6 +171,8 @@ void EditorLayer::DrawToolBar()
 			OnSceneStop();
 		}
 	}
+	ImGui::PopStyleVar(2);
+	ImGui::PopStyleColor(3);
 	ImGui::End();
 }
 
