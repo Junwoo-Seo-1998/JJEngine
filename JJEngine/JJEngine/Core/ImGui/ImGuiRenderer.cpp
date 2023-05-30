@@ -136,10 +136,6 @@ void ImGuiRenderer::GuiDrawDockSpaceBegin()
 
 	if (ImGui::BeginMenuBar())
 	{
-		if(ImGui::BeginMenu("File"))
-		{
-			ImGui::EndMenu();
-		}
 
 		if (ImGui::BeginMenu("Options"))
 		{

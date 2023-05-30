@@ -132,7 +132,18 @@ private:
 
 TestScene::TestScene(std::string t) :Scene(t)
 {
-	CreateEntity("Test Entity");
+	CreateEntity("Test 1 Entity");
+	CreateEntity("Test 2 Entity");
+	CreateEntity("Test 3 Entity");
+	auto temp = CreateEntity("Test P Entity");
+	auto temp2 = CreateEntity("Child Entity");
+	temp2.SetParent(temp);
+
+
+	temp = CreateEntity("Child 1 Entity");
+	temp.SetParent(CreateEntity("Test PPAP Entity"));
+	temp2 = CreateEntity("Child 2 Entity");
+	temp2.SetParent(temp);
 }
 
 TestScene::~TestScene()

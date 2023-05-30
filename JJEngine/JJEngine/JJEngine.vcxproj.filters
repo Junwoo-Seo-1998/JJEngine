@@ -56,9 +56,6 @@
     <ClInclude Include="Core\Component\CameraComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Component\NameComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Component\SpriteRendererComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -68,13 +65,21 @@
     <ClInclude Include="Core\Entity\Entity.hpp">
       <Filter>Entity</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Entity\NameComponent.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Entity\RelationshipComponent.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Entity\UUIDComponent.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
     <ClInclude Include="Core\EntryPoint.h" />
     <ClInclude Include="Core\Event\StringEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="Core\EventListener.h" />
     <ClInclude Include="Core\EventManager.h" />
-    <ClInclude Include="Core\GameObject.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -128,10 +133,12 @@
     </ClInclude>
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
+    <ClInclude Include="Core\SceneSerializer.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h">
       <Filter>Script</Filter>
     </ClInclude>
     <ClInclude Include="Core\Time.h" />
+    <ClInclude Include="Core\Type.h" />
     <ClInclude Include="Core\Utils\Assert.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -154,7 +161,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -165,11 +171,13 @@
     <ClCompile Include="Core\Component\TransformComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Entity\Entity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Event\StringEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
     <ClCompile Include="Core\EventManager.cpp" />
-    <ClCompile Include="Core\GameObject.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -214,6 +222,7 @@
     </ClCompile>
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
+    <ClCompile Include="Core\SceneSerializer.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp">
       <Filter>Script</Filter>
     </ClCompile>
@@ -237,6 +246,5 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\test.cpp" />
   </ItemGroup>
 </Project>

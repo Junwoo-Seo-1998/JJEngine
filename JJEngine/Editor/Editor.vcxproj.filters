@@ -10,6 +10,9 @@
     <ClInclude Include="Panel\AssetBrowserPanel.h">
       <Filter>Panel</Filter>
     </ClInclude>
+    <ClInclude Include="Panel\ComponentPanel.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
     <ClInclude Include="Panel\SceneHierarchyPanel.h">
       <Filter>Panel</Filter>
     </ClInclude>
@@ -18,6 +21,9 @@
   <ItemGroup>
     <ClCompile Include="EditorLayer.cpp" />
     <ClCompile Include="Panel\AssetBrowserPanel.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel\ComponentPanel.cpp">
       <Filter>Panel</Filter>
     </ClCompile>
     <ClCompile Include="Panel\SceneHierarchyPanel.cpp">

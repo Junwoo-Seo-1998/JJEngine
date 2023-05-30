@@ -8,17 +8,17 @@ namespace internal
 
 	uuids::uuid_random_generator uuid_random_generator{ eng };
 
-	UUID stringNameSpace = uuid_random_generator();
+	UUIDType stringNameSpace = uuid_random_generator();
 
 	uuids::uuid_name_generator uuid_name_generator{ stringNameSpace };
 }
 
-UUID UUIDGenerator::Generate()
+UUIDType UUIDGenerator::Generate()
 {
 	return internal::uuid_random_generator();
 }
 
-UUID UUIDGenerator::Generate(const std::string& str)
+UUIDType UUIDGenerator::Generate(const std::string& str)
 {
 	return internal::uuid_name_generator(str);
 }

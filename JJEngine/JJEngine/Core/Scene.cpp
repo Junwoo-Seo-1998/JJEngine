@@ -7,7 +7,9 @@ End Header-------------------------------------------------------- */
 #include "Scene.h"
 #include "Entity/Entity.hpp"
 #include "Component/TransformComponent.h"
-#include "Component/NameComponent.h"
+#include "Utils/Assert.h"
+#include "Utils/UUIDGenerator.h"
+
 Scene::Scene()
 	:m_scene_name("unnamed-scene")
 {
@@ -53,13 +55,63 @@ void Scene::OnDestroy()
 Entity Scene::CreateEntity(const std::string& name)
 {
 	Entity entity{ m_Registry.create(),this };
+
+	auto& uuidComponent = entity.AddComponent<UUIDComponent>();
+	uuidComponent.UUID = UUIDGenerator::Generate();
+
 	entity.AddComponent<TransformComponent>();
-	if (!name.empty())
+	if(!name.empty())
 		entity.AddComponent<NameComponent>(name);
+
+	entity.AddComponent<RelationshipComponent>();
+	m_entity_map[uuidComponent.UUID] = entity;
+
+	//for editor view
+	SortEntityMap();
+
 	return entity;
+}
+
+Entity Scene::GetEntity(UUIDType uuid) const
+{
+	ENGINE_ASSERT(m_entity_map.find(uuid) != m_entity_map.end(), "There is no entity with given UUID");
+	return m_entity_map.at(uuid);
+}
+
+Entity Scene::TryGetEntity(UUIDType uuid) const
+{
+	if(const auto found = m_entity_map.find(uuid); found != m_entity_map.end())
+		return found->second;
+	return Entity{};
+}
+
+Entity Scene::TryGetEntity(const std::string& name)
+{
+	const auto entities = m_Registry.view<NameComponent>();
+	for(auto entity : entities)
+	{
+		if (entities.get<NameComponent>(entity).Name == name)
+			return { entity, this };
+	}
+	return {};
 }
 
 entt::registry& Scene::GetRegistry()
 {
 	return m_Registry;
+}
+
+const EntityMap& Scene::GetEntityMap() const
+{
+	return m_entity_map;
+}
+
+void Scene::SortEntityMap()
+{
+	m_Registry.sort<UUIDComponent>([&](const auto left, const auto right)
+	{
+		auto leftEntity = m_entity_map.find(left.UUID);
+		auto rightEntity = m_entity_map.find(right.UUID);
+		return leftEntity->second < rightEntity->second;
+	});
 }
