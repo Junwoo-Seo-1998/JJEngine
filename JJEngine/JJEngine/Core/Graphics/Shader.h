@@ -38,6 +38,7 @@ public:
 	void SetFloatVector3(const std::string& name, const std::vector<glm::vec3>& value) const;
 	void SetFloat4(const std::string& name, const glm::vec4& value) const;
 	void SetMat4(const std::string& name, const glm::mat4& value) const;
+	void SetMatVector4(const std::string& name, const std::vector<glm::mat4>& value) const;
 
 	//void SetTexture(const std::string& name, std::shared_ptr<Texture> texture, unsigned int unit = 0);
 	unsigned GetShaderProgram();

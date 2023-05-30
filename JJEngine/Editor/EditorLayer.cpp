@@ -73,7 +73,7 @@ void EditorLayer::OnRender()
 	auto viewProj = identity;
 	
 	viewProj *= glm::perspective(400.f, 1.f, 0.001f, 100.f);
-	viewProj *=MatrixMath::BuildCameraMatrixWithDirection({ 0,0,1 }, { 0,0,-1.f });
+	viewProj *= MatrixMath::BuildCameraMatrixWithDirection({ 0,0,1 }, { 0,0,-1.f });
 
 	Renderer2D::BeginScene(viewProj);
 
