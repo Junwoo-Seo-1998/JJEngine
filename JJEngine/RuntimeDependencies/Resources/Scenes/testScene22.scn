@@ -1,0 +1,73 @@
+Scene: Name
+Entities:
+  - Name: Test Breadth Entity
+    Children:
+      - Name: Child B1 Entity
+        Children:
+          - Name: Child B1_1 Entity
+            Children:
+              []
+          - Name: Child B1_2 Entity
+            Children:
+              []
+      - Name: Child B2 Entity
+        Children:
+          - Name: Child B2_1 Entity
+            Children:
+              []
+          - Name: Child B2_2 Entity
+            Children:
+              []
+      - Name: Child B3 Entity
+        Children:
+          - Name: Child B3_1 Entity
+            Children:
+              []
+          - Name: Child B3_2 Entity
+            Children:
+              []
+      - Name: Child B4 Entity
+        Children:
+          - Name: Child B4_1 Entity
+            Children:
+              []
+          - Name: Child B4_2 Entity
+            Children:
+              []
+      - Name: Child B5 Entity
+        Children:
+          - Name: Child B5_1 Entity
+            Children:
+              []
+          - Name: Child B5_2 Entity
+            Children:
+              []
+  - Name: Test Depth Entity
+    Children:
+      - Name: Child D1 Entity
+        Children:
+          - Name: Child D2 Entity
+            Children:
+              - Name: Child D3 Entity
+                Children:
+                - Name: Child D4 Entity
+                  Children:
+                  - Name: Child D5 Entity
+                    Children:
+                    - Name: Child D6 Entity
+                      Children:
+                        []
+  - Name: Test P Entity
+    Children:
+      - Name: Child Entity
+        Children:
+          []
+  - Name: Test 3 Entity
+    Children:
+      []
+  - Name: Test 2 Entity
+    Children:
+      []
+  - Name: Test 1 Entity
+    Children:
+      []

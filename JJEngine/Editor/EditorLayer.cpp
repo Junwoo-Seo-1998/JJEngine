@@ -1,3 +1,4 @@
+#include "Core/SceneSerializer.h"
 #include "EditorLayer.h"
 
 #include <glm/ext/matrix_clip_space.hpp>
@@ -19,6 +20,7 @@
 
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
+
 
 EditorLayer::~EditorLayer()
 {
@@ -93,6 +95,30 @@ void EditorLayer::OnPostRender()
 void EditorLayer::OnImGuiRender()
 {
 	ImGuiRenderer::Instance()->GuiDrawDockSpaceBegin();
+	if (ImGui::BeginMenuBar()) // testing for now
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Save scene")) { 
+				SceneSerializer see_real( Application::Instance().GetSceneManager()->GetCurrentScene() );
+				see_real.Serialize("./Resources/Scenes/testScene.scn");
+			}
+			if (ImGui::MenuItem("Load test scene")) {
+				Application::Instance().GetSceneManager()->GetCurrentScene()->GetRegistry().clear();
+				SceneSerializer see_real(Application::Instance().GetSceneManager()->GetCurrentScene());
+				if (see_real.Deserialize("./Resources/Scenes/testScene.scn") == false) Log::Error("Fail to deserialize testScene");
+			}
+			if (ImGui::MenuItem("Load test22 scene")) {
+				Application::Instance().GetSceneManager()->GetCurrentScene()->GetRegistry().clear();
+				SceneSerializer see_real(Application::Instance().GetSceneManager()->GetCurrentScene());
+				if(see_real.Deserialize("./Resources/Scenes/testScene22.scn") == false)Log::Error("Fail to deserialize testScene");
+			}
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
+	}
+
 	auto panels = editorRegistry.view<ImGuiSubWindow>();
 	for (auto& ID:panels) {
 		panels.get<ImGuiSubWindow>(ID).Update();

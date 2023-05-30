@@ -17,6 +17,7 @@ class Scene
 {
 	friend class Entity;
 	friend class SceneHierarchyPanel;
+	friend class SceneSerializer;
 public:
 	Scene();
 	Scene(const std::string& scene_name);

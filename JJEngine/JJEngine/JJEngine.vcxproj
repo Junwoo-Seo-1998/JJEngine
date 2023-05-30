@@ -57,7 +57,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4819;4996;4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;DEBUG;JJ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;..\Libs\stduuid\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;..\Libs\stduuid\include;..\Libs\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -78,7 +78,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4819;4996;4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;..\Libs\stduuid\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;..\Libs\stduuid\include;..\Libs\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -133,6 +133,7 @@
     <ClInclude Include="Core\Layer\LayerManager.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
+    <ClInclude Include="Core\SceneSerializer.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Core\Type.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="Core\Layer\LayerManager.cpp" />
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
+    <ClCompile Include="Core\SceneSerializer.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp" />
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Core\Utils\File.cpp" />

@@ -133,6 +133,7 @@
     </ClInclude>
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
+    <ClInclude Include="Core\SceneSerializer.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h">
       <Filter>Script</Filter>
     </ClInclude>
@@ -221,6 +222,7 @@
     </ClCompile>
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
+    <ClCompile Include="Core\SceneSerializer.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp">
       <Filter>Script</Filter>
     </ClCompile>
