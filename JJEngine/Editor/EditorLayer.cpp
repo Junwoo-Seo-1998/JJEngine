@@ -92,7 +92,7 @@ void EditorLayer::OnRender()
 
 		Entity entity{ e, active_scene.get() };
 		//Log::Info("To Draw: {}", entity.Name());
-		Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), { 1,1,1,1 });
+		Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), entity.GetComponent<SpriteRendererComponent>().color);
 	}
 	Renderer2D::EndScene();
 }
@@ -163,7 +163,7 @@ void EditorLayer::DrawToolBar()
 	ImGui::Begin("##toolbar", nullptr,
 		ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-	std::shared_ptr<Texture> TextureToUse = scene_state == SceneState::Play ? PlayIcon : StopIcon;
+	std::shared_ptr<Texture> TextureToUse = scene_state == SceneState::Edit ? PlayIcon : StopIcon;
 	float buttonSize = ImGui::GetWindowHeight() - 4.0f;
 	ImGui::SameLine((ImGui::GetContentRegionMax().x * 0.5f) - (buttonSize * 0.5f));
 	if (ImGui::ImageButton((ImTextureID)TextureToUse->GetTextureID(),

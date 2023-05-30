@@ -204,7 +204,7 @@ void ComponentPanel::DrawComponents(Entity entity)
 
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 		{
-			//ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
+			ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 		});
 	}
 }
