@@ -70,6 +70,7 @@ project "JJEngine"
         "%{IncludeDir.SPDLOG}",
         "%{IncludeDir.FILEWATCH}",
         "%{IncludeDir.STDUUID}",
+        "%{IncludeDir.YAML_CPP}",
     }
     files {
         "JJEngine/**.h",
