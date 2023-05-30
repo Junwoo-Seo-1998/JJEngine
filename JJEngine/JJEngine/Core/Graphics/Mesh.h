@@ -34,6 +34,46 @@ private:
 	std::shared_ptr<VertexBuffer> VBO;
 	std::shared_ptr<IndexBuffer> EBO;
 public:
+	static Mesh CreateSphere(int stacks, int slices, float radius, glm::vec3 center) {
+		Mesh mesh;
+		for (int i = 0; i <= stacks; ++i) {
+			float row = (float)i / (float)stacks;
+			float beta = 3.14159 * (row - 0.5f);
+			for (int j = 0; j <= slices; ++j) {
+				float  col = (float)j / (float)slices;
+				float  alpha = col * 3.14159 * 2.f;
+				Vertex v;
+				v.position = center + glm::vec3(radius * sin(alpha) * cos(beta), radius * sin(beta), radius * cos(alpha) * cos(beta));
+				v.normal = glm::vec3(v.position.x, v.position.y, v.position.z) / radius;
+				mesh.vertices.push_back(v);
+			}
+		}
+		BuildIndexBuffer(stacks, slices, mesh);
+		return mesh;
+	}
+
+
+	static Mesh CreatePlane(int stacks, int slices)
+	{
+		Mesh mesh;
+		for (int stack = 0; stack <= stacks; ++stack)
+		{
+			float row = (float)stack / stacks;
+			for (int slice = 0; slice <= slices; ++slice)
+			{
+				float col = (float)slice / slices;
+				Vertex v;
+				v.position = glm::vec3(col - 0.5f, 0.f, 0.5f - row);
+				v.normal = glm::vec3(0.0f, 1.0f, 0.0f);
+				mesh.vertices.push_back(v);
+			}
+		}
+		BuildIndexBuffer(stacks, slices, mesh);
+		return mesh;
+	}
+
+
+private:
 	static constexpr float EPSILON = std::numeric_limits<float>::epsilon();
 
 	static bool DegenerateTri(const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2) {
@@ -69,24 +109,6 @@ public:
 				}
 			}
 		}
-	}
-
-	static Mesh CreateSphere(int stacks, int slices, float radius, glm::vec3 center) {
-		Mesh mesh;
-		for (int i = 0; i <= stacks; ++i) {
-			float row = (float)i / (float)stacks;
-			float beta = 3.14159 * (row - 0.5f);
-			for (int j = 0; j <= slices; ++j) {
-				float  col = (float)j / (float)slices;
-				float  alpha = col * 3.14159 * 2.f;
-				Vertex v;
-				v.position = center + glm::vec3(radius * sin(alpha) * cos(beta), radius * sin(beta), radius * cos(alpha) * cos(beta));
-				v.normal = glm::vec3(v.position.x, v.position.y, v.position.z) / radius;
-				mesh.vertices.push_back(v);
-			}
-		}
-		BuildIndexBuffer(stacks, slices, mesh);
-		return mesh;
 	}
 
 };

@@ -10,10 +10,10 @@ class ShadowScene : public Scene
 	FreeCamera freeCam;
 	FreeCamera light1;
 	FreeCamera light2;
-
+	FreeCamera* controller;
 	RenderingLayer graphics;
 	std::shared_ptr<VertexArray> shadowSceneVAO;
-	std::shared_ptr<FrameBuffer> shadowSceneSampleFBO;
+	std::vector<std::shared_ptr<FrameBuffer>> shadowSceneSampleFBO;
 	std::shared_ptr<Shader> shader;
 	std::shared_ptr<Shader> shadowShader;
 
