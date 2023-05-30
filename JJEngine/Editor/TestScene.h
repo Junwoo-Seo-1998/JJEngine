@@ -18,6 +18,7 @@
 #include "Core/Time.h"
 #include "Core/ImGui/ImGuiRenderer.h"
 #include "Core/Entity/Entity.hpp"
+#include "Core/Component/SpriteRendererComponent.h"
 class TestScene : public Scene
 {
 	std::string text{};
@@ -138,6 +139,9 @@ TestScene::TestScene(std::string t) :Scene(t)
 	auto temp = CreateEntity("Test P Entity");
 	auto temp2 = CreateEntity("Child Entity");
 	temp2.SetParent(temp);
+
+	temp.Transform().Position = { 1.f, 0, 0 };
+	temp.AddComponent<SpriteRendererComponent>();
 
 
 	temp = CreateEntity("Child 1 Entity");

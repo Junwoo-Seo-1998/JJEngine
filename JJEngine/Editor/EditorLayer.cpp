@@ -63,6 +63,7 @@ void EditorLayer::OnStart()
 
 void EditorLayer::OnUpdate()
 {
+	active_scene = Application::Instance().GetSceneManager()->GetCurrentScene();
 	//get something from scene
 }
 
@@ -74,9 +75,13 @@ void EditorLayer::OnPreRender()
 
 void EditorLayer::OnRender()
 {
+	if(!active_scene)
+		return;
+
 	auto& reg = active_scene->GetRegistry();
 	glm::mat4 viewProj = glm::perspective(400.f, 1.f, 0.001f, 100.f);
-	viewProj *=MatrixMath::BuildCameraMatrixWithDirection({ 0,0,1 }, { 0,0,-1.f });
+	viewProj *=MatrixMath::BuildCameraMatrixWithDirection({ 1,0,1.f }, { 0,0,-1.f });
+	
 
 	Renderer2D::BeginScene(viewProj);
 
@@ -84,7 +89,9 @@ void EditorLayer::OnRender()
 
 	for (auto e: view)
 	{
+		
 		Entity entity{ e, active_scene.get() };
+		//Log::Info("To Draw: {}", entity.Name());
 		Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), { 1,1,1,1 });
 	}
 	Renderer2D::EndScene();
@@ -128,7 +135,7 @@ void EditorLayer::OnImGuiRender()
 	}
 
 	ImGui::Begin("viewport");
-	ImGui::Image((void*)editor_viewport->GetColorTexture(0)->GetTextureID(), { 400, 400 }, { 0,1 }, { 1,0 });
+	ImGui::Image((void*)editor_viewport->GetColorTexture(0)->GetTextureID(), { 400, 400 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 	ImGui::End();
 
 
