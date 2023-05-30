@@ -33,6 +33,9 @@ void EditorLayer::OnAttach()
 	active_scene = std::make_shared<Scene>();
 	//for testing
 	editor_viewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::Depth } });
+
+	PlayIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/PlayButton.png"));
+	StopIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/Stop.png"));
 }
 
 void EditorLayer::OnDetach()
@@ -133,5 +136,37 @@ void EditorLayer::OnImGuiRender()
 	component_panel.SetSelevted_EntityHandle(selected_entityID);
 	component_panel.OnImGuiRender();
 
+	DrawToolBar();
+
 	ImGuiRenderer::Instance()->GuiDrawDockSpaceEnd();
+}
+
+void EditorLayer::DrawToolBar()
+{
+	ImGui::Begin("##toolbar", nullptr,
+		ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+	std::shared_ptr<Texture> TextureToUse = scene_state == SceneState::Play ? PlayIcon : StopIcon;
+	if (ImGui::ImageButton((ImTextureID)TextureToUse->GetTextureID(), ImVec2{ 20.f, 20.f }))
+	{
+		if (scene_state == SceneState::Edit)
+		{
+			OnScenePlay();
+		}
+		else if (scene_state == SceneState::Play)
+		{
+			OnSceneStop();
+		}
+	}
+	ImGui::End();
+}
+
+void EditorLayer::OnScenePlay()
+{
+	scene_state = SceneState::Play;
+}
+
+void EditorLayer::OnSceneStop()
+{
+	scene_state = SceneState::Edit;
 }
