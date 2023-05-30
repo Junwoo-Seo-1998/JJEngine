@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/Scene.h"
 #include <entt/entt.hpp>
 //default component
 #include "Core/Component/TransformComponent.h"
@@ -96,4 +97,3 @@ void Entity::RemoveComponent()
 {
 	m_Scene->m_Registry.remove<Comp_type>(m_EntityHandle);
 }
-

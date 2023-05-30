@@ -1,5 +1,7 @@
 #pragma once
 #include <entt/entt.hpp>
+
+#include "Core/Entity/Entity.hpp"
 class Scene;
 class ComponentPanel {
 	std::shared_ptr<Scene> m_scene;
@@ -11,4 +13,6 @@ public:
 	void SetScene(std::shared_ptr<Scene> scene);
 	void SetSelevted_EntityHandle(entt::entity ID);
 	void OnImGuiRender();
+private:
+	void DrawComponents(Entity entity);
 };

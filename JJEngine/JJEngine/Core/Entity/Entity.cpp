@@ -1,5 +1,3 @@
-#include "Core/Scene.h"
-
 //--include Entity at the end due to the template
 #include "Entity.hpp"
 
