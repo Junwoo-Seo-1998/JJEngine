@@ -79,8 +79,8 @@ void EditorLayer::OnRender()
 		return;
 
 	auto& reg = active_scene->GetRegistry();
-	glm::mat4 viewProj = glm::perspective(400.f, 1.f, 0.001f, 100.f);
-	viewProj *= MatrixMath::BuildCameraMatrixWithDirection({ 1,0,1.f }, { 0,0,-1.f });
+	glm::mat4 viewProj = glm::perspective(glm::radians(45.f), 1.f, 0.001f, 100.f);
+	viewProj *= MatrixMath::BuildCameraMatrixWithDirection({ 1,0,10.f }, { 0,0,-1.f });
 
 
 	Renderer2D::BeginScene(viewProj);
@@ -92,7 +92,11 @@ void EditorLayer::OnRender()
 
 		Entity entity{ e, active_scene.get() };
 		//Log::Info("To Draw: {}", entity.Name());
-		Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), entity.GetComponent<SpriteRendererComponent>().color);
+		auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
+		if (spriteComp.texture.get())
+			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.texture, spriteComp.color);
+		else
+			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
 	}
 	Renderer2D::EndScene();
 }

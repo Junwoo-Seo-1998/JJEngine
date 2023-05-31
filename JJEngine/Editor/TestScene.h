@@ -141,8 +141,8 @@ TestScene::TestScene(std::string t) :Scene(t)
 	temp2.SetParent(temp);
 
 	temp.Transform().Position = { 1.f, 0, 0 };
-	temp.AddComponent<SpriteRendererComponent>();
-
+	auto& sprite=temp.AddComponent<SpriteRendererComponent>();
+	sprite.texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
 
 	temp = CreateEntity("Child 1 Entity");
 	temp.SetParent(CreateEntity("Test PPAP Entity"));

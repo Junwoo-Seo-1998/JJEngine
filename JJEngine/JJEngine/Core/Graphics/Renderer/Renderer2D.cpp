@@ -110,15 +110,16 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
 {
 	s_Data.TextureShader->SetMat4("Transform", transform);
 	s_Data.TextureShader->SetFloat4("Color", color);
-	s_Data.TextureShader->SetInt("Texture", 0);
+	s_Data.TextureShader->SetInt("TextureUnit", 0);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
 void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Texture>& texture,
 	const glm::vec4& tintColor)
 {
-
+	s_Data.TextureShader->SetMat4("Transform", transform);
+	s_Data.TextureShader->SetFloat4("Color", tintColor);
 	texture->BindTexture(1);
-	s_Data.TextureShader->SetInt("Texture", 1);
+	s_Data.TextureShader->SetInt("TextureUnit", 1);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
