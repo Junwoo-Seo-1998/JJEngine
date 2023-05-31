@@ -93,7 +93,7 @@ void EditorLayer::OnRender()
 		Entity entity{ e, active_scene.get() };
 		//Log::Info("To Draw: {}", entity.Name());
 		auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
-		if (spriteComp.texture.get())
+		if (spriteComp.texture)
 			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.texture, spriteComp.color);
 		else
 			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
