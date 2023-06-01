@@ -67,9 +67,11 @@ void EditorLayer::OnUpdate()
 
 
 	if (shouldOpenFile.extension().string() == ".scn") {
+		//TODO: ask save now scene
 		SetNewScene(std::make_shared<Scene>(shouldOpenFile.filename().string()));
 		SceneSerializer see_real(active_scene);
-		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize " + shouldOpenFile.filename().string());
+		active_scene->SetScenePath(shouldOpenFile);
+		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize Scene: " + shouldOpenFile.filename().string());
 	}
 	shouldOpenFile.clear();
 }
@@ -99,9 +101,17 @@ void EditorLayer::OnImGuiRender()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Make scene")) {
+				//TODO: name
+			}
 			if (ImGui::MenuItem("Save scene")) {
 				SceneSerializer see_real(active_scene);
-				see_real.Serialize("./Resources/Scenes/testScene.scn");
+				if (active_scene->GetScenePath().extension().string() == ".scn") {
+					see_real.Serialize(active_scene->GetScenePath().string());
+				}
+				else {
+					see_real.Serialize("./Resources/Scenes/" + active_scene->GetSceneName() + ".scn");
+				}
 			}
 			ImGui::EndMenu();
 		}

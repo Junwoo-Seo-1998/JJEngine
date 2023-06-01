@@ -7,14 +7,14 @@
 #include "Core/Entity/Entity.hpp"
 #include "Core/Component/SpriteRendererComponent.h"
 TestScene::TestScene(std::string t)
-	:text(t)
+	:Scene(t)
 {
 
 }
 
 void TestScene::Start()
 {
-	Log::Info("Scene: " + text);
+	Log::Info("Scene: " + m_scene_name);
 	shader = Shader::CreateShaderFromFile({
 { ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.vert"}},
 { ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.frag"} }

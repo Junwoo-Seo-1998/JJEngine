@@ -7,6 +7,7 @@
 #include "Core/Entity/RelationshipComponent.h"
 #include "Core/Utils/Log.h"
 
+// Key values
 #define YM_SCENE "Scene"
 #define YM_NAME "Name"
 #define YM_ENTITY "Entities"
@@ -18,8 +19,11 @@
 #define YM_SPRITE "Sprite"
 #define YM_UUID "UUID"
 #define YM_CHILDREN "Children"
+
+// Emitter macro
 #define YAML_KEY_VALUE(emitter, key, value) emitter<<YAML::Key<<key<<YAML::Value<<value;
 
+// YAML Implement
 namespace YAML {
 	Emitter& operator<<(Emitter& emitter, glm::vec3 v) {
 		return emitter << BeginSeq << v.x << v.y << v.z << EndSeq;
@@ -43,6 +47,8 @@ namespace YAML {
 		}
 	};
 }
+
+// Helper function
 void DeserializeTransform(Entity& entity, std::string id, YAML::Node& transform_components);
 void DeserializeEntity(YAML::detail::iterator_value entity, YAML::Node& components, std::shared_ptr<Scene> scene);
 void DeserializeEntityTree(Entity &parent, YAML::detail::iterator_value entity, YAML::Node& components, std::shared_ptr<Scene> scene);
@@ -57,7 +63,7 @@ void SceneSerializer::Serialize(const std::string filePath)
 	YAML::Emitter out;
 	out << YAML::BeginMap;
 	out << YAML::Key << YM_SCENE;
-	out << YAML::Value << YM_NAME;
+	out << YAML::Value << scene->m_scene_name;
 	out << YAML::Key << YM_ENTITY;
 	out << YAML::Value << YAML::BeginSeq;
 	std::vector < entt::entity > rootEntity{};
@@ -131,7 +137,7 @@ bool SceneSerializer::Deserialize(const std::string filePath)
 	YAML::Node data = YAML::Load(strStream.str());
 	if (!data[YM_SCENE]) return false;
 
-	//std::string sceneName{data["Scene"].as<std::string>()};
+	scene->m_scene_name = data[YM_SCENE].as<std::string>();
 
 	auto entities = data[YM_ENTITY];
 	auto components = data[YM_COMPONENT];

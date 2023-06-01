@@ -115,6 +115,17 @@ Entity Scene::TryGetEntity(const std::string& name)
 	return {};
 }
 
+std::string Scene::GetSceneName() const {
+	return m_scene_name;
+}
+
+std::filesystem::path Scene::GetScenePath() const {
+	return scenePath;
+}
+void Scene::SetScenePath(std::filesystem::path path) {
+	scenePath = path;
+}
+
 entt::registry& Scene::GetRegistry()
 {
 	return m_Registry;

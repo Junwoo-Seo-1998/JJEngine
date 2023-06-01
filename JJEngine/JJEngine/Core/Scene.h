@@ -7,6 +7,7 @@ End Header-------------------------------------------------------- */
 #pragma once
 #include <string>
 #include <entt/entt.hpp>
+#include <filesystem>
 #include "Type.h"
 
 class EditorCamera;
@@ -43,6 +44,9 @@ public:
 	Entity TryGetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(const std::string& name);
 
+	std::string GetSceneName() const;
+	std::filesystem::path GetScenePath() const;
+	void SetScenePath(std::filesystem::path);
 
 	entt::registry& GetRegistry();
 	const EntityMap& GetEntityMap() const;
@@ -50,6 +54,7 @@ protected:
 	void SortEntityMap();
 
 	std::string m_scene_name;
+	std::filesystem::path scenePath;
 	entt::registry m_Registry;
 
 	//to register entities based on uuid
