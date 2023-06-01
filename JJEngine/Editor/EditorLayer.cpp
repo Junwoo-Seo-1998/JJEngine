@@ -66,12 +66,12 @@ void EditorLayer::OnUpdate()
 	editor_camera.OnUpdate();
 
 
-	if (shouldOpenFile.empty() == false) {
+	if (shouldOpenFile.extension().string() == ".scn") {
 		SetNewScene(std::make_shared<Scene>(shouldOpenFile.filename().string()));
 		SceneSerializer see_real(active_scene);
 		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize " + shouldOpenFile.filename().string());
-		shouldOpenFile.clear();
 	}
+	shouldOpenFile.clear();
 }
 
 void EditorLayer::OnPreRender()
