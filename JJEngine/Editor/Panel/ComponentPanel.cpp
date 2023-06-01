@@ -9,6 +9,7 @@
 
 #include "imgui_internal.h"
 #include "Core/Component/SpriteRendererComponent.h"
+#include "Core/Utils/Assert.h"
 
 static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
 {
@@ -124,13 +125,7 @@ static void DrawComponent(const std::string& name, Entity entity, UIFunction uiF
 	}
 }
 
-
-ComponentPanel::ComponentPanel(std::shared_ptr<Scene> scene)
-{
-	SetScene(scene);
-}
-
-void ComponentPanel::SetScene(std::shared_ptr<Scene> scene)
+void ComponentPanel::SetScene(std::weak_ptr<Scene> scene)
 {
 	m_scene = scene;
 	selected_EntityHandle = entt::null;
@@ -143,11 +138,12 @@ void ComponentPanel::SetSelevted_EntityHandle(entt::entity ID)
 
 void ComponentPanel::OnImGuiRender()
 {
-	if (m_scene == nullptr)
-		return;
+	auto scene = m_scene.lock();
+	ENGINE_ASSERT(scene, "check the original scene was deleted!!");
+
 	ImGui::Begin("Component Editing");
 	if (selected_EntityHandle != entt::null) {
-		Entity entity{ selected_EntityHandle, m_scene.get() };
+		Entity entity{ selected_EntityHandle, scene.get() };
 		DrawComponents(entity);
 		//auto compos = m_scene->GetRegistry().storage(selected_EntityHandle);
 	}
