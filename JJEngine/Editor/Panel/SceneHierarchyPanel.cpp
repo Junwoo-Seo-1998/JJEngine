@@ -5,26 +5,23 @@
 #include "Core/SceneManager.h"
 #include "Core/Entity/Entity.hpp"
 #include "Core/Utils/Log.h"
-
-SceneHierarchyPanel::SceneHierarchyPanel(std::shared_ptr<Scene> scene)
-{
-	//since might do other things in future.
-	SetScene(scene);
-}
-
+#include "Core/Utils/Assert.h"
 void SceneHierarchyPanel::SetSlected_EntityFunc(std::function<void(entt::entity)> func)
 {
 	setSelectedEntity = func;
 }
 
-void SceneHierarchyPanel::SetScene(std::shared_ptr<Scene> scene)
+void SceneHierarchyPanel::SetScene(std::weak_ptr<Scene> scene)
 {
 	m_scene = scene;
 }
 
 void SceneHierarchyPanel::DrawEntityTree(entt::entity entityID)
 {
-	Entity entity{ entityID, m_scene.get() };
+	auto scene = m_scene.lock();
+	ENGINE_ASSERT(scene, "check the original scene was deleted!!");
+
+	Entity entity{ entityID, scene.get() };
 	std::vector<UUIDType>& child = entity.GetChildrenUUID();
 	ImGuiTreeNodeFlags flag{ child.empty() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow};
 	auto& name = entity.Name();
@@ -34,7 +31,7 @@ void SceneHierarchyPanel::DrawEntityTree(entt::entity entityID)
 	}
 	if (opened == true) {
 		for (auto& c:child) {
-			DrawEntityTree(m_scene->GetEntity(c).GetEntityHandle());
+			DrawEntityTree(scene->GetEntity(c).GetEntityHandle());
 		}
 		ImGui::TreePop();
 	}
@@ -43,13 +40,14 @@ void SceneHierarchyPanel::DrawEntityTree(entt::entity entityID)
 
 void SceneHierarchyPanel::OnImGuiRender()
 {
-	if(m_scene == nullptr)
-		return;
+	auto scene = m_scene.lock();
+	ENGINE_ASSERT(scene, "check the original scene was deleted!!");
+
 	ImGui::Begin("Scene Hierarchy");
 	std::vector < entt::entity > rootEntity{};
-	m_scene->m_Registry.each([&](auto entityID)
+	scene->m_Registry.each([&](auto entityID)
 		{
-			Entity entity{ entityID, m_scene.get() };
+			Entity entity{ entityID, scene.get() };
 			if (entity.GetParentUUID().is_nil() == true) {
 				rootEntity.push_back(entityID);
 			}
