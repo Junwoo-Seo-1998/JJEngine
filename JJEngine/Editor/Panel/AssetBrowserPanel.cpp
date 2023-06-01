@@ -13,6 +13,10 @@ void AssetBrowserPanel::Set()
 	Folder_texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/FolderImage.png"));
 	File_texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/FileImage.png"));
 }
+void AssetBrowserPanel::SetSelectedFileFunc(std::function<void(std::filesystem::path)> func)
+{
+	setSelectedFile = func;
+}
 void AssetBrowserPanel::OnImGuiRender()
 {
 	if (ImGui::Button("<-") == true) {
@@ -40,8 +44,13 @@ void AssetBrowserPanel::OnImGuiRender()
 		}
 		bool isDoubliClicked{ ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) };
 		bool isHovering{ ImGui::IsItemHovered()};
-		if (isDirectory == true && isHovering == true && isDoubliClicked == true) {
-			nowDirectory /= p.filename();
+		if (isHovering == true && isDoubliClicked == true) {
+			if (isDirectory == true) {
+				nowDirectory /= p.filename();
+			}
+			else {
+				setSelectedFile(nowDirectory / p.filename());
+			}
 		}
 		ImGui::Text(p.filename().string().c_str());
 		ImGui::NextColumn();

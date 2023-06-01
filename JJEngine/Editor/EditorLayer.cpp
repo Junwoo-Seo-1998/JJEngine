@@ -50,15 +50,26 @@ void EditorLayer::OnStart()
 	component_panel.SetScene(active_scene);
 	scene_hierarchy_panel.SetScene(active_scene);
 	scene_hierarchy_panel.SetSlected_EntityFunc([&](entt::entity ID)->void {selected_entityID = ID; });
+
+
 	entt::entity ID{ editorRegistry.create() };
 	ImGuiSubWindow* temp = &editorRegistry.emplace<ImGuiSubWindow>(ID, "Asset browser");
 	ABP.Set();
+	ABP.SetSelectedFileFunc([&](std::filesystem::path str)->void {shouldOpenFile = str; });
 	temp->Push_ImGuiCommand([&]()->void {ABP.OnImGuiRender(); });
 }
 
 void EditorLayer::OnUpdate()
 {
 	editor_camera.OnUpdate();
+
+
+	if (shouldOpenFile.extension().string() == ".scn") {
+		SetNewScene(std::make_shared<Scene>(shouldOpenFile.filename().string()));
+		SceneSerializer see_real(active_scene);
+		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize " + shouldOpenFile.filename().string());
+	}
+	shouldOpenFile.clear();
 }
 
 void EditorLayer::OnPreRender()
@@ -89,16 +100,6 @@ void EditorLayer::OnImGuiRender()
 			if (ImGui::MenuItem("Save scene")) {
 				SceneSerializer see_real(active_scene);
 				see_real.Serialize("./Resources/Scenes/testScene.scn");
-			}
-			if (ImGui::MenuItem("Load test scene")) {
-				SetNewScene(std::make_shared<Scene>("Test"));
-				SceneSerializer see_real(active_scene);
-				if (see_real.Deserialize("./Resources/Scenes/testScene.scn") == false) Log::Error("Fail to deserialize testScene");
-			}
-			if (ImGui::MenuItem("Load test22 scene")) {
-				SetNewScene(std::make_shared<Scene>("Test22"));
-				SceneSerializer see_real(active_scene);
-				if (see_real.Deserialize("./Resources/Scenes/testScene22.scn") == false)Log::Error("Fail to deserialize testScene");
 			}
 			ImGui::EndMenu();
 		}

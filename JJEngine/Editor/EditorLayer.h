@@ -37,6 +37,7 @@ private:
 	EditorCamera editor_camera;
 	std::shared_ptr<Scene> active_scene;
 	entt::entity selected_entityID{entt::null};
+	std::filesystem::path shouldOpenFile{""};
 
 	ComponentPanel component_panel;
 	SceneHierarchyPanel scene_hierarchy_panel;
