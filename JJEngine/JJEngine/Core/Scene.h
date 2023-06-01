@@ -9,6 +9,7 @@ End Header-------------------------------------------------------- */
 #include <entt/entt.hpp>
 #include "Type.h"
 
+class EditorCamera;
 class Entity;
 class SceneHierarchyPanel;
 using EntityMap = std::unordered_map<UUIDType, Entity>;
@@ -30,6 +31,11 @@ public:
 	virtual void PostUpdate();
 	virtual void OnDisable();
 	virtual void OnDestroy();
+
+	//editor only
+	void UpdateEditor(EditorCamera& camera);
+
+
 
 	Entity CreateEntity(const std::string& name = {});
 

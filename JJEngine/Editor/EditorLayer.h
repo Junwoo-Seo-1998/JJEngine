@@ -3,6 +3,7 @@
 #include "Panel/SceneHierarchyPanel.h"
 #include "Panel/AssetBrowserPanel.h"
 #include "Panel/ComponentPanel.h"
+#include "Core/Graphics/Renderer/EditorCamera.h"
 #include <entt/entt.hpp>
 #include <memory>
 class Scene;
@@ -32,7 +33,7 @@ private:
 
 	SceneState scene_state = SceneState::Edit;
 
-
+	EditorCamera editor_camera;
 	std::shared_ptr<Scene> active_scene;
 	entt::entity selected_entityID{entt::null};
 

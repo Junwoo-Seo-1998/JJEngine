@@ -143,7 +143,6 @@ void ComponentPanel::SetSelevted_EntityHandle(entt::entity ID)
 
 void ComponentPanel::OnImGuiRender()
 {
-	m_scene = Application::Instance().GetSceneManager()->GetCurrentScene();
 	if (m_scene == nullptr)
 		return;
 	ImGui::Begin("Component Editing");

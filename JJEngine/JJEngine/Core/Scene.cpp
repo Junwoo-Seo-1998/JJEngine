@@ -5,8 +5,11 @@ Platform: x64
 Date: 12/23/2022
 End Header-------------------------------------------------------- */
 #include "Scene.h"
+
+#include "Component/SpriteRendererComponent.h"
 #include "Entity/Entity.hpp"
 #include "Component/TransformComponent.h"
+#include "Graphics/Renderer/Renderer2D.h"
 #include "Utils/Assert.h"
 #include "Utils/UUIDGenerator.h"
 
@@ -50,6 +53,22 @@ void Scene::OnDisable()
 
 void Scene::OnDestroy()
 {
+}
+
+void Scene::UpdateEditor(EditorCamera& camera)
+{
+	Renderer2D::BeginScene(camera);
+	auto view = m_Registry.view<SpriteRendererComponent>();
+	for (auto e : view)
+	{
+		Entity entity{ e, this };
+		auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
+		if (spriteComp.texture)
+			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.texture, spriteComp.color);
+		else
+			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
+	}
+	Renderer2D::EndScene();
 }
 
 Entity Scene::CreateEntity(const std::string& name)

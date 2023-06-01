@@ -9,9 +9,9 @@ class EditorApp : public Application
 {
 	virtual void UserDefinedInit() override
 	{
-		auto test1 = std::make_shared<TestScene>("Test");
+		/*auto test1 = std::make_shared<TestScene>("Test");
 		GetSceneManager()->enrollScene(0, test1);
-		GetSceneManager()->setNextScene(0);
+		GetSceneManager()->setNextScene(0);*/
 
 		GetLayerManager()->PushLayer(std::make_shared<EditorLayer>());
 	}

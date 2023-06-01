@@ -117,6 +117,8 @@
     <ClInclude Include="Core\Graphics\FrameBuffer.h" />
     <ClInclude Include="Core\Graphics\IndexBuffer.h" />
     <ClInclude Include="Core\Graphics\Mesh.h" />
+    <ClInclude Include="Core\Graphics\Renderer\CameraBase.h" />
+    <ClInclude Include="Core\Graphics\Renderer\EditorCamera.h" />
     <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h" />
     <ClInclude Include="Core\Graphics\RenderingLayer.h" />
     <ClInclude Include="Core\Graphics\Shader.h" />
@@ -157,6 +159,7 @@
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Mesh.cpp" />
+    <ClCompile Include="Core\Graphics\Renderer\EditorCamera.cpp" />
     <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp" />
     <ClCompile Include="Core\Graphics\RenderingLayer.cpp" />
     <ClCompile Include="Core\Graphics\Shader.cpp" />

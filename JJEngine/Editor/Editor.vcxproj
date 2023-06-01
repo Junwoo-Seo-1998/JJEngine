@@ -110,6 +110,7 @@
     <ClCompile Include="Panel\ComponentPanel.cpp" />
     <ClCompile Include="Panel\SceneHierarchyPanel.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JJEngine\JJEngine.vcxproj">

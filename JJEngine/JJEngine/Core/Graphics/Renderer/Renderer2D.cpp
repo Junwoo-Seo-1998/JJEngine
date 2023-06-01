@@ -6,6 +6,7 @@
 #include <memory>
 #include <array>
 
+#include "EditorCamera.h"
 #include "glad.h"
 #include "Core/Graphics/IndexBuffer.h"
 
@@ -97,6 +98,14 @@ void Renderer2D::BeginScene(const glm::mat4& viewProjection)
 {
 	s_Data.TextureShader->Use();
 	s_Data.TextureShader->SetMat4("ViewProjection", viewProjection);
+
+	s_Data.QuadVertexArray->Bind();
+}
+
+void Renderer2D::BeginScene(const EditorCamera& camera)
+{
+	s_Data.TextureShader->Use();
+	s_Data.TextureShader->SetMat4("ViewProjection", camera.GetViewProjection());
 
 	s_Data.QuadVertexArray->Bind();
 }

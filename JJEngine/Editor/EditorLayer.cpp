@@ -5,6 +5,7 @@
 
 #include "glad.h"
 #include "imgui.h"
+#include "TestScene.h"
 #include "Core/ImGui/ImGuiRenderer.h"
 #include "Core/Graphics/FrameBuffer.h"
 #include "Core/Utils/Log.h"
@@ -30,7 +31,10 @@ EditorLayer::~EditorLayer()
 void EditorLayer::OnAttach()
 {
 	Log::Info("Editor Layer Added");
-	active_scene = std::make_shared<Scene>();
+	editor_camera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
+	active_scene = std::make_shared<TestScene>("Test");
+	active_scene->Awake();
+	active_scene->Start();
 	//for testing
 	editor_viewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::Depth } });
 
@@ -45,26 +49,18 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnStart()
 {
-
-	component_panel.SetScene(Application::Instance().GetSceneManager()->GetCurrentScene());
-	scene_hierarchy_panel.SetScene(Application::Instance().GetSceneManager()->GetCurrentScene());
+	component_panel.SetScene(active_scene);
+	scene_hierarchy_panel.SetScene(active_scene);
 	scene_hierarchy_panel.SetSlected_EntityFunc([&](entt::entity ID)->void {selected_entityID = ID; });
-
 	entt::entity ID{ editorRegistry.create() };
 	ImGuiSubWindow* temp = &editorRegistry.emplace<ImGuiSubWindow>(ID, "Asset browser");
 	ABP.Set();
 	temp->Push_ImGuiCommand([&]()->void {ABP.OnImGuiRender(); });
-
-
-	auto test_texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
-	Entity entity = active_scene->CreateEntity();
-	entity.AddComponent<SpriteRendererComponent>(test_texture);
 }
 
 void EditorLayer::OnUpdate()
 {
-	active_scene = Application::Instance().GetSceneManager()->GetCurrentScene();
-	//get something from scene
+	editor_camera.OnUpdate();
 }
 
 void EditorLayer::OnPreRender()
@@ -77,28 +73,7 @@ void EditorLayer::OnRender()
 {
 	if (!active_scene)
 		return;
-
-	auto& reg = active_scene->GetRegistry();
-	glm::mat4 viewProj = glm::perspective(glm::radians(45.f), 1.f, 0.001f, 100.f);
-	viewProj *= MatrixMath::BuildCameraMatrixWithDirection({ 1,0,10.f }, { 0,0,-1.f });
-
-
-	Renderer2D::BeginScene(viewProj);
-
-	auto view = reg.view<SpriteRendererComponent>();
-
-	for (auto e : view)
-	{
-
-		Entity entity{ e, active_scene.get() };
-		//Log::Info("To Draw: {}", entity.Name());
-		auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
-		if (spriteComp.texture)
-			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.texture, spriteComp.color);
-		else
-			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
-	}
-	Renderer2D::EndScene();
+	active_scene->UpdateEditor(editor_camera);
 }
 
 void EditorLayer::OnPostRender()

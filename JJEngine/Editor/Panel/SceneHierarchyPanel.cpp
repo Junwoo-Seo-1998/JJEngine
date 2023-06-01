@@ -43,7 +43,6 @@ void SceneHierarchyPanel::DrawEntityTree(entt::entity entityID)
 
 void SceneHierarchyPanel::OnImGuiRender()
 {
-	m_scene = Application::Instance().GetSceneManager()->GetCurrentScene();
 	if(m_scene == nullptr)
 		return;
 	ImGui::Begin("Scene Hierarchy");

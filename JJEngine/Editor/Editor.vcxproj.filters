@@ -30,5 +30,6 @@
       <Filter>Panel</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
 </Project>
