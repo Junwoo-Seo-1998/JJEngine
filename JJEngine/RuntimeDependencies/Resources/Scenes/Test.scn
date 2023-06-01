@@ -1,39 +1,57 @@
 Scene: Test
 Entities:
-  - Name: Test PPAP Entity
-    UUID: e8f4838d-beea-4e96-9b37-2cd605d766ba
-    Children:
-      - Name: Child 1 Entity
-        UUID: a5aa253e-36aa-4ead-b495-3d781e81ed6b
-        Children:
-          - Name: Child 2 Entity
-            UUID: 7d415830-d2b7-4cdb-90cc-48bea2c16ef8
-            Children:
-              []
-  - Name: Test P Entity
-    UUID: 76937096-0b14-4b25-8dfd-a66c84d8d0be
-    Children:
-      - Name: Child Entity
-        UUID: 35e69604-906b-4d72-90ee-8eafdaec0e85
-        Children:
-          []
-  - Name: Test 3 Entity
-    UUID: c67d1eec-da86-4788-bed1-6a45840346b4
-    Children:
-      []
-  - Name: Test 2 Entity
-    UUID: 02a87c6c-f1d1-4547-9c0f-63d43acc6669
-    Children:
-      []
   - Name: Test 1 Entity
-    UUID: 3343144f-07ac-4371-aec0-5a744cfb566f
-    Children:
-      []
+    UUID: ad6d74b9-67f6-4b1e-9918-2cdf3d52bcdb
+  - Name: Test 2 Entity
+    UUID: ef71143e-75ed-475c-b3ab-e2898f132ae5
+  - Name: Test 3 Entity
+    UUID: 6d59c093-0dd5-4d22-9c45-183c03676f19
+  - Name: Test P Entity
+    UUID: 4767c1ba-7106-4b9a-a260-7faa546841b8
+  - Name: Child Entity
+    UUID: 63c408f2-daa6-49ae-a804-e11fe8ae8096
+  - Name: Child 1 Entity
+    UUID: 849be922-761e-46bb-97ed-bc38ce473a85
+  - Name: Test PPAP Entity
+    UUID: f9626f92-ac5e-4635-bf23-431e518b4c89
+  - Name: Child 2 Entity
+    UUID: 67873631-880d-4014-a168-24e7f4891b10
 Components:
-  Name:
-    {}
+  Relationship:
+    ad6d74b9-67f6-4b1e-9918-2cdf3d52bcdb:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    ef71143e-75ed-475c-b3ab-e2898f132ae5:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    6d59c093-0dd5-4d22-9c45-183c03676f19:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    4767c1ba-7106-4b9a-a260-7faa546841b8:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    63c408f2-daa6-49ae-a804-e11fe8ae8096:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    849be922-761e-46bb-97ed-bc38ce473a85:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    f9626f92-ac5e-4635-bf23-431e518b4c89:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    67873631-880d-4014-a168-24e7f4891b10:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
   Transform:
-    7d415830-d2b7-4cdb-90cc-48bea2c16ef8:
+    ad6d74b9-67f6-4b1e-9918-2cdf3d52bcdb:
       Position:
         - 0
         - 0
@@ -46,7 +64,7 @@ Components:
         - 1
         - 1
         - 1
-    e8f4838d-beea-4e96-9b37-2cd605d766ba:
+    ef71143e-75ed-475c-b3ab-e2898f132ae5:
       Position:
         - 0
         - 0
@@ -59,7 +77,7 @@ Components:
         - 1
         - 1
         - 1
-    a5aa253e-36aa-4ead-b495-3d781e81ed6b:
+    6d59c093-0dd5-4d22-9c45-183c03676f19:
       Position:
         - 0
         - 0
@@ -72,20 +90,7 @@ Components:
         - 1
         - 1
         - 1
-    35e69604-906b-4d72-90ee-8eafdaec0e85:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    76937096-0b14-4b25-8dfd-a66c84d8d0be:
+    4767c1ba-7106-4b9a-a260-7faa546841b8:
       Position:
         - 1
         - 0
@@ -98,7 +103,7 @@ Components:
         - 1
         - 1
         - 1
-    c67d1eec-da86-4788-bed1-6a45840346b4:
+    63c408f2-daa6-49ae-a804-e11fe8ae8096:
       Position:
         - 0
         - 0
@@ -111,7 +116,7 @@ Components:
         - 1
         - 1
         - 1
-    02a87c6c-f1d1-4547-9c0f-63d43acc6669:
+    849be922-761e-46bb-97ed-bc38ce473a85:
       Position:
         - 0
         - 0
@@ -124,7 +129,20 @@ Components:
         - 1
         - 1
         - 1
-    3343144f-07ac-4371-aec0-5a744cfb566f:
+    f9626f92-ac5e-4635-bf23-431e518b4c89:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    67873631-880d-4014-a168-24e7f4891b10:
       Position:
         - 0
         - 0

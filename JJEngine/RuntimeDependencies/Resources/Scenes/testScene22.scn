@@ -1,109 +1,199 @@
 Scene: Name
 Entities:
   - Name: Test 1 Entity
-    UUID: b01ab297-1b84-4652-b282-fb909a6a7c3f
-    Children:
-      []
+    UUID: b0dc6527-7c91-4a8c-814a-649b93f66e94
   - Name: Test 2 Entity
-    UUID: ae209404-337c-4bd4-9024-a784c2df9cb0
-    Children:
-      []
+    UUID: 35841948-0e2a-4e89-ae75-e5828a59da18
   - Name: Test 3 Entity
-    UUID: e25ca90e-960f-492a-a600-f7c528573ed3
-    Children:
-      []
+    UUID: d082a03e-b90d-467b-a2e7-7a89a2b98c1f
   - Name: Test P Entity
-    UUID: 3bbcb2cc-d120-4d65-9639-abeb4ea1027f
-    Children:
-      - Name: Child Entity
-        UUID: 7ebc1ab8-4102-422d-8a44-9d0d7d445806
-        Children:
-          []
+    UUID: ecccf667-ea7b-4607-8efa-e1f7b297dfe1
+  - Name: Child Entity
+    UUID: 72a82050-1a61-4657-ba9f-b041b14b07cc
   - Name: Test Depth Entity
-    UUID: 8647eee1-f1b7-4239-b0c9-71fb2d9d4459
-    Children:
-      - Name: Child D1 Entity
-        UUID: a4a0e6b9-2c74-4c07-8649-2c891ed35d8a
-        Children:
-          - Name: Child D2 Entity
-            UUID: 4fd58d24-40d9-4e85-9cf1-d3ce861d6abb
-            Children:
-              - Name: Child D3 Entity
-                UUID: 16c51ca4-cd92-49f0-aa55-fd1859a0631c
-                Children:
-                  - Name: Child D4 Entity
-                    UUID: f5c53b6f-267b-4c1e-9ea4-a97b19dc4d9e
-                    Children:
-                      - Name: Child D5 Entity
-                        UUID: c9645421-007e-432a-baa0-a61e4675b9d4
-                        Children:
-                          - Name: Child D6 Entity
-                            UUID: 35d0d99c-6604-4ba8-90b1-bde87c55d932
-                            Children:
-                              []
+    UUID: 4b700654-73db-4077-8ad8-3ebc9622403a
+  - Name: Child D1 Entity
+    UUID: 1d25d4db-5208-4e1e-a9fd-c2d13c1e6d3b
+  - Name: Child D2 Entity
+    UUID: 30bb7a13-e621-454f-a38b-554c3eff3583
+  - Name: Child D3 Entity
+    UUID: 07867273-e17d-44a8-8423-d6767ce9d378
+  - Name: Child D4 Entity
+    UUID: 3eca19c0-9f28-4735-ad8d-0acf89869e4d
+  - Name: Child D5 Entity
+    UUID: 6455f3e9-7f0e-4f3d-84b2-7166d3395c15
+  - Name: Child D6 Entity
+    UUID: b5bb6e50-4b3c-4d97-bacb-5969778cbccf
   - Name: Test Breadth Entity
-    UUID: 87b1996b-91ee-49df-93ed-e2a01f55f8f4
-    Children:
-      - Name: Child B1 Entity
-        UUID: 35a485d7-34a8-4e1b-aa3b-1a30bddebc02
-        Children:
-          - Name: Child B1_1 Entity
-            UUID: 6ef3654a-ae50-45db-84fd-96dc72e866c9
-            Children:
-              []
-          - Name: Child B1_2 Entity
-            UUID: de1226bc-bafd-43d0-ac4e-33d8cd12c67a
-            Children:
-              []
-      - Name: Child B2 Entity
-        UUID: 48c149fc-df50-4feb-83b5-8f0918314f15
-        Children:
-          - Name: Child B2_1 Entity
-            UUID: 9d86c96e-0a89-4ffd-846e-77a1208a6c5f
-            Children:
-              []
-          - Name: Child B2_2 Entity
-            UUID: 3498e445-07d0-4a48-970e-f7beebca2e19
-            Children:
-              []
-      - Name: Child B3 Entity
-        UUID: 6facaa9d-ae9d-4ed7-973d-198eb9754b16
-        Children:
-          - Name: Child B3_1 Entity
-            UUID: c121e121-ef1a-48ef-95da-471f57a327fc
-            Children:
-              []
-          - Name: Child B3_2 Entity
-            UUID: 71f8b085-ab9a-474d-8426-66164a46d545
-            Children:
-              []
-      - Name: Child B4 Entity
-        UUID: 036d4541-3a48-4421-8101-2bb10d4f8ca3
-        Children:
-          - Name: Child B4_1 Entity
-            UUID: 91ae46c4-b7ac-4d95-a231-b9e03d54f2c5
-            Children:
-              []
-          - Name: Child B4_2 Entity
-            UUID: 9fc3efba-5557-4e8a-81b0-117353abe5db
-            Children:
-              []
-      - Name: Child B5 Entity
-        UUID: 3a64fb35-0611-47f2-a5a3-29b7f519c28c
-        Children:
-          - Name: Child B5_1 Entity
-            UUID: c4ae05a0-e83a-4470-8350-2fd9f506e3f5
-            Children:
-              []
-          - Name: Child B5_2 Entity
-            UUID: bf70f101-1717-4d46-bb4c-a399572121cc
-            Children:
-              []
+    UUID: fd8a8caf-fa83-4f73-b7c4-e32000f830a0
+  - Name: Child B1 Entity
+    UUID: cc52b557-3841-41c8-a72c-8e07dc472eb8
+  - Name: Child B1_1 Entity
+    UUID: 5ecac345-2599-4dd6-aa33-23283af5a47e
+  - Name: Child B1_2 Entity
+    UUID: d933fda1-284f-40c0-b83c-d9bf8bc7f539
+  - Name: Child B2 Entity
+    UUID: 13dba492-dd19-4e20-8b95-f73d9369b68e
+  - Name: Child B2_1 Entity
+    UUID: d128c664-6d5d-4fde-bb61-7cb005d8c0b1
+  - Name: Child B2_2 Entity
+    UUID: 39f946b7-45c2-4ff3-b8ea-6d90b37b770c
+  - Name: Child B3 Entity
+    UUID: 6993d0a5-aef5-4596-9376-badf12bac1ec
+  - Name: Child B3_1 Entity
+    UUID: 96e61fcc-7151-492d-a16d-e3ac84163383
+  - Name: Child B3_2 Entity
+    UUID: 7ba39094-cf62-4515-a733-015062427967
+  - Name: Child B4 Entity
+    UUID: d89b4bef-bd1a-4fdf-b656-4cdec9d5482c
+  - Name: Child B4_1 Entity
+    UUID: 3498e97e-789f-4b80-9650-86912db92080
+  - Name: Child B4_2 Entity
+    UUID: 6442ffae-1aa2-460f-a16d-26b600a72530
+  - Name: Child B5 Entity
+    UUID: f26d0058-ab67-418c-beb3-66e5cdc0af78
+  - Name: Child B5_1 Entity
+    UUID: bc1d170b-b3e7-41bd-975b-cee646481890
+  - Name: Child B5_2 Entity
+    UUID: a3743db1-2737-4ef4-b3ae-e4478a6b270d
 Components:
-  Name:
-    {}
+  Relationship:
+    b0dc6527-7c91-4a8c-814a-649b93f66e94:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    35841948-0e2a-4e89-ae75-e5828a59da18:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    d082a03e-b90d-467b-a2e7-7a89a2b98c1f:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    ecccf667-ea7b-4607-8efa-e1f7b297dfe1:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        - 72a82050-1a61-4657-ba9f-b041b14b07cc
+    72a82050-1a61-4657-ba9f-b041b14b07cc:
+      Parent: ecccf667-ea7b-4607-8efa-e1f7b297dfe1
+      Children:
+        []
+    4b700654-73db-4077-8ad8-3ebc9622403a:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        - 1d25d4db-5208-4e1e-a9fd-c2d13c1e6d3b
+    1d25d4db-5208-4e1e-a9fd-c2d13c1e6d3b:
+      Parent: 4b700654-73db-4077-8ad8-3ebc9622403a
+      Children:
+        - 30bb7a13-e621-454f-a38b-554c3eff3583
+    30bb7a13-e621-454f-a38b-554c3eff3583:
+      Parent: 1d25d4db-5208-4e1e-a9fd-c2d13c1e6d3b
+      Children:
+        - 07867273-e17d-44a8-8423-d6767ce9d378
+    07867273-e17d-44a8-8423-d6767ce9d378:
+      Parent: 30bb7a13-e621-454f-a38b-554c3eff3583
+      Children:
+        - 3eca19c0-9f28-4735-ad8d-0acf89869e4d
+    3eca19c0-9f28-4735-ad8d-0acf89869e4d:
+      Parent: 07867273-e17d-44a8-8423-d6767ce9d378
+      Children:
+        - 6455f3e9-7f0e-4f3d-84b2-7166d3395c15
+    6455f3e9-7f0e-4f3d-84b2-7166d3395c15:
+      Parent: 3eca19c0-9f28-4735-ad8d-0acf89869e4d
+      Children:
+        - b5bb6e50-4b3c-4d97-bacb-5969778cbccf
+    b5bb6e50-4b3c-4d97-bacb-5969778cbccf:
+      Parent: 6455f3e9-7f0e-4f3d-84b2-7166d3395c15
+      Children:
+        []
+    fd8a8caf-fa83-4f73-b7c4-e32000f830a0:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        - cc52b557-3841-41c8-a72c-8e07dc472eb8
+        - 13dba492-dd19-4e20-8b95-f73d9369b68e
+        - 6993d0a5-aef5-4596-9376-badf12bac1ec
+        - d89b4bef-bd1a-4fdf-b656-4cdec9d5482c
+        - f26d0058-ab67-418c-beb3-66e5cdc0af78
+    cc52b557-3841-41c8-a72c-8e07dc472eb8:
+      Parent: fd8a8caf-fa83-4f73-b7c4-e32000f830a0
+      Children:
+        - 5ecac345-2599-4dd6-aa33-23283af5a47e
+        - d933fda1-284f-40c0-b83c-d9bf8bc7f539
+    5ecac345-2599-4dd6-aa33-23283af5a47e:
+      Parent: cc52b557-3841-41c8-a72c-8e07dc472eb8
+      Children:
+        []
+    d933fda1-284f-40c0-b83c-d9bf8bc7f539:
+      Parent: cc52b557-3841-41c8-a72c-8e07dc472eb8
+      Children:
+        []
+    13dba492-dd19-4e20-8b95-f73d9369b68e:
+      Parent: fd8a8caf-fa83-4f73-b7c4-e32000f830a0
+      Children:
+        - d128c664-6d5d-4fde-bb61-7cb005d8c0b1
+        - 39f946b7-45c2-4ff3-b8ea-6d90b37b770c
+    d128c664-6d5d-4fde-bb61-7cb005d8c0b1:
+      Parent: 13dba492-dd19-4e20-8b95-f73d9369b68e
+      Children:
+        []
+    39f946b7-45c2-4ff3-b8ea-6d90b37b770c:
+      Parent: 13dba492-dd19-4e20-8b95-f73d9369b68e
+      Children:
+        []
+    6993d0a5-aef5-4596-9376-badf12bac1ec:
+      Parent: fd8a8caf-fa83-4f73-b7c4-e32000f830a0
+      Children:
+        - 96e61fcc-7151-492d-a16d-e3ac84163383
+        - 7ba39094-cf62-4515-a733-015062427967
+    96e61fcc-7151-492d-a16d-e3ac84163383:
+      Parent: 6993d0a5-aef5-4596-9376-badf12bac1ec
+      Children:
+        []
+    7ba39094-cf62-4515-a733-015062427967:
+      Parent: 6993d0a5-aef5-4596-9376-badf12bac1ec
+      Children:
+        []
+    d89b4bef-bd1a-4fdf-b656-4cdec9d5482c:
+      Parent: fd8a8caf-fa83-4f73-b7c4-e32000f830a0
+      Children:
+        - 3498e97e-789f-4b80-9650-86912db92080
+        - 6442ffae-1aa2-460f-a16d-26b600a72530
+    3498e97e-789f-4b80-9650-86912db92080:
+      Parent: d89b4bef-bd1a-4fdf-b656-4cdec9d5482c
+      Children:
+        []
+    6442ffae-1aa2-460f-a16d-26b600a72530:
+      Parent: d89b4bef-bd1a-4fdf-b656-4cdec9d5482c
+      Children:
+        []
+    f26d0058-ab67-418c-beb3-66e5cdc0af78:
+      Parent: fd8a8caf-fa83-4f73-b7c4-e32000f830a0
+      Children:
+        - bc1d170b-b3e7-41bd-975b-cee646481890
+        - a3743db1-2737-4ef4-b3ae-e4478a6b270d
+    bc1d170b-b3e7-41bd-975b-cee646481890:
+      Parent: f26d0058-ab67-418c-beb3-66e5cdc0af78
+      Children:
+        []
+    a3743db1-2737-4ef4-b3ae-e4478a6b270d:
+      Parent: f26d0058-ab67-418c-beb3-66e5cdc0af78
+      Children:
+        []
   Transform:
-    b01ab297-1b84-4652-b282-fb909a6a7c3f:
+    b0dc6527-7c91-4a8c-814a-649b93f66e94:
+      Position:
+        - 66.3000031
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    35841948-0e2a-4e89-ae75-e5828a59da18:
       Position:
         - 0
         - 0
@@ -116,7 +206,7 @@ Components:
         - 1
         - 1
         - 1
-    ae209404-337c-4bd4-9024-a784c2df9cb0:
+    d082a03e-b90d-467b-a2e7-7a89a2b98c1f:
       Position:
         - 0
         - 0
@@ -129,7 +219,7 @@ Components:
         - 1
         - 1
         - 1
-    e25ca90e-960f-492a-a600-f7c528573ed3:
+    ecccf667-ea7b-4607-8efa-e1f7b297dfe1:
       Position:
         - 0
         - 0
@@ -142,7 +232,7 @@ Components:
         - 1
         - 1
         - 1
-    7ebc1ab8-4102-422d-8a44-9d0d7d445806:
+    72a82050-1a61-4657-ba9f-b041b14b07cc:
       Position:
         - 0
         - 0
@@ -155,7 +245,7 @@ Components:
         - 1
         - 1
         - 1
-    3bbcb2cc-d120-4d65-9639-abeb4ea1027f:
+    4b700654-73db-4077-8ad8-3ebc9622403a:
       Position:
         - 0
         - 0
@@ -168,7 +258,7 @@ Components:
         - 1
         - 1
         - 1
-    35d0d99c-6604-4ba8-90b1-bde87c55d932:
+    1d25d4db-5208-4e1e-a9fd-c2d13c1e6d3b:
       Position:
         - 0
         - 0
@@ -181,7 +271,7 @@ Components:
         - 1
         - 1
         - 1
-    c9645421-007e-432a-baa0-a61e4675b9d4:
+    30bb7a13-e621-454f-a38b-554c3eff3583:
       Position:
         - 0
         - 0
@@ -194,7 +284,7 @@ Components:
         - 1
         - 1
         - 1
-    f5c53b6f-267b-4c1e-9ea4-a97b19dc4d9e:
+    07867273-e17d-44a8-8423-d6767ce9d378:
       Position:
         - 0
         - 0
@@ -207,7 +297,7 @@ Components:
         - 1
         - 1
         - 1
-    16c51ca4-cd92-49f0-aa55-fd1859a0631c:
+    3eca19c0-9f28-4735-ad8d-0acf89869e4d:
       Position:
         - 0
         - 0
@@ -220,7 +310,7 @@ Components:
         - 1
         - 1
         - 1
-    4fd58d24-40d9-4e85-9cf1-d3ce861d6abb:
+    6455f3e9-7f0e-4f3d-84b2-7166d3395c15:
       Position:
         - 0
         - 0
@@ -233,7 +323,7 @@ Components:
         - 1
         - 1
         - 1
-    a4a0e6b9-2c74-4c07-8649-2c891ed35d8a:
+    b5bb6e50-4b3c-4d97-bacb-5969778cbccf:
       Position:
         - 0
         - 0
@@ -246,7 +336,7 @@ Components:
         - 1
         - 1
         - 1
-    8647eee1-f1b7-4239-b0c9-71fb2d9d4459:
+    fd8a8caf-fa83-4f73-b7c4-e32000f830a0:
       Position:
         - 0
         - 0
@@ -259,7 +349,7 @@ Components:
         - 1
         - 1
         - 1
-    bf70f101-1717-4d46-bb4c-a399572121cc:
+    cc52b557-3841-41c8-a72c-8e07dc472eb8:
       Position:
         - 0
         - 0
@@ -272,7 +362,7 @@ Components:
         - 1
         - 1
         - 1
-    c4ae05a0-e83a-4470-8350-2fd9f506e3f5:
+    5ecac345-2599-4dd6-aa33-23283af5a47e:
       Position:
         - 0
         - 0
@@ -285,7 +375,7 @@ Components:
         - 1
         - 1
         - 1
-    3a64fb35-0611-47f2-a5a3-29b7f519c28c:
+    d933fda1-284f-40c0-b83c-d9bf8bc7f539:
       Position:
         - 0
         - 0
@@ -298,7 +388,7 @@ Components:
         - 1
         - 1
         - 1
-    9fc3efba-5557-4e8a-81b0-117353abe5db:
+    13dba492-dd19-4e20-8b95-f73d9369b68e:
       Position:
         - 0
         - 0
@@ -311,7 +401,7 @@ Components:
         - 1
         - 1
         - 1
-    91ae46c4-b7ac-4d95-a231-b9e03d54f2c5:
+    d128c664-6d5d-4fde-bb61-7cb005d8c0b1:
       Position:
         - 0
         - 0
@@ -324,7 +414,7 @@ Components:
         - 1
         - 1
         - 1
-    036d4541-3a48-4421-8101-2bb10d4f8ca3:
+    39f946b7-45c2-4ff3-b8ea-6d90b37b770c:
       Position:
         - 0
         - 0
@@ -337,7 +427,7 @@ Components:
         - 1
         - 1
         - 1
-    71f8b085-ab9a-474d-8426-66164a46d545:
+    6993d0a5-aef5-4596-9376-badf12bac1ec:
       Position:
         - 0
         - 0
@@ -350,7 +440,7 @@ Components:
         - 1
         - 1
         - 1
-    c121e121-ef1a-48ef-95da-471f57a327fc:
+    96e61fcc-7151-492d-a16d-e3ac84163383:
       Position:
         - 0
         - 0
@@ -363,7 +453,7 @@ Components:
         - 1
         - 1
         - 1
-    6facaa9d-ae9d-4ed7-973d-198eb9754b16:
+    7ba39094-cf62-4515-a733-015062427967:
       Position:
         - 0
         - 0
@@ -376,7 +466,7 @@ Components:
         - 1
         - 1
         - 1
-    3498e445-07d0-4a48-970e-f7beebca2e19:
+    d89b4bef-bd1a-4fdf-b656-4cdec9d5482c:
       Position:
         - 0
         - 0
@@ -389,7 +479,7 @@ Components:
         - 1
         - 1
         - 1
-    9d86c96e-0a89-4ffd-846e-77a1208a6c5f:
+    3498e97e-789f-4b80-9650-86912db92080:
       Position:
         - 0
         - 0
@@ -402,7 +492,7 @@ Components:
         - 1
         - 1
         - 1
-    48c149fc-df50-4feb-83b5-8f0918314f15:
+    6442ffae-1aa2-460f-a16d-26b600a72530:
       Position:
         - 0
         - 0
@@ -415,7 +505,7 @@ Components:
         - 1
         - 1
         - 1
-    de1226bc-bafd-43d0-ac4e-33d8cd12c67a:
+    f26d0058-ab67-418c-beb3-66e5cdc0af78:
       Position:
         - 0
         - 0
@@ -428,7 +518,7 @@ Components:
         - 1
         - 1
         - 1
-    6ef3654a-ae50-45db-84fd-96dc72e866c9:
+    bc1d170b-b3e7-41bd-975b-cee646481890:
       Position:
         - 0
         - 0
@@ -441,20 +531,7 @@ Components:
         - 1
         - 1
         - 1
-    35a485d7-34a8-4e1b-aa3b-1a30bddebc02:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    87b1996b-91ee-49df-93ed-e2a01f55f8f4:
+    a3743db1-2737-4ef4-b3ae-e4478a6b270d:
       Position:
         - 0
         - 0
