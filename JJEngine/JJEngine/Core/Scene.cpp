@@ -169,7 +169,7 @@ void Scene::ResizeViewport(unsigned width, unsigned height)
 	for (auto entity : view)
 	{
 		auto& cameraComponent = view.get<CameraComponent>(entity);
-		cameraComponent.aspect_ratio = width / height;
+		cameraComponent.aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
 	}
 }
 

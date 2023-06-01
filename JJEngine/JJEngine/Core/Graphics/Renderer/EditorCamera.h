@@ -8,7 +8,6 @@ public:
 	EditorCamera(float fov, float aspectRatio, float nearClip, float farClip);
 
 	void OnUpdate();
-	//void OnEvent(Event& e);
 
 	inline float GetDistance() const { return m_Distance; }
 	inline void SetDistance(float distance) { m_Distance = distance; }
@@ -29,8 +28,6 @@ public:
 private:
 	void UpdateProjection();
 	void UpdateView();
-
-	//bool OnMouseScroll(MouseScrolledEvent& e);
 
 	void MousePan(const glm::vec2& delta);
 	void MouseRotate(const glm::vec2& delta);

@@ -71,25 +71,14 @@ void EditorCamera::OnUpdate()
 			MouseZoom(delta.y);
 	}
 
+	if(Input::IsMouseScrolled())
+	{
+		float delta = Input::GetMouseScrollOffset() * 0.2f;
+		MouseZoom(delta);
+	}
+
 	UpdateView();
 }
-
-//not yet
-/*void EditorCamera::OnEvent(Event& e)
-{
-	EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<MouseScrolledEvent>((EditorCamera::OnMouseScroll));
-}*/
-
-/*
-bool EditorCamera::OnMouseScroll(MouseScrolledEvent& e)
-{
-	float delta = e.GetYOffset() * 0.1f;
-	MouseZoom(delta);
-	UpdateView();
-	return false;
-}
-*/
 
 void EditorCamera::MousePan(const glm::vec2& delta)
 {

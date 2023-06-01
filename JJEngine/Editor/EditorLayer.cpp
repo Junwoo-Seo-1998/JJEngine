@@ -24,6 +24,7 @@
 
 #include "Core/Event/WindowEvent.h"
 #include "Core/Event/EventManager.h"
+#include "Core/Input/Input.h"
 
 EditorLayer::~EditorLayer()
 {
@@ -65,7 +66,6 @@ void EditorLayer::OnUpdate()
 {
 	editor_camera.OnUpdate();
 
-
 	if (shouldOpenFile.extension().string() == ".scn") {
 		//TODO: ask save now scene
 		SetNewScene(std::make_shared<Scene>(shouldOpenFile.filename().string()));
@@ -78,15 +78,16 @@ void EditorLayer::OnUpdate()
 
 void EditorLayer::OnPreRender()
 {
-
-	if (viewport_size.x > 0.0f && viewport_size.y > 0.0f)
+	auto spec = editor_viewport->GetSpecification();
+	const bool viewportSizeChanged = (spec.Width != viewport_size.x || spec.Height != viewport_size.y);
+	if (viewportSizeChanged && viewport_size.x > 0.0f && viewport_size.y > 0.0f)
 	{
 		editor_camera.SetViewportSize((unsigned)viewport_size.x, (unsigned)viewport_size.y);
 		active_scene->ResizeViewport((unsigned)viewport_size.x, (unsigned)viewport_size.y);
 		editor_viewport->Resize((unsigned)viewport_size.x, (unsigned)viewport_size.y);
-		editor_viewport->Bind(true);
-		glViewport(0, 0, viewport_size.x, viewport_size.y);
 	}
+	editor_viewport->Bind(true);
+	glViewport(0, 0, (int)spec.Width, (int)spec.Height);
 }
 
 void EditorLayer::OnRender()

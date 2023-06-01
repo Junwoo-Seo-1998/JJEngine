@@ -61,6 +61,11 @@ std::shared_ptr<Texture> FrameBuffer::GetDepthTexture()
 	return m_DepthTexture;
 }
 
+FrameBufferSpecification FrameBuffer::GetSpecification() const
+{
+	return m_DescribedFrameBuffer;
+}
+
 FrameBuffer::FrameBuffer(const FrameBufferSpecification& spec)
 	:m_DescribedFrameBuffer(spec), m_DepthFormat(FrameBufferFormat::None)
 	, m_FrameBufferID(0), m_ColorFormats(), m_DepthTexture(nullptr)

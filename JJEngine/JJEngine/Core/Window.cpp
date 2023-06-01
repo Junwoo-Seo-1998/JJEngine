@@ -60,6 +60,10 @@ Window::Window()
 	glfwSetWindowSizeCallback(window, GLFWResizeCallback);
 	glfwSetKeyCallback(window, GLFWKeyCallback);
 	glfwSetMouseButtonCallback(window, GLFWMouseCallback);
+	glfwSetScrollCallback(window, [](GLFWwindow* /*window*/, double /*xOffset*/, double yOffset)
+	{
+		Input::SetMouseScroll(static_cast<float>(yOffset));
+	});
 	glfwSetCursorPosCallback(window, GLFWMousePositionCallback);
 
 	//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);

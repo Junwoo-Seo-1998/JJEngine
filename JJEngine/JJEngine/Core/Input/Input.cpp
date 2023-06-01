@@ -34,6 +34,8 @@ namespace InputStatics
 	std::tuple<float, float> s_LastMousePos;
 	std::tuple<float, float> s_MousePos;
 	std::tuple<float, float> s_MouseOffset;
+
+	float s_MouseScroll = 0.f;
 }
 
 bool Input::IsPressed(Key key)
@@ -76,6 +78,11 @@ bool Input::IsReleased(Mouse button)
 	return InputStatics::s_mouse_released[static_cast<unsigned short>(button)];
 }
 
+bool Input::IsMouseScrolled()
+{
+	return InputStatics::s_MouseScroll != 0.f;
+}
+
 void Input::SetMouseCursorEnable(bool input)
 {
 	glfwSetInputMode(Application::Instance().GetWindow()->GetGLFWWindow(), GLFW_CURSOR, input ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
@@ -94,6 +101,11 @@ std::tuple<float, float> Input::GetLastMousePosition()
 std::tuple<float, float> Input::GetMouseOffset()
 {
 	return InputStatics::s_MouseOffset;
+}
+
+float Input::GetMouseScrollOffset()
+{
+	return InputStatics::s_MouseScroll;
 }
 
 void Input::Reset()
@@ -120,6 +132,7 @@ void Input::Reset()
 	InputStatics::s_mouse_released.fill(false);
 
 	InputStatics::s_MouseOffset = { 0.f,0.f };
+	InputStatics::s_MouseScroll = 0.f;
 }
 
 void Input::PostEventUpdate()
@@ -177,5 +190,10 @@ void Input::SetMousePosition(float x, float y)
 	InputStatics::s_MouseOffset = { x - last_x, last_y - y };
 	InputStatics::s_MousePos = { x,y };
 	InputStatics::s_LastMousePos = InputStatics::s_MousePos;
+}
+
+void Input::SetMouseScroll(float yOffset)
+{
+	InputStatics::s_MouseScroll = yOffset;
 }
 
