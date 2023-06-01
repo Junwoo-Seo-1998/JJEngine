@@ -91,6 +91,28 @@ Entity Scene::CreateEntity(const std::string& name)
 	return entity;
 }
 
+Entity Scene::CreateEntityWithUUID(UUIDType uuid, const std::string& name, bool sort)
+{
+	auto entity = Entity{ m_Registry.create(), this };
+
+	auto& uuidComponent = entity.AddComponent<UUIDComponent>();
+	uuidComponent.UUID = uuid;
+
+	entity.AddComponent<TransformComponent>();
+	if (!name.empty())
+		entity.AddComponent<NameComponent>(name);
+
+	entity.AddComponent<RelationshipComponent>();
+	ENGINE_ASSERT(m_entity_map.find(uuidComponent.UUID) == m_entity_map.end(), "There is an Entity already with same uuid");
+	m_entity_map[uuidComponent.UUID] = entity;
+
+	//for editor view
+	if (sort)
+		SortEntityMap();
+
+	return entity;
+}
+
 Entity Scene::GetEntity(UUIDType uuid) const
 {
 	ENGINE_ASSERT(m_entity_map.find(uuid) != m_entity_map.end(), "There is no entity with given UUID");

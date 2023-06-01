@@ -39,6 +39,7 @@ public:
 
 
 	Entity CreateEntity(const std::string& name = {});
+	Entity CreateEntityWithUUID(UUIDType uuid, const std::string& name = {}, bool sort = true);
 
 	Entity GetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(UUIDType uuid) const;
