@@ -45,7 +45,7 @@ Window::Window()
 		return;
 	}
 	glfwMakeContextCurrent(window);
-	//glfwSwapInterval(1);
+	glfwSwapInterval(1);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	int err = gladLoadGL();
@@ -76,7 +76,6 @@ Window::~Window()
 
 void Window::update(std::function<void()> updateCallback)
 {
-	glfwGetWindowSize(window, &windowWidth, &windowHeight);
 	glViewport(0, 0, windowWidth, windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	Input::Reset();

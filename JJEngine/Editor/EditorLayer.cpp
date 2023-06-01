@@ -78,8 +78,15 @@ void EditorLayer::OnUpdate()
 
 void EditorLayer::OnPreRender()
 {
-	editor_viewport->Bind(true);
-	glViewport(0, 0, 400, 400);
+
+	if (viewport_size.x > 0.0f && viewport_size.y > 0.0f)
+	{
+		editor_camera.SetViewportSize((unsigned)viewport_size.x, (unsigned)viewport_size.y);
+		active_scene->ResizeViewport((unsigned)viewport_size.x, (unsigned)viewport_size.y);
+		editor_viewport->Resize((unsigned)viewport_size.x, (unsigned)viewport_size.y);
+		editor_viewport->Bind(true);
+		glViewport(0, 0, viewport_size.x, viewport_size.y);
+	}
 }
 
 void EditorLayer::OnRender()
@@ -125,7 +132,9 @@ void EditorLayer::OnImGuiRender()
 	}
 
 	ImGui::Begin("viewport");
-	ImGui::Image((void*)editor_viewport->GetColorTexture(0)->GetTextureID(), { 400, 400 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+	viewport_size = { viewportPanelSize.x, viewportPanelSize.y };
+	ImGui::Image((void*)editor_viewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 	ImGui::End();
 
 

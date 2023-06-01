@@ -6,6 +6,7 @@
 #include "Core/Graphics/Renderer/EditorCamera.h"
 #include <entt/entt.hpp>
 #include <memory>
+#include <glm/glm.hpp>
 class Scene;
 class FrameBuffer;
 class EditorLayer : public Layer
@@ -36,6 +37,8 @@ private:
 	SceneState scene_state = SceneState::Edit;
 
 	EditorCamera editor_camera;
+	glm::vec2 viewport_size{ 400.f, 400.f };
+
 	std::shared_ptr<Scene> active_scene;
 	entt::entity selected_entityID{entt::null};
 	std::filesystem::path shouldOpenFile{""};

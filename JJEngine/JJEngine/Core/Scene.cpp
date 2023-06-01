@@ -6,6 +6,7 @@ Date: 12/23/2022
 End Header-------------------------------------------------------- */
 #include "Scene.h"
 
+#include "Component/CameraComponent.h"
 #include "Component/SpriteRendererComponent.h"
 #include "Entity/Entity.hpp"
 #include "Component/TransformComponent.h"
@@ -156,6 +157,20 @@ entt::registry& Scene::GetRegistry()
 const EntityMap& Scene::GetEntityMap() const
 {
 	return m_entity_map;
+}
+
+void Scene::ResizeViewport(unsigned width, unsigned height)
+{
+	m_ViewportWidth = width;
+	m_ViewportHeight = height;
+
+	//resize non fixed aspect ratio
+	auto view = m_Registry.view<CameraComponent>();
+	for (auto entity : view)
+	{
+		auto& cameraComponent = view.get<CameraComponent>(entity);
+		cameraComponent.aspect_ratio = width / height;
+	}
 }
 
 void Scene::SortEntityMap()

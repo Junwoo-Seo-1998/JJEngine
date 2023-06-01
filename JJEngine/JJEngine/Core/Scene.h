@@ -51,8 +51,13 @@ public:
 
 	entt::registry& GetRegistry();
 	const EntityMap& GetEntityMap() const;
+
+	//update all viewport size of entities that have camera components
+	void ResizeViewport(unsigned int width, unsigned int height);
 protected:
 	void SortEntityMap();
+
+	unsigned int m_ViewportWidth = 0, m_ViewportHeight = 0;
 
 	std::string m_scene_name;
 	std::filesystem::path scenePath;
@@ -60,5 +65,7 @@ protected:
 
 	//to register entities based on uuid
 	EntityMap m_entity_map;
+
+
 	
 };
