@@ -1,39 +1,52 @@
-Scene: Name
+Scene: unnamed-scene
 Entities:
   - Name: Test 1 Entity
-    UUID: 5fec42b4-be79-417c-9960-8e358196f82a
+    UUID: 1ee4893f-faa6-417a-a03c-289f6bf563e4
     Children:
       []
   - Name: Test 2 Entity
-    UUID: 0849f767-2089-41c8-b3db-e53ad7c2ab68
+    UUID: 289fcb9d-1198-44c6-bba1-d782e9994852
     Children:
       []
   - Name: Test 3 Entity
-    UUID: 5d68a5c0-57fe-4c4a-84c0-51e4ec188a97
+    UUID: 8d216d9f-e07e-4122-90ba-054d5d9415cf
     Children:
       []
   - Name: Test P Entity
-    UUID: 9fd1c883-a202-44d5-9238-384f666197ca
+    UUID: b37d2b57-1fba-4613-8a6e-e20f5f84f519
     Children:
       - Name: Child Entity
-        UUID: 70cb9d2e-159d-4ac9-bc60-91d806277d85
+        UUID: 5cabe979-f43c-4faa-a498-6790e11466f6
         Children:
           []
   - Name: Test PPAP Entity
-    UUID: 091cc4bc-b9c2-4575-9ca1-28244fbac4ee
+    UUID: a8bf78a4-b5e9-4ca5-bbe8-ecf45ae869a6
     Children:
       - Name: Child 1 Entity
-        UUID: 6db8e496-40f2-4e1b-8283-ef2e9d20602b
+        UUID: 108f9303-50e9-40bf-9f38-82686780d12b
         Children:
           - Name: Child 2 Entity
-            UUID: 1ec8dfaa-01f8-4256-b6f3-897883be500f
+            UUID: a754abbf-12ff-4ae3-9da3-e17d7ec3be8a
             Children:
               []
 Components:
   Name:
     {}
   Transform:
-    5fec42b4-be79-417c-9960-8e358196f82a:
+    1ee4893f-faa6-417a-a03c-289f6bf563e4:
+      Position:
+        - 19.7999992
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    289fcb9d-1198-44c6-bba1-d782e9994852:
       Position:
         - 0
         - 0
@@ -44,9 +57,9 @@ Components:
         - 0
       Scale:
         - 1
-        - 0
-        - 0
-    0849f767-2089-41c8-b3db-e53ad7c2ab68:
+        - 1
+        - 1
+    8d216d9f-e07e-4122-90ba-054d5d9415cf:
       Position:
         - 0
         - 0
@@ -57,22 +70,9 @@ Components:
         - 0
       Scale:
         - 1
-        - 0
-        - 0
-    5d68a5c0-57fe-4c4a-84c0-51e4ec188a97:
-      Position:
-        - 17.8999996
-        - 6
-        - 12.5
-      Rotation:
-        - 0.296705961
-        - 0.3333579
-        - 0.204203516
-      Scale:
-        - 6.4000001
         - 1
-        - 14.1999998
-    70cb9d2e-159d-4ac9-bc60-91d806277d85:
+        - 1
+    5cabe979-f43c-4faa-a498-6790e11466f6:
       Position:
         - 0
         - 0
@@ -83,9 +83,9 @@ Components:
         - 0
       Scale:
         - 1
-        - 0
-        - 0
-    9fd1c883-a202-44d5-9238-384f666197ca:
+        - 1
+        - 1
+    b37d2b57-1fba-4613-8a6e-e20f5f84f519:
       Position:
         - 1
         - 0
@@ -96,9 +96,9 @@ Components:
         - 0
       Scale:
         - 1
-        - 0
-        - 0
-    1ec8dfaa-01f8-4256-b6f3-897883be500f:
+        - 1
+        - 1
+    a754abbf-12ff-4ae3-9da3-e17d7ec3be8a:
       Position:
         - 0
         - 0
@@ -109,9 +109,9 @@ Components:
         - 0
       Scale:
         - 1
-        - 0
-        - 0
-    6db8e496-40f2-4e1b-8283-ef2e9d20602b:
+        - 1
+        - 1
+    108f9303-50e9-40bf-9f38-82686780d12b:
       Position:
         - 0
         - 0
@@ -122,9 +122,9 @@ Components:
         - 0
       Scale:
         - 1
-        - 0
-        - 0
-    091cc4bc-b9c2-4575-9ca1-28244fbac4ee:
+        - 1
+        - 1
+    a8bf78a4-b5e9-4ca5-bbe8-ecf45ae869a6:
       Position:
         - 0
         - 0
@@ -135,7 +135,7 @@ Components:
         - 0
       Scale:
         - 1
-        - 0
-        - 0
+        - 1
+        - 1
   Sprite:
     {}
