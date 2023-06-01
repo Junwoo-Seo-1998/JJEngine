@@ -89,17 +89,17 @@ void EditorLayer::OnImGuiRender()
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Save scene")) {
-				SceneSerializer see_real(Application::Instance().GetSceneManager()->GetCurrentScene());
+				SceneSerializer see_real(active_scene);
 				see_real.Serialize("./Resources/Scenes/testScene.scn");
 			}
 			if (ImGui::MenuItem("Load test scene")) {
-				Application::Instance().GetSceneManager()->GetCurrentScene()->GetRegistry().clear();
-				SceneSerializer see_real(Application::Instance().GetSceneManager()->GetCurrentScene());
+				SetNewScene(std::make_shared<Scene>("Test"));
+				SceneSerializer see_real(active_scene);
 				if (see_real.Deserialize("./Resources/Scenes/testScene.scn") == false) Log::Error("Fail to deserialize testScene");
 			}
 			if (ImGui::MenuItem("Load test22 scene")) {
-				Application::Instance().GetSceneManager()->GetCurrentScene()->GetRegistry().clear();
-				SceneSerializer see_real(Application::Instance().GetSceneManager()->GetCurrentScene());
+				SetNewScene(std::make_shared<Scene>("Test22"));
+				SceneSerializer see_real(active_scene);
 				if (see_real.Deserialize("./Resources/Scenes/testScene22.scn") == false)Log::Error("Fail to deserialize testScene");
 			}
 			ImGui::EndMenu();
@@ -170,4 +170,13 @@ void EditorLayer::OnScenePlay()
 void EditorLayer::OnSceneStop()
 {
 	scene_state = SceneState::Edit;
+}
+
+void EditorLayer::SetNewScene(std::shared_ptr<Scene> new_scene) {
+	selected_entityID = entt::null;
+	active_scene = new_scene;
+	component_panel.SetScene(active_scene);
+	scene_hierarchy_panel.SetScene(active_scene);
+	active_scene->Awake();
+	active_scene->Start();
 }

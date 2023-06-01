@@ -24,6 +24,7 @@ private:
 	void DrawToolBar();
 	void OnScenePlay();
 	void OnSceneStop();
+	void SetNewScene(std::shared_ptr<Scene> new_scene);
 
 private:
 	enum class SceneState

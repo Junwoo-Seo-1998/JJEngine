@@ -1,23 +1,141 @@
 Scene: Name
 Entities:
   - Name: Test PPAP Entity
+    UUID: 01e476f2-3d25-4702-a760-800ec6f1b514
     Children:
       - Name: Child 1 Entity
+        UUID: 4bbba441-52d8-42c4-a565-06bd5a0057f0
         Children:
           - Name: Child 2 Entity
+            UUID: 4de86c0e-8132-4069-b4df-f8d2f4361732
             Children:
               []
   - Name: Test P Entity
+    UUID: 4381306d-4163-406f-ba27-6a29fde813f7
     Children:
       - Name: Child Entity
+        UUID: 6c4b56cc-c6e2-4bec-99f5-f1882120d839
         Children:
           []
   - Name: Test 3 Entity
+    UUID: 8e494c74-e211-4bc8-bfcd-86e6f2de987c
     Children:
       []
   - Name: Test 2 Entity
+    UUID: 4486cb9a-da3f-4be4-af71-78f3896f1da5
     Children:
       []
   - Name: Test 1 Entity
+    UUID: afb2a951-c374-465e-a7e4-ee135e74e60b
     Children:
       []
+Components:
+  Name:
+    {}
+  Transform:
+    4de86c0e-8132-4069-b4df-f8d2f4361732:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    4bbba441-52d8-42c4-a565-06bd5a0057f0:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    01e476f2-3d25-4702-a760-800ec6f1b514:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    6c4b56cc-c6e2-4bec-99f5-f1882120d839:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    4381306d-4163-406f-ba27-6a29fde813f7:
+      Position:
+        - 1
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    8e494c74-e211-4bc8-bfcd-86e6f2de987c:
+      Position:
+        - 17.8999996
+        - 6
+        - 12.5
+      Rotation:
+        - 0.296705961
+        - 0.3333579
+        - 0.204203516
+      Scale:
+        - 6.4000001
+        - 1
+        - 14.1999998
+    4486cb9a-da3f-4be4-af71-78f3896f1da5:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    afb2a951-c374-465e-a7e4-ee135e74e60b:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+  Sprite:
+    {}

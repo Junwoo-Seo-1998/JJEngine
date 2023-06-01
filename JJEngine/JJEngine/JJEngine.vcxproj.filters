@@ -89,6 +89,12 @@
     <ClInclude Include="Core\Graphics\Mesh.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Graphics\Renderer\CameraBase.h">
+      <Filter>Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Renderer\EditorCamera.h">
+      <Filter>Graphics\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h">
       <Filter>Graphics\Renderer</Filter>
     </ClInclude>
@@ -161,8 +167,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Graphics\Renderer\EditorCamera.h" />
-    <ClInclude Include="Core\Graphics\Renderer\CameraBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -188,6 +192,9 @@
     </ClCompile>
     <ClCompile Include="Core\Graphics\Mesh.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\Renderer\EditorCamera.cpp">
+      <Filter>Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp">
       <Filter>Graphics\Renderer</Filter>
@@ -248,6 +255,5 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\Graphics\Renderer\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

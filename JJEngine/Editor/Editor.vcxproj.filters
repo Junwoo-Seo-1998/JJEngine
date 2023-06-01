@@ -29,7 +29,7 @@
     <ClCompile Include="Panel\SceneHierarchyPanel.cpp">
       <Filter>Panel</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="TestScene.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
 </Project>
