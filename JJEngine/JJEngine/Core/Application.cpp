@@ -10,6 +10,7 @@ End Header-------------------------------------------------------- */
 #include "Window.h"
 #include "Input/Input.h"
 #include "SceneManager.h"
+#include "Event/EventManager.h"
 #include "Time.h"
 #include "ImGui/ImGuiRenderer.h"
 #include "Core/Layer/Layer.h"
@@ -24,9 +25,11 @@ Application::Application()
 {
 	ASSERT(s_Instance == nullptr, "You are making Application Twice!!");
 	s_Instance = this;
+	eventManager = std::make_shared<EventManager>();
 	window = std::make_shared<Window>();
 	sceneManager = std::make_shared<SceneManager>();
 	layerManager = std::make_shared<LayerManager>();
+	
 }
 
 Application::~Application()
@@ -72,6 +75,19 @@ void Application::Update()
 
 			//imgui
 			ImGuiRenderer::Instance()->GuiBegin();
+
+			std::shared_ptr<Event> event = eventManager->PollEvent();
+			while (event)
+			{
+				{//dispatch event
+					for (auto layer : overlays)
+						layer->OnEvent(*event);
+					for (auto layer : layers)
+						layer->OnEvent(*event);
+				}
+				event = eventManager->PollEvent();
+			}
+			
 
 			sceneManager->update();// this will be moved up later
 
@@ -135,4 +151,9 @@ std::shared_ptr<Window> Application::GetWindow()
 std::shared_ptr<LayerManager> Application::GetLayerManager()
 {
 	return layerManager;
+}
+
+std::shared_ptr<EventManager> Application::GetEventManager()
+{
+	return eventManager;
 }

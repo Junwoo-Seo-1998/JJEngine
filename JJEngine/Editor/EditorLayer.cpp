@@ -22,6 +22,8 @@
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
 
+#include "Core/Event/WindowEvent.h"
+#include "Core/Event/EventManager.h"
 
 EditorLayer::~EditorLayer()
 {
@@ -124,6 +126,18 @@ void EditorLayer::OnImGuiRender()
 	DrawToolBar();
 
 	ImGuiRenderer::Instance()->GuiDrawDockSpaceEnd();
+}
+
+void EditorLayer::OnEvent(Event& event)
+{
+	EngineLog::Info("Event : {}", event);
+
+	EventDispatcher dispatcher(event);
+	dispatcher.Dispatch<WindowResizeEvent>([&](WindowResizeEvent& e)
+	{
+		EngineLog::Info("Got {}!", e.ToString());
+		return true;
+	});
 }
 
 void EditorLayer::DrawToolBar()

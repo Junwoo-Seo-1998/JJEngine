@@ -7,6 +7,7 @@ End Header-------------------------------------------------------- */
 #pragma once
 #include <memory>
 
+class EventManager;
 class Application;
 
 class Window;
@@ -25,6 +26,7 @@ public:
 	std::shared_ptr<SceneManager> GetSceneManager();
 	std::shared_ptr<Window> GetWindow();
 	std::shared_ptr<LayerManager> GetLayerManager();
+	std::shared_ptr<EventManager> GetEventManager();
 	virtual void UserDefinedInit() {};
 
 
@@ -35,4 +37,5 @@ private:
 	std::shared_ptr<SceneManager> sceneManager;
 	std::shared_ptr<Window> window;
 	std::shared_ptr<LayerManager> layerManager;
+	std::shared_ptr<EventManager> eventManager;
 };

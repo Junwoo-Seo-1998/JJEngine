@@ -75,11 +75,6 @@
       <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Core\EntryPoint.h" />
-    <ClInclude Include="Core\Event\StringEvent.h">
-      <Filter>Event</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\EventListener.h" />
-    <ClInclude Include="Core\EventManager.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -167,6 +162,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\Event\Event.h" />
+    <ClInclude Include="Core\Event\WindowEvent.h" />
+    <ClInclude Include="Core\Event\EventManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -180,10 +178,6 @@
     <ClCompile Include="Core\Entity\Entity.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Event\StringEvent.cpp">
-      <Filter>Event</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\EventManager.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -255,5 +249,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Core\Event\EventManager.cpp" />
   </ItemGroup>
 </Project>
