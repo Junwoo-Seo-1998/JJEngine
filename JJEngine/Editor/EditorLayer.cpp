@@ -32,9 +32,7 @@ void EditorLayer::OnAttach()
 {
 	Log::Info("Editor Layer Added");
 	editor_camera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
-	active_scene = std::make_shared<TestScene>("Test");
-	active_scene->Awake();
-	active_scene->Start();
+	SetNewScene(std::make_shared<TestScene>("Test"));
 	//for testing
 	editor_viewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::Depth } });
 
