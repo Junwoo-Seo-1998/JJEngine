@@ -21,8 +21,10 @@ public:
 	std::tuple<int, int> GetWidthAndHeight();
 
 private:
+	void SetWindowSize(int width, int height);
 	static void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void GLFWMouseCallback(GLFWwindow* window, int button, int action, int mods);
 	static void GLFWMousePositionCallback(GLFWwindow* window, double xposIn, double yposIn);
+	static void GLFWResizeCallback(GLFWwindow* window, int width, int height);
 
 };

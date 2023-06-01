@@ -20,6 +20,7 @@ public:
 	void OnRender() override;
 	void OnPostRender() override;
 	void OnImGuiRender() override;
+	void OnEvent(Event& event) override;
 private:
 	void DrawToolBar();
 	void OnScenePlay();

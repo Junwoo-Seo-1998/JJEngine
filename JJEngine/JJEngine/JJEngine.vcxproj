@@ -111,9 +111,9 @@
     <ClInclude Include="Core\Entity\RelationshipComponent.h" />
     <ClInclude Include="Core\Entity\UUIDComponent.h" />
     <ClInclude Include="Core\EntryPoint.h" />
-    <ClInclude Include="Core\Event\StringEvent.h" />
-    <ClInclude Include="Core\EventListener.h" />
-    <ClInclude Include="Core\EventManager.h" />
+    <ClInclude Include="Core\Event\Event.h" />
+    <ClInclude Include="Core\Event\EventManager.h" />
+    <ClInclude Include="Core\Event\WindowEvent.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h" />
     <ClInclude Include="Core\Graphics\IndexBuffer.h" />
     <ClInclude Include="Core\Graphics\Mesh.h" />
@@ -154,8 +154,7 @@
     <ClCompile Include="Core\Component\CameraComponent.cpp" />
     <ClCompile Include="Core\Component\TransformComponent.cpp" />
     <ClCompile Include="Core\Entity\Entity.cpp" />
-    <ClCompile Include="Core\Event\StringEvent.cpp" />
-    <ClCompile Include="Core\EventManager.cpp" />
+    <ClCompile Include="Core\Event\EventManager.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Mesh.cpp" />

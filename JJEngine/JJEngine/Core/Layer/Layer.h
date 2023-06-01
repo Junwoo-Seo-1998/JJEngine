@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+class Event;
 class Layer
 {
 public:
@@ -16,6 +17,8 @@ public:
 	virtual void OnRender() {}
 	virtual void OnPostRender() {}
 	virtual void OnImGuiRender() {}
+
+	virtual void OnEvent(Event& event) {}
 
 	inline const std::string& Name() const { return m_Name; }
 protected:

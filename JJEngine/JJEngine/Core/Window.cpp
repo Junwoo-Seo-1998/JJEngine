@@ -9,6 +9,9 @@ End Header-------------------------------------------------------- */
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include "Application.h"
+#include "Event/EventManager.h"
+#include "Event/WindowEvent.h"
 #include "Input/Input.h"
 
 Window::Window()
@@ -51,8 +54,10 @@ Window::Window()
 		glfwTerminate();
 		return;
 	}
-	
 
+	glfwSetWindowUserPointer(window, this);
+
+	glfwSetWindowSizeCallback(window, GLFWResizeCallback);
 	glfwSetKeyCallback(window, GLFWKeyCallback);
 	glfwSetMouseButtonCallback(window, GLFWMouseCallback);
 	glfwSetCursorPosCallback(window, GLFWMousePositionCallback);
@@ -94,6 +99,12 @@ GLFWwindow* Window::GetGLFWWindow()
 std::tuple<int, int> Window::GetWidthAndHeight()
 {
 	return { windowWidth, windowHeight };
+}
+
+void Window::SetWindowSize(int width, int height)
+{
+	windowWidth = width;
+	windowHeight = height;
 }
 
 void Window::GLFWKeyCallback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
@@ -147,4 +158,11 @@ void Window::GLFWMousePositionCallback(GLFWwindow* window, double xposIn, double
 	float ypos = static_cast<float>(yposIn);
 
 	Input::SetMousePosition(xpos, ypos);
+}
+
+void Window::GLFWResizeCallback(GLFWwindow* window, int width, int height)
+{
+	Window& windowClass = *(Window*)glfwGetWindowUserPointer(window);
+	windowClass.SetWindowSize(width, height);
+	Application::Instance().GetEventManager()->AddEvent(std::make_shared<WindowResizeEvent>(width, height));
 }
