@@ -171,6 +171,8 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\Component\RigidBody2DComponent.h" />
+    <ClInclude Include="Core\Component\BoxCollider2DComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />

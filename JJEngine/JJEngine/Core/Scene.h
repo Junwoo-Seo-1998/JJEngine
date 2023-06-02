@@ -9,10 +9,13 @@ End Header-------------------------------------------------------- */
 #include <entt/entt.hpp>
 #include <filesystem>
 #include "Type.h"
+#include <memory>
 
 class EditorCamera;
 class Entity;
 class SceneHierarchyPanel;
+class b2World;
+
 using EntityMap = std::unordered_map<UUIDType, Entity>;
 
 class Scene
@@ -36,7 +39,9 @@ public:
 	//editor only
 	void UpdateEditor(EditorCamera& camera);
 	//runtime only
+	void StartRuntime();
 	void UpdateRuntime();
+	void StopRuntime();
 
 
 	Entity CreateEntity(const std::string& name = {});
@@ -68,6 +73,6 @@ protected:
 	//to register entities based on uuid
 	EntityMap m_entity_map;
 
-
+	std::unique_ptr<b2World> m_2DWorld;
 	
 };

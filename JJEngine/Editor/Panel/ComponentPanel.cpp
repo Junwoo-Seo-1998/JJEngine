@@ -8,6 +8,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "imgui_internal.h"
+#include "Core/Component/BoxCollider2DComponent.h"
+#include "Core/Component/RigidBody2DComponent.h"
 #include "Core/Component/SpriteRendererComponent.h"
 #include "Core/Utils/Assert.h"
 
@@ -178,10 +180,31 @@ void ComponentPanel::DrawComponents(Entity entity)
 
 		if (ImGui::BeginPopup("Add Component"))
 		{
-			if (ImGui::MenuItem("Sprite Renderer"))
+			if(!entity.HasComponent<SpriteRendererComponent>())
 			{
-				entity.AddComponent<SpriteRendererComponent>();
-				ImGui::CloseCurrentPopup();
+				if (ImGui::MenuItem("Sprite Renderer"))
+				{
+					entity.AddComponent<SpriteRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+			if(!entity.HasComponent<RigidBody2DComponent>())
+			{
+				if (ImGui::MenuItem("RigidBody2D"))
+				{
+					entity.AddComponent<RigidBody2DComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+			if (!entity.HasComponent<BoxCollider2DComponent>())
+			{
+				if (ImGui::MenuItem("BoxCollider2D"))
+				{
+					entity.AddComponent<BoxCollider2DComponent>();
+					ImGui::CloseCurrentPopup();
+				}
 			}
 
 			ImGui::EndPopup();
@@ -200,6 +223,41 @@ void ComponentPanel::DrawComponents(Entity entity)
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+		});
+
+		DrawComponent<RigidBody2DComponent>("RigidBody 2D", entity, [](auto& component)
+		{
+			const char* bodyTypeStrings[] = { "Static", "Dynamic", "Kinematic" };
+			const char* currentBodyTypeString = bodyTypeStrings[(int)component.Type];
+			if (ImGui::BeginCombo("Body Type", currentBodyTypeString))
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					bool isSelected = currentBodyTypeString == bodyTypeStrings[i];
+					if (ImGui::Selectable(bodyTypeStrings[i], isSelected))
+					{
+						currentBodyTypeString = bodyTypeStrings[i];
+						component.Type = (RigidBody2DComponent::BodyType)i;
+					}
+
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+
+			ImGui::Checkbox("Fixed Rotation", &component.FixedRotation);
+		});
+
+		DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
+		{
+			ImGui::DragFloat2("Offset", glm::value_ptr(component.Offset));
+			ImGui::DragFloat2("Size", glm::value_ptr(component.Size));
+			ImGui::DragFloat("Density", &component.Density, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution", &component.Restitution, 0.01f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
 		});
 	}
 }

@@ -273,11 +273,13 @@ void EditorLayer::DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType)
 void EditorLayer::OnScenePlay()
 {
 	scene_state = SceneState::Play;
+	active_scene->StartRuntime();
 }
 
 void EditorLayer::OnSceneStop()
 {
 	scene_state = SceneState::Edit;
+	active_scene->StopRuntime();
 }
 
 void EditorLayer::SetNewScene(std::shared_ptr<Scene> new_scene) {

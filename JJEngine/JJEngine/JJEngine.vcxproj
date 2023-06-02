@@ -103,7 +103,9 @@
     <ClInclude Include="Core\Asset\AssetType.h" />
     <ClInclude Include="Core\Asset\Manager\AssetManagerBase.h" />
     <ClInclude Include="Core\Camera.h" />
+    <ClInclude Include="Core\Component\BoxCollider2DComponent.h" />
     <ClInclude Include="Core\Component\CameraComponent.h" />
+    <ClInclude Include="Core\Component\RigidBody2DComponent.h" />
     <ClInclude Include="Core\Component\SpriteRendererComponent.h" />
     <ClInclude Include="Core\Component\TransformComponent.h" />
     <ClInclude Include="Core\Entity\Entity.hpp" />
