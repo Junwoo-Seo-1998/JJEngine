@@ -7,6 +7,8 @@
 #include <entt/entt.hpp>
 #include <memory>
 #include <glm/glm.hpp>
+
+#include "Core/ImGui/ImGuiSubWindow.h"
 class Scene;
 class FrameBuffer;
 class EditorLayer : public Layer
@@ -36,24 +38,27 @@ private:
 		Play = 0, Edit = 1
 	};
 
-	SceneState scene_state = SceneState::Edit;
+	SceneState m_SceneState = SceneState::Edit;
 
-	EditorCamera editor_camera;
-	glm::vec2 viewport_size{ 400.f, 400.f };
+	EditorCamera m_EditorCamera;
+	glm::vec2 m_ViewportSize{ 400.f, 400.f };
 
-	int gizmo_type = -1;//no drawing
+	int m_GizmoType = -1;//no drawing
 
-	std::shared_ptr<Scene> active_scene;
-	entt::entity selected_entityID{entt::null};
+	std::shared_ptr<Scene> m_ActiveScene;
+	
+
+	entt::entity m_SelectedEntityID{entt::null};
 	std::filesystem::path shouldOpenFile{""};
 
-	ComponentPanel component_panel;
-	SceneHierarchyPanel scene_hierarchy_panel;
-	AssetBrowserPanel ABP{};
+	ComponentPanel m_ComponentPanel;
+	SceneHierarchyPanel m_SceneHierarchyPanel;
+	AssetBrowserPanel m_AssetBrowserPanel{};
 
-	entt::registry editorRegistry{};
-	std::shared_ptr<FrameBuffer> editor_viewport;
+	ImGuiSubWindow m_AssetBrowserWindow{ "Asset browser" };
 
-	std::shared_ptr<Texture> PlayIcon;
-	std::shared_ptr<Texture> StopIcon;
+	std::shared_ptr<FrameBuffer> m_EditorViewport;
+
+	std::shared_ptr<Texture> m_PlayIcon;
+	std::shared_ptr<Texture> m_StopIcon;
 };

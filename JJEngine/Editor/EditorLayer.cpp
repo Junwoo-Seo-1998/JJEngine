@@ -30,19 +30,18 @@
 
 EditorLayer::~EditorLayer()
 {
-	editorRegistry.clear();
 }
 
 void EditorLayer::OnAttach()
 {
 	Log::Info("Editor Layer Added");
-	editor_camera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
+	m_EditorCamera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
 	SetNewScene(std::make_shared<TestScene>("Test"));
 	//for testing
-	editor_viewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::Depth } });
+	m_EditorViewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::Depth } });
 
-	PlayIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/PlayButton.png"));
-	StopIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/Stop.png"));
+	m_PlayIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/PlayButton.png"));
+	m_StopIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/Stop.png"));
 }
 
 void EditorLayer::OnDetach()
@@ -52,24 +51,22 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnStart()
 {
-	component_panel.SetScene(active_scene);
-	scene_hierarchy_panel.SetScene(active_scene);
-	scene_hierarchy_panel.SetSlected_EntityFunc([&](entt::entity ID)->void {selected_entityID = ID; });
+	m_ComponentPanel.SetScene(m_ActiveScene);
+	m_SceneHierarchyPanel.SetScene(m_ActiveScene);
+	m_SceneHierarchyPanel.SetSlected_EntityFunc([&](entt::entity ID)->void {m_SelectedEntityID = ID; });
 
+	m_AssetBrowserPanel.Set();
+	m_AssetBrowserPanel.SetSelectedFileFunc([&](std::filesystem::path str)->void {shouldOpenFile = str; });
 
-	entt::entity ID{ editorRegistry.create() };
-	ImGuiSubWindow* temp = &editorRegistry.emplace<ImGuiSubWindow>(ID, "Asset browser");
-	ABP.Set();
-	ABP.SetSelectedFileFunc([&](std::filesystem::path str)->void {shouldOpenFile = str; });
-	temp->Push_ImGuiCommand([&]()->void {ABP.OnImGuiRender(); });
+	m_AssetBrowserWindow.Push_ImGuiCommand([&]()->void {m_AssetBrowserPanel.OnImGuiRender(); });
 }
 
 void EditorLayer::OnUpdate()
 {
-	switch (scene_state)
+	switch (m_SceneState)
 	{
 	case SceneState::Edit:
-		editor_camera.OnUpdate();
+		m_EditorCamera.OnUpdate();
 		SelectGuizmo();
 		break;
 	case SceneState::Play:
@@ -81,8 +78,8 @@ void EditorLayer::OnUpdate()
 	if (shouldOpenFile.extension().string() == ".scn") {
 		//TODO: ask save now scene
 		SetNewScene(std::make_shared<Scene>(shouldOpenFile.filename().string()));
-		SceneSerializer see_real(active_scene);
-		active_scene->SetScenePath(shouldOpenFile);
+		SceneSerializer see_real(m_ActiveScene);
+		m_ActiveScene->SetScenePath(shouldOpenFile);
 		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize Scene: " + shouldOpenFile.filename().string());
 	}
 	shouldOpenFile.clear();
@@ -90,36 +87,36 @@ void EditorLayer::OnUpdate()
 
 void EditorLayer::OnPreRender()
 {
-	auto spec = editor_viewport->GetSpecification();
-	const bool viewportSizeChanged = (spec.Width != viewport_size.x || spec.Height != viewport_size.y);
-	if (viewportSizeChanged && viewport_size.x > 0.0f && viewport_size.y > 0.0f)
+	auto spec = m_EditorViewport->GetSpecification();
+	const bool viewportSizeChanged = (spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y);
+	if (viewportSizeChanged && m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f)
 	{
-		editor_camera.SetViewportSize((unsigned)viewport_size.x, (unsigned)viewport_size.y);
-		active_scene->ResizeViewport((unsigned)viewport_size.x, (unsigned)viewport_size.y);
-		editor_viewport->Resize((unsigned)viewport_size.x, (unsigned)viewport_size.y);
+		m_EditorCamera.SetViewportSize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
+		m_ActiveScene->ResizeViewport((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
+		m_EditorViewport->Resize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 	}
-	editor_viewport->Bind(true);
+	m_EditorViewport->Bind(true);
 	glViewport(0, 0, (int)spec.Width, (int)spec.Height);
 }
 
 void EditorLayer::OnRender()
 {
-	if (!active_scene)
+	if (!m_ActiveScene)
 		return;
-	switch (scene_state)
+	switch (m_SceneState)
 	{
 	case SceneState::Edit:
-		active_scene->UpdateEditor(editor_camera);
+		m_ActiveScene->UpdateEditor(m_EditorCamera);
 		break;
 	case SceneState::Play:
-		active_scene->UpdateRuntime();
+		m_ActiveScene->UpdateRuntime();
 		break;
 	}
 }
 
 void EditorLayer::OnPostRender()
 {
-	editor_viewport->UnBind();
+	m_EditorViewport->UnBind();
 }
 
 void EditorLayer::OnImGuiRender()
@@ -133,12 +130,12 @@ void EditorLayer::OnImGuiRender()
 				//TODO: name
 			}
 			if (ImGui::MenuItem("Save scene")) {
-				SceneSerializer see_real(active_scene);
-				if (active_scene->GetScenePath().extension().string() == ".scn") {
-					see_real.Serialize(active_scene->GetScenePath().string());
+				SceneSerializer see_real(m_ActiveScene);
+				if (m_ActiveScene->GetScenePath().extension().string() == ".scn") {
+					see_real.Serialize(m_ActiveScene->GetScenePath().string());
 				}
 				else {
-					see_real.Serialize("./Resources/Scenes/" + active_scene->GetSceneName() + ".scn");
+					see_real.Serialize("./Resources/Scenes/" + m_ActiveScene->GetSceneName() + ".scn");
 				}
 			}
 			ImGui::EndMenu();
@@ -147,23 +144,20 @@ void EditorLayer::OnImGuiRender()
 		ImGui::EndMenuBar();
 	}
 
-	auto panels = editorRegistry.view<ImGuiSubWindow>();
-	for (auto& ID : panels) {
-		panels.get<ImGuiSubWindow>(ID).Update();
-	}
+	m_AssetBrowserWindow.Update();
 
 	ImGui::Begin("viewport");
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-	viewport_size = { viewportPanelSize.x, viewportPanelSize.y };
-	ImGui::Image((void*)editor_viewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-	if(scene_state==SceneState::Edit)
-		DrawGuizmo(editor_camera, { selected_entityID, active_scene.get() }, gizmo_type);
+	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+	ImGui::Image((void*)m_EditorViewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+	if(m_SceneState==SceneState::Edit)
+		DrawGuizmo(m_EditorCamera, { m_SelectedEntityID, m_ActiveScene.get() }, m_GizmoType);
 	ImGui::End();
 
 
-	scene_hierarchy_panel.OnImGuiRender();
-	component_panel.SetSelevted_EntityHandle(selected_entityID);
-	component_panel.OnImGuiRender();
+	m_SceneHierarchyPanel.OnImGuiRender();
+	m_ComponentPanel.SetSelevted_EntityHandle(m_SelectedEntityID);
+	m_ComponentPanel.OnImGuiRender();
 
 	DrawToolBar();
 
@@ -197,17 +191,17 @@ void EditorLayer::DrawToolBar()
 	ImGui::Begin("##toolbar", nullptr,
 		ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-	std::shared_ptr<Texture> TextureToUse = scene_state == SceneState::Edit ? PlayIcon : StopIcon;
+	std::shared_ptr<Texture> TextureToUse = m_SceneState == SceneState::Edit ? m_PlayIcon : m_StopIcon;
 	float buttonSize = ImGui::GetWindowHeight() - 4.0f;
 	ImGui::SameLine((ImGui::GetContentRegionMax().x * 0.5f) - (buttonSize * 0.5f));
 	if (ImGui::ImageButton((ImTextureID)TextureToUse->GetTextureID(),
 		ImVec2{ buttonSize, buttonSize }, ImVec2{ 0.f, 0.f }, ImVec2{ 1.f, 1.f }, 0))
 	{
-		if (scene_state == SceneState::Edit)
+		if (m_SceneState == SceneState::Edit)
 		{
 			OnScenePlay();
 		}
-		else if (scene_state == SceneState::Play)
+		else if (m_SceneState == SceneState::Play)
 		{
 			OnSceneStop();
 		}
@@ -220,13 +214,13 @@ void EditorLayer::DrawToolBar()
 void EditorLayer::SelectGuizmo()
 {
 	if(Input::IsPressed(KeyCode::Q))
-		gizmo_type = -1;
+		m_GizmoType = -1;
 	else if(Input::IsPressed(KeyCode::W))
-		gizmo_type = (int)ImGuizmo::OPERATION::TRANSLATE;
+		m_GizmoType = (int)ImGuizmo::OPERATION::TRANSLATE;
 	else if (Input::IsPressed(KeyCode::E))
-		gizmo_type = (int)ImGuizmo::OPERATION::ROTATE;
+		m_GizmoType = (int)ImGuizmo::OPERATION::ROTATE;
 	else if (Input::IsPressed(KeyCode::R))
-		gizmo_type = (int)ImGuizmo::OPERATION::SCALE;
+		m_GizmoType = (int)ImGuizmo::OPERATION::SCALE;
 }
 
 void EditorLayer::DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType)
@@ -272,21 +266,24 @@ void EditorLayer::DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType)
 
 void EditorLayer::OnScenePlay()
 {
-	scene_state = SceneState::Play;
-	active_scene->StartRuntime();
+	m_SceneState = SceneState::Play;
+	m_ActiveScene->StartRuntime();
 }
 
 void EditorLayer::OnSceneStop()
 {
-	scene_state = SceneState::Edit;
-	active_scene->StopRuntime();
+	m_SceneState = SceneState::Edit;
+	m_ActiveScene->StopRuntime();
 }
 
 void EditorLayer::SetNewScene(std::shared_ptr<Scene> new_scene) {
-	selected_entityID = entt::null;
-	active_scene = new_scene;
-	component_panel.SetScene(active_scene);
-	scene_hierarchy_panel.SetScene(active_scene);
-	active_scene->Awake();
-	active_scene->Start();
+	m_SelectedEntityID = entt::null;
+	if (m_SceneState != SceneState::Edit)
+		OnSceneStop();
+	m_ActiveScene = new_scene;
+
+	m_ComponentPanel.SetScene(m_ActiveScene);
+	m_SceneHierarchyPanel.SetScene(m_ActiveScene);
+	m_ActiveScene->Awake();
+	m_ActiveScene->Start();
 }
