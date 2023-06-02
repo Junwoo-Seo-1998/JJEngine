@@ -13,6 +13,7 @@ End Header-------------------------------------------------------- */
 #include "Graphics/Renderer/Renderer2D.h"
 #include "Utils/Assert.h"
 #include "Utils/UUIDGenerator.h"
+#include "Utils/Math/MatrixMath.h"
 
 Scene::Scene()
 	:m_scene_name("unnamed-scene")
@@ -70,6 +71,36 @@ void Scene::UpdateEditor(EditorCamera& camera)
 			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
 	}
 	Renderer2D::EndScene();
+}
+
+void Scene::UpdateRuntime()
+{
+	Entity camera = GetMainCameraEntity();
+	if(!camera)
+	{
+		Log::Warn("There is no Camera In This Scene!");
+		return;
+	}
+
+	{
+		auto& camTransform = camera.Transform();
+		auto& camComp = camera.GetComponent<CameraComponent>();
+		glm::mat4 viewProj = camComp.GetMatrix() *
+			MatrixMath::BuildCameraMatrixWithDirection(camTransform.Position, camTransform.GetForward(), camTransform.GetUp());
+		Renderer2D::BeginScene(viewProj);
+		auto group = m_Registry.group<TransformComponent, SpriteRendererComponent>();
+		for (auto e : group)
+		{
+			Entity entity{ e, this };
+			auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
+			if (spriteComp.texture)
+				Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.texture, spriteComp.color);
+			else
+				Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
+		}
+
+		Renderer2D::EndScene();
+	}
 }
 
 Entity Scene::CreateEntity(const std::string& name)
@@ -138,6 +169,20 @@ Entity Scene::TryGetEntity(const std::string& name)
 	return {};
 }
 
+Entity Scene::GetMainCameraEntity()
+{
+	auto view = m_Registry.view<CameraComponent>();
+	for (auto entity : view)
+	{
+		auto& comp = view.get<CameraComponent>(entity);
+		if (comp.IsMainCamera)
+		{
+			return { entity, this };
+		}
+	}
+	return {};
+}
+
 std::string Scene::GetSceneName() const {
 	return m_scene_name;
 }
@@ -169,7 +214,7 @@ void Scene::ResizeViewport(unsigned width, unsigned height)
 	for (auto entity : view)
 	{
 		auto& cameraComponent = view.get<CameraComponent>(entity);
-		cameraComponent.aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
+		cameraComponent.Aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
 	}
 }
 

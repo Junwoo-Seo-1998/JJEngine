@@ -35,7 +35,8 @@ public:
 
 	//editor only
 	void UpdateEditor(EditorCamera& camera);
-
+	//runtime only
+	void UpdateRuntime();
 
 
 	Entity CreateEntity(const std::string& name = {});
@@ -44,6 +45,7 @@ public:
 	Entity GetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(const std::string& name);
+	Entity GetMainCameraEntity();
 
 	std::string GetSceneName() const;
 	std::filesystem::path GetScenePath() const;

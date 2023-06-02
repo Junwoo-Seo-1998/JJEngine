@@ -66,8 +66,18 @@ void EditorLayer::OnStart()
 
 void EditorLayer::OnUpdate()
 {
-	editor_camera.OnUpdate();
-	SelectGuizmo();
+	switch (scene_state)
+	{
+	case SceneState::Edit:
+		editor_camera.OnUpdate();
+		SelectGuizmo();
+		break;
+	case SceneState::Play:
+		//place holder
+		break;
+	}
+
+	
 	if (shouldOpenFile.extension().string() == ".scn") {
 		//TODO: ask save now scene
 		SetNewScene(std::make_shared<Scene>(shouldOpenFile.filename().string()));
@@ -96,7 +106,15 @@ void EditorLayer::OnRender()
 {
 	if (!active_scene)
 		return;
-	active_scene->UpdateEditor(editor_camera);
+	switch (scene_state)
+	{
+	case SceneState::Edit:
+		active_scene->UpdateEditor(editor_camera);
+		break;
+	case SceneState::Play:
+		active_scene->UpdateRuntime();
+		break;
+	}
 }
 
 void EditorLayer::OnPostRender()
@@ -138,7 +156,8 @@ void EditorLayer::OnImGuiRender()
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 	viewport_size = { viewportPanelSize.x, viewportPanelSize.y };
 	ImGui::Image((void*)editor_viewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-	DrawGuizmo(editor_camera, { selected_entityID, active_scene.get() }, gizmo_type);
+	if(scene_state==SceneState::Edit)
+		DrawGuizmo(editor_camera, { selected_entityID, active_scene.get() }, gizmo_type);
 	ImGui::End();
 
 

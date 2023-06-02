@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include <Core/Utils/Log.h>
 #include "Core/Time.h"
+#include "Core/Component/CameraComponent.h"
 #include "Core/Entity/Entity.hpp"
 #include "Core/Component/SpriteRendererComponent.h"
 TestScene::TestScene(std::string t)
@@ -85,6 +86,10 @@ void TestScene::Start()
 
 	framebuffer = FrameBuffer::CreateFrameBuffer({ 1200, 800, { FrameBufferFormat::RGBA } });
 
+	auto cam=CreateEntity("Camera");
+	auto& camComp=cam.AddComponent<CameraComponent>();
+	camComp.IsMainCamera = true;
+	cam.Transform().Position = { 0,0,4 };
 
 	CreateEntity("Test 1 Entity");
 	CreateEntity("Test 2 Entity");

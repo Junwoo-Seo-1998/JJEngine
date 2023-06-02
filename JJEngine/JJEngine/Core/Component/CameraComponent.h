@@ -4,10 +4,10 @@
 struct CameraComponent
 {
 public:
-	float fov_y = 45.f; //degree
-	float aspect_ratio = 1.0f;
-	float near = 1.0f;
-	float far = 1000000.f;
-
+	float Fov_y = 45.f; //degree
+	float Aspect_ratio = 1.0f;
+	float Near = 1.0f;
+	float Far = 1000000.f;
+	bool IsMainCamera = false;
 	[[nodiscard]] glm::mat4 GetMatrix() const;
 };
