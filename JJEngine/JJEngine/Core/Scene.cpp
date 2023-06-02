@@ -5,6 +5,7 @@ Platform: x64
 Date: 12/23/2022
 End Header-------------------------------------------------------- */
 #include "Scene.h"
+#include "Entity/Entity.hpp"
 
 #include "Time.h"
 #include "box2d/box2d.h"
@@ -12,7 +13,7 @@ End Header-------------------------------------------------------- */
 #include "Component/CameraComponent.h"
 #include "Component/RigidBody2DComponent.h"
 #include "Component/SpriteRendererComponent.h"
-#include "Entity/Entity.hpp"
+
 #include "Component/TransformComponent.h"
 #include "Graphics/Renderer/Renderer2D.h"
 #include "Utils/Assert.h"
@@ -29,6 +30,50 @@ static b2BodyType RigidBody2DTypeToBox2D(RigidBody2DComponent::BodyType bodyType
 	}
 	ENGINE_ASSERT(false, "Shouldn't be here");
 	return b2_staticBody;
+}
+
+
+template<typename T>
+static void CopyComponent(entt::registry& dstRegistry, entt::registry& srcRegistry, const std::unordered_map<UUIDType, entt::entity>& enttIDMap)
+{
+	auto srcEntities = srcRegistry.view<T>();
+	for (auto srcEntity : srcEntities)
+	{
+		entt::entity destEntity = enttIDMap.at(srcRegistry.get<UUIDComponent>(srcEntity).UUID);
+
+		auto& srcComponent = srcRegistry.get<T>(srcEntity);
+		auto& destComponent = dstRegistry.emplace_or_replace<T>(destEntity, srcComponent);
+	}
+}
+
+std::shared_ptr<Scene> Scene::Copy(std::shared_ptr<Scene> toCopy)
+{
+	std::shared_ptr<Scene> newScene = std::make_shared<Scene>();
+
+	newScene->ResizeViewport(toCopy->m_ViewportWidth, toCopy->m_ViewportHeight);
+
+	auto& toCopyReg = toCopy->GetRegistry();
+	auto& newReg = newScene->GetRegistry();
+
+	std::unordered_map<UUIDType, entt::entity> enttIDMap;
+	auto idView = toCopyReg.view<UUIDComponent>();
+	for (auto entity : idView)
+	{
+		auto uuid = toCopyReg.get<UUIDComponent>(entity).UUID;
+		const auto& name = toCopyReg.get<NameComponent>(entity).Name;
+		Entity e = newScene->CreateEntityWithUUID(uuid, name);
+		enttIDMap[uuid] = e.m_EntityHandle;
+	}
+
+	//copy except UUID and Name components
+	CopyComponent<CameraComponent>(newReg, toCopyReg, enttIDMap);
+	CopyComponent<TransformComponent>(newReg, toCopyReg, enttIDMap);
+	CopyComponent<SpriteRendererComponent>(newReg, toCopyReg, enttIDMap);
+	CopyComponent<RigidBody2DComponent>(newReg, toCopyReg, enttIDMap);
+	CopyComponent<BoxCollider2DComponent>(newReg, toCopyReg, enttIDMap);
+
+
+	return newScene;
 }
 
 Scene::Scene()
@@ -159,7 +204,7 @@ void Scene::UpdateRuntime()
 	{
 		auto& camTransform = camera.Transform();
 		auto& camComp = camera.GetComponent<CameraComponent>();
-		glm::mat4 viewProj = camComp.GetMatrix() *
+		glm::mat4 viewProj = camComp.GetProjection() *
 			MatrixMath::BuildCameraMatrixWithDirection(camTransform.Position, camTransform.GetForward(), camTransform.GetUp());
 		Renderer2D::BeginScene(viewProj);
 		auto group = m_Registry.group<TransformComponent, SpriteRendererComponent>();

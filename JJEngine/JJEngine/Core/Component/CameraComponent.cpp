@@ -1,7 +1,7 @@
 #include "CameraComponent.h"
 #include "Core/Utils/Math/MatrixMath.h"
 
-glm::mat4 CameraComponent::GetMatrix() const
+glm::mat4 CameraComponent::GetProjection() const
 {
-	return MatrixMath::BuildPerspectiveProjectionMatrixFovy(glm::radians(Fov_y), Aspect_ratio, Near, Far);
+	return MatrixMath::BuildPerspectiveProjectionMatrixFovy(Fov_y, Aspect_ratio, Near, Far);
 }

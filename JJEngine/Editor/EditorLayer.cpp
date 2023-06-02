@@ -267,23 +267,34 @@ void EditorLayer::DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType)
 void EditorLayer::OnScenePlay()
 {
 	m_SceneState = SceneState::Play;
-	m_ActiveScene->StartRuntime();
+
+	m_RuntimeScene = Scene::Copy(m_EditorScene);
+	m_RuntimeScene->ResizeViewport((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
+	m_RuntimeScene->StartRuntime();
+	m_ActiveScene = m_RuntimeScene;
 }
 
 void EditorLayer::OnSceneStop()
 {
 	m_SceneState = SceneState::Edit;
-	m_ActiveScene->StopRuntime();
+
+	m_RuntimeScene->StopRuntime();
+	m_RuntimeScene = nullptr;
+
+	m_ActiveScene = m_EditorScene;
 }
 
 void EditorLayer::SetNewScene(std::shared_ptr<Scene> new_scene) {
 	m_SelectedEntityID = entt::null;
 	if (m_SceneState != SceneState::Edit)
 		OnSceneStop();
-	m_ActiveScene = new_scene;
 
-	m_ComponentPanel.SetScene(m_ActiveScene);
-	m_SceneHierarchyPanel.SetScene(m_ActiveScene);
+	m_EditorScene = new_scene;
+	m_EditorScene->ResizeViewport((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
+	m_SceneHierarchyPanel.SetScene(m_EditorScene);
+	m_ComponentPanel.SetScene(m_EditorScene);
+
+	m_ActiveScene = m_EditorScene;
 	m_ActiveScene->Awake();
 	m_ActiveScene->Start();
 }

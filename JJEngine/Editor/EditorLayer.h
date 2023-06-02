@@ -45,7 +45,10 @@ private:
 
 	int m_GizmoType = -1;//no drawing
 
+	//update stuff should be based on active scene
 	std::shared_ptr<Scene> m_ActiveScene;
+	//for play and pause
+	std::shared_ptr<Scene> m_EditorScene, m_RuntimeScene;
 	
 
 	entt::entity m_SelectedEntityID{entt::null};

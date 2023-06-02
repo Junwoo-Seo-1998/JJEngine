@@ -23,6 +23,9 @@ class Scene
 	friend class Entity;
 	friend class SceneHierarchyPanel;
 	friend class SceneSerializer;
+	//static function
+public:
+	static std::shared_ptr<Scene> Copy(std::shared_ptr<Scene> toCopy);
 public:
 	Scene();
 	Scene(const std::string& scene_name);
@@ -44,8 +47,8 @@ public:
 	void StopRuntime();
 
 
-	Entity CreateEntity(const std::string& name = {});
-	Entity CreateEntityWithUUID(UUIDType uuid, const std::string& name = {}, bool sort = true);
+	Entity CreateEntity(const std::string& name = "No Name");
+	Entity CreateEntityWithUUID(UUIDType uuid, const std::string& name = "No Name", bool sort = true);
 
 	Entity GetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(UUIDType uuid) const;
@@ -61,6 +64,25 @@ public:
 
 	//update all viewport size of entities that have camera components
 	void ResizeViewport(unsigned int width, unsigned int height);
+
+
+	/*template<typename ComponentType>
+	void CopyComponentIfExists(entt::entity dst, entt::registry& dstReg, entt::entity src)
+	{
+		if (m_Registry.any_of<ComponentType>(src))
+		{
+			auto& srcComponent = m_Registry.get<ComponentType>(src);
+			dstReg.emplace_or_replace<ComponentType>(dst, srcComponent);
+		}
+	}
+
+	template<typename ComponentType>
+	static void CopyComponentIfExistsFromScene(std::shared_ptr<Scene> dstScene, Entity dst, std::shared_ptr<Scene> srcScene, Entity src)
+	{
+		srcScene->CopyComponentIfExists<ComponentType>(dst.GetEntityHandle(), dstScene->m_Registry, src.GetEntityHandle());
+	}*/
+
+
 protected:
 	void SortEntityMap();
 

@@ -7,6 +7,8 @@
 #include "Core/Component/CameraComponent.h"
 #include "Core/Entity/Entity.hpp"
 #include "Core/Component/SpriteRendererComponent.h"
+#include "Core/Component/RigidBody2DComponent.h"
+#include "Core/Component/BoxCollider2DComponent.h"
 TestScene::TestScene(std::string t)
 	:Scene(t)
 {
@@ -89,23 +91,35 @@ void TestScene::Start()
 	auto cam=CreateEntity("Camera");
 	auto& camComp=cam.AddComponent<CameraComponent>();
 	camComp.IsMainCamera = true;
-	cam.Transform().Position = { 0,0,4 };
+	cam.Transform().Position = { 0,1.52f,7.5f };
 
-	CreateEntity("Test 1 Entity");
-	CreateEntity("Test 2 Entity");
-	CreateEntity("Test 3 Entity");
-	auto temp = CreateEntity("Test P Entity");
-	auto temp2 = CreateEntity("Child Entity");
-	temp2.SetParent(temp);
+	auto ground = CreateEntity("Ground");
+	auto& groundSprite = ground.AddComponent<SpriteRendererComponent>();
+	groundSprite.color = { 0.5f,0.25f, 0.2f, 1.f };
+	ground.Transform().Scale = { 5,0.25f,1 };
+	ground.Transform().Position.y = -1.f;
+	ground.AddComponent<BoxCollider2DComponent>();
+	ground.AddComponent<RigidBody2DComponent>();
 
-	temp.Transform().Position = { 1.f, 0, 0 };
+	auto ground2 = CreateEntity("Ground2");
+	auto& groundSprite2 = ground2.AddComponent<SpriteRendererComponent>();
+	groundSprite2.color = { 0.5f,0.25f, 0.2f, 1.f };
+	ground2.Transform().Scale = { 1.f,0.25f,1 };
+	ground2.Transform().Position.y = 1.21f;
+	ground2.Transform().Position.x = 0.67f;
+	ground2.Transform().Rotation.z = glm::radians(29.23f);
+	ground2.AddComponent<BoxCollider2DComponent>();
+	ground2.AddComponent<RigidBody2DComponent>();
+
+	auto temp = CreateEntity("Test Texture Entity");
+
+	temp.Transform().Position = { 0.f, 2.50f, 0 };
 	auto& sprite = temp.AddComponent<SpriteRendererComponent>();
 	sprite.texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
 
-	temp = CreateEntity("Child 1 Entity");
-	temp.SetParent(CreateEntity("Test PPAP Entity"));
-	temp2 = CreateEntity("Child 2 Entity");
-	temp2.SetParent(temp);
+	temp.AddComponent<BoxCollider2DComponent>();
+	auto& body = temp.AddComponent<RigidBody2DComponent>();
+	body.Type = RigidBody2DComponent::BodyType::Dynamic;
 }
 
 void TestScene::Update()
