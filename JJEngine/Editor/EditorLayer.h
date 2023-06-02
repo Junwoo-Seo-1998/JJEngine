@@ -24,6 +24,8 @@ public:
 	void OnEvent(Event& event) override;
 private:
 	void DrawToolBar();
+	void SelectGuizmo();
+	void DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType);
 	void OnScenePlay();
 	void OnSceneStop();
 	void SetNewScene(std::shared_ptr<Scene> new_scene);
@@ -38,6 +40,8 @@ private:
 
 	EditorCamera editor_camera;
 	glm::vec2 viewport_size{ 400.f, 400.f };
+
+	int gizmo_type = -1;//no drawing
 
 	std::shared_ptr<Scene> active_scene;
 	entt::entity selected_entityID{entt::null};

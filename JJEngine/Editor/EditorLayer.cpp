@@ -2,9 +2,11 @@
 #include "EditorLayer.h"
 
 #include <glm/ext/matrix_clip_space.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "glad.h"
 #include "imgui.h"
+#include "ImGuizmo.h"
 #include "TestScene.h"
 #include "Core/ImGui/ImGuiRenderer.h"
 #include "Core/Graphics/FrameBuffer.h"
@@ -65,7 +67,7 @@ void EditorLayer::OnStart()
 void EditorLayer::OnUpdate()
 {
 	editor_camera.OnUpdate();
-
+	SelectGuizmo();
 	if (shouldOpenFile.extension().string() == ".scn") {
 		//TODO: ask save now scene
 		SetNewScene(std::make_shared<Scene>(shouldOpenFile.filename().string()));
@@ -136,6 +138,7 @@ void EditorLayer::OnImGuiRender()
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 	viewport_size = { viewportPanelSize.x, viewportPanelSize.y };
 	ImGui::Image((void*)editor_viewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+	DrawGuizmo(editor_camera, { selected_entityID, active_scene.get() }, gizmo_type);
 	ImGui::End();
 
 
@@ -193,6 +196,60 @@ void EditorLayer::DrawToolBar()
 	ImGui::PopStyleVar(2);
 	ImGui::PopStyleColor(3);
 	ImGui::End();
+}
+
+void EditorLayer::SelectGuizmo()
+{
+	if(Input::IsPressed(KeyCode::Q))
+		gizmo_type = -1;
+	else if(Input::IsPressed(KeyCode::W))
+		gizmo_type = (int)ImGuizmo::OPERATION::TRANSLATE;
+	else if (Input::IsPressed(KeyCode::E))
+		gizmo_type = (int)ImGuizmo::OPERATION::ROTATE;
+	else if (Input::IsPressed(KeyCode::R))
+		gizmo_type = (int)ImGuizmo::OPERATION::SCALE;
+}
+
+void EditorLayer::DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType)
+{
+	ImGuizmo::SetOrthographic(false);
+
+	ImGuizmo::BeginFrame();
+
+	float windowWidth = (float)ImGui::GetWindowWidth();
+	float windowHeight = (float)ImGui::GetWindowHeight();
+	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+	//editor camera
+	const glm::mat4& cameraProjection = camera.GetProjection();
+	glm::mat4 cameraView = camera.GetViewMatrix();
+
+	if(!entity || GizmoType == -1)
+	{
+		return;
+	}
+
+	auto& tc = entity.GetComponent<TransformComponent>();
+	glm::mat4 transform = tc.GetTransform();
+
+	//snapping
+	bool snap = Input::IsPressed(Key::LeftControl);
+	float snapValue = 0.5f;// snap 0.5 for translation and scale
+	if (GizmoType == ImGuizmo::OPERATION::ROTATE)
+		snapValue = 45.0f;
+
+	float snapValues[3] = { snapValue,snapValue,snapValue };
+
+	ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+		(ImGuizmo::OPERATION)GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform), nullptr, snap ? snapValues : nullptr);
+
+	if (ImGuizmo::IsUsing())
+	{
+		glm::vec3 translation, rotation, scale;
+		ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(transform), glm::value_ptr(translation), glm::value_ptr(rotation), glm::value_ptr(scale));
+		tc.Position = translation;
+		tc.Rotation = glm::radians(rotation);
+		tc.Scale = scale;
+	}
 }
 
 void EditorLayer::OnScenePlay()
