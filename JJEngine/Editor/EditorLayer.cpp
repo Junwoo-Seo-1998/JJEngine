@@ -213,8 +213,7 @@ void EditorLayer::SelectGuizmo()
 void EditorLayer::DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType)
 {
 	ImGuizmo::SetOrthographic(false);
-
-	ImGuizmo::BeginFrame();
+	ImGuizmo::SetDrawlist();
 
 	float windowWidth = (float)ImGui::GetWindowWidth();
 	float windowHeight = (float)ImGui::GetWindowHeight();
