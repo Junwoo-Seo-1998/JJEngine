@@ -59,6 +59,12 @@
     <ClInclude Include="Core\Component\CameraComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Component\LightComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component\MaterialComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Component\RigidBody2DComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -93,6 +99,9 @@
     <ClInclude Include="Core\Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Graphics\Graphics.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Graphics\IndexBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -103,6 +112,9 @@
       <Filter>Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\Renderer\EditorCamera.h">
+      <Filter>Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Renderer\Renderer.h">
       <Filter>Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h">
@@ -174,23 +186,17 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Graphics\Graphics.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Component\LightComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Graphics\Renderer\Renderer.h">
-      <Filter>Graphics\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Component\MaterialComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
     <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\Component\CameraComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Component\LightComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Component\MaterialComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Core\Component\TransformComponent.cpp">
@@ -205,6 +211,9 @@
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Graphics\Graphics.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -212,6 +221,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Renderer\EditorCamera.cpp">
+      <Filter>Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\Renderer\Renderer.cpp">
       <Filter>Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp">
@@ -270,17 +282,5 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\Graphics\Graphics.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Graphics\Renderer\Renderer.cpp">
-      <Filter>Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Component\MaterialComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Component\LightComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
