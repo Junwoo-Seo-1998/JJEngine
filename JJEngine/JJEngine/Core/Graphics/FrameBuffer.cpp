@@ -93,8 +93,8 @@ void FrameBuffer::BuildFrameBuffer()
 {
 	if (m_FrameBufferID != 0)
 	{
+		glDeleteFramebuffers(1, &m_FrameBufferID);
 		//remove previous data
-		glDeleteFramebuffers(GL_FRAMEBUFFER, &m_FrameBufferID);
 		m_ColorTextures.clear();
 		m_DepthTexture.reset();
 	}
