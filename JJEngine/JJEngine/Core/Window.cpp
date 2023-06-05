@@ -9,6 +9,9 @@ End Header-------------------------------------------------------- */
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include "Application.h"
+#include "Event/EventManager.h"
+#include "Event/WindowEvent.h"
 #include "Input/Input.h"
 
 Window::Window()
@@ -42,7 +45,7 @@ Window::Window()
 		return;
 	}
 	glfwMakeContextCurrent(window);
-	//glfwSwapInterval(1);
+	glfwSwapInterval(1);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	int err = gladLoadGL();
@@ -51,10 +54,16 @@ Window::Window()
 		glfwTerminate();
 		return;
 	}
-	
 
+	glfwSetWindowUserPointer(window, this);
+
+	glfwSetWindowSizeCallback(window, GLFWResizeCallback);
 	glfwSetKeyCallback(window, GLFWKeyCallback);
 	glfwSetMouseButtonCallback(window, GLFWMouseCallback);
+	glfwSetScrollCallback(window, [](GLFWwindow* /*window*/, double /*xOffset*/, double yOffset)
+	{
+		Input::SetMouseScroll(static_cast<float>(yOffset));
+	});
 	glfwSetCursorPosCallback(window, GLFWMousePositionCallback);
 
 	//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -71,7 +80,6 @@ Window::~Window()
 
 void Window::update(std::function<void()> updateCallback)
 {
-	glfwGetWindowSize(window, &windowWidth, &windowHeight);
 	glViewport(0, 0, windowWidth, windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	Input::Reset();
@@ -94,6 +102,12 @@ GLFWwindow* Window::GetGLFWWindow()
 std::tuple<int, int> Window::GetWidthAndHeight()
 {
 	return { windowWidth, windowHeight };
+}
+
+void Window::SetWindowSize(int width, int height)
+{
+	windowWidth = width;
+	windowHeight = height;
 }
 
 void Window::GLFWKeyCallback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
@@ -147,4 +161,11 @@ void Window::GLFWMousePositionCallback(GLFWwindow* window, double xposIn, double
 	float ypos = static_cast<float>(yposIn);
 
 	Input::SetMousePosition(xpos, ypos);
+}
+
+void Window::GLFWResizeCallback(GLFWwindow* window, int width, int height)
+{
+	Window& windowClass = *(Window*)glfwGetWindowUserPointer(window);
+	windowClass.SetWindowSize(width, height);
+	Application::Instance().GetEventManager()->AddEvent(std::make_shared<WindowResizeEvent>(width, height));
 }

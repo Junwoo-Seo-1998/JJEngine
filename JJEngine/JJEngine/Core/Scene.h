@@ -7,10 +7,15 @@ End Header-------------------------------------------------------- */
 #pragma once
 #include <string>
 #include <entt/entt.hpp>
+#include <filesystem>
 #include "Type.h"
+#include <memory>
 
+class EditorCamera;
 class Entity;
 class SceneHierarchyPanel;
+class b2World;
+
 using EntityMap = std::unordered_map<UUIDType, Entity>;
 
 class Scene
@@ -18,6 +23,9 @@ class Scene
 	friend class Entity;
 	friend class SceneHierarchyPanel;
 	friend class SceneSerializer;
+	//static function
+public:
+	static std::shared_ptr<Scene> Copy(std::shared_ptr<Scene> toCopy);
 public:
 	Scene();
 	Scene(const std::string& scene_name);
@@ -31,22 +39,62 @@ public:
 	virtual void OnDisable();
 	virtual void OnDestroy();
 
-	Entity CreateEntity(const std::string& name = {});
+	//editor only
+	void UpdateEditor(EditorCamera& camera);
+	//runtime only
+	void StartRuntime();
+	void UpdateRuntime();
+	void StopRuntime();
+
+
+	Entity CreateEntity(const std::string& name = "No Name");
+	Entity CreateEntityWithUUID(UUIDType uuid, const std::string& name = "No Name", bool sort = true);
 
 	Entity GetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(const std::string& name);
+	Entity GetMainCameraEntity();
 
+	std::string GetSceneName() const;
+	std::filesystem::path GetScenePath() const;
+	void SetScenePath(std::filesystem::path);
 
 	entt::registry& GetRegistry();
 	const EntityMap& GetEntityMap() const;
+
+	//update all viewport size of entities that have camera components
+	void ResizeViewport(unsigned int width, unsigned int height);
+
+
+	/*template<typename ComponentType>
+	void CopyComponentIfExists(entt::entity dst, entt::registry& dstReg, entt::entity src)
+	{
+		if (m_Registry.any_of<ComponentType>(src))
+		{
+			auto& srcComponent = m_Registry.get<ComponentType>(src);
+			dstReg.emplace_or_replace<ComponentType>(dst, srcComponent);
+		}
+	}
+
+	template<typename ComponentType>
+	static void CopyComponentIfExistsFromScene(std::shared_ptr<Scene> dstScene, Entity dst, std::shared_ptr<Scene> srcScene, Entity src)
+	{
+		srcScene->CopyComponentIfExists<ComponentType>(dst.GetEntityHandle(), dstScene->m_Registry, src.GetEntityHandle());
+	}*/
+
+
 protected:
 	void SortEntityMap();
 
+	unsigned int m_ViewportWidth = 0, m_ViewportHeight = 0;
+
 	std::string m_scene_name;
+	std::filesystem::path scenePath;
 	entt::registry m_Registry;
 
 	//to register entities based on uuid
 	EntityMap m_entity_map;
+
+	std::unique_ptr<b2World> m_2DWorld;
 	
 };

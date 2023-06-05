@@ -1,7 +1,5 @@
 #include "MatrixMath.h"
 #include <glm/ext/matrix_transform.hpp>
-#undef far
-#undef near
 
 glm::mat4 MatrixMath::BuildCameraMatrix(glm::vec3 cam_position, glm::vec3 target, glm::vec3 world_up)
 {
@@ -67,33 +65,33 @@ glm::mat4 MatrixMath::BuildCameraMatrixWithDirection(const glm::vec3& cam_positi
 	return toret;
 }
 
-glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrix(float width, float height, float near, float far)
+glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrix(float width, float height, float Near, float Far)
 {
-	float projection_plane = near;
+	float projection_plane = Near;
 	glm::mat4 perspective =
 	{
 		{2 * projection_plane / width,0,0,0},
 		{0,2 * projection_plane / height,0,0},
-		{0,0,(near + far) / (near - far),-1},
-		{0,0,2 * far * near / (near - far),0},
+		{0,0,(Near + Far) / (Near - Far),-1},
+		{0,0,2 * Far * Near / (Near - Far),0},
 	};
 	return perspective;
 }
 
-glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrixFovx(float fov_x, float aspect_ratio, float near, float far)
+glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrixFovx(float fov_x, float aspect_ratio, float Near, float Far)
 {
 	float cot = 1.f / glm::tan(fov_x / 2.f);
 	glm::mat4 perspective =
 	{
 		{cot,0,0,0},
 		{0,cot * aspect_ratio,0,0},
-		{0,0,(near + far) / (near - far),-1},
-		{0,0,2 * far * near / (near - far),0},
+		{0,0,(Near + Far) / (Near - Far),-1},
+		{0,0,2 * Far * Near / (Near - Far),0},
 	};
 	return perspective;
 }
 
-glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrixFovy(float fov_y, float aspect_ratio, float near, float far)
+glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrixFovy(float fov_y, float aspect_ratio, float Near, float Far)
 {
 	//just studying purpose.. it uses my own matrix instead glm matrix on debug
 #ifdef DEBUG 
@@ -102,13 +100,13 @@ glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrixFovy(float fov_y, float as
 	{
 		{cot / aspect_ratio,0,0,0},
 		{0,cot ,0,0},
-		{0,0,(near + far) / (near - far),-1},
-		{0,0,2 * far * near / (near - far),0},
+		{0,0,(Near + Far) / (Near - Far),-1},
+		{0,0,2 * Far * Near / (Near - Far),0},
 	};
 
 	return perspective;
 #else
-	return glm::perspective(fov_y, aspect_ratio, near, far);
+	return glm::perspective(fov_y, aspect_ratio, Near, Far);
 #endif
 
 }

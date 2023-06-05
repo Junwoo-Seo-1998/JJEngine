@@ -57,7 +57,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4819;4996;4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;DEBUG;JJ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;..\Libs\stduuid\include;..\Libs\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;..\Libs\stduuid\include;..\Libs\yaml-cpp\include;..\Libs\ImGuizmo;..\Libs\box2d\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -78,7 +78,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4819;4996;4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;..\Libs\stduuid\include;..\Libs\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Libs\glfw\glfw\include;..\Libs\glad;..\Libs\glm;..\Libs\entt;..\Libs\imgui;..\Libs\stb_image;..\Libs\mono\include;..\Libs\spdlog\include;..\Libs\filewatch;..\Libs\stduuid\include;..\Libs\yaml-cpp\include;..\Libs\ImGuizmo;..\Libs\box2d\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -103,9 +103,11 @@
     <ClInclude Include="Core\Asset\AssetType.h" />
     <ClInclude Include="Core\Asset\Manager\AssetManagerBase.h" />
     <ClInclude Include="Core\Camera.h" />
+    <ClInclude Include="Core\Component\BoxCollider2DComponent.h" />
     <ClInclude Include="Core\Component\CameraComponent.h" />
     <ClInclude Include="Core\Component\LightComponent.h" />
     <ClInclude Include="Core\Component\MaterialComponent.h" />
+    <ClInclude Include="Core\Component\RigidBody2DComponent.h" />
     <ClInclude Include="Core\Component\SpriteRendererComponent.h" />
     <ClInclude Include="Core\Component\TransformComponent.h" />
     <ClInclude Include="Core\Entity\Entity.hpp" />
@@ -113,14 +115,16 @@
     <ClInclude Include="Core\Entity\RelationshipComponent.h" />
     <ClInclude Include="Core\Entity\UUIDComponent.h" />
     <ClInclude Include="Core\EntryPoint.h" />
-    <ClInclude Include="Core\Event\StringEvent.h" />
-    <ClInclude Include="Core\EventListener.h" />
-    <ClInclude Include="Core\EventManager.h" />
+    <ClInclude Include="Core\Event\Event.h" />
+    <ClInclude Include="Core\Event\EventManager.h" />
+    <ClInclude Include="Core\Event\WindowEvent.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h" />
     <ClInclude Include="Core\Graphics\Graphics.h" />
     <ClInclude Include="Core\Graphics\IndexBuffer.h" />
     <ClInclude Include="Core\Graphics\Mesh.h" />
     <ClInclude Include="Core\Graphics\Renderer\Renderer.h" />
+    <ClInclude Include="Core\Graphics\Renderer\CameraBase.h" />
+    <ClInclude Include="Core\Graphics\Renderer\EditorCamera.h" />
     <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h" />
     <ClInclude Include="Core\Graphics\Shader.h" />
     <ClInclude Include="Core\Graphics\Texture.h" />
@@ -157,13 +161,13 @@
     <ClCompile Include="Core\Component\MaterialComponent.cpp" />
     <ClCompile Include="Core\Component\TransformComponent.cpp" />
     <ClCompile Include="Core\Entity\Entity.cpp" />
-    <ClCompile Include="Core\Event\StringEvent.cpp" />
-    <ClCompile Include="Core\EventManager.cpp" />
+    <ClCompile Include="Core\Event\EventManager.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Graphics.cpp" />
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Mesh.cpp" />
     <ClCompile Include="Core\Graphics\Renderer\Renderer.cpp" />
+    <ClCompile Include="Core\Graphics\Renderer\EditorCamera.cpp" />
     <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp" />
     <ClCompile Include="Core\Graphics\Shader.cpp" />
     <ClCompile Include="Core\Graphics\Texture.cpp" />
@@ -199,6 +203,12 @@
     </ProjectReference>
     <ProjectReference Include="..\Libs\yaml-cpp\yaml-cpp.vcxproj">
       <Project>{88F1A057-74BE-FB62-9DD7-E90A890331F1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\ImGuizmo\ImGuizmo.vcxproj">
+      <Project>{36FD234F-22CA-7E5A-4BE3-6C02370FB4E8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Libs\box2d\Box2D.vcxproj">
+      <Project>{A434E80C-1049-10BE-D9CA-B31D459E0CEF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 class Texture;
+class EditorCamera;
 class Renderer2D
 {
 public:
@@ -9,6 +10,7 @@ public:
 	static void Shutdown();
 
 	static void BeginScene(const glm::mat4& viewProjection);
+	static void BeginScene(const EditorCamera& camera);
 	static void EndScene();
 
 	static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);

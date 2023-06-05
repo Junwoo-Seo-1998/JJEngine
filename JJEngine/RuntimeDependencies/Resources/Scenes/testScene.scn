@@ -1,23 +1,159 @@
 Scene: Name
 Entities:
+  - Name: Child 2 Entity
+    UUID: 99eeae27-b43b-4451-92a8-0b0ae2133b16
+  - Name: Child 1 Entity
+    UUID: a4780a54-e365-4006-b428-b1150236090c
   - Name: Test PPAP Entity
-    Children:
-      - Name: Child 1 Entity
-        Children:
-          - Name: Child 2 Entity
-            Children:
-              []
+    UUID: edcbe381-2205-4ff9-b3c7-8966e020a255
+  - Name: Child Entity
+    UUID: 544c6b15-0c91-4991-a954-86c3bace9cbe
   - Name: Test P Entity
-    Children:
-      - Name: Child Entity
-        Children:
-          []
+    UUID: 63e5a5fd-1d42-4b8c-b052-e0b4b48b106d
   - Name: Test 3 Entity
-    Children:
-      []
+    UUID: e802b8ae-6ce9-408c-8e7a-a536ff5d776d
   - Name: Test 2 Entity
-    Children:
-      []
+    UUID: 186564d2-b2ab-444b-b5d5-895bb3ad7c44
   - Name: Test 1 Entity
-    Children:
-      []
+    UUID: 3f138c78-8734-4a99-99dc-d48d2b1b011b
+Components:
+  Relationship:
+    99eeae27-b43b-4451-92a8-0b0ae2133b16:
+      Parent: a4780a54-e365-4006-b428-b1150236090c
+      Children:
+        []
+    a4780a54-e365-4006-b428-b1150236090c:
+      Parent: edcbe381-2205-4ff9-b3c7-8966e020a255
+      Children:
+        - 99eeae27-b43b-4451-92a8-0b0ae2133b16
+    edcbe381-2205-4ff9-b3c7-8966e020a255:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        - a4780a54-e365-4006-b428-b1150236090c
+    544c6b15-0c91-4991-a954-86c3bace9cbe:
+      Parent: 63e5a5fd-1d42-4b8c-b052-e0b4b48b106d
+      Children:
+        []
+    63e5a5fd-1d42-4b8c-b052-e0b4b48b106d:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        - 544c6b15-0c91-4991-a954-86c3bace9cbe
+    e802b8ae-6ce9-408c-8e7a-a536ff5d776d:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    186564d2-b2ab-444b-b5d5-895bb3ad7c44:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    3f138c78-8734-4a99-99dc-d48d2b1b011b:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+  Transform:
+    99eeae27-b43b-4451-92a8-0b0ae2133b16:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    a4780a54-e365-4006-b428-b1150236090c:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    edcbe381-2205-4ff9-b3c7-8966e020a255:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    544c6b15-0c91-4991-a954-86c3bace9cbe:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    63e5a5fd-1d42-4b8c-b052-e0b4b48b106d:
+      Position:
+        - 1
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    e802b8ae-6ce9-408c-8e7a-a536ff5d776d:
+      Position:
+        - 17.8999996
+        - 6
+        - 12.5
+      Rotation:
+        - 0.296705961
+        - 0.3333579
+        - 0.204203516
+      Scale:
+        - 6.4000001
+        - 1
+        - 14.1999998
+    186564d2-b2ab-444b-b5d5-895bb3ad7c44:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+    3f138c78-8734-4a99-99dc-d48d2b1b011b:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 0
+        - 0
+  Sprite:
+    {}

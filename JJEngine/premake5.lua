@@ -8,6 +8,8 @@ include "Libs/glfw"
 include "Libs/glad"
 include "Libs/imgui"
 include "Libs/yaml-cpp"
+include "Libs/ImGuizmo"
+include "Libs/box2d"
 group ""
 --inc
 IncludeDir={}
@@ -22,6 +24,8 @@ IncludeDir["SPDLOG"]="Libs/spdlog/include"
 IncludeDir["FILEWATCH"]="Libs/filewatch/"
 IncludeDir["STDUUID"]="Libs/stduuid/include"
 IncludeDir["YAML_CPP"]="Libs/yaml-cpp/include"
+IncludeDir["IMGUIZMO"]="Libs/ImGuizmo"
+IncludeDir["Box2D"]="Libs/box2d/include"
 --lib dir
 LibraryDir = {}
 LibraryDir["Mono_Debug"]="Libs/mono/lib/Debug"
@@ -51,6 +55,8 @@ project "JJEngine"
         "opengl32.lib",
         "ImGui",
         "yaml-cpp",
+        "ImGuizmo",
+        "Box2D",
     }
 
     disablewarnings {
@@ -71,11 +77,13 @@ project "JJEngine"
         "%{IncludeDir.FILEWATCH}",
         "%{IncludeDir.STDUUID}",
         "%{IncludeDir.YAML_CPP}",
+        "%{IncludeDir.IMGUIZMO}",
+        "%{IncludeDir.Box2D}",
     }
     files {
         "JJEngine/**.h",
         "JJEngine/**.cpp",
-        "JJEngine/**.hpp"
+        "JJEngine/**.hpp",
     }
     defines{
         "GLFW_INCLUDE_NONE",
@@ -212,6 +220,7 @@ project "Editor"
         "JJEngine",
         "GLAD",
         "opengl32.lib",
+        "ImGuizmo"
     }
     
     disablewarnings {
@@ -228,6 +237,7 @@ project "Editor"
         "%{IncludeDir.SPDLOG}",
         "%{IncludeDir.FILEWATCH}",
         "%{IncludeDir.STDUUID}",
+        "%{IncludeDir.IMGUIZMO}"
     }
     files {
         "Editor/**.h",

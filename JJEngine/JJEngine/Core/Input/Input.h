@@ -28,18 +28,22 @@ public:
 	static bool IsReleased(Key key);
 	static bool IsReleased(Mouse button);
 
+	static bool IsMouseScrolled();
+
 	static void SetMouseCursorEnable(bool input);
 
 	static std::tuple<float, float> GetMousePosition();
 	static std::tuple<float, float> GetLastMousePosition();
 
 	static std::tuple<float, float> GetMouseOffset();
+	static float GetMouseScrollOffset();
 private:
 	static void Reset();
 	static void PostEventUpdate();
 	static void SetKey(Key key, bool state);
 	static void SetMouseButton(Mouse button, bool state);
 	static void SetMousePosition(float x, float y);
+	static void SetMouseScroll(float yOffset);
 private:
 
 };

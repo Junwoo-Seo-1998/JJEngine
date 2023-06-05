@@ -21,7 +21,8 @@ void ImGuiRenderer::Init(void* window)
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 
-
+	io.Fonts->AddFontFromFileTTF("./Resources/Fonts/OpenSans/OpenSans-Bold.ttf", 18.f);
+	io.FontDefault = io.Fonts->AddFontFromFileTTF("./Resources/Fonts/OpenSans/OpenSans-Regular.ttf", 18.f);
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
@@ -38,7 +39,7 @@ void ImGuiRenderer::Init(void* window)
 	ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(window), true);
 	ImGui_ImplOpenGL3_Init("#version 460");
 
-	Log::Info("ImGui Renderer Init!");
+	EngineLog::Info("ImGui Renderer Init!");
 
 	//theme
 	auto& colors = ImGui::GetStyle().Colors;

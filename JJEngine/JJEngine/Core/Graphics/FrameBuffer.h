@@ -44,6 +44,8 @@ public:
 	std::shared_ptr<Texture> GetColorTexture(int index);
 	std::shared_ptr<Texture> GetDepthTexture();
 
+	FrameBufferSpecification GetSpecification() const;
+
 private:
 	FrameBuffer(const FrameBufferSpecification& spec);
 	void BuildFrameBuffer();

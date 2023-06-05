@@ -5,59 +5,130 @@
 #include "Core/SceneManager.h"
 #include "Core/Entity/Entity.hpp"
 #include "Core/Utils/Log.h"
-
-SceneHierarchyPanel::SceneHierarchyPanel(std::shared_ptr<Scene> scene)
-{
-	//since might do other things in future.
-	SetScene(scene);
-}
-
+#include "Core/Utils/Assert.h"
 void SceneHierarchyPanel::SetSlected_EntityFunc(std::function<void(entt::entity)> func)
 {
 	setSelectedEntity = func;
 }
 
-void SceneHierarchyPanel::SetScene(std::shared_ptr<Scene> scene)
+void SceneHierarchyPanel::SetScene(std::weak_ptr<Scene> scene)
 {
 	m_scene = scene;
+	clickedEntity = entt::null;
 }
 
 void SceneHierarchyPanel::DrawEntityTree(entt::entity entityID)
 {
-	Entity entity{ entityID, m_scene.get() };
+	auto scene = m_scene.lock();
+	ENGINE_ASSERT(scene, "check the original scene was deleted!!");
+
+	Entity entity{ entityID, scene.get() };
 	std::vector<UUIDType>& child = entity.GetChildrenUUID();
 	ImGuiTreeNodeFlags flag{ child.empty() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow};
 	auto& name = entity.Name();
 	bool opened = ImGui::TreeNodeEx(name.c_str(), flag);
+	bool isHovered{ ImGui::IsItemHovered()};
 	if (ImGui::IsItemClicked()) {
 		setSelectedEntity(entityID);
 	}
+	if (ImGui::IsItemActive() == true) {
+		//Log::Info("EID" + std::to_string((int)entityID));
+		// Dragging feedback
+		clickedEntity = entityID;
+		isDragging = true;
+	}
+	if (clickedEntity == entityID) isChildofClicked = true;
+	if (shouldChangeRelation == true 
+		&& isHovered == true) {
+		//Log::Info("Hovered EID" + std::to_string((int)entityID));
+		if (isChildofClicked == false) {
+			Entity ChildEntity{ clickedEntity, scene.get() };
+			ChildEntity.SetParent(entity);
+		}
+		shouldChangeRelation = false;
+	}
+
 	if (opened == true) {
 		for (auto& c:child) {
-			DrawEntityTree(m_scene->GetEntity(c).GetEntityHandle());
+			DrawEntityTree(scene->GetEntity(c).GetEntityHandle());
 		}
 		ImGui::TreePop();
+	}
+	if (clickedEntity == entityID) isChildofClicked = false;
+
+
+
+	if (isHovered == true 
+		&& ImGui::IsMouseReleased(ImGuiMouseButton_Right) == true) {
+		shouldRemoveEntity = entityID;
 	}
 }
 
 
 void SceneHierarchyPanel::OnImGuiRender()
 {
-	m_scene = Application::Instance().GetSceneManager()->GetCurrentScene();
-	if(m_scene == nullptr)
-		return;
+	auto scene = m_scene.lock();
+	ENGINE_ASSERT(scene, "check the original scene was deleted!!");
+
 	ImGui::Begin("Scene Hierarchy");
+	ImGui::Text("Scene name: %s", scene->m_scene_name.c_str());
+	if (ImGui::Button("Create empty entity") == true) {
+		Entity child = scene->CreateEntity(); // temp
+		if (clickedEntity != entt::null) {
+			Entity parent{ clickedEntity,scene.get() };
+			child.SetParent(parent);
+		}
+	}
+	ImGui::Separator();
+
+
 	std::vector < entt::entity > rootEntity{};
-	m_scene->m_Registry.each([&](auto entityID)
+	scene->m_Registry.each([&](auto entityID)
 		{
-			Entity entity{ entityID, m_scene.get() };
+			Entity entity{ entityID, scene.get() };
 			if (entity.GetParentUUID().is_nil() == true) {
 				rootEntity.push_back(entityID);
 			}
 		});
 
-	for (auto& e : rootEntity) {
-		DrawEntityTree(e);
+	bool opened = ImGui::TreeNodeEx("Scene", ImGuiTreeNodeFlags_OpenOnArrow);
+	if (ImGui::IsItemClicked()) {
+		setSelectedEntity(entt::null);
+		clickedEntity = entt::null;
 	}
+	if (opened == true) {
+		for (auto& e : rootEntity) {
+			DrawEntityTree(e);
+		}
+		ImGui::TreePop();
+	}
+
+	if (shouldChangeRelation == true) {//clear parent
+		Entity ChildEntity{ clickedEntity, scene.get() };
+		//ChildEntity.SetParent(); // nead ClearParent function
+		Log::Info("Clear parent");
+		shouldChangeRelation = false;
+	}
+
+	if (isDragging == true && ImGui::IsMouseReleased(ImGuiMouseButton_Left) == true) {
+		//Log::Info("Drag end");
+		isDragging = false;
+		shouldChangeRelation = true;
+	}
+
+	if (shouldRemoveEntity != entt::null && ImGui::BeginPopupContextWindow("Entity option"))
+	{
+		if (ImGui::Button("Remove")) { // will change into event-driven
+			scene->m_Registry.destroy(shouldRemoveEntity);
+			shouldRemoveEntity = entt::null;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+	else {
+		shouldRemoveEntity = entt::null;
+	}
+
+	ImGui::Separator();
 	ImGui::End();
 }

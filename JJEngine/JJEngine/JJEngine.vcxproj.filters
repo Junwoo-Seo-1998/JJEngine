@@ -53,7 +53,13 @@
       <Filter>Asset\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Core\Camera.h" />
+    <ClInclude Include="Core\Component\BoxCollider2DComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Component\CameraComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component\RigidBody2DComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Core\Component\SpriteRendererComponent.h">
@@ -75,11 +81,15 @@
       <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Core\EntryPoint.h" />
-    <ClInclude Include="Core\Event\StringEvent.h">
+    <ClInclude Include="Core\Event\Event.h">
       <Filter>Event</Filter>
     </ClInclude>
-    <ClInclude Include="Core\EventListener.h" />
-    <ClInclude Include="Core\EventManager.h" />
+    <ClInclude Include="Core\Event\EventManager.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Event\WindowEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -88,6 +98,12 @@
     </ClInclude>
     <ClInclude Include="Core\Graphics\Mesh.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Renderer\CameraBase.h">
+      <Filter>Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Renderer\EditorCamera.h">
+      <Filter>Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h">
       <Filter>Graphics\Renderer</Filter>
@@ -183,10 +199,9 @@
     <ClCompile Include="Core\Entity\Entity.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Event\StringEvent.cpp">
+    <ClCompile Include="Core\Event\EventManager.cpp">
       <Filter>Event</Filter>
     </ClCompile>
-    <ClCompile Include="Core\EventManager.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -195,6 +210,9 @@
     </ClCompile>
     <ClCompile Include="Core\Graphics\Mesh.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\Renderer\EditorCamera.cpp">
+      <Filter>Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp">
       <Filter>Graphics\Renderer</Filter>
