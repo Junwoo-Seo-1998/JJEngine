@@ -73,7 +73,11 @@ void SceneHierarchyPanel::OnImGuiRender()
 	ImGui::Begin("Scene Hierarchy");
 	ImGui::Text("Scene name: %s", scene->m_scene_name.c_str());
 	if (ImGui::Button("Create empty entity") == true) {
-		scene->CreateEntity(); // temp
+		Entity child = scene->CreateEntity(); // temp
+		if (clickedEntity != entt::null) {
+			Entity parent{ clickedEntity,scene.get() };
+			child.SetParent(parent);
+		}
 	}
 	ImGui::Separator();
 
@@ -87,8 +91,16 @@ void SceneHierarchyPanel::OnImGuiRender()
 			}
 		});
 
-	for (auto& e : rootEntity) {
-		DrawEntityTree(e);
+	bool opened = ImGui::TreeNodeEx("Scene", ImGuiTreeNodeFlags_OpenOnArrow);
+	if (ImGui::IsItemClicked()) {
+		setSelectedEntity(entt::null);
+		clickedEntity = entt::null;
+	}
+	if (opened == true) {
+		for (auto& e : rootEntity) {
+			DrawEntityTree(e);
+		}
+		ImGui::TreePop();
 	}
 
 	if (shouldChangeRelation == true) {//clear parent
@@ -106,7 +118,7 @@ void SceneHierarchyPanel::OnImGuiRender()
 
 	if (shouldRemoveEntity != entt::null && ImGui::BeginPopupContextWindow("Entity option"))
 	{
-		if (ImGui::Button("Remove")) { // change into event-driven
+		if (ImGui::Button("Remove")) { // will change into event-driven
 			scene->m_Registry.destroy(shouldRemoveEntity);
 			shouldRemoveEntity = entt::null;
 			ImGui::CloseCurrentPopup();
