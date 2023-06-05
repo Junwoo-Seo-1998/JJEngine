@@ -11,9 +11,7 @@
 #include "Core/Layer/Layer.h"
 #include "Core/Application.h"
 #include "Core/Window.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+
 
 using VariableContainerType = std::unordered_map<std::string, std::any>;
 

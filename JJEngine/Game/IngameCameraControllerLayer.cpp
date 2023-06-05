@@ -87,8 +87,8 @@ void MouseCamControl(TransformComponent& camT, double xpos, double ypos)
 	camT.Rotation.z += static_cast<float>(xoffset);
 	camT.Rotation.y += static_cast<float>(yoffset);
 
-	if (camT.Rotation.y > 89.0f)
-		camT.Rotation.y = 89.0f;
-	if (camT.Rotation.y < -89.0f)
-		camT.Rotation.y = -89.0f;
+	if (camT.Rotation.y > glm::radians(89.0f))
+		camT.Rotation.y = glm::radians(89.0f);
+	if (camT.Rotation.y < glm::radians(-89.0f))
+		camT.Rotation.y = glm::radians(-89.0f);
 }

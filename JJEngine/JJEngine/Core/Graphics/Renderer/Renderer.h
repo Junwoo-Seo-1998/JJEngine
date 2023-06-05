@@ -2,13 +2,14 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include "entt/entt.hpp"
-#include "Core/Graphics/Graphics.h"
 #include "Core/Component/TransformComponent.h"
 #include "Core/Component/MaterialComponent.h"
 #include "Core/Component/LightComponent.h"
+#include "Core/Graphics/Mesh.h"
 
 class Texture;
-
+class VertexArray;
+class FrameBuffer;
 
 class Renderer
 {

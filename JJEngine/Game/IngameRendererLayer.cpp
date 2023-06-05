@@ -1,4 +1,6 @@
 #include "glad.h"
+#include "Core/Utils/Math/MatrixMath.h"
+
 #include "IngameRendererLayer.h"
 #include "Core/Utils/Log.h"
 #include "Core/Application.h"
@@ -86,7 +88,7 @@ void IngameRendererLayer::OnRender()
 		auto& camera = camEntity.GetComponent<CameraComponent>();
 		auto& cameraTransform = camEntity.GetComponent<TransformComponent>();
 
-		glm::mat4 camVP = camera.GetMatrix() * glm::lookAt(cameraTransform.Position, cameraTransform.GetForward(), cameraTransform.GetUp());
+		glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.GetForward(), cameraTransform.GetUp());
 		for (auto& obj : objectView)
 		{
 			Entity objEntity(obj, active_scene.get());

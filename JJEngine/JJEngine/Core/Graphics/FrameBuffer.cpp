@@ -158,9 +158,9 @@ void FrameBuffer::BuildFrameBuffer()
 	{
 		const unsigned int size = static_cast<unsigned int>(m_ColorFormats.size());
 
-		ENGINE_ASSERT(size <= 4, "Framebuffer max color attachment size is 4");
+		ENGINE_ASSERT(size <= 8, "Framebuffer max color attachment size is 8");
 
-		GLenum buffers[4] = { GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2,GL_COLOR_ATTACHMENT3 };
+		GLenum buffers[8] = { GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2,GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5, GL_COLOR_ATTACHMENT6, GL_COLOR_ATTACHMENT7 };
 		glNamedFramebufferDrawBuffers(m_FrameBufferID, size, buffers);
 	}
 	else if (m_ColorFormats.empty())//means only depth

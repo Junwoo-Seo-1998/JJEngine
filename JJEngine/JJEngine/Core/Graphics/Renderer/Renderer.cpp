@@ -4,18 +4,19 @@
 #include "Core/Graphics/Shader.h"
 #include "Core/Graphics/Texture.h"
 #include "Core/Graphics/Graphics.h"
+#include "Core/Utils/Math/MatrixMath.h"
 
 #include <memory>
 #include <array>
 
 #include "glad.h"
 #include "Core/Graphics/IndexBuffer.h"
-
-
-
-static RenderCommand command;
+ 
+static RenderCommand command{};
 static std::vector<glm::mat4> toLightVP;
 static std::vector<LightInfo> lights;
+ 
+
 
 
 void Renderer::BeginScene(const glm::mat4& viewProjection)
@@ -35,17 +36,17 @@ void Renderer::AddAffectLight(const LightComponent& light, TransformComponent li
 	case LightType::Point:
 	{
 		lightTransform.LookAtDir({1.f, 0.f, 0.f});
-		toLightVP.push_back( light.GetMatrix() * glm::lookAt(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 		lightTransform.LookAtDir({ -1.f, 0.f, 0.f });
-		toLightVP.push_back( light.GetMatrix() * glm::lookAt(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 		lightTransform.LookAtDir({ 0.f, 1.f, 0.f });
-		toLightVP.push_back( light.GetMatrix() * glm::lookAt(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 		lightTransform.LookAtDir({ 0.f, -1.f, 0.f });
-		toLightVP.push_back( light.GetMatrix() * glm::lookAt(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 		lightTransform.LookAtDir({ 0.f, 0.f, 1.f });
-		toLightVP.push_back( light.GetMatrix() * glm::lookAt(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 		lightTransform.LookAtDir({ 0.f, 0.f, -1.f });
-		toLightVP.push_back( light.GetMatrix() * glm::lookAt(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 
 		lights.push_back({ light.type, toLightVP , lightTransform.Position });
 	}

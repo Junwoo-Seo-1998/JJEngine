@@ -1,7 +1,10 @@
 ﻿#include <algorithm>
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include "Graphics.h"
 #include "Core/Component/LightComponent.h"
-inline void Graphics::AddRenderCommand(CommandType commandType, const VariableContainerType& variables)
+void Graphics::AddRenderCommand(CommandType commandType, const VariableContainerType& variables)
 {
 	RenderCommand renderCommand;
 	renderCommand.commandType = commandType;
@@ -10,14 +13,14 @@ inline void Graphics::AddRenderCommand(CommandType commandType, const VariableCo
 	renderCommands.push_back(renderCommand);
 }
 
-inline void Graphics::ExecuteRenderCommands() {
+void Graphics::ExecuteRenderCommands() {
 	for (const auto& command : renderCommands) {
 		ExecuteRenderCommand(command);
 	}
 	renderCommands.clear();
 }
 
-inline void Graphics::ExecuteRenderCommand(RenderCommand command)
+void Graphics::ExecuteRenderCommand(RenderCommand command)
 {
 	switch (command.commandType)
 	{

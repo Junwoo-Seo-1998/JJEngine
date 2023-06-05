@@ -8,11 +8,11 @@ enum class LightType
 struct LightComponent
 {
 public:
-	float fov_y = 45.f; //degree
-	float aspect_ratio = 1.0f;
-	float near = 1.0f;
-	float far = 1000000.f;
+	//radian!! use glm::radians (degree)
+	float Fov_y = glm::radians(45.f);
+	float Aspect_ratio = 1.0f;
+	float Near = 1.0f;
+	float Far = 1000000.f;
 	LightType type = LightType::Point;
-
-	[[nodiscard]] glm::mat4 GetMatrix() const;
+	[[nodiscard]] glm::mat4 GetProjection() const;
 };
