@@ -121,13 +121,14 @@ void EditorLayer::OnPostRender()
 
 void EditorLayer::OnImGuiRender()
 {
+	static bool openMakeSceneWindow{false};
 	ImGuiRenderer::Instance()->GuiDrawDockSpaceBegin();
 	if (ImGui::BeginMenuBar()) // testing for now
 	{
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Make scene")) {
-				//TODO: name
+				openMakeSceneWindow = true;
 			}
 			if (ImGui::MenuItem("Save scene")) {
 				SceneSerializer see_real(m_ActiveScene);
@@ -142,6 +143,20 @@ void EditorLayer::OnImGuiRender()
 		}
 
 		ImGui::EndMenuBar();
+	}
+
+	if (openMakeSceneWindow == true) { // Scene generator window
+		ImGui::Begin("Scene generator");
+		static char newSceneName[128] = "Default";
+		ImGui::InputText("Input scene name", newSceneName, IM_ARRAYSIZE(newSceneName));
+		//ImGui::SameLine();
+		if (ImGui::Button("Make") == true) {
+			openMakeSceneWindow = false;
+			SetNewScene(std::make_shared<Scene>(newSceneName));
+			SceneSerializer see_real(m_ActiveScene);
+			see_real.Serialize("./Resources/Scenes/" + m_ActiveScene->GetSceneName() + ".scn");
+		}
+		ImGui::End();
 	}
 
 	m_AssetBrowserWindow.Update();

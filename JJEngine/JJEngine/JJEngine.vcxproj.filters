@@ -53,7 +53,13 @@
       <Filter>Asset\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Core\Camera.h" />
+    <ClInclude Include="Core\Component\BoxCollider2DComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Component\CameraComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component\RigidBody2DComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Core\Component\SpriteRendererComponent.h">
@@ -171,8 +177,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Component\RigidBody2DComponent.h" />
-    <ClInclude Include="Core\Component\BoxCollider2DComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />

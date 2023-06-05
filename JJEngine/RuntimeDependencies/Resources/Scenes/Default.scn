@@ -1,0 +1,10 @@
+Scene: Default
+Entities:
+  []
+Components:
+  Relationship:
+    {}
+  Transform:
+    {}
+  Sprite:
+    {}

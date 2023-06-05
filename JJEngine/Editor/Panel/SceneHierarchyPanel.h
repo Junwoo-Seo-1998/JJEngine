@@ -13,4 +13,8 @@ public:
 private:
 	std::weak_ptr<Scene> m_scene;
 	std::function<void(entt::entity)> setSelectedEntity;
+	entt::entity clickedEntity{entt::null};
+	bool isChildofClicked{false};
+	bool isDragging{false};
+	bool shouldChangeRelation{ false };
 };
