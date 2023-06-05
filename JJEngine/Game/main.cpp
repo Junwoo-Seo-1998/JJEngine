@@ -5,7 +5,8 @@
 #include "Core/Utils/Log.h"
 #include "FileWatch.hpp"
 #include "Core/Layer/LayerManager.h"
-#include "Core/Graphics/RenderingLayer.h"
+#include "IngameCameraControllerLayer.h"
+#include "IngameRendererLayer.h"
 
 #include <filesystem>
 
@@ -16,7 +17,8 @@ class GameApp : public Application
 		auto shadowScene = std::make_shared<ShadowScene>();
 		GetSceneManager()->enrollScene(0, shadowScene);
 		GetSceneManager()->setNextScene(0);
-		GetLayerManager()->PushLayer(std::make_shared<RenderingLayer>());
+		GetLayerManager()->PushLayer(std::make_shared<IngameCameraControllerLayer>());
+		GetLayerManager()->PushLayer(std::make_shared<IngameRendererLayer>());
 
 		//todo: remove this
 		filewatch::FileWatch<std::string> watch("./Resources/Scripts/JJEngine-ScriptCore.dll", [](const std::string& path, const filewatch::Event change_type) {

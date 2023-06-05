@@ -98,9 +98,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="IngameCameraControllerLayer.h" />
+    <ClInclude Include="IngameRendererLayer.h" />
     <ClInclude Include="ShadowScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="IngameCameraControllerLayer.cpp" />
+    <ClCompile Include="IngameRendererLayer.cpp" />
     <ClCompile Include="ShadowScene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

@@ -123,9 +123,6 @@ void FreeCamera::mouseCam(double xpos, double ypos)
 		double xoffset = get<0>(Input::GetMouseOffset());
 		double yoffset = get<1>(Input::GetMouseOffset());
 
-		lastX = static_cast<float>(xpos);
-		lastY = static_cast<float>(ypos);
-
 		float sensitivity = 0.05f;
 		xoffset *= sensitivity;
 		yoffset *= sensitivity;

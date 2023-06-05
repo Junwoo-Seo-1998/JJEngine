@@ -11,6 +11,7 @@ enum class TextureChannel
 {
 	RGB,
 	RGBA,
+	RGBA32F,
 	Depth,
 	None,
 };
@@ -43,12 +44,16 @@ public:
 	virtual ~Texture();
 	std::tuple<int, int> GetWidthHeight() const;
 	unsigned int GetTextureID() const;
-	
+	unsigned int GetUnitID() const;
+
 	void BindTexture(unsigned int unit = 0);
+	void UnBindTexture();
+
 private:
 	Texture(std::shared_ptr<TextureData> texture_data);
 	Texture(const TextureData& texture_data);
 	int m_Width;
 	int m_Height;
 	unsigned int m_TextureID;
+	unsigned int m_UnitID;
 };

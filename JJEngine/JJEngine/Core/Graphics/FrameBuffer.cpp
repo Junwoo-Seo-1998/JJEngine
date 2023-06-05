@@ -117,6 +117,11 @@ void FrameBuffer::BuildFrameBuffer()
 				{
 					m_ColorTextures[i] = Texture::CreateTexture({width,height,nullptr,TextureChannel::RGBA});
 					break;
+				case  FrameBufferFormat::RGBA32F:
+				{
+					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGBA32F });
+					break;
+				}
 				}
 			}
 			unsigned textureID = m_ColorTextures[i]->GetTextureID();

@@ -1,73 +1,109 @@
 #include "ShadowScene.h"
-#include "Core/Graphics/RenderingLayer.h"
+#include "IngameRendererLayer.h"
 #include "Core/Application.h"
+#include "Core/Entity/Entity.hpp"
+#include "Core/Component/CameraComponent.h"
+#include "Core/Component/LightComponent.h"
+#include "Core/Component/MaterialComponent.h"
+
 #include <imgui.h>
 #include <glad.h>
 void ShadowScene::Start()
 {
-	Model model;
-	model.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreateSphere(20, 20, 1.f, { 0.f, 0.f, 0.f })));
 	
-	Model planeModel;
-	planeModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreatePlane(20, 20)));
 
-	auto target = model.GetMeshes()[0];
-	auto plane = planeModel.GetMeshes()[0];
-	shadowSceneVAO = VertexArray::CreateVertexArray();
-	shadowSceneSampleFBO.push_back(FrameBuffer::CreateFrameBuffer({ 512, 512, { FrameBufferFormat::Depth } }));
-	shadowSceneSampleFBO.push_back(FrameBuffer::CreateFrameBuffer({ 512, 512, { FrameBufferFormat::Depth } }));
-	shadowSceneSampleFBO.push_back(FrameBuffer::CreateFrameBuffer({ 512, 512, { FrameBufferFormat::Depth } }));
+	Entity camera = CreateEntity("Cam");
+	camera.AddComponent<CameraComponent>(CameraComponent{});
+	Entity light1 = CreateEntity("Light 1");
+	light1.AddComponent<LightComponent>(LightComponent{});
+	Entity light2 = CreateEntity("Light 2");
+	light2.AddComponent<LightComponent>(LightComponent{});
 
-	
-	shadowSceneVAO->Bind();
-	target->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(target->GetNumOfVertices() * sizeof(Vertex));
-	target->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(target->GetNumOfIndices() * sizeof(int));
-	plane->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(plane->GetNumOfVertices() * sizeof(Vertex));
-	plane->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(plane->GetNumOfIndices() * sizeof(int));
-	shadowSceneVAO->UnBind();
-	AddObject(model);
-	AddObject(planeModel);
-
-
-
-	shader = Shader::CreateShaderFromFile({
+	std::shared_ptr<Shader> forwardShader = Shader::CreateShaderFromFile({
 { ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/test.vert"}},
 { ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/test.frag"} }
 		});
 
-	shadowShader = Shader::CreateShaderFromFile({
+	std::shared_ptr<Shader> shadowShader = Shader::CreateShaderFromFile({
 { ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/shadowSampling.vert"}},
 { ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/shadowSampling.frag"} }
 		});
 
-	auto window = Application::Instance().GetWindow();
+	MaterialComponent forwardShadowMaterial{};
+	forwardShadowMaterial.forwardShader = forwardShader;
+	forwardShadowMaterial.shadowSamplingShader = shadowShader;
+	forwardShadowMaterial.isShadowed = true;
+	forwardShadowMaterial.type = MaterialType::Forward;
 
-	freeCam = FreeCamera(window->GetGLFWWindow(), get<0>(window->GetWidthAndHeight()), get<1>(window->GetWidthAndHeight()));
-	freeCam.SetCamSpeed(0.15f);
-	freeCam.SetPosition({ 0.f, 0.f, 5.f });
-	freeCam.nearPlane = 0.1f;
-	freeCam.farPlane = 100.f;
-	light1 = FreeCamera(window->GetGLFWWindow(), get<0>(window->GetWidthAndHeight()), get<1>(window->GetWidthAndHeight()));
-	light1.camFront = { -1.f, 0.f, 0.f };
-	light1.SetPosition({ 3.f, 0.f, 0.f });
-	light1.nearPlane = 0.1f;
-	light1.farPlane = 100.f;
-	light2 = FreeCamera(window->GetGLFWWindow(), get<0>(window->GetWidthAndHeight()), get<1>(window->GetWidthAndHeight()));
-	light2.camFront = { 0.f, 0.f, -1.f };
-	light2.SetPosition({ 0.f, 0.f, 3.f });
-	light2.nearPlane = 0.1f;
-	light2.farPlane = 100.f;
-	freeCam.ComputeViewProjMats();
-	light1.ComputeViewProjMats();
-	light2.ComputeViewProjMats();
-	controller = &freeCam;
+	Entity object = CreateEntity("Object");
+	object.AddComponent<MaterialComponent>(forwardShadowMaterial);
+	Model objectModel;
+	objectModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreateSphere(20, 20, 1.f, { 0.f, 0.f, 0.f })));
+	object.AddComponent<Model>(objectModel);
+
+	Entity floor = CreateEntity("Floor");
+	floor.AddComponent<MaterialComponent>(forwardShadowMaterial);
+	Model floorModel;
+	floorModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreatePlane(20, 20)));
+	floor.AddComponent<Model>(floorModel);
+
+
+
+//	Model model;
+//	model.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreateSphere(20, 20, 1.f, { 0.f, 0.f, 0.f })));
+//	
+//	Model planeModel;
+//	planeModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreatePlane(20, 20)));
+//
+//	auto target = model.GetMeshes()[0];
+//	auto plane = planeModel.GetMeshes()[0];
+//	shadowSceneVAO = VertexArray::CreateVertexArray();
+//	shadowSceneSampleFBO.push_back(FrameBuffer::CreateFrameBuffer({ 512, 512, { FrameBufferFormat::Depth } }));
+//	shadowSceneSampleFBO.push_back(FrameBuffer::CreateFrameBuffer({ 512, 512, { FrameBufferFormat::Depth } }));
+//	shadowSceneSampleFBO.push_back(FrameBuffer::CreateFrameBuffer({ 512, 512, { FrameBufferFormat::Depth } }));
+//
+//	
+//	shadowSceneVAO->Bind();
+//	target->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(target->GetNumOfVertices() * sizeof(Vertex));
+//	target->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(target->GetNumOfIndices() * sizeof(int));
+//	plane->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(plane->GetNumOfVertices() * sizeof(Vertex));
+//	plane->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(plane->GetNumOfIndices() * sizeof(int));
+//	shadowSceneVAO->UnBind();
+//	AddObject(model);
+//	AddObject(planeModel);
+//
+//
+//
+
+//
+//	auto window = Application::Instance().GetWindow();
+//
+//	freeCam = FreeCamera(window->GetGLFWWindow(), get<0>(window->GetWidthAndHeight()), get<1>(window->GetWidthAndHeight()));
+//	freeCam.SetCamSpeed(0.15f);
+//	freeCam.SetPosition({ 0.f, 0.f, 5.f });
+//	freeCam.nearPlane = 0.1f;
+//	freeCam.farPlane = 100.f;
+//	light1 = FreeCamera(window->GetGLFWWindow(), get<0>(window->GetWidthAndHeight()), get<1>(window->GetWidthAndHeight()));
+//	light1.camFront = { -1.f, 0.f, 0.f };
+//	light1.SetPosition({ 3.f, 0.f, 0.f });
+//	light1.nearPlane = 0.1f;
+//	light1.farPlane = 100.f;
+//	light2 = FreeCamera(window->GetGLFWWindow(), get<0>(window->GetWidthAndHeight()), get<1>(window->GetWidthAndHeight()));
+//	light2.camFront = { 0.f, 0.f, -1.f };
+//	light2.SetPosition({ 0.f, 0.f, 3.f });
+//	light2.nearPlane = 0.1f;
+//	light2.farPlane = 100.f;
+//	freeCam.ComputeViewProjMats();
+//	light1.ComputeViewProjMats();
+//	light2.ComputeViewProjMats();
+//	controller = &freeCam;
 	glClearColor(0.3, 0.7, 0.3, 1.0);
 
 }
 
 void ShadowScene::Update()
 {
-	controller->Update();
+	/*controller->Update();
 	controller->ComputeViewProjMats();
 
 	VariableContainerType shadowSamplingVariables;
@@ -135,7 +171,7 @@ void ShadowScene::Update()
 		controller = &freeCam;
 	}
 
-	ImGui::End();
+	ImGui::End();*/
 }
 
 void ShadowScene::PostUpdate()

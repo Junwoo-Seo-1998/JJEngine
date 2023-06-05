@@ -20,7 +20,6 @@ glm::vec3 TransformComponent::GetUp() const
 	return glm::toMat4(glm::quat(Rotation)) * glm::vec4{ 0.f,1.f,0.f ,0.f };
 }
 
-
 glm::vec3 TransformComponent::GetForward() const
 {
 	return glm::toMat4(glm::quat(Rotation)) * glm::vec4{ 0.f,0.f,-1.f ,0.f };

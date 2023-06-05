@@ -1,7 +1,5 @@
 #include "EditorLayer.h"
-
 #include <glm/ext/matrix_clip_space.hpp>
-
 #include "glad.h"
 #include "imgui.h"
 #include "Core/ImGui/ImGuiRenderer.h"
@@ -16,7 +14,6 @@
 #include "Core/Component/TransformComponent.h"
 #include "Core/Entity/Entity.hpp"
 #include "Core/Graphics/Renderer/Renderer2D.h"
-
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
 
@@ -79,7 +76,7 @@ void EditorLayer::OnRender()
 
 	auto group=reg.group<TransformComponent, SpriteRendererComponent>();
 
-	for (auto entity:group)
+	for (auto entity : group)
 	{
 		auto [trans, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 		trans.Scale = {1.2,1.1,1 };

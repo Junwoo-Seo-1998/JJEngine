@@ -15,6 +15,8 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLInnerType() const
 		return GL_RGB8;
 	case TextureChannel::RGBA:
 		return GL_RGBA8;
+	case TextureChannel::RGBA32F:
+		return GL_RGBA32F;
 	case TextureChannel::Depth:
 		return GL_DEPTH24_STENCIL8;
 	default:
@@ -67,9 +69,20 @@ unsigned int Texture::GetTextureID() const
 	return m_TextureID;
 }
 
+unsigned int Texture::GetUnitID() const
+{
+	return m_UnitID;
+}
+
 void Texture::BindTexture(unsigned int unit)
 {
+	m_UnitID = unit;
 	glBindTextureUnit(unit, m_TextureID);
+}
+
+void Texture::UnBindTexture()
+{
+	glBindTextureUnit(m_UnitID, 0);
 }
 
 Texture::Texture(std::shared_ptr<TextureData> texture_data)

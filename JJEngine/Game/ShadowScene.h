@@ -1,21 +1,12 @@
 #pragma once
 #include "Core/Scene.h"
-#include "Core/Graphics/RenderingLayer.h"
+#include "Core/Graphics/Graphics.h"
 
 #include "Core/Graphics/VertexArray.h"
 #include "Core/Camera.h"
 #include "Core/Graphics/Shader.h"
 class ShadowScene : public Scene
 {
-	FreeCamera freeCam;
-	FreeCamera light1;
-	FreeCamera light2;
-	FreeCamera* controller;
-	RenderingLayer graphics;
-	std::shared_ptr<VertexArray> shadowSceneVAO;
-	std::vector<std::shared_ptr<FrameBuffer>> shadowSceneSampleFBO;
-	std::shared_ptr<Shader> shader;
-	std::shared_ptr<Shader> shadowShader;
 
 public:
 	virtual void Start() override;

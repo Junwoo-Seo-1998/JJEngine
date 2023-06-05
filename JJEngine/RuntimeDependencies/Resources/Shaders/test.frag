@@ -1,24 +1,32 @@
-#define MAX_LIGHTS 2
+uniform int MAX_SHADOW;
+uniform int MAX_LIGHTS;
+uniform int SIDES;
 
+struct ShadowMapInfo
+{
+    vec3 pos;
+    mat4 vp[SIDES];
+    uniform sampler2D shadowMaps[SIDES];
 
+}  
+uniform ShadowMapInfo info[MAX_LIGHTS];
 in vec3 vPos;
 in vec3 vNrm;
 in vec4 vToLighted[MAX_LIGHTS];
 uniform vec3 cam;
 uniform vec3 lights[MAX_LIGHTS];
-uniform sampler2D shadowMaps[MAX_LIGHTS];
 out vec4 FragColor;
 
 float CalcShadow(vec4 fragPosLightSpace, int lightIndex)
 {
-    // 그림자 맵에서 광원에 대한 텍스처 좌표를 계산
+
     vec3 shadowMapCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-    shadowMapCoords = shadowMapCoords * 0.5 + 0.5; // 좌표를 [0, 1] 범위로 매핑
+    shadowMapCoords = shadowMapCoords * 0.5 + 0.5; 
     
     float shadow = 0.0;
-    float bias = 0.001; // 그림자 맵의 정확성을 위한 바이어스 조절
+    float bias = 0.001; 
     
-    // 그림자 맵에서 광원에 대한 깊이 값을 가져와 그림자 여부를 계산
+ 
     float currentDepth = shadowMapCoords.z;
     float closestDepth = texture(shadowMaps[lightIndex], shadowMapCoords.xy).r;
     

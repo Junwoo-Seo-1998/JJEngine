@@ -92,9 +92,6 @@
     <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h">
       <Filter>Graphics\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Graphics\RenderingLayer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Graphics\Shader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -161,6 +158,18 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\Graphics\Graphics.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component\LightComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Renderer\Renderer.h">
+      <Filter>Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component\MaterialComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -189,9 +198,6 @@
     </ClCompile>
     <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp">
       <Filter>Graphics\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Graphics\RenderingLayer.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Shader.cpp">
       <Filter>Graphics</Filter>
@@ -246,5 +252,17 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Core\Graphics\Graphics.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\Renderer\Renderer.cpp">
+      <Filter>Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Component\MaterialComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Component\LightComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
