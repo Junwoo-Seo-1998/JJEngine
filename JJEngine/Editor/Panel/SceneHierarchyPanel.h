@@ -17,4 +17,5 @@ private:
 	bool isChildofClicked{false};
 	bool isDragging{false};
 	bool shouldChangeRelation{ false };
+	entt::entity shouldRemoveEntity{ entt::null };
 };
