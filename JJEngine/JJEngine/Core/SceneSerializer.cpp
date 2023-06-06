@@ -6,6 +6,7 @@
 #include "Core/Component/TransformComponent.h"
 #include "Core/Entity/RelationshipComponent.h"
 #include "Core/Utils/Log.h"
+#include "Component/SpriteRendererComponent.h"
 
 // Key values
 #define YM_SCENE "Scene"
@@ -21,6 +22,7 @@
 #define YM_PARENT "Parent"
 #define YM_CHILDREN "Children"
 #define YM_SPRITE "Sprite"
+#define YM_SPRITE_COLOR "SpriteColor"
 
 // Emitter macro
 #define YAML_KEY_VALUE(emitter, key, value) emitter<<YAML::Key<<key<<YAML::Value<<value;
@@ -49,6 +51,30 @@ namespace YAML {
 		}
 	};
 
+	Emitter& operator<<(Emitter& emitter, glm::vec4 v) {
+		return emitter << BeginSeq << v.x << v.y << v.z << v.w << EndSeq;
+	}
+
+	template<>
+	struct convert<glm::vec4> {
+		static Node encode(const glm::vec4& rhs) {
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			node.push_back(rhs.z);
+			node.push_back(rhs.w);
+			return node;
+		}
+		static bool decode(const Node& node, glm::vec4& rhs) {
+			if (!node.IsSequence() || node.size() != 4) return false;
+			rhs.x = node[0].as<float>();
+			rhs.y = node[1].as<float>();
+			rhs.z = node[2].as<float>();
+			rhs.w = node[3].as<float>();
+			return true;
+		}
+	};
+
 	Emitter& operator<<(Emitter& emitter, UUIDType v) {
 		return emitter << to_string(v);
 	}
@@ -72,6 +98,7 @@ namespace YAML {
 void SerializeEntity(YAML::Emitter& out, entt::entity ID, std::shared_ptr<Scene> scene);
 void DeserializeRelationship(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeTransform(YAML::iterator::value_type& transform_components, std::shared_ptr<Scene> scene);
+void DeserializeSprite(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeEntity(YAML::detail::iterator_value entity, std::shared_ptr<Scene> scene);
 
 SceneSerializer::SceneSerializer(std::shared_ptr<Scene> sc): scene(sc)
@@ -132,6 +159,14 @@ void SceneSerializer::Serialize(const std::string filePath)
 		{
 			out << YAML::Key << YM_SPRITE;
 			out << YAML::Value << YAML::BeginMap;
+			auto components = scene->m_Registry.view<SpriteRendererComponent>();
+			for (auto c : components)
+			{
+				Entity entity{ c,scene.get() };
+				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap)
+				YAML_KEY_VALUE(out, YM_SPRITE_COLOR, components.get<SpriteRendererComponent>(c).color)
+				out << YAML::EndMap;
+			}
 			out << YAML::EndMap;
 		}
 	}
@@ -168,6 +203,12 @@ bool SceneSerializer::Deserialize(const std::string filePath)
 		auto compos = components[YM_TRANSFORM];
 		for (auto c : compos) {
 			DeserializeTransform(c, scene);
+		}
+	}
+	{
+		auto compos = components[YM_SPRITE];
+		for (auto c : compos) {
+			DeserializeSprite(c, scene);
 		}
 	}
 
@@ -209,6 +250,11 @@ void DeserializeTransform(YAML::iterator::value_type& component, std::shared_ptr
 	entity.Transform().Position = pos;
 	entity.Transform().Rotation = rotation;
 	entity.Transform().Scale = scale;
+}
+void DeserializeSprite(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene) {
+	Entity entity = scene->GetEntity(component.first.as<UUIDType>());
+	glm::vec4 col{ component.second[YM_SPRITE_COLOR].as<glm::vec4>() };
+	entity.AddComponent<SpriteRendererComponent>(col);
 }
 void DeserializeEntity(YAML::detail::iterator_value entity, std::shared_ptr<Scene> scene) {
 	std::string name{ entity[YM_NAME].as<std::string>() };

@@ -1,0 +1,31 @@
+Scene: Default123
+Entities:
+  - Name: No Name
+    UUID: 5a757bdf-7b31-4cc6-9b0e-67cd6ecf52ff
+Components:
+  Relationship:
+    5a757bdf-7b31-4cc6-9b0e-67cd6ecf52ff:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+  Transform:
+    5a757bdf-7b31-4cc6-9b0e-67cd6ecf52ff:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+  Sprite:
+    5a757bdf-7b31-4cc6-9b0e-67cd6ecf52ff:
+      SpriteColor:
+        - 0.579150558
+        - 0.232554659
+        - 0.232554659
+        - 1
