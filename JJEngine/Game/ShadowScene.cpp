@@ -22,13 +22,13 @@ void ShadowScene::Start()
 
 	Entity light1 = CreateEntity("Light 1");
 	TransformComponent& lightTransform1 = light1.GetComponent<TransformComponent>();
-	lightTransform1.Position = { 3.f, 0.f, 0.f };
+	lightTransform1.Position = { 3.f, 2.f, 0.f };
 	lightTransform1.LookAtDir({-1.f, 0.f, 0.f});
 	light1.AddComponent<LightComponent>(LightComponent{});
 
 	Entity light2 = CreateEntity("Light 2");
 	TransformComponent& lightTransform2 = light2.GetComponent<TransformComponent>();
-	lightTransform2.Position = { 0.f, 0.f, 3.f };
+	lightTransform2.Position = { 0.f, 2.f, 3.f };
 	lightTransform2.LookAtDir({ 0.f, 0.f, -1.f });
 	light2.AddComponent<LightComponent>(LightComponent{});
 
@@ -56,8 +56,11 @@ void ShadowScene::Start()
 
 	Entity floor = CreateEntity("Floor");
 	floor.AddComponent<MaterialComponent>(forwardShadowMaterial);
+	TransformComponent& floorTransform = floor.GetComponent<TransformComponent>();
+	floorTransform.Position = { 0.f, -3.f, 0.f };	
+	floorTransform.Scale = { 10.f, 10.f, 10.f };
 	Model floorModel;
-	floorModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreatePlane(20, 20)));
+	floorModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreatePlane(10, 10)));
 	floor.AddComponent<Model>(floorModel);
 
 
@@ -110,7 +113,7 @@ void ShadowScene::Start()
 //	light1.ComputeViewProjMats();
 //	light2.ComputeViewProjMats();
 //	controller = &freeCam;
-	glClearColor(0.3, 0.7, 0.3, 1.0);
+	glClearColor(0, 0, 0, 0);
 
 }
 

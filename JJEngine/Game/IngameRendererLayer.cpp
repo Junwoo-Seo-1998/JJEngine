@@ -83,14 +83,14 @@ void IngameRendererLayer::OnRender()
 	auto cameraView = reg.view<CameraComponent>();
 	auto objectView = reg.view<Model>();
 	auto lightView = reg.view<LightComponent>();
-
+	int a = cameraView.size();
 	for (auto& cam : cameraView)
 	{
 		Entity camEntity(cam, active_scene.get());
 		auto& camera = camEntity.GetComponent<CameraComponent>();
 		auto& cameraTransform = camEntity.GetComponent<TransformComponent>();
 
-		glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.GetForward(), cameraTransform.GetUp());
+		glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.Position + cameraTransform.GetForward(), cameraTransform.GetUp());
 		for (auto& obj : objectView)
 		{
 			Entity objEntity(obj, active_scene.get());

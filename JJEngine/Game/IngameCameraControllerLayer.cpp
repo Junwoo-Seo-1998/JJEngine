@@ -27,8 +27,6 @@ void IngameCameraControllerLayer::OnDetach()
 
 void IngameCameraControllerLayer::OnStart()
 {
-	Entity entity = active_scene->CreateEntity();
-	entity.AddComponent<CameraComponent>(CameraComponent{true});
 }
 
 void IngameCameraControllerLayer::OnUpdate()
@@ -85,15 +83,15 @@ void MouseCamControl(TransformComponent& camT, double xpos, double ypos)
 	double xoffset = get<0>(Input::GetMouseOffset());
 	double yoffset = get<1>(Input::GetMouseOffset());
 
-	float sensitivity = 0.05f;
+	float sensitivity = 0.0005f;
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
-	camT.Rotation.z += static_cast<float>(xoffset);
-	camT.Rotation.y += static_cast<float>(yoffset);
+	camT.Rotation.y += static_cast<float>(xoffset);
+	camT.Rotation.x += static_cast<float>(yoffset);
 
-	if (camT.Rotation.y > glm::radians(89.0f))
-		camT.Rotation.y = glm::radians(89.0f);
-	if (camT.Rotation.y < glm::radians(-89.0f))
-		camT.Rotation.y = glm::radians(-89.0f);
+	//if (camT.Rotation.x > glm::radians(89.0f))
+	//	camT.Rotation.x = glm::radians(89.0f);
+	//if (camT.Rotation.x < glm::radians(-89.0f))
+	//	camT.Rotation.x = glm::radians(-89.0f);
 }
