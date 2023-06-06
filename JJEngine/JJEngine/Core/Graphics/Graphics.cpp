@@ -4,6 +4,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "Graphics.h"
 #include "Core/Component/LightComponent.h"
+#include <imgui.h>
 void Graphics::AddRenderCommand(CommandType commandType, const VariableContainerType& variables)
 {
 	RenderCommand renderCommand;
@@ -18,6 +19,7 @@ void Graphics::ExecuteRenderCommands() {
 
 	for (const auto& command : renderCommands) {
 		ExecutePreRenderCommand(command);
+
 		ExecuteRenderCommand(command);
 		ExecutePostRenderCommand(command);
 
@@ -122,6 +124,18 @@ void Graphics::ShadowSampling(RenderCommand command)
 	
 
 	int bindNumber = 0;
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, resolution.x, resolution.y);
+	glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(polygonOffset.x, polygonOffset.y);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	ImGui::Begin("shadow");
 	for (auto l : lights)
 	{
 		switch (l.type)
@@ -130,16 +144,8 @@ void Graphics::ShadowSampling(RenderCommand command)
 		{
 			for (auto vp : l.toLightVP)
 			{
-				shadowMapFBO->Bind();
-				glClear(GL_DEPTH_BUFFER_BIT);
-				glViewport(0, 0, resolution.x, resolution.y);
-				glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
-				glEnable(GL_POLYGON_OFFSET_FILL);
-				glPolygonOffset(polygonOffset.x, polygonOffset.y);
-				glEnable(GL_CULL_FACE);
-				glCullFace(GL_FRONT);
-				glDrawBuffer(GL_NONE);
-				glReadBuffer(GL_NONE);
+				shadowMapFBO->Bind(false);
+
 				shadowSamplingShader->Use();
 				shadowSamplingShader->SetMat4("toWorld", toWorld);
 				shadowSamplingShader->SetMat4("toLight", vp);
@@ -160,36 +166,42 @@ void Graphics::ShadowSampling(RenderCommand command)
 					mesh->GetMeshVBO()->BindToVertexArray();
 					glDrawElements(GL_TRIANGLES, mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
 				}
-				/*shadowMapFBO->GetDepthTexture()->BindTexture(bindNumber++);*/
 
+				std::shared_ptr<Texture> currentSample = Texture ::CopyTexture(shadowMapFBO->GetDepthTexture());
+				
+				const ImVec2 size{ 240,120 };
+				currentSample->BindTexture(bindNumber);
+				ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(currentSample->GetTextureID())), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+		
+				bindNumber++;
 				auto find = std::find_if(shadows.begin(), shadows.end(), [=](shadowInfoByLight target) {return target.first == l.toLightpos; });
 				if (find == shadows.end()) // not found
 				{
 					shadows.push_back(shadowInfoByLight{ l.toLightpos, std::tuple<std::vector<glm::mat4>,std::vector<std::shared_ptr<Texture>>>{} });
 					get<0>(shadows.back().second).push_back(vp);
-					get<1>(shadows.back().second).push_back(shadowMapFBO->GetDepthTexture());
+					get<1>(shadows.back().second).push_back(currentSample);
 				}
 				else // fouond
 				{
 					get<0>(find->second).push_back(vp);
-					get<1>(find->second).push_back(shadowMapFBO->GetDepthTexture());
-
+					get<1>(find->second).push_back(currentSample);
 				}
 				shadowMapFBO->UnBind();
-				const std::tuple<int, int> viewportSize = Application::Instance().GetWindow()->GetWidthAndHeight();
-				glBindFramebuffer(GL_FRAMEBUFFER, 0);
-				glViewport(0, 0, get<0>(viewportSize), get<1>(viewportSize));
-				glClear(GL_DEPTH_BUFFER_BIT);
-				glDisable(GL_CULL_FACE);
-				glDisable(GL_POLYGON_OFFSET_FILL);
-				glDrawBuffer(GL_BACK);
-				glReadBuffer(GL_BACK);
+
 			}
 		}
 		break;
 		}
 	}
+	ImGui::End();
 
+	const std::tuple<int, int> viewportSize = Application::Instance().GetWindow()->GetWidthAndHeight();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, get<0>(viewportSize), get<1>(viewportSize));
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_POLYGON_OFFSET_FILL);
+	glDrawBuffer(GL_BACK);
+	glReadBuffer(GL_BACK);
 }
 
 void Graphics::ForwardDrawWithShadow(RenderCommand command)

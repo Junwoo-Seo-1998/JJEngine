@@ -39,6 +39,7 @@ struct TextureData
 class Texture
 {
 public:
+	static std::shared_ptr<Texture> CopyTexture(std::shared_ptr<Texture> texture);
 	static std::shared_ptr<Texture> CreateTexture(std::shared_ptr<TextureData> texture_data);
 	static std::shared_ptr<Texture> CreateTexture(const TextureData& texture_data);
 	virtual ~Texture();
@@ -52,8 +53,14 @@ public:
 private:
 	Texture(std::shared_ptr<TextureData> texture_data);
 	Texture(const TextureData& texture_data);
+	Texture(std::shared_ptr<Texture> texture_data);
+
 	int m_Width;
 	int m_Height;
+	TextureChannelData m_TextureChannel;
+
+
 	unsigned int m_TextureID;
 	unsigned int m_UnitID;
+
 };

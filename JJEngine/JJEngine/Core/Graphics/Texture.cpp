@@ -43,6 +43,10 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLType() const
 	return 0;
 }
 
+std::shared_ptr<Texture> Texture::CopyTexture(std::shared_ptr<Texture> texture)
+{
+	return std::shared_ptr<Texture>(new Texture{ texture });
+}
 
 std::shared_ptr<Texture> Texture::CreateTexture(std::shared_ptr<TextureData> texture_data)
 {
@@ -86,7 +90,7 @@ void Texture::UnBindTexture()
 }
 
 Texture::Texture(std::shared_ptr<TextureData> texture_data)
-	:m_Width(texture_data->width), m_Height(texture_data->height)
+	:m_Width(texture_data->width), m_Height(texture_data->height), m_TextureChannel(texture_data->channel)
 {
 	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
 	
@@ -106,7 +110,7 @@ Texture::Texture(std::shared_ptr<TextureData> texture_data)
 }
 
 Texture::Texture(const TextureData& texture_data)
-	:m_Width(texture_data.width), m_Height(texture_data.height)
+	:m_Width(texture_data.width), m_Height(texture_data.height), m_TextureChannel(texture_data.channel)
 {
 	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
 
@@ -126,3 +130,20 @@ Texture::Texture(const TextureData& texture_data)
 }
 
 
+
+Texture::Texture(std::shared_ptr<Texture> texture)
+	:m_Width(texture->m_Width), m_Height(texture->m_Height), m_TextureChannel(texture->m_TextureChannel)
+{
+	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
+
+	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glBindTexture(GL_TEXTURE_2D, m_TextureID);
+
+	glTextureStorage2D(m_TextureID, 1, texture->m_TextureChannel.TextureChannelTypeToOpenGLInnerType(), m_Width, m_Height);
+	glCopyImageSubData(texture->GetTextureID(), GL_TEXTURE_2D, 0, 0, 0, 0, m_TextureID, GL_TEXTURE_2D, 0, 0, 0, 0, m_Width, m_Height, 1);
+}
