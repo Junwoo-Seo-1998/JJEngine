@@ -5,7 +5,7 @@ struct CameraComponent
 {
 public:
 	//radian!! use glm::radians (degree)
-	float cam_speed = 1.f;
+	float cam_speed = 0.1f;
 	float Fov_y = glm::radians(45.f);
 	float Aspect_ratio = 1.0f;
 	float Near = 1.0f;

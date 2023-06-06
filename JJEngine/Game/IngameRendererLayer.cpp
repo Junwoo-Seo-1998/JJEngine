@@ -20,7 +20,7 @@
 #include "Core/Component/TransformComponent.h"
 
 #include "Core/Window.h"
-
+#include "ShadowScene.h"
 
 IngameRendererLayer::~IngameRendererLayer()
 {
@@ -28,10 +28,10 @@ IngameRendererLayer::~IngameRendererLayer()
 
 void IngameRendererLayer::OnAttach()
 {
+	active_scene = sc;
 	const glm::uvec2 shadowResolution{ 512, 512 };
 	auto window = Application::Instance().GetWindow();
 	Log::Info("Ingame Renderer Layer Added");
-	active_scene = std::make_shared<Scene>();
 	//for testing
 	renderer_vao = VertexArray::CreateVertexArray();
 	//Position, Normal, Ambient, Diffuse, Specular 
@@ -48,6 +48,7 @@ void IngameRendererLayer::OnDetach()
 
 void IngameRendererLayer::OnStart()
 {
+
 	auto& reg = active_scene->GetRegistry();
 
 	auto view = reg.view<Model>();
@@ -66,6 +67,7 @@ void IngameRendererLayer::OnStart()
 
 void IngameRendererLayer::OnUpdate()
 {
+
 	//get something from scene
 }
 
@@ -81,14 +83,14 @@ void IngameRendererLayer::OnRender()
 	auto cameraView = reg.view<CameraComponent>();
 	auto objectView = reg.view<Model>();
 	auto lightView = reg.view<LightComponent>();
-
+	int a = cameraView.size();
 	for (auto& cam : cameraView)
 	{
 		Entity camEntity(cam, active_scene.get());
 		auto& camera = camEntity.GetComponent<CameraComponent>();
 		auto& cameraTransform = camEntity.GetComponent<TransformComponent>();
 
-		glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.GetForward(), cameraTransform.GetUp());
+		glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.Position + cameraTransform.GetForward(), cameraTransform.GetUp());
 		for (auto& obj : objectView)
 		{
 			Entity objEntity(obj, active_scene.get());
@@ -101,7 +103,9 @@ void IngameRendererLayer::OnRender()
 			Renderer::SetMaterial(material);
 			Renderer::SetVAO(renderer_vao);
 			Renderer::SetShadowBuffer(shadow_buffer);
+			Renderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
 			Renderer::SetTransform(transform);
+
 			for (auto& light : lightView)
 			{
 				Entity lightEntity(light, active_scene.get());
@@ -117,6 +121,7 @@ void IngameRendererLayer::OnRender()
 
 void IngameRendererLayer::OnPostRender()
 {
+	Renderer::DrawAllScene();
 }
 
 void IngameRendererLayer::OnImGuiRender()

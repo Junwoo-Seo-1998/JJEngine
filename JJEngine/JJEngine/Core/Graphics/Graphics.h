@@ -52,7 +52,16 @@ public:
 
 	void ExecuteRenderCommands();
 
+	void ExecutePreRenderCommand(RenderCommand command);
 	void ExecuteRenderCommand(RenderCommand command);
+	void ExecutePostRenderCommand(RenderCommand command);
+
 private:
 	std::vector<RenderCommand> renderCommands;
+
+	using shadowInfoByLight = std::pair<glm::vec3, std::tuple<std::vector<glm::mat4>, std::vector<std::shared_ptr<Texture>>>>;
+	std::vector<shadowInfoByLight> shadows;
+private:
+	void ShadowSampling(RenderCommand command);
+	void ForwardDrawWithShadow(RenderCommand command);
 };

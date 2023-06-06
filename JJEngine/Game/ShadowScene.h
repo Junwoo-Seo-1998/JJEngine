@@ -21,3 +21,5 @@ private:
 	std::vector<Model> objectGroups;
 
 };
+
+inline std::shared_ptr<ShadowScene> sc;
