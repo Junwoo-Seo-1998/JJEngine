@@ -25,7 +25,7 @@ void SceneHierarchyPanel::DrawEntityTree(entt::entity entityID)
 	Entity entity{ entityID, scene.get() };
 	std::vector<UUIDType>& child = entity.GetChildrenUUID();
 	ImGuiTreeNodeFlags flag{ child.empty() ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow};
-	auto& name = entity.Name();
+	auto name = entity.Name()+"##"+ std::to_string((unsigned)entityID);
 	bool opened = ImGui::TreeNodeEx(name.c_str(), flag);
 	bool isHovered{ ImGui::IsItemHovered()};
 	if (ImGui::IsItemClicked()) {
