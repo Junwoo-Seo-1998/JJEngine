@@ -269,6 +269,11 @@ Entity Scene::CreateEntityWithUUID(UUIDType uuid, const std::string& name, bool 
 	return entity;
 }
 
+void Scene::DestroyEntity(Entity entity, bool excludeChildren)
+{
+	DestroyEntityHelper(entity, excludeChildren, true);
+}
+
 Entity Scene::GetEntity(UUIDType uuid) const
 {
 	ENGINE_ASSERT(m_entity_map.find(uuid) != m_entity_map.end(), "There is no entity with given UUID");
@@ -350,4 +355,34 @@ void Scene::SortEntityMap()
 		auto rightEntity = m_entity_map.find(right.UUID);
 		return leftEntity->second < rightEntity->second;
 	});
+}
+
+
+void Scene::DestroyEntityHelper(Entity entity, bool excludeChildren, bool first)
+{
+	if (!entity)
+		return;
+
+	if (!excludeChildren)
+	{
+		//have to get children vector everytime since we use entt, it will move memory when we delete
+		for (size_t i = 0; i < entity.GetChildrenUUID().size(); i++)
+		{
+			auto childId = entity.GetChildrenUUID()[i];
+			Entity child = GetEntity(childId);
+			DestroyEntityHelper(child, excludeChildren, false);
+		}
+	}
+
+	if (first)
+	{
+		auto parent = entity.GetParent();
+		if (parent)
+			parent.RemoveChild(entity);
+	}
+
+	m_entity_map.erase(entity.GetUUID());
+	m_Registry.destroy(entity.m_EntityHandle);
+
+	SortEntityMap();
 }

@@ -119,7 +119,8 @@ void SceneHierarchyPanel::OnImGuiRender()
 	if (shouldRemoveEntity != entt::null && ImGui::BeginPopupContextWindow("Entity option"))
 	{
 		if (ImGui::Button("Remove")) { // will change into event-driven
-			scene->m_Registry.destroy(shouldRemoveEntity);
+			scene->DestroyEntity(Entity{ shouldRemoveEntity, scene.get() });
+			setSelectedEntity(entt::null);//jun: don't forget
 			shouldRemoveEntity = entt::null;
 			ImGui::CloseCurrentPopup();
 		}

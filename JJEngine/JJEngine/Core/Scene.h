@@ -50,6 +50,8 @@ public:
 	Entity CreateEntity(const std::string& name = "No Name");
 	Entity CreateEntityWithUUID(UUIDType uuid, const std::string& name = "No Name", bool sort = true);
 
+	void DestroyEntity(Entity entity, bool excludeChildren = false);
+
 	Entity GetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(UUIDType uuid) const;
 	Entity TryGetEntity(const std::string& name);
@@ -85,6 +87,7 @@ public:
 
 protected:
 	void SortEntityMap();
+	void DestroyEntityHelper(Entity entity, bool excludeChildren = false, bool first = true);
 
 	unsigned int m_ViewportWidth = 0, m_ViewportHeight = 0;
 
