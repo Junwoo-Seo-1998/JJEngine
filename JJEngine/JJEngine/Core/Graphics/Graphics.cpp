@@ -41,6 +41,7 @@ void Graphics::ExecuteRenderCommand(RenderCommand command)
 
 		VAO->Bind();
 		ForwardShader->Use();
+		ForwardShader->SetInt("current_lights", lights.size());
 		ForwardShader->SetMat4("toWorld", toWorld);
 		ForwardShader->SetMat4("forNrm", glm::transpose(glm::inverse(toWorld)));
 		ForwardShader->SetMat4("toVP", toVP);
@@ -158,26 +159,30 @@ void Graphics::ExecuteRenderCommand(RenderCommand command)
 
 		VAO->Bind();
 
-		const int max_lights = shadows.size();
 		int i = 0;
 		for (auto s : shadows)
 		{
+			const int sideNumber = get<0>(s.second).size();
+
 			ForwardShader->Use();
+			ForwardShader->SetInt("current_lights", lightsNumber);
+			ForwardShader->SetInt("current_side", sideNumber);
+
 			ForwardShader->SetMat4("toWorld", toWorld);
 			ForwardShader->SetMat4("forNrm", glm::transpose(glm::inverse(toWorld)));
 			ForwardShader->SetMat4("toVP", toVP);
 
-			std::string posName = "info[" + std::to_string(i) + "].pos";
+			std::string posName = "sampleInfo[" + std::to_string(i) + "].pos";
 			ForwardShader->SetFloat3(posName, s.first);
 
-			const int sides = get<0>(s.second).size();
 
-			std::string vpName = "info[" + std::to_string(i) + "].vp[0]";
+			std::string vpName = "sampleInfo[" + std::to_string(i) + "].vp[0]";
 			ForwardShader->SetMatVector4(vpName, get<0>(s.second));
 
+			const int sides = get<0>(s.second).size();
 			for (int j = 0; j < sides; j++)
 			{
-				ForwardShader->SetInt("shadowMaps[" + std::to_string(j) + "]", get<1>(s.second)[j]->GetUnitID());
+				ForwardShader->SetInt("sampleInfo[" + std::to_string(i) + "].shadowMaps[" + std::to_string(j) + "]", get<1>(s.second)[j]->GetUnitID());
 			}
 
 			for (const auto& mesh : model.GetMeshes())

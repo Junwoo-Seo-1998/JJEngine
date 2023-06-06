@@ -22,8 +22,9 @@ public:
 	static void SetVAO(std::shared_ptr<VertexArray> VAO);
 	static void SetGBuffer(std::shared_ptr<FrameBuffer> FBO);
 	static void SetShadowBuffer (const std::shared_ptr<FrameBuffer>& FBO);
+	static void SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset);
 	static void EndScene();
-
+	static void DrawAllScene();
 };
 
 //begin에서 커맨드 타입 정하고 end에서 커맨드 추가

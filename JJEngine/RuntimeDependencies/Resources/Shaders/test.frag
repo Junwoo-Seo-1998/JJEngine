@@ -1,26 +1,28 @@
-uniform int MAX_SHADOW;
-uniform int MAX_LIGHTS;
-uniform int SIDES;
+#define MAX_LIGHTS 16
+#define SIDES 6
+
+uniform int current_side;
+uniform int current_lights;
 
 struct ShadowMapInfo
 {
-    vec3 pos;
     mat4 vp[SIDES];
-    uniform sampler2D shadowMaps[SIDES];
+    vec3 pos;
+    sampler2D shadowMaps[SIDES];
+};
 
-}  
-uniform ShadowMapInfo info[MAX_LIGHTS];
+uniform ShadowMapInfo sampleInfo[MAX_LIGHTS];
+
 in vec3 vPos;
 in vec3 vNrm;
-in vec4 vToLighted[MAX_LIGHTS];
+
 uniform vec3 cam;
-uniform vec3 lights[MAX_LIGHTS];
 out vec4 FragColor;
 
-float CalcShadow(vec4 fragPosLightSpace, int lightIndex)
+float CalcShadow(int lightIndex, int sideIndex)
 {
-
-    vec3 shadowMapCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    vec4 lighted = sampleInfo[lightIndex].vp[sideIndex] * vec4(vPos, 1.f);
+    vec3 shadowMapCoords = lighted.xyz / lighted.w;
     shadowMapCoords = shadowMapCoords * 0.5 + 0.5; 
     
     float shadow = 0.0;
@@ -28,7 +30,7 @@ float CalcShadow(vec4 fragPosLightSpace, int lightIndex)
     
  
     float currentDepth = shadowMapCoords.z;
-    float closestDepth = texture(shadowMaps[lightIndex], shadowMapCoords.xy).r;
+    float closestDepth = texture(sampleInfo[lightIndex].shadowMaps[sideIndex], shadowMapCoords.xy).r;
     
     shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
     
@@ -38,9 +40,9 @@ float CalcShadow(vec4 fragPosLightSpace, int lightIndex)
 void main()
 {
     vec3 finalColor = {0.f, 0.f, 0.f};
-     for(int i = 0; i < 2; i++)
+     for(int i = 0; i < current_lights; i++)
     {
-        vec3 lightDir = normalize(lights[i] - vPos);
+        vec3 lightDir = normalize(sampleInfo[i].pos - vPos);
         vec3 viewDir = normalize(cam - vPos);
         vec3 normal = normalize(vNrm);
         
@@ -51,7 +53,12 @@ void main()
         
         vec3 ambient = ambientStrength * vec3(1.0, 1.0, 1.0);
         vec3 diffuse = diffuseStrength * max(dot(normal, lightDir), 0.0) * vec3(1.0, 1.0, 1.0);
-        float shadow = CalcShadow(vToLighted[i], i);
+        float shadow = 1.f;
+        
+        for(int j = 0; j < current_side; j++)
+        {
+            shadow = min(shadow, CalcShadow(i, j));
+        }
         
         vec3 reflectDir = reflect(lightDir, normal);
         vec3 specular = specularStrength * pow(max(dot(viewDir, reflectDir), 0.0), shininess) * vec3(1.0, 1.0, 1.0);

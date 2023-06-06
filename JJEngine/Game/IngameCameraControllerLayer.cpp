@@ -5,6 +5,9 @@
 #include "Core/Entity/Entity.hpp"
 #include "Core/Component/CameraComponent.h"
 #include "Core/Component/TransformComponent.h"
+#include "ShadowScene.h"
+
+
 void MouseCamControl(TransformComponent& camT, double xpos, double ypos);
 
 IngameCameraControllerLayer::~IngameCameraControllerLayer()
@@ -13,7 +16,9 @@ IngameCameraControllerLayer::~IngameCameraControllerLayer()
 
 void IngameCameraControllerLayer::OnAttach()
 {
-	active_scene = std::make_shared<Scene>();
+	sc = std::make_shared<ShadowScene>();
+	active_scene = sc;
+	active_scene->Start();
 }
 
 void IngameCameraControllerLayer::OnDetach()

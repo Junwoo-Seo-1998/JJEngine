@@ -49,6 +49,7 @@ void Renderer::AddAffectLight(const LightComponent& light, TransformComponent li
 		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 
 		lights.push_back({ light.type, toLightVP , lightTransform.Position });
+		toLightVP.clear();
 	}
 	break;
 	}
@@ -84,11 +85,22 @@ void Renderer::SetShadowBuffer(const std::shared_ptr<FrameBuffer>& FBO)
 	command.variables["ShadowMapFBO"] = FBO;
 }
 
+void Renderer::SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset)
+{
+	command.variables["Shadow Resolution"] = resolution;
+	command.variables["Polygon Offset"] = zOffset;
+}
+
 
 void Renderer::EndScene()
 {
 	command.variables["Lights"] = lights;
 	Graphics::GetInstance()->AddRenderCommand(command.commandType, command.variables);
+	lights.clear();
+}
 
+void Renderer::DrawAllScene()
+{
+	Graphics::GetInstance()->ExecuteRenderCommands();
 }
 
