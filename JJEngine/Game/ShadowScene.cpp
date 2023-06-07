@@ -113,7 +113,7 @@ void ShadowScene::Start()
 //	light1.ComputeViewProjMats();
 //	light2.ComputeViewProjMats();
 //	controller = &freeCam;
-	glClearColor(0, 0, 0, 0);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 }
 

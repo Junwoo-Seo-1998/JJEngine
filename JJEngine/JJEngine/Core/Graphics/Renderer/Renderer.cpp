@@ -15,7 +15,8 @@
 static RenderCommand command{};
 static std::vector<glm::mat4> toLightVP;
 static std::vector<LightInfo> lights;
- 
+static std::vector<ModelInfo> models;
+
 
 
 
@@ -24,9 +25,9 @@ void Renderer::BeginScene(const glm::mat4& viewProjection)
 	command.variables["toVP"] = viewProjection;
 }
 
-void Renderer::SetModel(const Model& model)
+void Renderer::AddModel(const Model& model, const TransformComponent& transform)
 {
-	command.variables["Model"] = model;
+	models.push_back({ model, transform.GetTransform() });
 }
 
 void Renderer::AddAffectLight(const LightComponent& light, TransformComponent lightTransform)
@@ -53,11 +54,6 @@ void Renderer::AddAffectLight(const LightComponent& light, TransformComponent li
 	}
 	break;
 	}
-}
-
-void Renderer::SetTransform(const TransformComponent& transform)
-{
-	command.variables["toWorld"] = transform.GetTransform();
 }
 
 void Renderer::SetMaterial(const MaterialComponent& material)
@@ -95,8 +91,10 @@ void Renderer::SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset)
 void Renderer::EndScene()
 {
 	command.variables["Lights"] = lights;
+	command.variables["Model"] = models;
 	Graphics::GetInstance()->AddRenderCommand(command.commandType, command.variables);
 	lights.clear();
+	models.clear();
 }
 
 void Renderer::DrawAllScene()

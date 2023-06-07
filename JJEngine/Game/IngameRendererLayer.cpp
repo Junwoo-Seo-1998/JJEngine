@@ -84,27 +84,29 @@ void IngameRendererLayer::OnRender()
 	auto objectView = reg.view<Model>();
 	auto lightView = reg.view<LightComponent>();
 	int a = cameraView.size();
+
+
 	for (auto& cam : cameraView)
 	{
 		Entity camEntity(cam, active_scene.get());
 		auto& camera = camEntity.GetComponent<CameraComponent>();
 		auto& cameraTransform = camEntity.GetComponent<TransformComponent>();
+		const glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.Position + cameraTransform.GetForward(), cameraTransform.GetUp());
 
-		glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.Position + cameraTransform.GetForward(), cameraTransform.GetUp());
 		for (auto& obj : objectView)
 		{
 			Entity objEntity(obj, active_scene.get());
 			auto& transform = objEntity.GetComponent<TransformComponent>();
 			auto& model = objEntity.GetComponent<Model>();
 			auto& material = objEntity.GetComponent<MaterialComponent>();
-
 			Renderer::BeginScene(camVP);
-			Renderer::SetModel(model);
-			Renderer::SetMaterial(material);
 			Renderer::SetVAO(renderer_vao);
 			Renderer::SetShadowBuffer(shadow_buffer);
 			Renderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
-			Renderer::SetTransform(transform);
+
+			Renderer::AddModel(model, transform);
+			Renderer::SetMaterial(material);
+
 
 			for (auto& light : lightView)
 			{
@@ -114,7 +116,9 @@ void IngameRendererLayer::OnRender()
 				Renderer::AddAffectLight(light, lightTransform);
 			}
 			Renderer::EndScene();
+
 		}
+
 	}
 
 }
