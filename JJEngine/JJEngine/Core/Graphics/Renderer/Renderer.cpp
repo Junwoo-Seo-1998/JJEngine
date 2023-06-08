@@ -37,17 +37,17 @@ void Renderer::AddAffectLight(const LightComponent& light, TransformComponent li
 	case LightType::Point:
 	{
 		lightTransform.LookAtDir({1.f, 0.f, 0.f});
-		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.Position + lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 		lightTransform.LookAtDir({ -1.f, 0.f, 0.f });
-		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.Position + lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 		lightTransform.LookAtDir({ 0.f, 1.f, 0.f });
-		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.Position + lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 		lightTransform.LookAtDir({ 0.f, -1.f, 0.f });
-		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.Position + lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 		lightTransform.LookAtDir({ 0.f, 0.f, 1.f });
-		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.Position + lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 		lightTransform.LookAtDir({ 0.f, 0.f, -1.f });
-		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, lightTransform.Position + lightTransform.GetForward(), lightTransform.GetUp()));
+		toLightVP.push_back( light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, lightTransform.GetForward(), lightTransform.GetUp()));
 
 		lights.push_back({ light.type, toLightVP , lightTransform.Position });
 		toLightVP.clear();

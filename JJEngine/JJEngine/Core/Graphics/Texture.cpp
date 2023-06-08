@@ -142,8 +142,6 @@ Texture::Texture(std::shared_ptr<Texture> texture)
 	glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glBindTexture(GL_TEXTURE_2D, m_TextureID);
-
 	glTextureStorage2D(m_TextureID, 1, texture->m_TextureChannel.TextureChannelTypeToOpenGLInnerType(), m_Width, m_Height);
-	glCopyImageSubData(texture->GetTextureID(), GL_TEXTURE_2D, 0, 0, 0, 0, m_TextureID, GL_TEXTURE_2D, 0, 0, 0, 0, m_Width, m_Height, 1);
+	glCopyTextureSubImage2D(texture->GetTextureID(), GL_TEXTURE_2D, 0, 0, 0, 0, m_Width, m_Height);
 }
