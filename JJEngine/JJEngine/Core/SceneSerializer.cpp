@@ -7,6 +7,9 @@
 #include "Core/Entity/RelationshipComponent.h"
 #include "Core/Utils/Log.h"
 #include "Component/SpriteRendererComponent.h"
+#include "Component/CameraComponent.h"
+#include "Component/RigidBody2DComponent.h"
+#include "Component/BoxCollider2DComponent.h"
 
 // Key values
 #define YM_SCENE "Scene"
@@ -23,12 +26,41 @@
 #define YM_CHILDREN "Children"
 #define YM_SPRITE "Sprite"
 #define YM_SPRITE_COLOR "SpriteColor"
+#define YM_CAMERA "Camera"
+#define YM_CAMERAVALUES "CameraValues"
+#define YM_CAMERABOOLS "CameraBools"
+#define YM_RIGIDBODY_2D "RigidBody2D"
+#define YM_RIGIDBODY_2D_TYPE "RigidBody2DType"
+#define YM_RIGIDBODY_2D_BOOL "RigidBody2DBool"
+#define YM_BOXCOLLIDER_2D "BoxCollider2D"
+#define YM_BOXCOLLIDER_2D_2DVALUES "BoxCollider2D_2DValues"
+#define YM_BOXCOLLIDER_2D_1DVALUES "BoxCollider2D_1DValues"
 
 // Emitter macro
-#define YAML_KEY_VALUE(emitter, key, value) emitter<<YAML::Key<<key<<YAML::Value<<value;
+#define YAML_KEY_VALUE(emitter, key, value) emitter<<YAML::Key<<key<<YAML::Value<<value
 
 // YAML Implement
 namespace YAML {
+	Emitter& operator<<(Emitter& emitter, glm::vec2 v) {
+		return emitter << BeginSeq << v.x << v.y << EndSeq;
+	}
+
+	template<>
+	struct convert<glm::vec2> {
+		static Node encode(const glm::vec2& rhs) {
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			return node;
+		}
+		static bool decode(const Node& node, glm::vec2& rhs) {
+			if (!node.IsSequence() || node.size() != 2) return false;
+			rhs.x = node[0].as<float>();
+			rhs.y = node[1].as<float>();
+			return true;
+		}
+	};
+
 	Emitter& operator<<(Emitter& emitter, glm::vec3 v) {
 		return emitter << BeginSeq << v.x << v.y << v.z << EndSeq;
 	}
@@ -99,6 +131,9 @@ void SerializeEntity(YAML::Emitter& out, entt::entity ID, std::shared_ptr<Scene>
 void DeserializeRelationship(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeTransform(YAML::iterator::value_type& transform_components, std::shared_ptr<Scene> scene);
 void DeserializeSprite(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
+void DeserializeCamera(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
+void DeserializeRidgidBody2D(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
+void DeserializeBox2D(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeEntity(YAML::detail::iterator_value entity, std::shared_ptr<Scene> scene);
 
 SceneSerializer::SceneSerializer(std::shared_ptr<Scene> sc): scene(sc)
@@ -129,9 +164,9 @@ void SceneSerializer::Serialize(const std::string filePath)
 			for (auto c : components)
 			{
 				Entity entity{ c,scene.get() };
-				YAML_KEY_VALUE(out, entity.GetUUID(), YAML::BeginMap)
-					YAML_KEY_VALUE(out, YM_PARENT, entity.GetParentUUID())
-					YAML_KEY_VALUE(out, YM_CHILDREN, YAML::BeginSeq)
+				YAML_KEY_VALUE(out, entity.GetUUID(), YAML::BeginMap);
+				YAML_KEY_VALUE(out, YM_PARENT, entity.GetParentUUID());
+				YAML_KEY_VALUE(out, YM_CHILDREN, YAML::BeginSeq);
 					auto& children = entity.GetChildrenUUID();
 				for (auto& id : children) {
 					out << id;
@@ -148,10 +183,10 @@ void SceneSerializer::Serialize(const std::string filePath)
 			for (auto c : components)
 			{
 				Entity entity{ c,scene.get() };
-				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap)
-					YAML_KEY_VALUE(out, YM_POSITION, entity.Transform().Position)
-					YAML_KEY_VALUE(out, YM_ROTATION, entity.Transform().Rotation)
-					YAML_KEY_VALUE(out, YM_SCALE, entity.Transform().Scale)
+				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap);
+				YAML_KEY_VALUE(out, YM_POSITION, entity.Transform().Position);
+				YAML_KEY_VALUE(out, YM_ROTATION, entity.Transform().Rotation);
+				YAML_KEY_VALUE(out, YM_SCALE, entity.Transform().Scale);
 					out << YAML::EndMap;
 			}
 			out << YAML::EndMap;
@@ -163,8 +198,57 @@ void SceneSerializer::Serialize(const std::string filePath)
 			for (auto c : components)
 			{
 				Entity entity{ c,scene.get() };
-				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap)
-				YAML_KEY_VALUE(out, YM_SPRITE_COLOR, components.get<SpriteRendererComponent>(c).color)
+				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap);
+				YAML_KEY_VALUE(out, YM_SPRITE_COLOR, components.get<SpriteRendererComponent>(c).color);
+				out << YAML::EndMap;
+			}
+			out << YAML::EndMap;
+		}
+		{
+			out << YAML::Key << YM_CAMERA;
+			out << YAML::Value << YAML::BeginMap;
+			auto components = scene->m_Registry.view<CameraComponent>();
+			for (auto c : components)
+			{
+				Entity entity{ c,scene.get() };
+				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap);
+				CameraComponent& cacom = components.get<CameraComponent>(c);
+				YAML_KEY_VALUE(out, YM_CAMERAVALUES, YAML::BeginSeq);
+				out << cacom.cam_speed << cacom.Fov_y << cacom.Aspect_ratio << cacom.Near << cacom.Far << YAML::EndSeq;
+				YAML_KEY_VALUE(out, YM_CAMERABOOLS, YAML::BeginSeq);
+				out << cacom.main_cam << cacom.IsMainCamera << YAML::EndSeq;
+				out << YAML::EndMap;
+			}
+			out << YAML::EndMap;
+		}
+		{
+			out << YAML::Key << YM_RIGIDBODY_2D;
+			out << YAML::Value << YAML::BeginMap;
+			auto components = scene->m_Registry.view<RigidBody2DComponent>();
+			for (auto c : components)
+			{
+				Entity entity{ c,scene.get() };
+				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap);
+				YAML_KEY_VALUE(out, YM_RIGIDBODY_2D_TYPE, static_cast<int>(components.get<RigidBody2DComponent>(c).Type));
+				YAML_KEY_VALUE(out, YM_RIGIDBODY_2D_BOOL, components.get<RigidBody2DComponent>(c).FixedRotation);
+				out << YAML::EndMap;
+			}
+			out << YAML::EndMap;
+		}
+		{
+			out << YAML::Key << YM_BOXCOLLIDER_2D;
+			out << YAML::Value << YAML::BeginMap;
+			auto components = scene->m_Registry.view<BoxCollider2DComponent>();
+			for (auto c : components)
+			{
+				Entity entity{ c,scene.get() };
+				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap);
+				BoxCollider2DComponent& bocom = components.get<BoxCollider2DComponent>(c);
+				YAML_KEY_VALUE(out, YM_BOXCOLLIDER_2D_2DVALUES, YAML::BeginSeq);
+				out << bocom.Offset << bocom.Size << YAML::EndSeq;
+				YAML_KEY_VALUE(out, YM_BOXCOLLIDER_2D_1DVALUES, YAML::BeginSeq);
+				out << bocom.Density << bocom.Friction << bocom.Restitution << bocom.RestitutionThreshold;
+				out << YAML::EndSeq;
 				out << YAML::EndMap;
 			}
 			out << YAML::EndMap;
@@ -211,6 +295,24 @@ bool SceneSerializer::Deserialize(const std::string filePath)
 			DeserializeSprite(c, scene);
 		}
 	}
+	{
+		auto compos = components[YM_CAMERA];
+		for (auto c : compos) {
+			DeserializeCamera(c, scene);
+		}
+	}
+	{
+		auto compos = components[YM_RIGIDBODY_2D];
+		for (auto c : compos) {
+			DeserializeRidgidBody2D(c, scene);
+		}
+	}
+	{
+		auto compos = components[YM_BOXCOLLIDER_2D];
+		for (auto c : compos) {
+			DeserializeBox2D(c, scene);
+		}
+	}
 
 	return true;
 }
@@ -229,8 +331,8 @@ bool SceneSerializer::Deserialize(const std::string filePath)
 void SerializeEntity(YAML::Emitter& out, entt::entity ID, std::shared_ptr<Scene> scene) {
 	Entity entity{ ID, scene.get() };
 	out << YAML::BeginMap;
-	YAML_KEY_VALUE(out,YM_NAME, entity.Name())
-	YAML_KEY_VALUE(out,YM_UUID, entity.GetUUID())
+	YAML_KEY_VALUE(out, YM_NAME, entity.Name());
+	YAML_KEY_VALUE(out, YM_UUID, entity.GetUUID());
 	out << YAML::EndMap;
 }
 void DeserializeRelationship(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene) {
@@ -255,6 +357,38 @@ void DeserializeSprite(YAML::iterator::value_type& component, std::shared_ptr<Sc
 	Entity entity = scene->GetEntity(component.first.as<UUIDType>());
 	glm::vec4 col{ component.second[YM_SPRITE_COLOR].as<glm::vec4>() };
 	entity.AddComponent<SpriteRendererComponent>(col);
+}
+void DeserializeCamera(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene) {
+	Entity entity = scene->GetEntity(component.first.as<UUIDType>());
+	auto values = component.second[YM_CAMERAVALUES];
+	CameraComponent& com = entity.AddComponent<CameraComponent>();
+	com.cam_speed = values[0].as<float>();
+	com.Fov_y = values[1].as<float>();
+	com.Aspect_ratio = values[2].as<float>();
+	com.Near = values[3].as<float>();
+	com.Far = values[4].as<float>();
+	auto bools = component.second[YM_CAMERABOOLS];
+	com.main_cam = bools[0].as<bool>();
+	com.IsMainCamera = bools[1].as<bool>();
+
+}
+void DeserializeRidgidBody2D(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene){
+	Entity entity = scene->GetEntity(component.first.as<UUIDType>());
+	RigidBody2DComponent& com = entity.AddComponent<RigidBody2DComponent>();
+	com.Type = RigidBody2DComponent::BodyType{ component.second[YM_RIGIDBODY_2D_TYPE].as<int>() };
+	com.FixedRotation =  component.second[YM_RIGIDBODY_2D_BOOL].as<bool>();
+}
+void DeserializeBox2D(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene) {
+	Entity entity = scene->GetEntity(component.first.as<UUIDType>());
+	BoxCollider2DComponent& com = entity.AddComponent<BoxCollider2DComponent>();
+	auto values = component.second[YM_BOXCOLLIDER_2D_2DVALUES];
+	com.Offset = values[0].as<glm::vec2>();
+	com.Size = values[1].as<glm::vec2>();
+	auto values1 = component.second[YM_BOXCOLLIDER_2D_1DVALUES];
+	com.Density = values1[0].as<float>();
+	com.Friction = values1[1].as<float>();
+	com.Restitution = values1[2].as<float>();
+	com.RestitutionThreshold = values1[3].as<float>();
 }
 void DeserializeEntity(YAML::detail::iterator_value entity, std::shared_ptr<Scene> scene) {
 	std::string name{ entity[YM_NAME].as<std::string>() };

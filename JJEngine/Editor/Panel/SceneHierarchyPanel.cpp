@@ -122,6 +122,7 @@ void SceneHierarchyPanel::OnImGuiRender()
 			scene->DestroyEntity(Entity{ shouldRemoveEntity, scene.get() });
 			setSelectedEntity(entt::null);//jun: don't forget
 			shouldRemoveEntity = entt::null;
+			clickedEntity = entt::null;
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();

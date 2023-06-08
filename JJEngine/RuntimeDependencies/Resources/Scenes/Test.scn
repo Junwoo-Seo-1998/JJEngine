@@ -1,60 +1,36 @@
 Scene: Test
 Entities:
-  - Name: Test 1 Entity
-    UUID: ad6d74b9-67f6-4b1e-9918-2cdf3d52bcdb
-  - Name: Test 2 Entity
-    UUID: ef71143e-75ed-475c-b3ab-e2898f132ae5
-  - Name: Test 3 Entity
-    UUID: 6d59c093-0dd5-4d22-9c45-183c03676f19
-  - Name: Test P Entity
-    UUID: 4767c1ba-7106-4b9a-a260-7faa546841b8
-  - Name: Child Entity
-    UUID: 63c408f2-daa6-49ae-a804-e11fe8ae8096
-  - Name: Child 1 Entity
-    UUID: 849be922-761e-46bb-97ed-bc38ce473a85
-  - Name: Test PPAP Entity
-    UUID: f9626f92-ac5e-4635-bf23-431e518b4c89
-  - Name: Child 2 Entity
-    UUID: 67873631-880d-4014-a168-24e7f4891b10
+  - Name: Test Texture Entity
+    UUID: 25fd99f7-77e6-43f1-8107-3cad9d133856
+  - Name: Ground2
+    UUID: 416957e2-ec8f-4556-a53d-ad294c7977ab
+  - Name: Ground
+    UUID: 28ecc814-0323-454d-b2e3-4b687cbc77ab
+  - Name: Camera
+    UUID: f4211e4f-e78a-48ce-ae39-3be0aaad6074
 Components:
   Relationship:
-    ad6d74b9-67f6-4b1e-9918-2cdf3d52bcdb:
+    25fd99f7-77e6-43f1-8107-3cad9d133856:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    ef71143e-75ed-475c-b3ab-e2898f132ae5:
+    416957e2-ec8f-4556-a53d-ad294c7977ab:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    6d59c093-0dd5-4d22-9c45-183c03676f19:
+    28ecc814-0323-454d-b2e3-4b687cbc77ab:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    4767c1ba-7106-4b9a-a260-7faa546841b8:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    63c408f2-daa6-49ae-a804-e11fe8ae8096:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    849be922-761e-46bb-97ed-bc38ce473a85:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    f9626f92-ac5e-4635-bf23-431e518b4c89:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    67873631-880d-4014-a168-24e7f4891b10:
+    f4211e4f-e78a-48ce-ae39-3be0aaad6074:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
   Transform:
-    ad6d74b9-67f6-4b1e-9918-2cdf3d52bcdb:
+    25fd99f7-77e6-43f1-8107-3cad9d133856:
       Position:
         - 0
-        - 0
+        - 2.5
         - 0
       Rotation:
         - 0
@@ -64,89 +40,37 @@ Components:
         - 1
         - 1
         - 1
-    ef71143e-75ed-475c-b3ab-e2898f132ae5:
+    416957e2-ec8f-4556-a53d-ad294c7977ab:
+      Position:
+        - 0.670000017
+        - 1.21000004
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0.510159731
+      Scale:
+        - 1
+        - 0.25
+        - 1
+    28ecc814-0323-454d-b2e3-4b687cbc77ab:
       Position:
         - 0
-        - 0
+        - -1
         - 0
       Rotation:
         - 0
         - 0
         - 0
       Scale:
+        - 5
+        - 0.25
         - 1
-        - 1
-        - 1
-    6d59c093-0dd5-4d22-9c45-183c03676f19:
+    f4211e4f-e78a-48ce-ae39-3be0aaad6074:
       Position:
         - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    4767c1ba-7106-4b9a-a260-7faa546841b8:
-      Position:
-        - 1
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    63c408f2-daa6-49ae-a804-e11fe8ae8096:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    849be922-761e-46bb-97ed-bc38ce473a85:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    f9626f92-ac5e-4635-bf23-431e518b4c89:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    67873631-880d-4014-a168-24e7f4891b10:
-      Position:
-        - 0
-        - 0
-        - 0
+        - 1.51999998
+        - 7.5
       Rotation:
         - 0
         - 0
@@ -156,4 +80,82 @@ Components:
         - 1
         - 1
   Sprite:
-    {}
+    25fd99f7-77e6-43f1-8107-3cad9d133856:
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    416957e2-ec8f-4556-a53d-ad294c7977ab:
+      SpriteColor:
+        - 0.5
+        - 0.25
+        - 0.200000003
+        - 1
+    28ecc814-0323-454d-b2e3-4b687cbc77ab:
+      SpriteColor:
+        - 0.5
+        - 0.25
+        - 0.200000003
+        - 1
+  Camera:
+    f4211e4f-e78a-48ce-ae39-3be0aaad6074:
+      CameraValues:
+        - 0.100000001
+        - 0.785398185
+        - 2.2954545
+        - 1
+        - 1000000
+      CameraBools:
+        - true
+        - true
+  RigidBody2D:
+    25fd99f7-77e6-43f1-8107-3cad9d133856:
+      RigidBody2DType: 1
+      RigidBody2DBool: false
+    416957e2-ec8f-4556-a53d-ad294c7977ab:
+      RigidBody2DType: 0
+      RigidBody2DBool: false
+    28ecc814-0323-454d-b2e3-4b687cbc77ab:
+      RigidBody2DType: 0
+      RigidBody2DBool: false
+  BoxCollider2D:
+    25fd99f7-77e6-43f1-8107-3cad9d133856:
+      BoxCollider2D_2DValues:
+        -
+          - 0
+          - 0
+        -
+          - 0.5
+          - 0.5
+      BoxCollider2D_1DValues:
+        - 1
+        - 0.5
+        - 0
+        - 0.5
+    416957e2-ec8f-4556-a53d-ad294c7977ab:
+      BoxCollider2D_2DValues:
+        -
+          - 0
+          - 0
+        -
+          - 0.5
+          - 0.5
+      BoxCollider2D_1DValues:
+        - 1
+        - 0.5
+        - 0
+        - 0.5
+    28ecc814-0323-454d-b2e3-4b687cbc77ab:
+      BoxCollider2D_2DValues:
+        -
+          - 0
+          - 0
+        -
+          - 0.5
+          - 0.5
+      BoxCollider2D_1DValues:
+        - 1
+        - 0.5
+        - 0
+        - 0.5
