@@ -124,7 +124,7 @@ Texture::Texture(const TextureData& texture_data)
 
 	if (texture_data.data != nullptr)
 	{
-		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, texture_data.channel.TextureChannelTypeToOpenGLType(), GL_UNSIGNED_BYTE, texture_data.data.get());
+		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, ,=texture_data.channel.TextureChannelTypeToOpenGLType(), GL_UNSIGNED_BYTE, texture_data.data.get());
 		glGenerateTextureMipmap(m_TextureID);
 	}
 }

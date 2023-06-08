@@ -138,14 +138,14 @@ void Graphics::ShadowSampling(RenderCommand command)
 						glDrawElements(GL_TRIANGLES, mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
 						//Draw Call End
 
-						//Ingui texture check function
-						const ImVec2 size{ 240,120 };
-						ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(shadowMapFBO->GetDepthTexture()->GetTextureID())), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-						
+
 						//Bind currently sampled FBO depth
 						std::shared_ptr<Texture> currentSample = Texture::CopyTexture(shadowMapFBO->GetDepthTexture());
 						currentSample->BindTexture(bindNumber);
 						bindNumber++;
+						//Ingui texture check function
+						const ImVec2 size{ 240,120 };
+						ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(currentSample->GetTextureID())), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
 
 						//Find light. If it is, put vp and depth texture by the found light position.
