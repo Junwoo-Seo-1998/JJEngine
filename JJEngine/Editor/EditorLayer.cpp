@@ -80,6 +80,20 @@ void EditorLayer::OnUpdate()
 		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize Scene: " + shouldOpenFile.filename().string());
 	}
 	shouldOpenFile.clear();
+
+
+	auto [mx, my] = ImGui::GetMousePos();
+
+	mx -= m_ViewportBoundMin.x;
+	my -= m_ViewportBoundMin.y;
+	glm::vec2 viewportSize = m_ViewportBoundMax - m_ViewportBoundMin;
+	my = viewportSize.y - my;
+
+	//EngineLog::Info("viewportSize {}, {}", viewportSize.x, viewportSize.y);
+	if(mx>=0 && mx<=viewportSize.x && my>=0 && my<=viewportSize.y)
+	{
+		//EngineLog::Info("Mouse {}, {}", mx, my);
+	}
 }
 
 void EditorLayer::OnPreRender()
@@ -158,14 +172,33 @@ void EditorLayer::OnImGuiRender()
 
 	m_AssetBrowserWindow.Update();
 
-	ImGui::Begin("viewport");
-	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-	ImGui::Image((void*)m_EditorViewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-	if(m_SceneState==SceneState::Edit)
-		DrawGuizmo(m_EditorCamera, { m_SelectedEntityID, m_ActiveScene.get() }, m_GizmoType);
-	ImGui::End();
 
+	//viewport part
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.0f, 0.0f });
+		ImGui::Begin("viewport");
+
+		auto viewportOffset = ImGui::GetCursorPos();//include tab
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+		ImVec2 vMin = ImGui::GetWindowContentRegionMin();
+		ImVec2 vMax = ImGui::GetWindowContentRegionMax();
+
+		vMin.x += ImGui::GetWindowPos().x;
+		vMin.y += ImGui::GetWindowPos().y;
+		vMax.x += ImGui::GetWindowPos().x;
+		vMax.y += ImGui::GetWindowPos().y;
+
+		m_ViewportBoundMax = { vMax.x, vMax.y };
+		m_ViewportBoundMin = { vMin.x, vMin.y };
+
+		ImGui::Image((void*)m_EditorViewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+		if (m_SceneState == SceneState::Edit)
+			DrawGuizmo(m_EditorCamera, { m_SelectedEntityID, m_ActiveScene.get() }, m_GizmoType);
+		ImGui::End();
+		ImGui::PopStyleVar();
+	}
 
 	m_SceneHierarchyPanel.OnImGuiRender();
 	m_ComponentPanel.SetSelevted_EntityHandle(m_SelectedEntityID);

@@ -62,6 +62,17 @@ std::shared_ptr<Texture> FrameBuffer::GetDepthTexture()
 	return m_DepthTexture;
 }
 
+int FrameBuffer::GetPixelInt(int colorTextureIndex, int x, int y)
+{
+	ENGINE_ASSERT(colorTextureIndex < m_ColorTextures.size());
+
+	int val = 0;
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + colorTextureIndex);
+	glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &val);
+
+	return val;
+}
+
 FrameBufferSpecification FrameBuffer::GetSpecification() const
 {
 	return m_DescribedFrameBuffer;
