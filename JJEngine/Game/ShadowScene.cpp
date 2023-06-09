@@ -22,14 +22,12 @@ void ShadowScene::Start()
 
 	Entity light1 = CreateEntity("Light 1");
 	TransformComponent& lightTransform1 = light1.GetComponent<TransformComponent>();
-	lightTransform1.Position = { 3.f, 2.f, 0.f };
-	lightTransform1.LookAtDir({-1.f, 0.f, 0.f});
+	lightTransform1.Position = { 10.f, 0.f, 0.f };
 	light1.AddComponent<LightComponent>(LightComponent{});
 
 	Entity light2 = CreateEntity("Light 2");
 	TransformComponent& lightTransform2 = light2.GetComponent<TransformComponent>();
-	lightTransform2.Position = { 0.f, 2.f, 3.f };
-	lightTransform2.LookAtDir({ 0.f, 0.f, -1.f });
+	lightTransform2.Position = { 0.f, 0.f, 10.f };
 	light2.AddComponent<LightComponent>(LightComponent{});
 
 	std::shared_ptr<Shader> forwardShader = Shader::CreateShaderFromFile({

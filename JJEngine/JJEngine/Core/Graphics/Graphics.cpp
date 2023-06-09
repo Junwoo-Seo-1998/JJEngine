@@ -16,7 +16,10 @@ void Graphics::AddRenderCommand(CommandType commandType, const VariableContainer
 
 void Graphics::ExecuteRenderCommands() {
 	glClear(GL_COLOR_BUFFER_BIT);
-
+	shadowIndex = 0;
+	for (const auto& command : renderCommands) {
+		ExecutePostRenderCommand(command);
+	}
 	for (const auto& command : renderCommands) {
 		ExecutePreRenderCommand(command);
 	}
@@ -25,9 +28,7 @@ void Graphics::ExecuteRenderCommands() {
 		ExecuteRenderCommand(command);
 	}
 
-	for (const auto& command : renderCommands) {
-		ExecutePostRenderCommand(command);
-	}
+
 	renderCommands.clear();
 }
 
@@ -38,9 +39,6 @@ void Graphics::ExecutePreRenderCommand(RenderCommand command)
 
 	case CommandType::ForwardShaded:
 	{
-		/*
-		* Z버퍼 FBO, 그림자 해상도, 폴리곤 오프셋, 그릴 대상, 사용할 셰이더, to world 행렬, to light 행렬, 빛 갯수
-		*/
 
 		ShadowSampling(command);
 
@@ -54,62 +52,11 @@ void Graphics::ExecuteRenderCommand(RenderCommand command)
 {
 	switch (command.commandType)
 	{
-	case CommandType::Forward:
-	{
-		auto& VAO = std::any_cast<std::shared_ptr<VertexArray>&>(command.variables["VAO"]);
-		auto& ForwardShader = std::any_cast<std::shared_ptr<Shader>&>(command.variables["ForwardShader"]);
-		auto modelInfo = std::any_cast<std::vector<ModelInfo>&>(command.variables["Model"]);
-		auto toVP = std::any_cast<glm::mat4&> (command.variables["toVP"]);
-		auto& samples = std::any_cast<std::vector<std::shared_ptr<FrameBuffer>>&>(command.variables["Shadow Maps"]);
-		auto lights = std::any_cast<std::vector<LightInfo>&> (command.variables["Lights"]);
-		std::vector<glm::vec3> lights_pos(lights.size());
 
-		std::transform(lights.begin(), lights.end(), lights_pos.begin(), [](const LightInfo& light) {
-			return light.toLightpos;
-			});
-
-		VAO->Bind();
-		ForwardShader->Use();
-		ForwardShader->SetInt("current_lights", lights.size());
-
-		ForwardShader->SetMat4("toVP", toVP);
-		ForwardShader->SetFloatVector3("lights", lights_pos);
-		for (auto& info : modelInfo)
-		{
-			ForwardShader->SetMat4("toWorld", info.toWorld);
-			ForwardShader->SetMat4("forNrm", glm::transpose(glm::inverse(info.toWorld)));
-
-
-			for (const auto& mesh : info.model.GetMeshes())
-			{
-				mesh->GetMeshVBO()->SetData(sizeof(Vertex) * static_cast<size_t>(mesh->GetNumOfVertices()), &mesh->GetVertices()[0]);
-				mesh->GetMeshVBO()->SetDataTypes({
-					{ 0, DataType::Float3 }, //location=0, pos
-					{ 1, DataType::Float3 }, //location=1, nrm
-					{ 2, DataType::Float2 }, //location=2, uv
-					});
-				if (mesh->GetNumOfIndices())
-				{
-					mesh->GetMeshEBO()->Bind();
-					mesh->GetMeshEBO()->SetData(sizeof(int) * static_cast<size_t>(mesh->GetNumOfIndices()), &mesh->GetIndices()[0]);
-				}
-				mesh->GetMeshVBO()->BindToVertexArray();
-				glDrawElements(GL_TRIANGLES, mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
-			}
-			
-		}
-		
-		VAO->UnBind();
-	}
-	break;
 	case CommandType::ForwardShaded:
 	{
-		/*
-		* Z버퍼 FBO, 그림자 해상도, 폴리곤 오프셋, 그릴 대상, 사용할 셰이더, to world 행렬, to light 행렬, 빛 갯수
-		*/
 
 		ForwardDrawWithShadow(command);
-
 	}
 	break;
 
@@ -141,63 +88,75 @@ void Graphics::ShadowSampling(RenderCommand command)
 	auto& shadowMapFBO = std::any_cast<std::shared_ptr<FrameBuffer>&>(command.variables["ShadowMapFBO"]);
 	const auto resolution = std::any_cast<glm::ivec2&>(command.variables["Shadow Resolution"]);
 	const auto polygonOffset = std::any_cast<glm::ivec2&>(command.variables["Polygon Offset"]);
-	auto modelInfo = std::any_cast<std::vector<ModelInfo>&>(command.variables["Model"]);
+	auto modelInfo = std::any_cast<ModelInfo&>(command.variables["Model"]);
 	auto lights = std::any_cast<std::vector<LightInfo>&> (command.variables["Lights"]);
 	auto& VAO = std::any_cast<std::shared_ptr<VertexArray>&>(command.variables["VAO"]);
 
 	const int lightsNumber = lights.size();
 	
 	int bindNumber = 0;
-	glClear(GL_DEPTH_BUFFER_BIT);
-	glViewport(0, 0, resolution.x, resolution.y);
-	glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
+
 	glEnable(GL_POLYGON_OFFSET_FILL);
+	glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
 	glPolygonOffset(polygonOffset.x, polygonOffset.y);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
 
-	ImGui::Begin("shadow");
+	std::vector<shadowInfoByLight> shadows; // A container of shadows and light VP
 
-
-	for (auto& info : modelInfo)
+	for (const auto& mesh : modelInfo.model.GetMeshes()) // For all meshes in a target model
 	{
-		std::vector<shadowInfoByLight> shadows;
 		shadowSamplingShader->Use();
-		shadowSamplingShader->SetMat4("toWorld", info.toWorld);
-		shadowMapFBO->Bind();
-		for (const auto& l : lights)
+		shadowSamplingShader->SetMat4("toWorld", modelInfo.toWorld);
+		glViewport(0, 0, resolution.x, resolution.y);
+
+		for (const auto& l : lights) // For each light
 		{
 			switch (l.type)
 			{
 			case LightType::Point:
 			{
-				for (const auto& vp : l.toLightVP)
+				for (const auto& vp : l.toLightVP) // One light has 6 VP. Because it is point light.
 				{
-					shadowSamplingShader->SetMat4("toLight", vp);
-					for (const auto& mesh : info.model.GetMeshes())
-					{
-						mesh->GetMeshVBO()->SetData(sizeof(Vertex) * static_cast<size_t>(mesh->GetNumOfVertices()), &mesh->GetVertices()[0]);
-						mesh->GetMeshVBO()->SetDataTypes({
-							{ 0, DataType::Float3 }, //location=0, pos
-							{ 1, DataType::Float3 }, //location=1, nrm
-							{ 2, DataType::Float2 }, //location=2, uv
-							});
-						if (mesh->GetNumOfIndices())
-						{
-							mesh->GetMeshEBO()->Bind();
-							mesh->GetMeshEBO()->SetData(sizeof(int) * static_cast<size_t>(mesh->GetNumOfIndices()), &mesh->GetIndices()[0]);
-						}
-						mesh->GetMeshVBO()->BindToVertexArray();
-						glDrawElements(GL_TRIANGLES, mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
-					}
 
-					const ImVec2 size{ 240,120 };
-					ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(shadowMapFBO->GetDepthTexture()->GetTextureID())), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+					shadowMapFBO->Bind();
+					glClear(GL_DEPTH_BUFFER_BIT);
+
+
+					shadowSamplingShader->SetMat4("toLight", vp);
+					//Draw Call Start
+					mesh->GetMeshVBO()->SetData(sizeof(Vertex) * static_cast<size_t>(mesh->GetNumOfVertices()), &mesh->GetVertices()[0]);
+					mesh->GetMeshVBO()->SetDataTypes({
+						{ 0, DataType::Float3 }, //location=0, pos
+						{ 1, DataType::Float3 }, //location=1, nrm
+						{ 2, DataType::Float2 }, //location=2, uv
+						});
+					if (mesh->GetNumOfIndices())
+					{
+						mesh->GetMeshEBO()->Bind();
+						mesh->GetMeshEBO()->SetData(sizeof(int) * static_cast<size_t>(mesh->GetNumOfIndices()), &mesh->GetIndices()[0]);
+					}
+					mesh->GetMeshVBO()->BindToVertexArray();
+					glDrawElements(GL_TRIANGLES, mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+					//Draw Call End
+
+
+
+					//Bind currently sampled FBO depth
 					std::shared_ptr<Texture> currentSample = Texture::CopyTexture(shadowMapFBO->GetDepthTexture());
 					currentSample->BindTexture(bindNumber);
-
 					bindNumber++;
+					//Ingui texture check function
+					const ImVec2 size{ 240,120 };
+					ImGui::Begin("shadow");
+					ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(currentSample->GetTextureID())), size, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+					ImGui::End();
+
+
+
+					//Find light. If it is, put vp and depth texture by the found light position.
 					auto find = std::find_if(shadows.begin(), shadows.end(), [=](shadowInfoByLight target) {return target.first == l.toLightpos; });
+					
 					if (find == shadows.end()) // not found
 					{
 						shadows.push_back(shadowInfoByLight{ l.toLightpos, std::tuple<std::vector<glm::mat4>,std::vector<std::shared_ptr<Texture>>>{} });
@@ -215,22 +174,22 @@ void Graphics::ShadowSampling(RenderCommand command)
 			}
 			break;
 			}
-		}
-		shadowsForModel.push_back(shadows);
+		}		
 	}
-	ImGui::End();
+	shadowsForModel.push_back(shadows);
 
 	const std::tuple<int, int> viewportSize = Application::Instance().GetWindow()->GetWidthAndHeight();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, get<0>(viewportSize), get<1>(viewportSize));
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_POLYGON_OFFSET_FILL);
+
+
 
 }
 
 void Graphics::ForwardDrawWithShadow(RenderCommand command)
 {
-	auto modelInfo = std::any_cast<std::vector<ModelInfo>&>(command.variables["Model"]);
+	auto modelInfo = std::any_cast<ModelInfo&>(command.variables["Model"]);
 	auto lights = std::any_cast<std::vector<LightInfo>&> (command.variables["Lights"]);
 	auto& VAO = std::any_cast<std::shared_ptr<VertexArray>&>(command.variables["VAO"]);
 	auto& ForwardShader = std::any_cast<std::shared_ptr<Shader>&>(command.variables["ForwardShader"]);
@@ -239,12 +198,10 @@ void Graphics::ForwardDrawWithShadow(RenderCommand command)
 
 	VAO->Bind();
 	ForwardShader->Use();
+	std::vector<shadowInfoByLight> shadows = shadowsForModel[shadowIndex];
 
-	int shadowIndex = 0;
-	for (auto& info : modelInfo)
+	for (const auto& mesh : modelInfo.model.GetMeshes())
 	{
-
-		std::vector<shadowInfoByLight> shadows = shadowsForModel[shadowIndex];
 		int i = 0;
 		for (auto s : shadows)
 		{
@@ -269,29 +226,29 @@ void Graphics::ForwardDrawWithShadow(RenderCommand command)
 				ForwardShader->SetInt("sampleInfo[" + std::to_string(i) + "].shadowMaps[" + std::to_string(j) + "]", get<1>(s.second)[j]->GetUnitID());
 			}
 
-			ForwardShader->SetMat4("toWorld", info.toWorld);
-			ForwardShader->SetMat4("forNrm", glm::transpose(glm::inverse(info.toWorld)));
+			ForwardShader->SetMat4("toWorld", modelInfo.toWorld);
+			ForwardShader->SetMat4("forNrm", glm::transpose(glm::inverse(modelInfo.toWorld)));
 
-			for (const auto& mesh : info.model.GetMeshes())
+
+			mesh->GetMeshVBO()->SetData(sizeof(Vertex) * static_cast<size_t>(mesh->GetNumOfVertices()), &mesh->GetVertices()[0]);
+			mesh->GetMeshVBO()->SetDataTypes({
+				{ 0, DataType::Float3 }, //location=0, pos
+				{ 1, DataType::Float3 }, //location=1, nrm
+				{ 2, DataType::Float2 }, //location=2, uv
+				});
+			if (mesh->GetNumOfIndices())
 			{
-				mesh->GetMeshVBO()->SetData(sizeof(Vertex) * static_cast<size_t>(mesh->GetNumOfVertices()), &mesh->GetVertices()[0]);
-				mesh->GetMeshVBO()->SetDataTypes({
-					{ 0, DataType::Float3 }, //location=0, pos
-					{ 1, DataType::Float3 }, //location=1, nrm
-					{ 2, DataType::Float2 }, //location=2, uv
-					});
-				if (mesh->GetNumOfIndices())
-				{
-					mesh->GetMeshEBO()->Bind();
-					mesh->GetMeshEBO()->SetData(sizeof(int) * static_cast<size_t>(mesh->GetNumOfIndices()), &mesh->GetIndices()[0]);
-				}
-				mesh->GetMeshVBO()->BindToVertexArray();
-				glDrawElements(GL_TRIANGLES, mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+				mesh->GetMeshEBO()->Bind();
+				mesh->GetMeshEBO()->SetData(sizeof(int) * static_cast<size_t>(mesh->GetNumOfIndices()), &mesh->GetIndices()[0]);
 			}
+			mesh->GetMeshVBO()->BindToVertexArray();
+			glDrawElements(GL_TRIANGLES, mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+
 			i++;
 		}
-		shadowIndex++;
 	}
+	shadowIndex++;
+
 
 	VAO->UnBind();
 }

@@ -58,8 +58,6 @@ private:
 	int m_Width;
 	int m_Height;
 	TextureChannelData m_TextureChannel;
-
-
 	unsigned int m_TextureID;
 	unsigned int m_UnitID;
 
