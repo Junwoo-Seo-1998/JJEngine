@@ -1,6 +1,6 @@
 #include "MatrixMath.h"
 #include <glm/ext/matrix_transform.hpp>
-
+#include <glm/gtc/matrix_transform.hpp>
 glm::mat4 MatrixMath::BuildCameraMatrix(glm::vec3 cam_position, glm::vec3 target, glm::vec3 world_up)
 {
 	//just studying purpose.. it uses my own matrix instead glm matrix on debug
@@ -38,6 +38,7 @@ glm::mat4 MatrixMath::BuildCameraMatrix(glm::vec3 cam_position, glm::vec3 target
 glm::mat4 MatrixMath::BuildCameraMatrixWithDirection(const glm::vec3& cam_position, const glm::vec3& lookAt,
 	const glm::vec3& world_up)
 {
+#ifdef DEBUG
 	if (lookAt == world_up)
 		throw "shouldn't be same!";
 	glm::vec3 cam_foward = -lookAt;
@@ -63,6 +64,9 @@ glm::mat4 MatrixMath::BuildCameraMatrixWithDirection(const glm::vec3& cam_positi
 	auto toret = inverse_scale_rotation * inverse_transform;
 
 	return toret;
+#else
+	return glm::lookAt(cam_position, lookAt, world_up);
+#endif
 }
 
 glm::mat4 MatrixMath::BuildPerspectiveProjectionMatrix(float width, float height, float Near, float Far)

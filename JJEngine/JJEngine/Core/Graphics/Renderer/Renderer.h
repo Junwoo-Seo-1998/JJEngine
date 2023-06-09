@@ -15,7 +15,7 @@ class Renderer
 {
 public:
 	static void BeginScene(const glm::mat4& viewProjection);
-	static void AddModel(const Model& model, const TransformComponent& transform);
+	static void SetModel(const Model& model, const TransformComponent& transform);
 	static void AddAffectLight(const LightComponent& light, TransformComponent lightTransform);
 	static void SetMaterial(const MaterialComponent& material);
 	static void SetVAO(std::shared_ptr<VertexArray> VAO);

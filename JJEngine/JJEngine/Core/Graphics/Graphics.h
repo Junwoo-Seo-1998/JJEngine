@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -65,9 +65,11 @@ public:
 
 private:
 	std::vector<RenderCommand> renderCommands;
-
+	//                                 라이트 위치마다                 6개의 light VP         6개의 매핑된 그림자 텍스쳐
 	using shadowInfoByLight = std::pair<glm::vec3, std::tuple<std::vector<glm::mat4>, std::vector<std::shared_ptr<Texture>>>>;
 	std::vector<std::vector<shadowInfoByLight>> shadowsForModel;
+
+	int shadowIndex = 0;
 private:
 	void ShadowSampling(RenderCommand command);
 	void ForwardDrawWithShadow(RenderCommand command);

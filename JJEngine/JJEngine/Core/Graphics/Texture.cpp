@@ -124,7 +124,7 @@ Texture::Texture(const TextureData& texture_data)
 
 	if (texture_data.data != nullptr)
 	{
-		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, ,=texture_data.channel.TextureChannelTypeToOpenGLType(), GL_UNSIGNED_BYTE, texture_data.data.get());
+		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, texture_data.channel.TextureChannelTypeToOpenGLType(), GL_UNSIGNED_BYTE, texture_data.data.get());
 		glGenerateTextureMipmap(m_TextureID);
 	}
 }
@@ -143,5 +143,7 @@ Texture::Texture(std::shared_ptr<Texture> texture)
 	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTextureStorage2D(m_TextureID, 1, texture->m_TextureChannel.TextureChannelTypeToOpenGLInnerType(), m_Width, m_Height);
-	glCopyTextureSubImage2D(texture->GetTextureID(), GL_TEXTURE_2D, 0, 0, 0, 0, m_Width, m_Height);
+	glCopyImageSubData(texture->GetTextureID(), GL_TEXTURE_2D, 0, 0, 0, 0, m_TextureID, GL_TEXTURE_2D, 0, 0, 0, 0, m_Width, m_Height, 1);
+	glGenerateTextureMipmap(m_TextureID);
+
 }

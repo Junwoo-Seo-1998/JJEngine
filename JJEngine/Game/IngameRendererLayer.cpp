@@ -104,7 +104,7 @@ void IngameRendererLayer::OnRender()
 			Renderer::SetShadowBuffer(shadow_buffer);
 			Renderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
 
-			Renderer::AddModel(model, transform);
+			Renderer::SetModel(model, transform);
 			Renderer::SetMaterial(material);
 
 
