@@ -33,6 +33,7 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLType() const
 	case TextureChannel::RGB:
 		return GL_RGB;
 	case TextureChannel::RGBA:
+	case TextureChannel::RGBA32F:
 		return GL_RGBA;
 	case TextureChannel::Depth:
 		return GL_DEPTH_STENCIL;
