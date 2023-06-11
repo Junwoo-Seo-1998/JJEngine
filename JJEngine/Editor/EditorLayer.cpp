@@ -94,6 +94,9 @@ void EditorLayer::OnUpdate()
 	if(mx>=0 && mx<=viewportSize.x && my>=0 && my<=viewportSize.y)
 	{
 		//EngineLog::Info("Mouse {}, {}", mx, my);
+		m_EditorViewport->Bind();
+		EngineLog::Info("Mouse {}, {} : {}", mx, my, m_EditorViewport->GetPixelInt(1, mx, my));
+		m_EditorViewport->UnBind();
 	}
 }
 
@@ -109,7 +112,7 @@ void EditorLayer::OnPreRender()
 	}
 	m_EditorViewport->Bind();
 	RenderCommand::Clear();
-	//glViewport(0, 0, (int)spec.Width, (int)spec.Height);
+	m_EditorViewport->GetColorTexture(1)->ClearTexture();
 }
 
 void EditorLayer::OnRender()
