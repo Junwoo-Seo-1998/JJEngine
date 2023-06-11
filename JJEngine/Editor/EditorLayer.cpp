@@ -23,6 +23,7 @@
 
 #include "Core/Event/WindowEvent.h"
 #include "Core/Event/EventManager.h"
+#include "Core/Graphics/RenderCommand.h"
 #include "Core/Input/Input.h"
 
 EditorLayer::~EditorLayer()
@@ -35,7 +36,7 @@ void EditorLayer::OnAttach()
 	m_EditorCamera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
 	SetNewScene(std::make_shared<TestScene>("Test"));
 	//for testing
-	m_EditorViewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::Depth } });
+	m_EditorViewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::R_INT,FrameBufferFormat::Depth } });
 
 	m_PlayIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/PlayButton.png"));
 	m_StopIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/Stop.png"));
@@ -106,8 +107,9 @@ void EditorLayer::OnPreRender()
 		m_ActiveScene->ResizeViewport((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 		m_EditorViewport->Resize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 	}
-	m_EditorViewport->Bind(true);
-	glViewport(0, 0, (int)spec.Width, (int)spec.Height);
+	m_EditorViewport->Bind();
+	RenderCommand::Clear();
+	//glViewport(0, 0, (int)spec.Width, (int)spec.Height);
 }
 
 void EditorLayer::OnRender()
