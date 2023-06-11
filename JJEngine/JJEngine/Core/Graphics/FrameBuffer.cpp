@@ -167,6 +167,9 @@ void FrameBuffer::BuildFrameBuffer()
 				m_DepthTexture = Texture::CreateTexture({ width,height,nullptr, TextureChannel::Depth });
 				break;
 			}
+			default:
+				ENGINE_ASSERT(false, "Not Supported Type!");
+				break;
 		}
 		unsigned textureID = m_DepthTexture->GetTextureID();
 		glNamedFramebufferTexture(m_FrameBufferID, GL_DEPTH_STENCIL_ATTACHMENT, textureID, 0);
