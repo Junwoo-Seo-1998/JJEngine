@@ -41,6 +41,7 @@ public:
 
 	//editor only
 	void UpdateEditor(EditorCamera& camera);
+	void RenderEntityID(EditorCamera& camera);
 	//runtime only
 	void StartRuntime();
 	void UpdateRuntime();
