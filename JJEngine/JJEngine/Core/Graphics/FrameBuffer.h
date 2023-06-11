@@ -4,6 +4,7 @@
 enum class FrameBufferFormat
 {
 	None = 0,
+	R_INT,
 	RGB,
 	RGBA,
 	RGBA32F,

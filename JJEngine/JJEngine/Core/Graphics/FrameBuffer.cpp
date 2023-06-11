@@ -124,6 +124,11 @@ void FrameBuffer::BuildFrameBuffer()
 			const FrameBufferFormat format = m_ColorFormats[i];
 			switch (format)
 			{
+				case FrameBufferFormat::R_INT:
+				{
+					m_ColorTextures[i] = Texture::CreateTexture({ width, height, nullptr, TextureChannel::R_INT });
+					break;
+				}
 				case FrameBufferFormat::RGB:
 				{
 					m_ColorTextures[i] = Texture::CreateTexture({ width,height,nullptr,TextureChannel::RGB });
@@ -131,14 +136,17 @@ void FrameBuffer::BuildFrameBuffer()
 				}
 				case  FrameBufferFormat::RGBA:
 				{
-					m_ColorTextures[i] = Texture::CreateTexture({width,height,nullptr,TextureChannel::RGBA});
+					m_ColorTextures[i] = Texture::CreateTexture({ width,height,nullptr,TextureChannel::RGBA });
 					break;
+				}
 				case  FrameBufferFormat::RGBA32F:
 				{
-					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGBA32F });
+					m_ColorTextures[i] = Texture::CreateTexture({ width,height,nullptr,TextureChannel::RGBA32F });
 					break;
 				}
-				}
+				default:
+					ENGINE_ASSERT(false, "Not Supported Type!");
+					break;
 			}
 			unsigned textureID = m_ColorTextures[i]->GetTextureID();
 			glNamedFramebufferTexture(m_FrameBufferID, GL_COLOR_ATTACHMENT0 + i, textureID, 0);

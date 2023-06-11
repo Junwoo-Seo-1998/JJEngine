@@ -9,6 +9,7 @@ End Header-------------------------------------------------------- */
 #include<tuple>
 enum class TextureChannel
 {
+	R_INT,
 	RGB,
 	RGBA,
 	RGBA32F,

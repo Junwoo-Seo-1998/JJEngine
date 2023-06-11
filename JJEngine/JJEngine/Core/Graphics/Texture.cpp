@@ -11,6 +11,8 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLInnerType() const
 {
 	switch (channel)
 	{
+	case TextureChannel::R_INT:
+		return GL_R8;
 	case TextureChannel::RGB:
 		return GL_RGB8;
 	case TextureChannel::RGBA:
@@ -30,6 +32,8 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLType() const
 {
 	switch (channel)
 	{
+	case TextureChannel::R_INT:
+		return GL_RED;
 	case TextureChannel::RGB:
 		return GL_RGB;
 	case TextureChannel::RGBA:
