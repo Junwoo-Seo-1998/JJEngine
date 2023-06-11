@@ -49,7 +49,7 @@
     <ClInclude Include="Core\Asset\AssetType.h">
       <Filter>Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Asset\Manager\AssetManagerBase.h">
+    <ClInclude Include="Core\Asset\Manager\AssetManager.h">
       <Filter>Asset\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Core\Camera.h" />
@@ -186,6 +186,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\Utils\YAML_IMPL.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -282,5 +283,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Core\Asset\Manager\AssetManager.cpp" />
   </ItemGroup>
 </Project>
