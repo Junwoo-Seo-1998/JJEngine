@@ -108,6 +108,9 @@
     <ClInclude Include="Core\Graphics\Mesh.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Graphics\RenderCommand.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Graphics\Renderer\CameraBase.h">
       <Filter>Graphics\Renderer</Filter>
     </ClInclude>
@@ -185,11 +188,16 @@
     <ClInclude Include="Core\Utils\UUIDGenerator.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Utils\YAML_IMPL.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Utils\YAML_IMPL.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Asset\Manager\AssetManager.cpp">
+      <Filter>Asset\Manager</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\Component\CameraComponent.cpp">
       <Filter>Component</Filter>
@@ -219,6 +227,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Mesh.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\RenderCommand.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Renderer\EditorCamera.cpp">
@@ -283,6 +294,5 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\Asset\Manager\AssetManager.cpp" />
   </ItemGroup>
 </Project>
