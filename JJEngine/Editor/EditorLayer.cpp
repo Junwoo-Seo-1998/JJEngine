@@ -82,7 +82,7 @@ void EditorLayer::OnUpdate()
 	}
 	shouldOpenFile.clear();
 
-	if (Input::IsTriggered(MouseCode::Left) && m_SceneState != SceneState::Play && m_GizmoType == -1)
+	if (Input::IsTriggered(MouseCode::Left) && m_SceneState != SceneState::Play && !ImGuizmo::IsOver() && !Input::IsPressed(KeyCode::LeftAlt))
 	{
 		auto [mx, my] = ImGui::GetMousePos();
 
@@ -297,9 +297,8 @@ void EditorLayer::DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType)
 	ImGuizmo::SetOrthographic(false);
 	ImGuizmo::SetDrawlist();
 
-	float windowWidth = (float)ImGui::GetWindowWidth();
-	float windowHeight = (float)ImGui::GetWindowHeight();
-	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+	ImGuizmo::SetRect(m_ViewportBoundMin.x, m_ViewportBoundMin.y, m_ViewportBoundMax.x - m_ViewportBoundMin.x, m_ViewportBoundMax.y - m_ViewportBoundMin.y);
+
 	//editor camera
 	const glm::mat4& cameraProjection = camera.GetProjection();
 	glm::mat4 cameraView = camera.GetViewMatrix();
