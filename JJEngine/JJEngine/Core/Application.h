@@ -13,6 +13,7 @@ class Application;
 class Window;
 class SceneManager;
 class LayerManager;
+class AssetManager;
 class Application
 {
 protected:
@@ -27,6 +28,7 @@ public:
 	std::shared_ptr<Window> GetWindow();
 	std::shared_ptr<LayerManager> GetLayerManager();
 	std::shared_ptr<EventManager> GetEventManager();
+	std::shared_ptr<AssetManager> GetAssetManager();
 	virtual void UserDefinedInit() {};
 
 
@@ -38,4 +40,5 @@ private:
 	std::shared_ptr<Window> window;
 	std::shared_ptr<LayerManager> layerManager;
 	std::shared_ptr<EventManager> eventManager;
+	std::shared_ptr<AssetManager> assetManager;
 };

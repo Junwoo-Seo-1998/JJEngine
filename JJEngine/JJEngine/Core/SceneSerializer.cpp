@@ -10,7 +10,9 @@
 #include "Component/RigidBody2DComponent.h"
 #include "Component/BoxCollider2DComponent.h"
 #include "Core/Utils/YAML_IMPL.hpp"
-
+#include "Core/Asset/Asset_Texture.h"
+#include "Core/Application.h"
+#include "Core/Asset/Manager/AssetManager.h"
 
 // Key values
 #define YM_SCENE "Scene"
@@ -26,6 +28,7 @@
 #define YM_PARENT "Parent"
 #define YM_CHILDREN "Children"
 #define YM_SPRITE "Sprite"
+#define YM_SPRITE_HANDLE "SpriteHandle"
 #define YM_SPRITE_COLOR "SpriteColor"
 #define YM_CAMERA "Camera"
 #define YM_CAMERAVALUES "CameraValues"
@@ -110,6 +113,7 @@ void SceneSerializer::Serialize(const std::string filePath)
 			{
 				Entity entity{ c,scene.get() };
 				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap);
+				YAML_KEY_VALUE(out, YM_SPRITE_HANDLE, (components.get<SpriteRendererComponent>(c).asset ? components.get<SpriteRendererComponent>(c).asset->GetHandle() : AssetHandle{}));
 				YAML_KEY_VALUE(out, YM_SPRITE_COLOR, components.get<SpriteRendererComponent>(c).color);
 				out << YAML::EndMap;
 			}
@@ -267,7 +271,9 @@ void DeserializeTransform(YAML::iterator::value_type& component, std::shared_ptr
 void DeserializeSprite(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene) {
 	Entity entity = scene->GetEntity(component.first.as<UUIDType>());
 	glm::vec4 col{ component.second[YM_SPRITE_COLOR].as<glm::vec4>() };
-	entity.AddComponent<SpriteRendererComponent>(col);
+	SpriteRendererComponent& temp = entity.AddComponent<SpriteRendererComponent>(col);
+	if (component.second[YM_SPRITE_HANDLE].as<AssetHandle>().is_nil() == false)
+		temp.asset = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Texture>(component.second[YM_SPRITE_HANDLE].as<AssetHandle>());
 }
 void DeserializeCamera(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene) {
 	Entity entity = scene->GetEntity(component.first.as<UUIDType>());

@@ -1,12 +1,17 @@
 #include "AssetManager.h"
 #include "Core/Utils/YAML_IMPL.hpp"
+#include "Core/Utils/File.h"
+#include "Core/Utils/UUIDGenerator.h"
 
 #define ADATA_PATH "./Assets.AData"
+#define RESORCE_PATH "./Resources"
 
+//Assets
 #define SCN ".scn"
 #define PNG ".png"
 #define JPG ".jpg"
 
+// YAML impl
 #define YM_ADATA "ADATA"
 #define YM_ASSETS "Assets"
 #define YM_ASSET_HANDLE "Handle"
@@ -17,10 +22,12 @@ void AssetManager::AddAsset(std::shared_ptr<Asset>& empty_asset, AssetType type)
 {
 	switch (type)
 	{
-	case AssetType::Scene:break;
-		empty_asset = std::make_shared<Asset>();
-	case AssetType::Texture:break;
-		empty_asset = std::make_shared<Asset>();
+	case AssetType::Scene:
+		empty_asset = std::make_shared<Asset_Scene>();
+		break;
+	case AssetType::Texture:
+		empty_asset = std::make_shared<Asset_Texture>();
+		break;
 	default:
 		ASSERT("Unexpected Asset type");
 	}
@@ -44,7 +51,7 @@ bool AssetManager::ReadAData()
 		AddAsset(temp,type);
 		assets[handle] = temp;
 		temp->Handle = handle;
-		temp->path = D[YM_ASSET_PATH].as<std::filesystem::path>();
+		temp->path = D[YM_ASSET_PATH].as<std::string>();
 	}
 	return true;
 }
@@ -61,7 +68,7 @@ void AssetManager::SaveAData()
 		out << YAML::BeginMap;
 		YAML_KEY_VALUE(out, YM_ASSET_HANDLE, a.second->Handle);
 		YAML_KEY_VALUE(out, YM_ASSET_TYPE, static_cast<int>(a.second->GetAssetType()));
-		YAML_KEY_VALUE(out, YM_ASSET_PATH, a.second->path.c_str());
+		YAML_KEY_VALUE(out, YM_ASSET_PATH, a.second->path.string());
 		out << YAML::EndMap;
 	}
 	out << YAML::EndSeq;
@@ -73,6 +80,49 @@ void AssetManager::SaveAData()
 void AssetManager::UpdateAData()
 {
 	// check all assets in resorce folder
+	bool isUpdated{false};
+
+	std::vector<std::filesystem::path> files = File::GetFileListsRecv("./Resources");
+	for (auto& f:files) {
+		if (std::filesystem::is_directory(f) == true) continue;
+		auto extension = f.extension();
+		AssetType type{ AssetType::None};
+		if (extension == PNG) {
+			type = AssetType::Texture;
+		}
+		else if (extension == JPG) {
+			type = AssetType::Texture;
+		}
+		else if (extension == SCN) {
+			type = AssetType::Scene;
+		}
+		else {
+			continue;
+		}
+
+		bool isNewAsset{true};
+		for (auto it = assets.begin(); it != assets.end();++it) {
+			if (*(it->second.get()) == f) {
+				isNewAsset = false;
+				break;
+			}
+		}
+		if (isNewAsset == true) {
+			isUpdated = true;
+			AssetHandle handle{ UUIDGenerator::Generate(f.string())};// handel generate
+			std::shared_ptr<Asset> temp;
+			AddAsset(temp, type);
+			assets[handle] = temp;
+			temp->Handle = handle;
+			temp->path = f;
+		}
+	}
+
+
+
+	if (isUpdated == true) {
+		SaveAData();
+	}
 }
 
 AssetType AssetManager::GetAssetType(AssetHandle assetHandle)
@@ -100,7 +150,7 @@ bool AssetManager::ReloadData(AssetHandle assetHandle)
 
 bool AssetManager::IsAssetHandleValid(AssetHandle assetHandle)
 {
-	latestFoundAsset = std::find(assets.begin(), assets.end(), assetHandle);
+	latestFoundAsset = assets.find(assetHandle);
 	if (latestFoundAsset == assets.end()) return false;
 	return true;
 }
@@ -109,6 +159,23 @@ bool AssetManager::IsAssetLoaded(AssetHandle handle)
 {
 	if (IsAssetHandleValid(handle) == false) return false;
 	return latestFoundAsset->second->CheckIsDataLoaded();
+}
+
+AssetHandle AssetManager::GetHandleFromPath(std::filesystem::path p)
+{
+	return GetAssetFromPath(p)->Handle;
+}
+
+std::shared_ptr<Asset> AssetManager::GetAssetFromPath(std::filesystem::path p)
+{
+	auto it = assets.begin();
+	for (; it != assets.end(); ++it) {
+		if (*(it->second.get()) == p) {
+			break;
+		}
+	}
+	if (it == assets.end()) ASSERT("Path is not an asset");
+	return it->second;
 }
 
 std::unordered_set<AssetHandle> AssetManager::GetAllAssetsWithType(AssetType type)

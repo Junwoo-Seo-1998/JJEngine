@@ -9,6 +9,9 @@
 #include "Core/Component/SpriteRendererComponent.h"
 #include "Core/Component/RigidBody2DComponent.h"
 #include "Core/Component/BoxCollider2DComponent.h"
+#include "Core/Application.h"
+#include "Core/Asset/Manager/AssetManager.h"
+
 TestScene::TestScene(std::string t)
 	:Scene(t)
 {
@@ -45,7 +48,7 @@ void TestScene::Start()
 
 	temp.Transform().Position = { 0.f, 2.50f, 0 };
 	auto& sprite = temp.AddComponent<SpriteRendererComponent>();
-	sprite.texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
+	sprite.asset = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Texture>(Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/Textures/test.jpg")); //Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
 
 	temp.AddComponent<BoxCollider2DComponent>();
 	auto& body = temp.AddComponent<RigidBody2DComponent>();

@@ -9,7 +9,7 @@
 
 // YAML Implement
 namespace YAML {
-	Emitter& operator<<(Emitter& emitter, glm::vec2 v) {
+	inline Emitter& operator<<(Emitter& emitter, glm::vec2 v) {
 		return emitter << BeginSeq << v.x << v.y << EndSeq;
 	}
 
@@ -29,7 +29,7 @@ namespace YAML {
 		}
 	};
 
-	Emitter& operator<<(Emitter& emitter, glm::vec3 v) {
+	inline Emitter& operator<<(Emitter& emitter, glm::vec3 v) {
 		return emitter << BeginSeq << v.x << v.y << v.z << EndSeq;
 	}
 
@@ -51,7 +51,7 @@ namespace YAML {
 		}
 	};
 
-	Emitter& operator<<(Emitter& emitter, glm::vec4 v) {
+	inline Emitter& operator<<(Emitter& emitter, glm::vec4 v) {
 		return emitter << BeginSeq << v.x << v.y << v.z << v.w << EndSeq;
 	}
 
@@ -75,7 +75,7 @@ namespace YAML {
 		}
 	};
 
-	Emitter& operator<<(Emitter& emitter, UUIDType v) {
+	inline Emitter& operator<<(Emitter& emitter, UUIDType v) {
 		return emitter << to_string(v);
 	}
 

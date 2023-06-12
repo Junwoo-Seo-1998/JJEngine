@@ -1,0 +1,38 @@
+ADATA: All engine resorce assets
+Assets:
+  - Handle: 89b57b0f-6d08-5895-b804-64e384106bac
+    Type: 1
+    FilePath: ./Resources\Scenes\Default tt.scn
+  - Handle: 52c913f1-447c-5c4a-b3d8-f3c78f5f0717
+    Type: 1
+    FilePath: ./Resources\Scenes\Default.scn
+  - Handle: 7ceecaae-04d1-5769-b18e-9d3b9b6333d3
+    Type: 2
+    FilePath: ./Resources\Textures\FileImage.png
+  - Handle: 9c821a52-28ae-5f92-b359-c252d9fd8548
+    Type: 1
+    FilePath: ./Resources\Scenes\Default123.scn
+  - Handle: ef91cb69-50f7-5015-a5a5-cd398d224ec6
+    Type: 1
+    FilePath: ./Resources\Scenes\Test.scn
+  - Handle: 6ff14046-5fbb-5fe2-bd73-50ca6dee8b3c
+    Type: 1
+    FilePath: ./Resources\Scenes\testScene.scn
+  - Handle: 374f8fc9-4902-586c-a2ed-8dcf580af4fc
+    Type: 2
+    FilePath: ./Resources\Textures\grid.png
+  - Handle: 46c9b71b-1d42-51e7-877e-1c89ff8071b7
+    Type: 1
+    FilePath: ./Resources\Scenes\testScene22.scn
+  - Handle: df44f695-c594-5277-a7d4-d2e04b599f00
+    Type: 2
+    FilePath: ./Resources\Textures\FolderImage.png
+  - Handle: 5d0b7f90-acf7-58d1-9f22-9f6b0d6d60ff
+    Type: 2
+    FilePath: ./Resources\Textures\test.jpg
+  - Handle: 5e7c40dc-ad78-5235-ac5c-c1764c53ce5f
+    Type: 2
+    FilePath: ./Resources\Textures\UI\PlayButton.png
+  - Handle: 77674609-0750-58b0-9db8-c6b56630de8d
+    Type: 2
+    FilePath: ./Resources\Textures\UI\Stop.png
