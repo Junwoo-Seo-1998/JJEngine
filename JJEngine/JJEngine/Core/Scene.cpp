@@ -134,6 +134,18 @@ void Scene::UpdateEditor(EditorCamera& camera)
 	Renderer2D::EndScene();
 }
 
+void Scene::RenderEntityID(EditorCamera& camera)
+{
+	Renderer2D::BeginSceneEntityID(camera);
+	auto view = m_Registry.view<SpriteRendererComponent>();
+	for (auto e : view)
+	{
+		Entity entity{ e, this };
+		Renderer2D::DrawQuadEntityID(entity.GetWorldSpaceTransformMatrix(), static_cast<int>(e));
+	}
+	Renderer2D::EndSceneEntityID();
+}
+
 void Scene::StartRuntime()
 {
 	m_2DWorld = std::make_unique<b2World>(b2Vec2{ 0.f, -9.8f });

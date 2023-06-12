@@ -37,7 +37,7 @@ void EditorLayer::OnAttach()
 	SetNewScene(std::make_shared<TestScene>("Test"));
 	//for testing
 	m_EditorViewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::R_INT,FrameBufferFormat::Depth } });
-
+	m_EditorSelectionViewport = FrameBuffer::CreateFrameBuffer({ 400, 400, {FrameBufferFormat::R_INT, FrameBufferFormat::Depth} });
 	m_PlayIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/PlayButton.png"));
 	m_StopIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/Stop.png"));
 }
@@ -82,18 +82,32 @@ void EditorLayer::OnUpdate()
 	}
 	shouldOpenFile.clear();
 
-
-	auto [mx, my] = ImGui::GetMousePos();
-
-	mx -= m_ViewportBoundMin.x;
-	my -= m_ViewportBoundMin.y;
-	glm::vec2 viewportSize = m_ViewportBoundMax - m_ViewportBoundMin;
-	my = viewportSize.y - my;
-
-	//EngineLog::Info("viewportSize {}, {}", viewportSize.x, viewportSize.y);
-	if(mx>=0 && mx<=viewportSize.x && my>=0 && my<=viewportSize.y)
+	if (Input::IsTriggered(MouseCode::Left) && m_SceneState != SceneState::Play && m_GizmoType == -1)
 	{
-		//EngineLog::Info("Mouse {}, {}", mx, my);
+		auto [mx, my] = ImGui::GetMousePos();
+
+		mx -= m_ViewportBoundMin.x;
+		my -= m_ViewportBoundMin.y;
+		glm::vec2 viewportSize = m_ViewportBoundMax - m_ViewportBoundMin;
+		my = viewportSize.y - my;
+
+		//EngineLog::Info("viewportSize {}, {}", viewportSize.x, viewportSize.y);
+		if (mx >= 0 && mx <= viewportSize.x && my >= 0 && my <= viewportSize.y)
+		{
+			//EngineLog::Info("Mouse {}, {}", mx, my);
+			m_EditorSelectionViewport->Bind();
+			int SelectedEntityID = m_EditorSelectionViewport->GetPixelInt(0, mx, my);
+			EngineLog::Info("Mouse {}, {} Selected EntityID: {}", mx, my, SelectedEntityID);
+			if(SelectedEntityID!=-1)
+			{
+				m_SelectedEntityID = static_cast<entt::entity>(SelectedEntityID);
+			}
+			else
+			{
+				m_SelectedEntityID = entt::null;
+			}
+			m_EditorSelectionViewport->UnBind();
+		}
 	}
 }
 
@@ -106,10 +120,10 @@ void EditorLayer::OnPreRender()
 		m_EditorCamera.SetViewportSize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 		m_ActiveScene->ResizeViewport((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 		m_EditorViewport->Resize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
+		m_EditorSelectionViewport->Resize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 	}
 	m_EditorViewport->Bind();
 	RenderCommand::Clear();
-	//glViewport(0, 0, (int)spec.Width, (int)spec.Height);
 }
 
 void EditorLayer::OnRender()
@@ -130,6 +144,14 @@ void EditorLayer::OnRender()
 void EditorLayer::OnPostRender()
 {
 	m_EditorViewport->UnBind();
+	if (m_SceneState != SceneState::Play)
+	{
+		m_EditorSelectionViewport->Bind();
+		RenderCommand::Clear();
+		m_EditorSelectionViewport->GetColorTexture(0)->ClearTexture(-1);
+		m_EditorScene->RenderEntityID(m_EditorCamera);
+		m_EditorSelectionViewport->UnBind();
+	}
 }
 
 void EditorLayer::OnImGuiRender()

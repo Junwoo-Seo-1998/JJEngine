@@ -63,6 +63,7 @@ private:
 	ImGuiSubWindow m_AssetBrowserWindow{ "Asset browser" };
 
 	std::shared_ptr<FrameBuffer> m_EditorViewport;
+	std::shared_ptr<FrameBuffer> m_EditorSelectionViewport;
 
 	std::shared_ptr<Texture> m_PlayIcon;
 	std::shared_ptr<Texture> m_StopIcon;
