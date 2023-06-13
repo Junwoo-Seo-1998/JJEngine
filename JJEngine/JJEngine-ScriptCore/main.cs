@@ -7,7 +7,7 @@ namespace JJEngine_ScriptCore
         public static void SetClearColor(float r, float g, float b)
         {
             Console.Write("SetClearColor");
-            InternalCalls.Graphics_SetClearColor(r,g,b);
+            //InternalCalls.Graphics_SetClearColor(r,g,b);
         }
     }
 
@@ -22,7 +22,7 @@ namespace JJEngine_ScriptCore
         public void test()
         {
             Console.WriteLine("color change");
-            Graphics.SetClearColor(1.0f, 0.8f, 0.3f);
+            //Graphics.SetClearColor(1.0f, 0.8f, 0.3f);
         }
     }
 

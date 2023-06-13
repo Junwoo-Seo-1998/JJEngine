@@ -55,6 +55,35 @@ std::string File::ReadFileToString(const std::string& file_name)
     return ss.str();
 }
 
+std::tuple<std::shared_ptr<char[]>, int> File::ReadFileToBytes(const std::filesystem::path& file_name)
+{
+    if (!CheckExists(file_name)) return {};
+
+    std::ifstream stream(file_name, std::ios::binary | std::ios::ate);
+
+    if (!stream)
+    {
+        // Failed to open the file
+        return { nullptr, 0 };
+    }
+
+    std::streampos end = stream.tellg();
+    stream.seekg(0, std::ios::beg);
+    int size = static_cast<int>(end - stream.tellg());
+
+    if (size == 0)
+    {
+        // File is empty
+        return { nullptr, 0 };
+    }
+
+    std::shared_ptr<char[]> buffer(new char[size]);
+    stream.read(buffer.get(), size);
+    stream.close();
+
+    return { buffer, size };
+}
+
 std::shared_ptr<TextureData> File::ReadImageToTexture(const std::string& file_name)
 {
     if (!std::filesystem::exists(file_name))
