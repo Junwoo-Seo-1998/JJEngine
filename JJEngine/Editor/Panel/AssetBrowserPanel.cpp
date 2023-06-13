@@ -17,8 +17,41 @@ void AssetBrowserPanel::SetSelectedFileFunc(std::function<void(std::filesystem::
 {
 	setSelectedFile = func;
 }
+void AssetBrowserPanel::OnImGuiRender_ResorceHierarchy(std::filesystem::path p)
+{
+	std::vector<std::filesystem::path> files = File::GetFileLists(p);
+	for (auto& f : files) {
+		ImGuiTreeNodeFlags flag{};
+		bool isDirectory{ std::filesystem::is_directory(f) };
+		if (isDirectory == true) {
+			flag =  ImGuiTreeNodeFlags_OpenOnArrow;
+		}
+		else {
+			flag = ImGuiTreeNodeFlags_Leaf;
+		}
+
+		auto name = f.filename().string() + "##" + f.string();
+		bool opened = ImGui::TreeNodeEx(name.c_str(), flag);
+
+		if (ImGui::IsItemClicked() == true && isDirectory == true) {
+			nowDirectory = f;
+		}
+
+		if (opened == true) {
+			if (isDirectory == true) {
+				OnImGuiRender_ResorceHierarchy(f);
+			}
+			ImGui::TreePop();
+		}
+	}
+}
 void AssetBrowserPanel::OnImGuiRender()
 {
+	ImGui::Begin("Resorce hierarchy");
+	OnImGuiRender_ResorceHierarchy(".");
+	ImGui::End();
+
+
 	if (ImGui::Button("<-") == true) {
 		if (nowDirectory != AssetDirectory) {
 			nowDirectory = nowDirectory.parent_path();

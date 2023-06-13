@@ -55,7 +55,7 @@ void EditorLayer::OnStart()
 
 	m_AssetBrowserPanel.Set();
 	m_AssetBrowserPanel.SetSelectedFileFunc([&](std::filesystem::path str)->void {shouldOpenFile = str; });
-
+	//m_AssetBrowserWindow.Push_ImGuiCommand([&]()->void {m_AssetBrowserPanel.OnImGuiRender_ResorceHierarchy("."); });
 	m_AssetBrowserWindow.Push_ImGuiCommand([&]()->void {m_AssetBrowserPanel.OnImGuiRender(); });
 }
 

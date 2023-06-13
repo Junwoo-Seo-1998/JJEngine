@@ -13,5 +13,6 @@ public:
 	AssetBrowserPanel();
 	void Set();
 	void SetSelectedFileFunc(std::function<void(std::filesystem::path)> func);
+	void OnImGuiRender_ResorceHierarchy(std::filesystem::path p);
 	void OnImGuiRender();
 };
