@@ -22,6 +22,8 @@ struct Renderer2DData
 	std::shared_ptr<VertexBuffer> QuadVertexBuffer;
 	std::shared_ptr<IndexBuffer> QuadIndexBuffer;
 	std::shared_ptr<Shader>TextureShader;
+	std::shared_ptr<Shader>EntityIDShader;
+
 	std::shared_ptr<Texture> WhiteTexture;
 
 	QuadVertex QuadVertices[4];
@@ -87,6 +89,10 @@ void Renderer2D::Init()
 		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.frag"} }
 	});
 
+	s_Data.EntityIDShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/EntityID.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/EntityID.frag"} }
+	});
 	
 }
 
@@ -130,5 +136,24 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Text
 	s_Data.TextureShader->SetFloat4("Color", tintColor);
 	texture->BindTexture(1);
 	s_Data.TextureShader->SetInt("TextureUnit", 1);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+}
+
+void Renderer2D::BeginSceneEntityID(const EditorCamera& camera)
+{
+	s_Data.EntityIDShader->Use();
+	s_Data.EntityIDShader->SetMat4("ViewProjection", camera.GetViewProjection());
+
+	s_Data.QuadVertexArray->Bind();
+}
+
+void Renderer2D::EndSceneEntityID()
+{
+}
+
+void Renderer2D::DrawQuadEntityID(const glm::mat4& transform, int entityID)
+{
+	s_Data.EntityIDShader->SetMat4("Transform", transform);
+	s_Data.EntityIDShader->SetInt("EntityID", entityID);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }

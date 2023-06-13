@@ -9,6 +9,7 @@ End Header-------------------------------------------------------- */
 #include<tuple>
 enum class TextureChannel
 {
+	R_INT,
 	RGB,
 	RGBA,
 	RGBA32F,
@@ -50,6 +51,8 @@ public:
 	void BindTexture(unsigned int unit = 0);
 	void UnBindTexture();
 
+	//clear texture with the value
+	void ClearTexture(int value = -1);
 private:
 	Texture(std::shared_ptr<TextureData> texture_data);
 	Texture(const TextureData& texture_data);

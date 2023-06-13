@@ -12,6 +12,7 @@ End Header-------------------------------------------------------- */
 #include "Application.h"
 #include "Event/EventManager.h"
 #include "Event/WindowEvent.h"
+#include "Graphics/RenderCommand.h"
 #include "Input/Input.h"
 
 Window::Window()
@@ -68,9 +69,8 @@ Window::Window()
 
 	//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	glEnable(GL_DEPTH_TEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
+	//do default opengl settings.
+	RenderCommand::Init();
 }
 
 Window::~Window()

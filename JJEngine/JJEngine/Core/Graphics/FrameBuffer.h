@@ -4,6 +4,7 @@
 enum class FrameBufferFormat
 {
 	None = 0,
+	R_INT,
 	RGB,
 	RGBA,
 	RGBA32F,
@@ -35,7 +36,7 @@ public:
 	FrameBuffer() = delete;
 	virtual ~FrameBuffer();
 
-	void Bind(bool clear = false) const;
+	void Bind() const;
 	void UnBind() const;
 
 	void Resize(unsigned int width, unsigned int height);
@@ -44,8 +45,9 @@ public:
 	std::shared_ptr<Texture> GetColorTexture(int index);
 	std::shared_ptr<Texture> GetDepthTexture();
 
-	FrameBufferSpecification GetSpecification() const;
+	int GetPixelInt(int colorTextureIndex, int x, int y);
 
+	FrameBufferSpecification GetSpecification() const;
 private:
 	FrameBuffer(const FrameBufferSpecification& spec);
 	void BuildFrameBuffer();

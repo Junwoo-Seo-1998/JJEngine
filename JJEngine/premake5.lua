@@ -135,7 +135,7 @@ project "JJEngine-ScriptCore"
     dotnetframework "4.8"
     location "JJEngine-ScriptCore"
     targetdir ("RuntimeDependencies/Resources/Scripts")
-    --objdir ("..Intermediates")
+    objdir ("bin/%{cfg.buildcfg}-obj")
 
     files 
     {

@@ -42,6 +42,8 @@ private:
 
 	EditorCamera m_EditorCamera;
 	glm::vec2 m_ViewportSize{ 400.f, 400.f };
+	glm::vec2 m_ViewportBoundMin{};
+	glm::vec2 m_ViewportBoundMax{};
 
 	int m_GizmoType = -1;//no drawing
 
@@ -61,6 +63,7 @@ private:
 	ImGuiSubWindow m_AssetBrowserWindow{ "Asset browser" };
 
 	std::shared_ptr<FrameBuffer> m_EditorViewport;
+	std::shared_ptr<FrameBuffer> m_EditorSelectionViewport;
 
 	std::shared_ptr<Texture> m_PlayIcon;
 	std::shared_ptr<Texture> m_StopIcon;

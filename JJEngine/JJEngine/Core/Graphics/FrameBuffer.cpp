@@ -22,11 +22,10 @@ FrameBuffer::~FrameBuffer()
 	UnBind();
 	glDeleteFramebuffers(1, &m_FrameBufferID);
 }
-void FrameBuffer::Bind(bool clear) const
+void FrameBuffer::Bind() const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBufferID);
-	if (clear)
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glViewport(0, 0, static_cast<int>(m_DescribedFrameBuffer.Width), static_cast<int>(m_DescribedFrameBuffer.Height));
 }
 
 void FrameBuffer::UnBind() const
@@ -59,6 +58,17 @@ std::shared_ptr<Texture> FrameBuffer::GetColorTexture(int index)
 std::shared_ptr<Texture> FrameBuffer::GetDepthTexture()
 {
 	return m_DepthTexture;
+}
+
+int FrameBuffer::GetPixelInt(int colorTextureIndex, int x, int y)
+{
+	ENGINE_ASSERT(colorTextureIndex < m_ColorTextures.size());
+
+	int val = 0;
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + colorTextureIndex);
+	glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &val);
+
+	return val;
 }
 
 FrameBufferSpecification FrameBuffer::GetSpecification() const
@@ -113,6 +123,11 @@ void FrameBuffer::BuildFrameBuffer()
 			const FrameBufferFormat format = m_ColorFormats[i];
 			switch (format)
 			{
+				case FrameBufferFormat::R_INT:
+				{
+					m_ColorTextures[i] = Texture::CreateTexture({ width, height, nullptr, TextureChannel::R_INT });
+					break;
+				}
 				case FrameBufferFormat::RGB:
 				{
 					m_ColorTextures[i] = Texture::CreateTexture({ width,height,nullptr,TextureChannel::RGB });
@@ -120,14 +135,17 @@ void FrameBuffer::BuildFrameBuffer()
 				}
 				case  FrameBufferFormat::RGBA:
 				{
-					m_ColorTextures[i] = Texture::CreateTexture({width,height,nullptr,TextureChannel::RGBA});
+					m_ColorTextures[i] = Texture::CreateTexture({ width,height,nullptr,TextureChannel::RGBA });
 					break;
+				}
 				case  FrameBufferFormat::RGBA32F:
 				{
-					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGBA32F });
+					m_ColorTextures[i] = Texture::CreateTexture({ width,height,nullptr,TextureChannel::RGBA32F });
 					break;
 				}
-				}
+				default:
+					ENGINE_ASSERT(false, "Not Supported Type!");
+					break;
 			}
 			unsigned textureID = m_ColorTextures[i]->GetTextureID();
 			glNamedFramebufferTexture(m_FrameBufferID, GL_COLOR_ATTACHMENT0 + i, textureID, 0);
@@ -148,6 +166,9 @@ void FrameBuffer::BuildFrameBuffer()
 				m_DepthTexture = Texture::CreateTexture({ width,height,nullptr, TextureChannel::Depth });
 				break;
 			}
+			default:
+				ENGINE_ASSERT(false, "Not Supported Type!");
+				break;
 		}
 		unsigned textureID = m_DepthTexture->GetTextureID();
 		glNamedFramebufferTexture(m_FrameBufferID, GL_DEPTH_STENCIL_ATTACHMENT, textureID, 0);

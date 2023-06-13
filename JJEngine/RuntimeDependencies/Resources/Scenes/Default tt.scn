@@ -119,12 +119,14 @@ Components:
         - 1
   Sprite:
     682d9c3c-248f-4311-b0bf-edbd4d345676:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
       SpriteColor:
         - 1
         - 1
         - 1
         - 1
     edd7159b-7878-4e8c-8d66-55c72c617d96:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
       SpriteColor:
         - 1
         - 1

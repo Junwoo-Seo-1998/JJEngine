@@ -20,6 +20,8 @@ End Header-------------------------------------------------------- */
 #include "Utils/UUIDGenerator.h"
 #include "Utils/Math/MatrixMath.h"
 
+#include "Core/Asset/Asset_Texture.h"
+
 static b2BodyType RigidBody2DTypeToBox2D(RigidBody2DComponent::BodyType bodyType)
 {
 	switch (bodyType)
@@ -126,12 +128,24 @@ void Scene::UpdateEditor(EditorCamera& camera)
 	{
 		Entity entity{ e, this };
 		auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
-		if (spriteComp.texture)
-			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.texture, spriteComp.color);
+		if (spriteComp.asset)
+			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.asset->data, spriteComp.color);
 		else
 			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
 	}
 	Renderer2D::EndScene();
+}
+
+void Scene::RenderEntityID(EditorCamera& camera)
+{
+	Renderer2D::BeginSceneEntityID(camera);
+	auto view = m_Registry.view<SpriteRendererComponent>();
+	for (auto e : view)
+	{
+		Entity entity{ e, this };
+		Renderer2D::DrawQuadEntityID(entity.GetWorldSpaceTransformMatrix(), static_cast<int>(e));
+	}
+	Renderer2D::EndSceneEntityID();
 }
 
 void Scene::StartRuntime()
@@ -212,8 +226,8 @@ void Scene::UpdateRuntime()
 		{
 			Entity entity{ e, this };
 			auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
-			if (spriteComp.texture)
-				Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.texture, spriteComp.color);
+			if (spriteComp.asset)
+				Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.asset->data, spriteComp.color);
 			else
 				Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
 		}

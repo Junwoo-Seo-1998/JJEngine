@@ -23,6 +23,7 @@
 
 #include "Core/Event/WindowEvent.h"
 #include "Core/Event/EventManager.h"
+#include "Core/Graphics/RenderCommand.h"
 #include "Core/Input/Input.h"
 
 EditorLayer::~EditorLayer()
@@ -35,8 +36,8 @@ void EditorLayer::OnAttach()
 	m_EditorCamera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
 	SetNewScene(std::make_shared<TestScene>("Test"));
 	//for testing
-	m_EditorViewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::Depth } });
-
+	m_EditorViewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::R_INT,FrameBufferFormat::Depth } });
+	m_EditorSelectionViewport = FrameBuffer::CreateFrameBuffer({ 400, 400, {FrameBufferFormat::R_INT, FrameBufferFormat::Depth} });
 	m_PlayIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/PlayButton.png"));
 	m_StopIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/Stop.png"));
 }
@@ -54,7 +55,7 @@ void EditorLayer::OnStart()
 
 	m_AssetBrowserPanel.Set();
 	m_AssetBrowserPanel.SetSelectedFileFunc([&](std::filesystem::path str)->void {shouldOpenFile = str; });
-
+	//m_AssetBrowserWindow.Push_ImGuiCommand([&]()->void {m_AssetBrowserPanel.OnImGuiRender_ResorceHierarchy("."); });
 	m_AssetBrowserWindow.Push_ImGuiCommand([&]()->void {m_AssetBrowserPanel.OnImGuiRender(); });
 }
 
@@ -80,6 +81,34 @@ void EditorLayer::OnUpdate()
 		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize Scene: " + shouldOpenFile.filename().string());
 	}
 	shouldOpenFile.clear();
+
+	if (Input::IsTriggered(MouseCode::Left) && m_SceneState != SceneState::Play && !ImGuizmo::IsOver() && !Input::IsPressed(KeyCode::LeftAlt))
+	{
+		auto [mx, my] = ImGui::GetMousePos();
+
+		mx -= m_ViewportBoundMin.x;
+		my -= m_ViewportBoundMin.y;
+		glm::vec2 viewportSize = m_ViewportBoundMax - m_ViewportBoundMin;
+		my = viewportSize.y - my;
+
+		//EngineLog::Info("viewportSize {}, {}", viewportSize.x, viewportSize.y);
+		if (mx >= 0 && mx <= viewportSize.x && my >= 0 && my <= viewportSize.y)
+		{
+			//EngineLog::Info("Mouse {}, {}", mx, my);
+			m_EditorSelectionViewport->Bind();
+			int SelectedEntityID = m_EditorSelectionViewport->GetPixelInt(0, mx, my);
+			EngineLog::Info("Mouse {}, {} Selected EntityID: {}", mx, my, SelectedEntityID);
+			if(SelectedEntityID!=-1)
+			{
+				m_SelectedEntityID = static_cast<entt::entity>(SelectedEntityID);
+			}
+			else
+			{
+				m_SelectedEntityID = entt::null;
+			}
+			m_EditorSelectionViewport->UnBind();
+		}
+	}
 }
 
 void EditorLayer::OnPreRender()
@@ -91,9 +120,10 @@ void EditorLayer::OnPreRender()
 		m_EditorCamera.SetViewportSize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 		m_ActiveScene->ResizeViewport((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 		m_EditorViewport->Resize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
+		m_EditorSelectionViewport->Resize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 	}
-	m_EditorViewport->Bind(true);
-	glViewport(0, 0, (int)spec.Width, (int)spec.Height);
+	m_EditorViewport->Bind();
+	RenderCommand::Clear();
 }
 
 void EditorLayer::OnRender()
@@ -114,6 +144,14 @@ void EditorLayer::OnRender()
 void EditorLayer::OnPostRender()
 {
 	m_EditorViewport->UnBind();
+	if (m_SceneState != SceneState::Play)
+	{
+		m_EditorSelectionViewport->Bind();
+		RenderCommand::Clear();
+		m_EditorSelectionViewport->GetColorTexture(0)->ClearTexture(-1);
+		m_EditorScene->RenderEntityID(m_EditorCamera);
+		m_EditorSelectionViewport->UnBind();
+	}
 }
 
 void EditorLayer::OnImGuiRender()
@@ -158,14 +196,33 @@ void EditorLayer::OnImGuiRender()
 
 	m_AssetBrowserWindow.Update();
 
-	ImGui::Begin("viewport");
-	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-	m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-	ImGui::Image((void*)m_EditorViewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-	if(m_SceneState==SceneState::Edit)
-		DrawGuizmo(m_EditorCamera, { m_SelectedEntityID, m_ActiveScene.get() }, m_GizmoType);
-	ImGui::End();
 
+	//viewport part
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.0f, 0.0f });
+		ImGui::Begin("viewport");
+
+		auto viewportOffset = ImGui::GetCursorPos();//include tab
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+		ImVec2 vMin = ImGui::GetWindowContentRegionMin();
+		ImVec2 vMax = ImGui::GetWindowContentRegionMax();
+
+		vMin.x += ImGui::GetWindowPos().x;
+		vMin.y += ImGui::GetWindowPos().y;
+		vMax.x += ImGui::GetWindowPos().x;
+		vMax.y += ImGui::GetWindowPos().y;
+
+		m_ViewportBoundMax = { vMax.x, vMax.y };
+		m_ViewportBoundMin = { vMin.x, vMin.y };
+
+		ImGui::Image((void*)m_EditorViewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+		if (m_SceneState == SceneState::Edit)
+			DrawGuizmo(m_EditorCamera, { m_SelectedEntityID, m_ActiveScene.get() }, m_GizmoType);
+		ImGui::End();
+		ImGui::PopStyleVar();
+	}
 
 	m_SceneHierarchyPanel.OnImGuiRender();
 	m_ComponentPanel.SetSelevted_EntityHandle(m_SelectedEntityID);
@@ -240,9 +297,8 @@ void EditorLayer::DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType)
 	ImGuizmo::SetOrthographic(false);
 	ImGuizmo::SetDrawlist();
 
-	float windowWidth = (float)ImGui::GetWindowWidth();
-	float windowHeight = (float)ImGui::GetWindowHeight();
-	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+	ImGuizmo::SetRect(m_ViewportBoundMin.x, m_ViewportBoundMin.y, m_ViewportBoundMax.x - m_ViewportBoundMin.x, m_ViewportBoundMax.y - m_ViewportBoundMin.y);
+
 	//editor camera
 	const glm::mat4& cameraProjection = camera.GetProjection();
 	glm::mat4 cameraView = camera.GetViewMatrix();

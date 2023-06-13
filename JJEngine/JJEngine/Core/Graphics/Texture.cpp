@@ -11,6 +11,8 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLInnerType() const
 {
 	switch (channel)
 	{
+	case TextureChannel::R_INT:
+		return GL_R32I;
 	case TextureChannel::RGB:
 		return GL_RGB8;
 	case TextureChannel::RGBA:
@@ -30,9 +32,12 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLType() const
 {
 	switch (channel)
 	{
+	case TextureChannel::R_INT:
+		return GL_RED_INTEGER;
 	case TextureChannel::RGB:
 		return GL_RGB;
 	case TextureChannel::RGBA:
+	case TextureChannel::RGBA32F:
 		return GL_RGBA;
 	case TextureChannel::Depth:
 		return GL_DEPTH_STENCIL;
@@ -87,6 +92,11 @@ void Texture::BindTexture(unsigned int unit)
 void Texture::UnBindTexture()
 {
 	glBindTextureUnit(m_UnitID, 0);
+}
+
+void Texture::ClearTexture(int value)
+{
+	glClearTexImage(m_TextureID, 0, m_TextureChannel.TextureChannelTypeToOpenGLType(), GL_INT, &value);
 }
 
 Texture::Texture(std::shared_ptr<TextureData> texture_data)

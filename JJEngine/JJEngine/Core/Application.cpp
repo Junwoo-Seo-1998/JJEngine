@@ -17,6 +17,7 @@ End Header-------------------------------------------------------- */
 #include "Core/Layer/LayerManager.h"
 #include "Script/ScriptEngine.h"
 #include "Utils/Assert.h"
+#include "Core/Asset/Manager/AssetManager.h"
 
 #include "Graphics/Renderer/Renderer2D.h"
 Application* Application::s_Instance = nullptr;
@@ -29,7 +30,7 @@ Application::Application()
 	window = std::make_shared<Window>();
 	sceneManager = std::make_shared<SceneManager>();
 	layerManager = std::make_shared<LayerManager>();
-	
+	assetManager = std::make_shared<AssetManager>();
 }
 
 Application::~Application()
@@ -42,7 +43,8 @@ bool Application::Init()
 	ImGuiRenderer::Instance()->Init(GetWindow()->GetGLFWWindow());
 	ScriptEngine::instance()->Init();
 	
-	
+	if (assetManager->ReadAData() == false) {}
+
 	return true;//just for now
 }
 
@@ -63,6 +65,9 @@ void Application::Update()
 	do
 	{
 		Time::Update();
+
+		assetManager->UpdateAData();
+
 		if (window->shouldClose() == true) {
 			sceneManager->exit();
 			engineLoop = false;
@@ -156,4 +161,9 @@ std::shared_ptr<LayerManager> Application::GetLayerManager()
 std::shared_ptr<EventManager> Application::GetEventManager()
 {
 	return eventManager;
+}
+
+std::shared_ptr<AssetManager> Application::GetAssetManager()
+{
+	return assetManager;
 }

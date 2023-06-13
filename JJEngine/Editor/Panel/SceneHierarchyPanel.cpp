@@ -6,6 +6,8 @@
 #include "Core/Entity/Entity.hpp"
 #include "Core/Utils/Log.h"
 #include "Core/Utils/Assert.h"
+#include "Core/Component/CameraComponent.h"
+
 void SceneHierarchyPanel::SetSlected_EntityFunc(std::function<void(entt::entity)> func)
 {
 	setSelectedEntity = func;
@@ -70,15 +72,26 @@ void SceneHierarchyPanel::OnImGuiRender()
 	auto scene = m_scene.lock();
 	ENGINE_ASSERT(scene, "check the original scene was deleted!!");
 
+	if (ImGui::BeginMenuBar() == true) {
+		if (ImGui::BeginMenu("Create") == true) {
+			if (ImGui::MenuItem("Create empty entity") == true) {
+				Entity child = scene->CreateEntity(); // temp
+				if (clickedEntity != entt::null) {
+					Entity parent{ clickedEntity,scene.get() };
+					child.SetParent(parent);
+				}
+			}
+			if (ImGui::MenuItem("Create Camera") == true) {
+				Entity entity = scene->CreateEntity("Camera");
+				entity.AddComponent<CameraComponent>();
+			}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMenuBar();
+	}
 	ImGui::Begin("Scene Hierarchy");
 	ImGui::Text("Scene name: %s", scene->m_scene_name.c_str());
-	if (ImGui::Button("Create empty entity") == true) {
-		Entity child = scene->CreateEntity(); // temp
-		if (clickedEntity != entt::null) {
-			Entity parent{ clickedEntity,scene.get() };
-			child.SetParent(parent);
-		}
-	}
+
 	ImGui::Separator();
 
 
@@ -91,7 +104,7 @@ void SceneHierarchyPanel::OnImGuiRender()
 			}
 		});
 
-	bool opened = ImGui::TreeNodeEx("Scene", ImGuiTreeNodeFlags_OpenOnArrow);
+	bool opened = ImGui::TreeNodeEx("Scene", ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_DefaultOpen);
 	if (ImGui::IsItemClicked()) {
 		setSelectedEntity(entt::null);
 		clickedEntity = entt::null;

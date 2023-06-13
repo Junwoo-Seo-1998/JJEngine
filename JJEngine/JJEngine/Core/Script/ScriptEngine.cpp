@@ -6,6 +6,8 @@
 #include "mono/metadata/assembly.h"
 #include "mono/metadata/threads.h"
 #include "glad.h"
+#include "Core/Utils/Assert.h"
+#include "Core/Utils/File.h"
 
 static std::string AppDomainName="JJ_AppDomain";
 
@@ -100,15 +102,19 @@ void ScriptEngine::InitMono()
 {
 	mono_set_assemblies_path("mono/lib");
 	s_data.RootDomain = mono_jit_init("JJEngineJITRuntime");
-	if(s_data.RootDomain == nullptr)
-	{
-		std::cerr << "mono jit init failed" << std::endl;
-		throw;
-	}
+
+	ENGINE_ASSERT(s_data.RootDomain != nullptr, "Mono JIT Init Failed");
+
 	s_data.AppDomain = mono_domain_create_appdomain(AppDomainName.data(), nullptr);
-	mono_domain_set(s_data.AppDomain, false);
-	//mono_thread_set_main(mono_thread_current());
-	mono_add_internal_call("JJEngine_ScriptCore.InternalCalls::Graphics_SetClearColor", (void*)test_clearColor);
+	mono_domain_set(s_data.AppDomain, true);
+
+	MonoAssembly* assembly = LoadCSharpAssembly("Resources/Scripts/JJEngine-ScriptCore.dll");
+	PrintAssemblyTypes(assembly);
+
+	MonoImage* image = mono_assembly_get_image(assembly);
+	MonoClass* mono_class = mono_class_from_name(image, "JJEngine_ScriptCore", "main");
+	MonoObject* object = mono_object_new(s_data.AppDomain, mono_class);
+	mono_runtime_object_init(object);
 
 /*#pragma region test
 	//for testing
@@ -178,38 +184,9 @@ void ScriptEngine::ShutdownMono()
 	s_data.RootDomain = nullptr;
 }
 
-std::shared_ptr<char[]> ScriptEngine::ReadBytes(const std::string& filepath, int& outSize)
-{
-	std::ifstream stream(filepath, std::ios::binary | std::ios::ate);
-
-	if (!stream)
-	{
-		// Failed to open the file
-		return nullptr;
-	}
-
-	std::streampos end = stream.tellg();
-	stream.seekg(0, std::ios::beg);
-	int size = static_cast<int>(end - stream.tellg());
-
-	if (size == 0)
-	{
-		// File is empty
-		return nullptr;
-	}
-
-	std::shared_ptr<char[]> buffer(new char[size]);
-	stream.read(buffer.get(), size);
-	stream.close();
-
-	outSize = size;
-	return buffer;
-}
-
 MonoAssembly* ScriptEngine::LoadCSharpAssembly(const std::string& assemblyPath)
 {
-	int fileSize = 0;
-	std::shared_ptr<char[]> fileData = ReadBytes(assemblyPath, fileSize);
+	auto [fileData, fileSize] = File::ReadFileToBytes(assemblyPath);
 
 	// NOTE: We can't use this image for anything other than loading the assembly because this image doesn't have a reference to the assembly
 	MonoImageOpenStatus status;
