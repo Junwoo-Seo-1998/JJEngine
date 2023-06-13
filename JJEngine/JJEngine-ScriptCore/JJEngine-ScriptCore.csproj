@@ -19,9 +19,10 @@
     <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
-    <BaseIntermediateOutputPath>obj\Win64\Debug\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\bin\Debug-obj\Win64\Debug\JJEngine-ScriptCore\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -31,9 +32,10 @@
     <DebugSymbols>true</DebugSymbols>
     <Optimize>true</Optimize>
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
-    <BaseIntermediateOutputPath>obj\Win64\Release\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\bin\Release-obj\Win64\Release\JJEngine-ScriptCore\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -44,7 +46,6 @@
   <ItemGroup>
     <Compile Include="InternalCalls.cs" />
     <Compile Include="main.cs" />
-    <Compile Include="obj\Win64\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

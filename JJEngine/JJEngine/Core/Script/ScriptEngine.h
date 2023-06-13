@@ -17,7 +17,6 @@ private:
 	void InitMono();
 	void ShutdownMono();
 private://inner helper functions
-	std::shared_ptr<char[]> ReadBytes(const std::string& filepath, int& outSize);
 	MonoAssembly* LoadCSharpAssembly(const std::string& assemblyPath);
 	void PrintAssemblyTypes(MonoAssembly* assembly);
 
