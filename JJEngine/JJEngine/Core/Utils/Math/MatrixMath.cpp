@@ -39,6 +39,7 @@ glm::mat4 MatrixMath::BuildCameraMatrixWithDirection(const glm::vec3& cam_positi
 	const glm::vec3& world_up)
 {
 #ifdef DEBUG
+
 	if (lookAt == world_up)
 		throw "shouldn't be same!";
 	glm::vec3 cam_foward = -lookAt;
@@ -65,7 +66,7 @@ glm::mat4 MatrixMath::BuildCameraMatrixWithDirection(const glm::vec3& cam_positi
 
 	return toret;
 #else
-	return glm::lookAt(cam_position, lookAt, world_up);
+	return glm::lookAt(cam_position, cam_position + lookAt, world_up);
 #endif
 }
 
