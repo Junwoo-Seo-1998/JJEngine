@@ -49,6 +49,12 @@
     <ClInclude Include="Core\Asset\AssetType.h">
       <Filter>Asset</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Asset\Asset_Scene.h">
+      <Filter>Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Asset\Asset_Texture.h">
+      <Filter>Asset</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Asset\Manager\AssetManager.h">
       <Filter>Asset\Manager</Filter>
     </ClInclude>
@@ -192,11 +198,15 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Asset\Asset_Texture.h" />
-    <ClInclude Include="Core\Asset\Asset_Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Asset\Asset_Scene.cpp">
+      <Filter>Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Asset\Asset_Texture.cpp">
+      <Filter>Asset</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Asset\Manager\AssetManager.cpp">
       <Filter>Asset\Manager</Filter>
     </ClCompile>
@@ -296,7 +306,5 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\Asset\Asset_Texture.cpp" />
-    <ClCompile Include="Core\Asset\Asset_Scene.cpp" />
   </ItemGroup>
 </Project>
