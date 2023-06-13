@@ -127,8 +127,8 @@ Shader::Shader(const ShaderSource& shaderSrc, bool is_file)
 	glGetProgramiv(m_ShaderProgram, GL_LINK_STATUS, &success);
 	if (!success) {
 		glGetProgramInfoLog(m_ShaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINK_FAILED\n" << infoLog << std::endl;
-		static_assert(true, "ERROR::SHADER::PROGRAM::LINK_FAILED\n");
+		EngineLog::Error("ERROR::SHADER::PROGRAM::LINK_FAILED {}\n", infoLog);
+		ENGINE_ASSERT(false, "ERROR::SHADER::PROGRAM::LINK_FAILED\n");
 	}
 
 	//no need only program
