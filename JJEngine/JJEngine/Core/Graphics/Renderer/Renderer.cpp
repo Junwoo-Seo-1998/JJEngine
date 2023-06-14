@@ -17,9 +17,10 @@ static std::vector<glm::mat4> toLightVP;
 static std::vector<LightInfo> lights;
 
 
-void Renderer::BeginScene(const glm::mat4& viewProjection)
+void Renderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3& pos)
 {
 	command.variables["toVP"] = viewProjection;
+	command.variables["camPos"] = pos;
 }
 
 void Renderer::SetModel(const Model& model, const TransformComponent& transform)
@@ -35,12 +36,12 @@ void Renderer::AddAffectLight(const LightComponent& light, TransformComponent li
 	case LightType::Point:
 	{
 
-		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, { 0.f, 0.f, 0.f }, {0.f, 1.f, 0.f}));
-		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrix(lightTransform.Position, { 0.f, 0.f, 0.f }, {0.f, 1.f, 0.f}));
-		//toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.99f, 0.f }));
-		//toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, -0.99f, 0.f }));
-		//toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.f, 1.f }));
-		//toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.f, -1.f }));
+		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 1.f, 0.f, 0.f }));
+		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { -1.f, 0.f, 0.f }));
+		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 1.f, 0.f }, {0, 0, 1}));
+		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, -1.f, 0.f }, {0, 0, -1}));
+		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.f, 1.f }));
+		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.f, -1.f }));
 
 		lights.push_back({ light.type, toLightVP , lightTransform.Position });
 		toLightVP.clear();
@@ -63,9 +64,10 @@ void Renderer::SetVAO(std::shared_ptr<VertexArray> VAO)
 	command.variables["VAO"] = VAO;
 }
 
-void Renderer::SetGBuffer(std::shared_ptr<FrameBuffer> FBO)
+void Renderer::SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ)
 {
 	command.variables["GBufferFBO"] = FBO;
+	command.variables["FSQ"] = FSQ;
 
 }
 

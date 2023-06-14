@@ -35,7 +35,7 @@ void IngameRendererLayer::OnAttach()
 	//for testing
 	renderer_vao = VertexArray::CreateVertexArray();
 	//Position, Normal, Ambient, Diffuse, Specular 
-	g_buffer = FrameBuffer::CreateFrameBuffer({ static_cast<unsigned int>(get<0>(window->GetWidthAndHeight())), static_cast<unsigned int>(get<1>(window->GetWidthAndHeight())),{FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA}});
+	g_buffer = FrameBuffer::CreateFrameBuffer({ static_cast<unsigned int>(get<0>(window->GetWidthAndHeight())), static_cast<unsigned int>(get<1>(window->GetWidthAndHeight())),{FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA}});
 
 	shadow_buffer = FrameBuffer::CreateFrameBuffer({ shadowResolution.x,shadowResolution.y,{FrameBufferFormat::Depth } });
 	
@@ -63,6 +63,18 @@ void IngameRendererLayer::OnStart()
 			mesh->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(mesh->GetNumOfIndices() * sizeof(int));
 		}
 	}
+	FSQ.GetVertices().push_back(Vertex{ glm::vec3{ -1.f, -1.f, 0.f} });
+	FSQ.GetVertices().push_back(Vertex{ glm::vec3{ 1.f, -1.f, 0.f} });
+	FSQ.GetVertices().push_back(Vertex{ glm::vec3{ 1.f, 1.f, 0.f} });
+	FSQ.GetVertices().push_back(Vertex{ glm::vec3{ -1.f, 1.f, 0.f} });
+	FSQ.GetIndices().push_back(0);
+	FSQ.GetIndices().push_back(1);
+	FSQ.GetIndices().push_back(2);
+	FSQ.GetIndices().push_back(0);
+	FSQ.GetIndices().push_back(2);
+	FSQ.GetIndices().push_back(3);
+	FSQ.GetMeshVBO() = VertexBuffer::CreateVertexBuffer(FSQ.GetNumOfVertices() * sizeof(Vertex));
+	FSQ.GetMeshEBO() = IndexBuffer::CreateIndexBuffer(FSQ.GetNumOfIndices() * sizeof(int));
 }
 
 void IngameRendererLayer::OnUpdate()
@@ -99,11 +111,13 @@ void IngameRendererLayer::OnRender()
 			auto& transform = objEntity.GetComponent<TransformComponent>();
 			auto& model = objEntity.GetComponent<Model>();
 			auto& material = objEntity.GetComponent<MaterialComponent>();
-			Renderer::BeginScene(camVP);
+			Renderer::BeginScene(camVP, cameraTransform.Position);
 			Renderer::SetVAO(renderer_vao);
 			Renderer::SetShadowBuffer(shadow_buffer);
-			Renderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
+			Renderer::SetGBuffer(g_buffer, FSQ);
 
+			Renderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
+			
 			Renderer::SetModel(model, transform);
 			Renderer::SetMaterial(material);
 

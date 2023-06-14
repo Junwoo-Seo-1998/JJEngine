@@ -22,23 +22,44 @@ void ShadowScene::Start()
 
 	Entity light1 = CreateEntity("Light 1");
 	TransformComponent& lightTransform1 = light1.GetComponent<TransformComponent>();
-	lightTransform1.Position = { 10.f, 0.f, 0.f };
+	lightTransform1.Position = { 3.f, 2.f, 0.f };
 	light1.AddComponent<LightComponent>(LightComponent{});
 
 	Entity light2 = CreateEntity("Light 2");
 	TransformComponent& lightTransform2 = light2.GetComponent<TransformComponent>();
-	lightTransform2.Position = { 0.f, 0.f, 10.f };
+	lightTransform2.Position = { 0.f, 2.f, 3.f };
 	light2.AddComponent<LightComponent>(LightComponent{});
 
 	std::shared_ptr<Shader> forwardShader = Shader::CreateShaderFromFile({
-{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/test.vert"}},
-{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/test.frag"} }
+{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ForwardRendering.vert"}},
+{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ForwardRendering.frag"} }
 		});
+
+
+	std::shared_ptr<Shader> deferredShader = Shader::CreateShaderFromFile({
+{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DeferredRendering.vert"}},
+{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DeferredRendering.frag"} }
+		});
+
 
 	std::shared_ptr<Shader> shadowShader = Shader::CreateShaderFromFile({
 { ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/shadowSampling.vert"}},
 { ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/shadowSampling.frag"} }
 		});
+
+	std::shared_ptr<Shader> gBufferShader = Shader::CreateShaderFromFile({
+{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/GBufferSampling.vert"}},
+{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/GBufferSampling.frag"} }
+		});
+
+
+	MaterialComponent deferredShadowMaterial{};
+	deferredShadowMaterial.shadowSamplingShader = shadowShader;
+	deferredShadowMaterial.defferedFirstPassShader = gBufferShader;
+	deferredShadowMaterial.defferedSecondPassShader = deferredShader;
+	deferredShadowMaterial.isShadowed = true;
+	deferredShadowMaterial.type = MaterialType::Deffered;
+
 
 	MaterialComponent forwardShadowMaterial{};
 	forwardShadowMaterial.forwardShader = forwardShader;
@@ -47,16 +68,22 @@ void ShadowScene::Start()
 	forwardShadowMaterial.type = MaterialType::Forward;
 
 	Entity object = CreateEntity("Object");
-	object.AddComponent<MaterialComponent>(forwardShadowMaterial);
+	object.AddComponent<MaterialComponent>(deferredShadowMaterial);
 	Model objectModel;
 	objectModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreateSphere(20, 20, 1.f, { 0.f, 0.f, 0.f })));
 	object.AddComponent<Model>(objectModel);
 
+
+	MaterialComponent forwardMaterial{};
+	forwardMaterial.forwardShader = forwardShader;
+	forwardMaterial.isShadowed = false;
+	forwardMaterial.type = MaterialType::Forward;
+
 	Entity floor = CreateEntity("Floor");
-	floor.AddComponent<MaterialComponent>(forwardShadowMaterial);
+	floor.AddComponent<MaterialComponent>(forwardMaterial);
 	TransformComponent& floorTransform = floor.GetComponent<TransformComponent>();
 	floorTransform.Position = { 0.f, -3.f, 0.f };	
-	floorTransform.Scale = { 10.f, 10.f, 10.f };
+	floorTransform.Scale = { 1000.f, 1000.f, 1000.f };
 	Model floorModel;
 	floorModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreatePlane(10, 10)));
 	floor.AddComponent<Model>(floorModel);

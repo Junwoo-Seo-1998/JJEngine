@@ -59,18 +59,29 @@ public:
 
 	void ExecuteRenderCommands();
 
+	void ExcuteInitializing();
 	void ExecutePreRenderCommand(RenderCommand command);
 	void ExecuteRenderCommand(RenderCommand command);
 	void ExecutePostRenderCommand(RenderCommand command);
 
 private:
 	std::vector<RenderCommand> renderCommands;
-	//                                 라이트 위치마다                 6개의 light VP         6개의 매핑된 그림자 텍스쳐
 	using shadowInfoByLight = std::pair<glm::vec3, std::tuple<std::vector<glm::mat4>, std::vector<std::shared_ptr<Texture>>>>;
 	std::vector<std::vector<shadowInfoByLight>> shadowsForModel;
-
 	int shadowIndex = 0;
+
+	std::vector<std::shared_ptr<Texture>> GBuffer;
+
+	int bindNumber = 0;
+
 private:
 	void ShadowSampling(RenderCommand command);
+	void GBufferSampling(RenderCommand command);
 	void ForwardDrawWithShadow(RenderCommand command);
+	void ForwardDrawWithoutShadow(RenderCommand command);
+
+	void DefferedDrawWithShadow(RenderCommand command);
+	void DefferedDrawWithoutShadow(RenderCommand command);
+
 };
+

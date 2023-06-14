@@ -26,24 +26,27 @@ float CalcShadow(int lightIndex, int sideIndex)
     shadowMapCoords = shadowMapCoords * 0.5 + 0.5; 
     
     float shadow = 0.0;
-    float bias = 0.001; 
+    float bias = 0.0001; 
     
  
     float currentDepth = shadowMapCoords.z;
     float closestDepth = texture(sampleInfo[lightIndex].shadowMaps[sideIndex], shadowMapCoords.xy).r;
     
     shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
-    
+
+    if (lighted.z < 0) {
+        shadow = 1.f;
+    }
     return shadow;
 }
 
 void main()
 {
     vec3 finalColor = {0.f, 0.f, 0.f};
-     for(int i = 0; i < current_lights; i++)
+    for(int i = 0; i < current_lights; i++)
     {
         vec3 lightDir = normalize(sampleInfo[i].pos - vPos);
-        vec3 viewDir = normalize(cam - vPos);
+        vec3 viewDir = normalize(vPos - cam);
         vec3 normal = normalize(vNrm);
         
         float ambientStrength = 0.1;
