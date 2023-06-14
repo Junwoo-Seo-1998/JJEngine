@@ -11,11 +11,19 @@ namespace JJEngine_ScriptCore
         }
     }
 
+
+    static class Debug
+    {
+        public static void Log(string str)
+        {
+            InternalCalls.Debug_Log(str);
+        }
+    }
     public class main
     {
         public main()
         {
-            Console.WriteLine("yeay!");
+            Debug.Log("Test log from c#");
             test();
         }
 
@@ -23,6 +31,11 @@ namespace JJEngine_ScriptCore
         {
             Console.WriteLine("color change");
             //Graphics.SetClearColor(1.0f, 0.8f, 0.3f);
+        }
+
+        public void printStr(string str)
+        {
+            Console.WriteLine(str);
         }
     }
 
@@ -40,5 +53,18 @@ namespace JJEngine_ScriptCore
         }
     }
 
+
+    public class Entity
+    {
+        public Entity()
+        {
+            Debug.Log("Entity Create!!");
+        }
+
+        public void OnUpdate()
+        {
+            Debug.Log("Entity Update!!");
+        }
+    }
 
 }

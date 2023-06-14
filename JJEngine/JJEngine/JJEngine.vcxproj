@@ -145,6 +145,7 @@
     <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="Core\SceneSerializer.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h" />
+    <ClInclude Include="Core\Script\ScriptGlue.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Core\Type.h" />
     <ClInclude Include="Core\Utils\Assert.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Core\SceneSerializer.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp" />
+    <ClCompile Include="Core\Script\ScriptGlue.cpp" />
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Core\Utils\File.cpp" />
     <ClCompile Include="Core\Utils\IMGUI_IMPL.cpp" />

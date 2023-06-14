@@ -3,28 +3,40 @@
 #include <string>
 #include <mono/metadata/image.h>
 #include <mono/utils/mono-forward.h>
-
-class ScriptEngine;
-static std::shared_ptr<ScriptEngine> createInstance();
-class ScriptEngine
+#include <filesystem>
+namespace Script
 {
-public:
-	static std::shared_ptr<ScriptEngine> instance();
-	void Init();
-	void InitCore();//testing
-	void Shutdown();
-private:
-	void InitMono();
-	void ShutdownMono();
-private://inner helper functions
-	MonoAssembly* LoadCSharpAssembly(const std::string& assemblyPath);
-	void PrintAssemblyTypes(MonoAssembly* assembly);
+	class ScriptClass;
 
-	friend std::shared_ptr<ScriptEngine> createInstance();
-	static std::shared_ptr<ScriptEngine> s_instance;
-	struct ScriptEngineData
+	class ScriptEngine
 	{
-		MonoDomain* RootDomain = nullptr;
-		MonoDomain* AppDomain = nullptr;
-	}s_data;
-};
+		friend ScriptClass;
+	public:
+		static void Init();
+		static void Shutdown();
+
+		static void LoadAssembly(const std::filesystem::path& filepath);
+	private:
+		static void InitMono();
+		static void ShutdownMono();
+	private://inner helper functions
+		static MonoAssembly* LoadMonoAssembly(const std::filesystem::path& assemblyPath);
+		static void PrintAssemblyTypes(MonoAssembly* assembly);
+		static MonoObject* InstantiateClass(MonoClass* monoClass);
+	};
+
+	class ScriptClass
+	{
+	public:
+		ScriptClass() = default;
+		ScriptClass(const std::string& nameSpace, const std::string& className);
+		MonoObject* Instantiate();
+
+		MonoMethod* GetMethod(const std::string& methodName, int paramCount);
+		MonoObject* InvokeMethod(MonoObject* classInstance, MonoMethod* method, void** params);
+	private:
+		std::string m_NameSpace;
+		std::string m_ClassName;
+		MonoClass* m_MonoClass;
+	};
+}
