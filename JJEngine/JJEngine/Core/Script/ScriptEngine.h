@@ -4,6 +4,10 @@
 #include <filesystem>
 #include <unordered_map>
 
+#include "Core/Entity/Entity.hpp"
+
+class Scene;
+
 extern "C" {
 	typedef struct _MonoClass MonoClass;
 	typedef struct _MonoObject MonoObject;
@@ -25,8 +29,16 @@ namespace Script
 		static void Init();
 		static void Shutdown();
 
+		static void StartRuntime(Scene* scene);
+		static void StopRuntime();
+
 		static void LoadAssembly(const std::filesystem::path& filepath);
 		static std::unordered_map<std::string, std::shared_ptr<ScriptClass>> GetEntityClasses();
+		static bool EntityClassExists(const std::string& fullName);
+
+		static void OnCreateEntity(Entity entity);
+		static void OnUpdateEntity(Entity entity);
+
 	private:
 		static void InitMono();
 		static void ShutdownMono();

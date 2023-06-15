@@ -47,7 +47,6 @@ public:
 	void UpdateRuntime();
 	void StopRuntime();
 
-
 	Entity CreateEntity(const std::string& name = "No Name");
 	Entity CreateEntityWithUUID(UUIDType uuid, const std::string& name = "No Name", bool sort = true);
 
@@ -84,7 +83,9 @@ public:
 	{
 		srcScene->CopyComponentIfExists<ComponentType>(dst.GetEntityHandle(), dstScene->m_Registry, src.GetEntityHandle());
 	}*/
-
+private:
+	void StartPhysics2D();
+	void StopPhysics2D();
 
 protected:
 	void SortEntityMap();

@@ -236,10 +236,7 @@ void ComponentPanel::DrawComponents(Entity entity)
 
 		DrawComponent<ScriptComponent>("C# Script", entity, [](auto& component)
 		{
-			bool scriptClassExists = false;
-			const auto& entityClasses = Script::ScriptEngine::GetEntityClasses();
-			if (entityClasses.find(component.Name) != entityClasses.end())
-				scriptClassExists = true;
+			bool scriptClassExists = Script::ScriptEngine::EntityClassExists(component.Name);
 
 			static char buffer[64];
 			std::strcpy(buffer, component.Name.c_str());

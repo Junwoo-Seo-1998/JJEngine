@@ -1,4 +1,5 @@
 #include "ScriptEngine.h"
+#include "Core/Type.h"
 #include <iostream>
 #include <fstream>
 #include "mono/jit/jit.h"
@@ -10,6 +11,9 @@
 #include "Core/Script/ScriptGlue.h"
 
 #include <memory>
+
+#include "Core/Scene.h"
+#include "Core/Component/ScriptComponent.h"
 
 namespace Script
 {
@@ -26,6 +30,10 @@ namespace Script
 
 		ScriptClass EntityClass;
 		std::unordered_map<std::string, std::shared_ptr<ScriptClass>> EntityClasses;
+		std::unordered_map<UUIDType, std::shared_ptr<ScriptInstance>> EntityInstances;
+
+		//runtime stuff
+		Scene* SceneContext = nullptr;
 	};
 
 	static std::string AppDomainName = "JJ_AppDomain";
@@ -55,6 +63,16 @@ namespace Script
 		ShutdownMono();
 	}
 
+	void ScriptEngine::StartRuntime(Scene* scene)
+	{
+		s_Data->SceneContext = scene;
+	}
+
+	void ScriptEngine::StopRuntime()
+	{
+		s_Data->SceneContext = nullptr;
+	}
+
 	void ScriptEngine::LoadAssembly(const std::filesystem::path& filepath)
 	{
 		s_Data->AppDomain = mono_domain_create_appdomain(AppDomainName.data(), nullptr);
@@ -66,9 +84,34 @@ namespace Script
 		//PrintAssemblyTypes(s_Data->CoreAssembly);
 	}
 
+	void ScriptEngine::OnCreateEntity(Entity entity)
+	{
+		const auto& script = entity.GetComponent<ScriptComponent>();
+		if (Script::ScriptEngine::EntityClassExists(script.Name))
+		{
+			std::shared_ptr<ScriptInstance> instance = std::make_shared<ScriptInstance>(s_Data->EntityClasses[script.Name]);
+			s_Data->EntityInstances[entity.GetUUID()] = instance;
+
+			instance->InvokeOnCreate();
+		}
+	}
+
+	void ScriptEngine::OnUpdateEntity(Entity entity)
+	{
+		const UUIDType entityUUID = entity.GetUUID();
+		ENGINE_ASSERT(s_Data->EntityInstances.contains(entityUUID), "Was Not Instantiate!!");
+		std::shared_ptr<ScriptInstance> instance = s_Data->EntityInstances[entityUUID];
+		instance->InvokeOnUpdate();
+	}
+
 	std::unordered_map<std::string, std::shared_ptr<ScriptClass>> ScriptEngine::GetEntityClasses()
 	{
 		return s_Data->EntityClasses;
+	}
+
+	bool ScriptEngine::EntityClassExists(const std::string& fullName)
+	{
+		return s_Data->EntityClasses.contains(fullName);
 	}
 
 
