@@ -107,9 +107,11 @@
     <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\Component\BoxCollider2DComponent.h" />
     <ClInclude Include="Core\Component\CameraComponent.h" />
+    <ClInclude Include="Core\Component\Components.h" />
     <ClInclude Include="Core\Component\LightComponent.h" />
     <ClInclude Include="Core\Component\MaterialComponent.h" />
     <ClInclude Include="Core\Component\RigidBody2DComponent.h" />
+    <ClInclude Include="Core\Component\ScriptComponent.h" />
     <ClInclude Include="Core\Component\SpriteRendererComponent.h" />
     <ClInclude Include="Core\Component\TransformComponent.h" />
     <ClInclude Include="Core\Entity\Entity.hpp" />

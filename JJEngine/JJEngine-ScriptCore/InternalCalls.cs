@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace JJEngine_ScriptCore
+namespace JJEngine
 {
     internal static class InternalCalls
     {

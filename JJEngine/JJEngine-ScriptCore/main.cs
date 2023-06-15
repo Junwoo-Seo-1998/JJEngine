@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JJEngine_ScriptCore
+namespace JJEngine
 {
     static class Graphics
     {

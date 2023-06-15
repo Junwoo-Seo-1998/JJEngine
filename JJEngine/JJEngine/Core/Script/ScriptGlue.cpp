@@ -3,7 +3,7 @@
 #include "mono/jit/jit.h"
 namespace Script
 {
-	#define ADD_INTERNAL_CALL(FuncName) mono_add_internal_call("JJEngine_ScriptCore.InternalCalls::" #FuncName, FuncName)
+	#define ADD_INTERNAL_CALL(FuncName) mono_add_internal_call("JJEngine.InternalCalls::" #FuncName, FuncName)
 
 	static void Debug_Log(MonoString* monoString)
 	{

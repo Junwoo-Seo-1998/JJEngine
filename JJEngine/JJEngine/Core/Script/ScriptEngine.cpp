@@ -26,6 +26,7 @@ namespace Script
 		MonoImage* CoreAssemblyImage = nullptr;
 
 		ScriptClass EntityClass;
+		std::unordered_map<std::string, std::shared_ptr<ScriptClass>> EntityClasses;
 	};
 
 	static std::string AppDomainName = "JJ_AppDomain";
@@ -36,9 +37,15 @@ namespace Script
 		s_Data = std::make_unique<ScriptEngineData>();
 		InitMono();
 		LoadAssembly("Resources/Scripts/JJEngine-ScriptCore.dll");
+		LoadAssemblyClasses(s_Data->CoreAssembly);
+		//PrintAssemblyTypes(s_Data->CoreAssembly);
+		for(auto p:s_Data->EntityClasses)
+		{
+			EngineLog::Trace("Subclass of Entity : {}", p.first);
+		}
 		ScriptGlue::RegisterFunctions();
 
-		s_Data->EntityClass = ScriptClass("JJEngine_ScriptCore", "Entity");
+		s_Data->EntityClass = ScriptClass("JJEngine", "Entity");
 		MonoObject* instance = s_Data->EntityClass.Instantiate();
 		MonoMethod* update = s_Data->EntityClass.GetMethod("OnUpdate", 0);
 		s_Data->EntityClass.InvokeMethod(instance, update, nullptr);
@@ -100,6 +107,42 @@ namespace Script
 		return assembly;
 	}
 
+	void ScriptEngine::LoadAssemblyClasses(MonoAssembly* assembly)
+	{
+		s_Data->EntityClasses.clear();
+
+		MonoImage* image = mono_assembly_get_image(assembly);
+		const MonoTableInfo* typeDefinitionsTable = mono_image_get_table_info(image, MONO_TABLE_TYPEDEF);
+		int32_t numTypes = mono_table_info_get_rows(typeDefinitionsTable);
+
+		MonoClass* entityClass = mono_class_from_name(image, "JJEngine", "Entity");
+
+		for (int32_t i = 0; i < numTypes; i++)
+		{
+			uint32_t cols[MONO_TYPEDEF_SIZE];
+			mono_metadata_decode_row(typeDefinitionsTable, i, cols, MONO_TYPEDEF_SIZE);
+
+			const char* nameSpace = mono_metadata_string_heap(image, cols[MONO_TYPEDEF_NAMESPACE]);
+			const char* name = mono_metadata_string_heap(image, cols[MONO_TYPEDEF_NAME]);
+			std::string fullName;
+			if (strlen(nameSpace) != 0)
+				fullName = std::format("{}.{}", nameSpace, name);
+			else
+				fullName = name;
+
+			MonoClass* monoClass = mono_class_from_name(image, nameSpace, name);
+
+			if(monoClass==entityClass)
+				continue;
+
+			bool is_subclass = mono_class_is_subclass_of(monoClass, entityClass, false);
+			if(is_subclass)
+			{
+				s_Data->EntityClasses[fullName] = std::make_shared<ScriptClass>(nameSpace, name);
+			}
+		}
+	}
+
 	void ScriptEngine::PrintAssemblyTypes(MonoAssembly* assembly)
 	{
 		MonoImage* image = mono_assembly_get_image(assembly);
@@ -114,7 +157,7 @@ namespace Script
 			const char* nameSpace = mono_metadata_string_heap(image, cols[MONO_TYPEDEF_NAMESPACE]);
 			const char* name = mono_metadata_string_heap(image, cols[MONO_TYPEDEF_NAME]);
 
-			printf("%s.%s\n", nameSpace, name);
+			EngineLog::Trace("{}.{}\n", nameSpace, name);
 		}
 	}
 
@@ -144,5 +187,23 @@ namespace Script
 	MonoObject* ScriptClass::InvokeMethod(MonoObject* classInstance, MonoMethod* method, void** params)
 	{
 		return mono_runtime_invoke(method, classInstance, params, nullptr);
+	}
+
+	ScriptInstance::ScriptInstance(std::shared_ptr<ScriptClass> scriptClass)
+		: m_ScriptClass(scriptClass)
+	{
+		m_Instance = scriptClass->Instantiate();
+		m_OnCreateMethod = scriptClass->GetMethod("OnCreate", 0);
+		m_OnUpdateMethod = scriptClass->GetMethod("OnUpdate", 0);
+	}
+
+	void ScriptInstance::InvokeOnCreate()
+	{
+		m_ScriptClass->InvokeMethod(m_Instance, m_OnCreateMethod, nullptr);
+	}
+
+	void ScriptInstance::InvokeOnUpdate()
+	{
+		m_ScriptClass->InvokeMethod(m_Instance, m_OnUpdateMethod, nullptr);
 	}
 }

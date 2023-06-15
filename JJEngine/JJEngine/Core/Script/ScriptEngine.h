@@ -21,6 +21,8 @@ namespace Script
 		static void ShutdownMono();
 	private://inner helper functions
 		static MonoAssembly* LoadMonoAssembly(const std::filesystem::path& assemblyPath);
+		static void LoadAssemblyClasses(MonoAssembly* assembly);
+
 		static void PrintAssemblyTypes(MonoAssembly* assembly);
 		static MonoObject* InstantiateClass(MonoClass* monoClass);
 	};
@@ -38,5 +40,20 @@ namespace Script
 		std::string m_NameSpace;
 		std::string m_ClassName;
 		MonoClass* m_MonoClass;
+	};
+
+	class ScriptInstance
+	{
+	public:
+		ScriptInstance(std::shared_ptr<ScriptClass> scriptClass);
+
+		void InvokeOnCreate();
+		void InvokeOnUpdate();
+	private:
+		std::shared_ptr<ScriptClass> m_ScriptClass;
+
+		MonoObject* m_Instance = nullptr;
+		MonoMethod* m_OnCreateMethod = nullptr;
+		MonoMethod* m_OnUpdateMethod = nullptr;
 	};
 }
