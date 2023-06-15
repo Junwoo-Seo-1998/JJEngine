@@ -10,8 +10,11 @@
 #include "imgui_internal.h"
 #include "Core/Component/BoxCollider2DComponent.h"
 #include "Core/Component/RigidBody2DComponent.h"
+#include "Core/Component/ScriptComponent.h"
 #include "Core/Component/SpriteRendererComponent.h"
 #include "Core/Utils/Assert.h"
+
+#include "Core/Script/ScriptEngine.h"
 
 static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
 {
@@ -180,6 +183,16 @@ void ComponentPanel::DrawComponents(Entity entity)
 
 		if (ImGui::BeginPopup("Add Component"))
 		{
+			if (!entity.HasComponent<ScriptComponent>())
+			{
+				if (ImGui::MenuItem("Script Component"))
+				{
+					entity.AddComponent<ScriptComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+
 			if(!entity.HasComponent<SpriteRendererComponent>())
 			{
 				if (ImGui::MenuItem("Sprite Renderer"))
@@ -218,6 +231,29 @@ void ComponentPanel::DrawComponents(Entity entity)
 			DrawVec3Control("Rotation", rotation);
 			component.Rotation = glm::radians(rotation);
 			DrawVec3Control("Scale", component.Scale, 1.f);
+		});
+
+
+		DrawComponent<ScriptComponent>("C# Script", entity, [](auto& component)
+		{
+			bool scriptClassExists = false;
+			const auto& entityClasses = Script::ScriptEngine::GetEntityClasses();
+			if (entityClasses.find(component.Name) != entityClasses.end())
+				scriptClassExists = true;
+
+			static char buffer[64];
+			std::strcpy(buffer, component.Name.c_str());
+
+			if (!scriptClassExists)
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 0.9f, 0.2f, 0.3f,1.f });
+
+			if(ImGui::InputText("Class", buffer, sizeof(buffer)))
+			{
+				component.Name = buffer;
+			}
+
+			if (!scriptClassExists)
+				ImGui::PopStyleColor();
 		});
 
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)

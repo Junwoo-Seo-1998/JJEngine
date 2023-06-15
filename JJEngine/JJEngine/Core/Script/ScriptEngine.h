@@ -1,9 +1,19 @@
 #pragma once
 #include <memory>
 #include <string>
-#include <mono/metadata/image.h>
-#include <mono/utils/mono-forward.h>
 #include <filesystem>
+#include <unordered_map>
+
+extern "C" {
+	typedef struct _MonoClass MonoClass;
+	typedef struct _MonoObject MonoObject;
+	typedef struct _MonoMethod MonoMethod;
+	typedef struct _MonoAssembly MonoAssembly;
+	typedef struct _MonoImage MonoImage;
+	typedef struct _MonoClassField MonoClassField;
+	typedef struct _MonoString MonoString;
+}
+
 namespace Script
 {
 	class ScriptClass;
@@ -16,6 +26,7 @@ namespace Script
 		static void Shutdown();
 
 		static void LoadAssembly(const std::filesystem::path& filepath);
+		static std::unordered_map<std::string, std::shared_ptr<ScriptClass>> GetEntityClasses();
 	private:
 		static void InitMono();
 		static void ShutdownMono();

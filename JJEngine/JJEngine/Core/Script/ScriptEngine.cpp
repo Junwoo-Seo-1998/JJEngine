@@ -1,5 +1,4 @@
 #include "ScriptEngine.h"
-
 #include <iostream>
 #include <fstream>
 #include "mono/jit/jit.h"
@@ -65,6 +64,11 @@ namespace Script
 		s_Data->CoreAssemblyImage = mono_assembly_get_image(s_Data->CoreAssembly);
 		//debug
 		//PrintAssemblyTypes(s_Data->CoreAssembly);
+	}
+
+	std::unordered_map<std::string, std::shared_ptr<ScriptClass>> ScriptEngine::GetEntityClasses()
+	{
+		return s_Data->EntityClasses;
 	}
 
 
