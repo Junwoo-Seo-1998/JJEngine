@@ -65,6 +65,9 @@
     <ClInclude Include="Core\Component\CameraComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Component\Components.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Component\LightComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -72,6 +75,9 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Core\Component\RigidBody2DComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component\ScriptComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Core\Component\SpriteRendererComponent.h">
@@ -201,8 +207,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Component\ScriptComponent.h" />
-    <ClInclude Include="Core\Component\Components.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />

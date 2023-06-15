@@ -21,8 +21,7 @@
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\bin\Debug-obj\Win64\Debug\JJEngine-ScriptCore\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -34,8 +33,7 @@
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\bin\Release-obj\Win64\Release\JJEngine-ScriptCore\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -45,8 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InternalCalls.cs" />
-    <Compile Include="main.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="main.cs" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
