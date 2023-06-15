@@ -51,7 +51,10 @@ void AssetBrowserPanel::OnImGuiRender()
 	OnImGuiRender_ResorceHierarchy(".");
 	ImGui::End();
 
-
+	ImGui::Text("Current path: ");
+	ImGui::SameLine();
+	ImGui::Text(nowDirectory.string().c_str());
+	ImGui::SameLine();
 	if (ImGui::Button("<-") == true) {
 		if (nowDirectory != AssetDirectory) {
 			nowDirectory = nowDirectory.parent_path();
