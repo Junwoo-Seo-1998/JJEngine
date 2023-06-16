@@ -5,7 +5,7 @@ End Header --------------------------------------------------------*/
 #include <iostream>
 //enums From glfw3.h however for easy use i made my engine one that converts glfw api to mine
 
-typedef enum class KeyCode : unsigned short
+typedef enum class KeyCode : uint16_t
 {
 	// From glfw3.h
 	Space = 32,
@@ -141,7 +141,7 @@ typedef enum class KeyCode : unsigned short
 	Last
 } Key;
 
-typedef enum class MouseCode : unsigned short
+typedef enum class MouseCode : uint16_t
 {
 	Left = 0,
 	Right,

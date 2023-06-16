@@ -174,6 +174,7 @@ void Scene::UpdateRuntime()
 {
 	//script
 	{
+		Script::ScriptEngine::UpdateTime();
 		//c# entity on update
 		auto view = m_Registry.view<ScriptComponent>();
 		for (auto e : view)
@@ -290,7 +291,7 @@ void Scene::DestroyEntity(Entity entity, bool excludeChildren)
 
 Entity Scene::GetEntity(UUIDType uuid) const
 {
-	ENGINE_ASSERT(m_entity_map.find(uuid) != m_entity_map.end(), "There is no entity with given UUID");
+	ENGINE_ASSERT(m_entity_map.contains(uuid), "There is no entity with given UUID");
 	return m_entity_map.at(uuid);
 }
 

@@ -28,6 +28,7 @@ namespace Script
 	public:
 		static void Init();
 		static void Shutdown();
+		static void UpdateTime();
 
 		static void StartRuntime(Scene* scene);
 		static void StopRuntime();
@@ -39,6 +40,7 @@ namespace Script
 		static void OnCreateEntity(Entity entity);
 		static void OnUpdateEntity(Entity entity);
 
+		static Scene* GetSceneContext();
 	private:
 		static void InitMono();
 		static void ShutdownMono();
@@ -68,7 +70,7 @@ namespace Script
 	class ScriptInstance
 	{
 	public:
-		ScriptInstance(std::shared_ptr<ScriptClass> scriptClass);
+		ScriptInstance(std::shared_ptr<ScriptClass> scriptClass, Entity entity);
 
 		void InvokeOnCreate();
 		void InvokeOnUpdate();
@@ -76,6 +78,7 @@ namespace Script
 		std::shared_ptr<ScriptClass> m_ScriptClass;
 
 		MonoObject* m_Instance = nullptr;
+		MonoMethod* m_Constructor = nullptr;
 		MonoMethod* m_OnCreateMethod = nullptr;
 		MonoMethod* m_OnUpdateMethod = nullptr;
 	};

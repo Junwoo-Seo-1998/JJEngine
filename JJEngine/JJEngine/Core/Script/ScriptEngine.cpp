@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "Core/Scene.h"
+#include "Core/Time.h"
 #include "Core/Component/ScriptComponent.h"
 
 namespace Script
@@ -28,7 +29,9 @@ namespace Script
 		MonoAssembly* CoreAssembly = nullptr;
 		MonoImage* CoreAssemblyImage = nullptr;
 
+		MonoMethod* UpdateDelta = nullptr;
 		ScriptClass EntityClass;
+
 		std::unordered_map<std::string, std::shared_ptr<ScriptClass>> EntityClasses;
 		std::unordered_map<UUIDType, std::shared_ptr<ScriptInstance>> EntityInstances;
 
@@ -52,15 +55,25 @@ namespace Script
 		}
 		ScriptGlue::RegisterFunctions();
 
+		ScriptClass TimeClass("JJEngine", "Time");
+		s_Data->UpdateDelta = TimeClass.GetMethod("UpdateDelta", 1);
+
 		s_Data->EntityClass = ScriptClass("JJEngine", "Entity");
-		MonoObject* instance = s_Data->EntityClass.Instantiate();
-		MonoMethod* update = s_Data->EntityClass.GetMethod("OnUpdate", 0);
-		s_Data->EntityClass.InvokeMethod(instance, update, nullptr);
+		//MonoObject* instance = s_Data->EntityClass.Instantiate();
+		/*MonoMethod* update = s_Data->EntityClass.GetMethod("OnUpdate", 0);
+		s_Data->EntityClass.InvokeMethod(instance, update, nullptr);*/
 	}
 
 	void ScriptEngine::Shutdown()
 	{
 		ShutdownMono();
+	}
+
+	void ScriptEngine::UpdateTime()
+	{
+		float time = Time::GetDelta();
+		void* param = &time;
+		mono_runtime_invoke(s_Data->UpdateDelta, nullptr, &param, nullptr);
 	}
 
 	void ScriptEngine::StartRuntime(Scene* scene)
@@ -89,7 +102,7 @@ namespace Script
 		const auto& script = entity.GetComponent<ScriptComponent>();
 		if (Script::ScriptEngine::EntityClassExists(script.Name))
 		{
-			std::shared_ptr<ScriptInstance> instance = std::make_shared<ScriptInstance>(s_Data->EntityClasses[script.Name]);
+			std::shared_ptr<ScriptInstance> instance = std::make_shared<ScriptInstance>(s_Data->EntityClasses[script.Name], entity);
 			s_Data->EntityInstances[entity.GetUUID()] = instance;
 
 			instance->InvokeOnCreate();
@@ -102,6 +115,11 @@ namespace Script
 		ENGINE_ASSERT(s_Data->EntityInstances.contains(entityUUID), "Was Not Instantiate!!");
 		std::shared_ptr<ScriptInstance> instance = s_Data->EntityInstances[entityUUID];
 		instance->InvokeOnUpdate();
+	}
+
+	Scene* ScriptEngine::GetSceneContext()
+	{
+		return s_Data->SceneContext;
 	}
 
 	std::unordered_map<std::string, std::shared_ptr<ScriptClass>> ScriptEngine::GetEntityClasses()
@@ -236,12 +254,23 @@ namespace Script
 		return mono_runtime_invoke(method, classInstance, params, nullptr);
 	}
 
-	ScriptInstance::ScriptInstance(std::shared_ptr<ScriptClass> scriptClass)
+	ScriptInstance::ScriptInstance(std::shared_ptr<ScriptClass> scriptClass, Entity entity)
 		: m_ScriptClass(scriptClass)
 	{
 		m_Instance = scriptClass->Instantiate();
+		m_Constructor = s_Data->EntityClass.GetMethod(".ctor", 2);
 		m_OnCreateMethod = scriptClass->GetMethod("OnCreate", 0);
 		m_OnUpdateMethod = scriptClass->GetMethod("OnUpdate", 0);
+
+		{//call entity ctor
+			auto uuid = entity.GetUUID().as_bytes();
+			void* params[2] =
+			{
+				(void*)&uuid[0],
+				(void*)&uuid[8]
+			};
+			m_ScriptClass->InvokeMethod(m_Instance, m_Constructor, params);
+		}
 	}
 
 	void ScriptInstance::InvokeOnCreate()

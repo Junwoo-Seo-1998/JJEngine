@@ -15,7 +15,7 @@
 #include "Core/Utils/Assert.h"
 
 #include "Core/Script/ScriptEngine.h"
-
+#include <format>
 static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
 {
 	ImGuiIO& io = ImGui::GetIO();
@@ -161,6 +161,8 @@ void ComponentPanel::OnImGuiRender()
 void ComponentPanel::DrawComponents(Entity entity)
 {
 	{
+		ImGui::Text(std::format("UUID : {}", to_string(entity.GetUUID())).c_str());
+
 		std::array<char, 256> inputText{ 0, };
 		auto& name = entity.Name();
 		std::copy(name.begin(), name.end(), inputText.data());

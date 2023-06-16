@@ -44,8 +44,13 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Win64|x64' ">
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JJEngine\InternalCalls.cs" />
-    <Compile Include="JJEngine\Time.cs" />
+    <Compile Include="JJEngine\Core\Input.cs" />
+    <Compile Include="JJEngine\Core\InputKeyCodes.cs" />
+    <Compile Include="JJEngine\Core\Entity.cs" />
+    <Compile Include="JJEngine\Core\InternalCalls.cs" />
+    <Compile Include="JJEngine\Core\Time.cs" />
+    <Compile Include="JJEngine\Core\UUIDType.cs" />
+    <Compile Include="JJEngine\Math\Vector3.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="JJEngine\main.cs" />
   </ItemGroup>

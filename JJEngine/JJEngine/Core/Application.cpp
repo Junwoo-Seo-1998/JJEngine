@@ -64,7 +64,6 @@ void Application::Update()
 	do
 	{
 		Time::Update();
-
 		assetManager->UpdateAData();
 
 		if (window->shouldClose() == true) {

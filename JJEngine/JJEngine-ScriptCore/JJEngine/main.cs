@@ -53,18 +53,4 @@ namespace JJEngine
         }
     }
 
-
-    public class Entity
-    {
-        public Entity()
-        {
-            Debug.Log("Entity Create!!");
-        }
-
-        public void OnUpdate()
-        {
-            Debug.Log("Entity Update!!");
-        }
-    }
-
 }

@@ -157,6 +157,7 @@
     <ClInclude Include="Core\Utils\Math\MatrixMath.h" />
     <ClInclude Include="Core\Utils\PlatformDetection.h" />
     <ClInclude Include="Core\Utils\UUIDGenerator.h" />
+    <ClInclude Include="Core\Utils\UUIDHelper.h" />
     <ClInclude Include="Core\Utils\YAML_IMPL.hpp" />
     <ClInclude Include="Core\Window.h" />
   </ItemGroup>
@@ -201,6 +202,7 @@
     <ClCompile Include="Core\Utils\Math\MatrixMath.cpp" />
     <ClCompile Include="Core\Utils\STB_IMPL.cpp" />
     <ClCompile Include="Core\Utils\UUIDGenerator.cpp" />
+    <ClCompile Include="Core\Utils\UUIDHelper.cpp" />
     <ClCompile Include="Core\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
