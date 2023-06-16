@@ -8,7 +8,12 @@ namespace JJEngine
 {
     class Time
     {
-        public static float Delta = 0.016f;
+        public static float Delta
+        {
+            get;
+            internal set;
+        } = 0.016f;
+
         internal static void UpdateDelta(float delta)
         {
             Delta = delta;

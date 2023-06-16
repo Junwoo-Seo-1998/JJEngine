@@ -40,7 +40,6 @@ namespace Game
 
             float speed = 3.0f;
             velocity *= speed;
-
             Position += velocity * Time.Delta;
         }
 
