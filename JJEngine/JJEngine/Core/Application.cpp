@@ -41,8 +41,7 @@ bool Application::Init()
 {
 	Renderer2D::Init();
 	ImGuiRenderer::Instance()->Init(GetWindow()->GetGLFWWindow());
-	ScriptEngine::instance()->Init();
-	
+	Script::ScriptEngine::Init();
 	if (assetManager->ReadAData() == false) {}
 
 	return true;//just for now
@@ -65,7 +64,6 @@ void Application::Update()
 	do
 	{
 		Time::Update();
-
 		assetManager->UpdateAData();
 
 		if (window->shouldClose() == true) {
@@ -138,8 +136,8 @@ void Application::Update()
 
 void Application::Shutdown()
 {
+	Script::ScriptEngine::Shutdown();
 	Renderer2D::Shutdown();
-	ScriptEngine::instance()->Shutdown();
 	ImGuiRenderer::Instance()->Shutdown();
 }
 

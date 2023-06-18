@@ -11,6 +11,7 @@
 #include "Core/Component/BoxCollider2DComponent.h"
 #include "Core/Application.h"
 #include "Core/Asset/Manager/AssetManager.h"
+#include "Core/Component/ScriptComponent.h"
 
 TestScene::TestScene(std::string t)
 	:Scene(t)
@@ -50,9 +51,12 @@ void TestScene::Start()
 	auto& sprite = temp.AddComponent<SpriteRendererComponent>();
 	sprite.asset = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Texture>(Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/Textures/test.jpg")); //Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
 
-	temp.AddComponent<BoxCollider2DComponent>();
+	/*temp.AddComponent<BoxCollider2DComponent>();
 	auto& body = temp.AddComponent<RigidBody2DComponent>();
-	body.Type = RigidBody2DComponent::BodyType::Dynamic;
+	body.Type = RigidBody2DComponent::BodyType::Dynamic;*/
+
+	auto& script=temp.AddComponent<ScriptComponent>();
+	script.Name = "Game.Player";
 }
 
 void TestScene::Update()

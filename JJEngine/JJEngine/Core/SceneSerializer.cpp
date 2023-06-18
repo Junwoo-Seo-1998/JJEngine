@@ -9,6 +9,7 @@
 #include "Component/CameraComponent.h"
 #include "Component/RigidBody2DComponent.h"
 #include "Component/BoxCollider2DComponent.h"
+#include "Component/ScriptComponent.h"
 #include "Core/Utils/YAML_IMPL.hpp"
 #include "Core/Asset/Asset_Texture.h"
 #include "Core/Application.h"
@@ -21,6 +22,8 @@
 #define YM_UUID "UUID"
 #define YM_COMPONENT "Components"
 #define YM_TRANSFORM "Transform"
+#define YM_SCRIPT "Script"
+#define YM_SCRIPT_NAME "ScriptName"
 #define YM_POSITION "Position"
 #define YM_ROTATION "Rotation"
 #define YM_SCALE "Scale"
@@ -44,6 +47,7 @@
 void SerializeEntity(YAML::Emitter& out, entt::entity ID, std::shared_ptr<Scene> scene);
 void DeserializeRelationship(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeTransform(YAML::iterator::value_type& transform_components, std::shared_ptr<Scene> scene);
+void DeserializeScript(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeSprite(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeCamera(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeRidgidBody2D(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
@@ -105,6 +109,21 @@ void SceneSerializer::Serialize(const std::string filePath)
 			}
 			out << YAML::EndMap;
 		}
+
+		{
+			out << YAML::Key << YM_SCRIPT;
+			out << YAML::Value << YAML::BeginMap;
+			auto components = scene->m_Registry.view<ScriptComponent>();
+			for (auto c : components)
+			{
+				Entity entity{ c,scene.get() };
+				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap);
+				YAML_KEY_VALUE(out, YM_SCRIPT_NAME, components.get<ScriptComponent>(c).Name);
+				out << YAML::EndMap;
+			}
+			out << YAML::EndMap;
+		}
+
 		{
 			out << YAML::Key << YM_SPRITE;
 			out << YAML::Value << YAML::BeginMap;
@@ -205,6 +224,12 @@ bool SceneSerializer::Deserialize(const std::string filePath)
 		}
 	}
 	{
+		auto compos = components[YM_SCRIPT];
+		for (auto c : compos) {
+			DeserializeScript(c, scene);
+		}
+	}
+	{
 		auto compos = components[YM_SPRITE];
 		for (auto c : compos) {
 			DeserializeSprite(c, scene);
@@ -268,6 +293,14 @@ void DeserializeTransform(YAML::iterator::value_type& component, std::shared_ptr
 	entity.Transform().Rotation = rotation;
 	entity.Transform().Scale = scale;
 }
+
+void DeserializeScript(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene) {
+	Entity entity = scene->GetEntity(component.first.as<UUIDType>());
+	std::string name = component.second[YM_SCRIPT_NAME].as<std::string>();
+	ScriptComponent& temp = entity.AddComponent<ScriptComponent>();
+	temp.Name = name;
+}
+
 void DeserializeSprite(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene) {
 	Entity entity = scene->GetEntity(component.first.as<UUIDType>());
 	glm::vec4 col{ component.second[YM_SPRITE_COLOR].as<glm::vec4>() };

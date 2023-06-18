@@ -107,9 +107,11 @@
     <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\Component\BoxCollider2DComponent.h" />
     <ClInclude Include="Core\Component\CameraComponent.h" />
+    <ClInclude Include="Core\Component\Components.h" />
     <ClInclude Include="Core\Component\LightComponent.h" />
     <ClInclude Include="Core\Component\MaterialComponent.h" />
     <ClInclude Include="Core\Component\RigidBody2DComponent.h" />
+    <ClInclude Include="Core\Component\ScriptComponent.h" />
     <ClInclude Include="Core\Component\SpriteRendererComponent.h" />
     <ClInclude Include="Core\Component\TransformComponent.h" />
     <ClInclude Include="Core\Entity\Entity.hpp" />
@@ -145,6 +147,7 @@
     <ClInclude Include="Core\SceneManager.h" />
     <ClInclude Include="Core\SceneSerializer.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h" />
+    <ClInclude Include="Core\Script\ScriptGlue.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Core\Type.h" />
     <ClInclude Include="Core\Utils\Assert.h" />
@@ -154,6 +157,7 @@
     <ClInclude Include="Core\Utils\Math\MatrixMath.h" />
     <ClInclude Include="Core\Utils\PlatformDetection.h" />
     <ClInclude Include="Core\Utils\UUIDGenerator.h" />
+    <ClInclude Include="Core\Utils\UUIDHelper.h" />
     <ClInclude Include="Core\Utils\YAML_IMPL.hpp" />
     <ClInclude Include="Core\Window.h" />
   </ItemGroup>
@@ -190,6 +194,7 @@
     <ClCompile Include="Core\SceneManager.cpp" />
     <ClCompile Include="Core\SceneSerializer.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp" />
+    <ClCompile Include="Core\Script\ScriptGlue.cpp" />
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Core\Utils\File.cpp" />
     <ClCompile Include="Core\Utils\IMGUI_IMPL.cpp" />
@@ -197,6 +202,7 @@
     <ClCompile Include="Core\Utils\Math\MatrixMath.cpp" />
     <ClCompile Include="Core\Utils\STB_IMPL.cpp" />
     <ClCompile Include="Core\Utils\UUIDGenerator.cpp" />
+    <ClCompile Include="Core\Utils\UUIDHelper.cpp" />
     <ClCompile Include="Core\Window.cpp" />
   </ItemGroup>
   <ItemGroup>

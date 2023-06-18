@@ -65,6 +65,9 @@
     <ClInclude Include="Core\Component\CameraComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Component\Components.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Component\LightComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -72,6 +75,9 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Core\Component\RigidBody2DComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component\ScriptComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Core\Component\SpriteRendererComponent.h">
@@ -171,6 +177,9 @@
     <ClInclude Include="Core\Script\ScriptEngine.h">
       <Filter>Script</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Script\ScriptGlue.h">
+      <Filter>Script</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Core\Type.h" />
     <ClInclude Include="Core\Utils\Assert.h">
@@ -198,6 +207,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\Utils\UUIDHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -286,6 +296,9 @@
     <ClCompile Include="Core\Script\ScriptEngine.cpp">
       <Filter>Script</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Script\ScriptGlue.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Core\Utils\File.cpp">
       <Filter>Utils</Filter>
@@ -306,5 +319,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Core\Utils\UUIDHelper.cpp" />
   </ItemGroup>
 </Project>

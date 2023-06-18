@@ -12,6 +12,7 @@ End Header-------------------------------------------------------- */
 #include "Component/BoxCollider2DComponent.h"
 #include "Component/CameraComponent.h"
 #include "Component/RigidBody2DComponent.h"
+#include "Component/ScriptComponent.h"
 #include "Component/SpriteRendererComponent.h"
 
 #include "Component/TransformComponent.h"
@@ -21,6 +22,7 @@ End Header-------------------------------------------------------- */
 #include "Utils/Math/MatrixMath.h"
 
 #include "Core/Asset/Asset_Texture.h"
+#include "Script/ScriptEngine.h"
 
 static b2BodyType RigidBody2DTypeToBox2D(RigidBody2DComponent::BodyType bodyType)
 {
@@ -70,6 +72,7 @@ std::shared_ptr<Scene> Scene::Copy(std::shared_ptr<Scene> toCopy)
 	//copy except UUID and Name components
 	CopyComponent<CameraComponent>(newReg, toCopyReg, enttIDMap);
 	CopyComponent<TransformComponent>(newReg, toCopyReg, enttIDMap);
+	CopyComponent<ScriptComponent>(newReg, toCopyReg, enttIDMap);
 	CopyComponent<SpriteRendererComponent>(newReg, toCopyReg, enttIDMap);
 	CopyComponent<RigidBody2DComponent>(newReg, toCopyReg, enttIDMap);
 	CopyComponent<BoxCollider2DComponent>(newReg, toCopyReg, enttIDMap);
@@ -150,43 +153,36 @@ void Scene::RenderEntityID(EditorCamera& camera)
 
 void Scene::StartRuntime()
 {
-	m_2DWorld = std::make_unique<b2World>(b2Vec2{ 0.f, -9.8f });
-	auto view = m_Registry.view<RigidBody2DComponent>();
-	for (auto e : view)
+	StartPhysics2D();
+
+	//scripting
 	{
-		Entity entity{ e, this };
-		auto& trasform = entity.Transform();
-		auto& rb2d = entity.GetComponent<RigidBody2DComponent>();
+		Script::ScriptEngine::StartRuntime(this);
+		//instantiate all script entities
 
-		b2BodyDef body_def;
-		body_def.type = RigidBody2DTypeToBox2D(rb2d.Type);
-		body_def.position.Set(trasform.Position.x, trasform.Position.y);
-		body_def.angle = trasform.Rotation.z;
-
-		b2Body* body = m_2DWorld->CreateBody(&body_def);
-		body->SetFixedRotation(rb2d.FixedRotation);
-		rb2d.RuntimeBody = body;
-
-		if(entity.HasComponent<BoxCollider2DComponent>())
+		auto view = m_Registry.view<ScriptComponent>();
+		for (auto e : view)
 		{
-			auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
+			Entity entity{ e,this };
 
-			b2PolygonShape polygon_shape;
-			polygon_shape.SetAsBox(trasform.Scale.x * bc2d.Size.x, trasform.Scale.y * bc2d.Size.y);
-
-			b2FixtureDef fixture_def;
-			fixture_def.shape = &polygon_shape;
-			fixture_def.density = bc2d.Density;
-			fixture_def.friction = bc2d.Friction;
-			fixture_def.restitution = bc2d.Restitution;
-			fixture_def.restitutionThreshold = bc2d.RestitutionThreshold;
-			bc2d.RuntimeFixture = body->CreateFixture(&fixture_def);
+			Script::ScriptEngine::OnCreateEntity(entity);
 		}
 	}
 }
 
 void Scene::UpdateRuntime()
 {
+	//script
+	{
+		Script::ScriptEngine::UpdateTime();
+		//c# entity on update
+		auto view = m_Registry.view<ScriptComponent>();
+		for (auto e : view)
+		{
+			Entity entity{ e,this };
+			Script::ScriptEngine::OnUpdateEntity(entity);
+		}
+	}
 
 	{
 		constexpr int velocityIters = 6;
@@ -238,7 +234,12 @@ void Scene::UpdateRuntime()
 
 void Scene::StopRuntime()
 {
-	m_2DWorld.release();
+	//scripting
+	{
+		Script::ScriptEngine::StopRuntime();
+	}
+	
+	StopPhysics2D();
 }
 
 Entity Scene::CreateEntity(const std::string& name)
@@ -290,7 +291,7 @@ void Scene::DestroyEntity(Entity entity, bool excludeChildren)
 
 Entity Scene::GetEntity(UUIDType uuid) const
 {
-	ENGINE_ASSERT(m_entity_map.find(uuid) != m_entity_map.end(), "There is no entity with given UUID");
+	ENGINE_ASSERT(m_entity_map.contains(uuid), "There is no entity with given UUID");
 	return m_entity_map.at(uuid);
 }
 
@@ -359,6 +360,48 @@ void Scene::ResizeViewport(unsigned width, unsigned height)
 		auto& cameraComponent = view.get<CameraComponent>(entity);
 		cameraComponent.Aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
 	}
+}
+
+void Scene::StartPhysics2D()
+{
+	m_2DWorld = std::make_unique<b2World>(b2Vec2{ 0.f, -9.8f });
+	auto view = m_Registry.view<RigidBody2DComponent>();
+	for (auto e : view)
+	{
+		Entity entity{ e, this };
+		auto& trasform = entity.Transform();
+		auto& rb2d = entity.GetComponent<RigidBody2DComponent>();
+
+		b2BodyDef body_def;
+		body_def.type = RigidBody2DTypeToBox2D(rb2d.Type);
+		body_def.position.Set(trasform.Position.x, trasform.Position.y);
+		body_def.angle = trasform.Rotation.z;
+
+		b2Body* body = m_2DWorld->CreateBody(&body_def);
+		body->SetFixedRotation(rb2d.FixedRotation);
+		rb2d.RuntimeBody = body;
+
+		if (entity.HasComponent<BoxCollider2DComponent>())
+		{
+			auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
+
+			b2PolygonShape polygon_shape;
+			polygon_shape.SetAsBox(trasform.Scale.x * bc2d.Size.x, trasform.Scale.y * bc2d.Size.y);
+
+			b2FixtureDef fixture_def;
+			fixture_def.shape = &polygon_shape;
+			fixture_def.density = bc2d.Density;
+			fixture_def.friction = bc2d.Friction;
+			fixture_def.restitution = bc2d.Restitution;
+			fixture_def.restitutionThreshold = bc2d.RestitutionThreshold;
+			bc2d.RuntimeFixture = body->CreateFixture(&fixture_def);
+		}
+	}
+}
+
+void Scene::StopPhysics2D()
+{
+	m_2DWorld.release();
 }
 
 void Scene::SortEntityMap()

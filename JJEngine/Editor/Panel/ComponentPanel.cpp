@@ -10,9 +10,12 @@
 #include "imgui_internal.h"
 #include "Core/Component/BoxCollider2DComponent.h"
 #include "Core/Component/RigidBody2DComponent.h"
+#include "Core/Component/ScriptComponent.h"
 #include "Core/Component/SpriteRendererComponent.h"
 #include "Core/Utils/Assert.h"
 
+#include "Core/Script/ScriptEngine.h"
+#include <format>
 static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
 {
 	ImGuiIO& io = ImGui::GetIO();
@@ -158,6 +161,8 @@ void ComponentPanel::OnImGuiRender()
 void ComponentPanel::DrawComponents(Entity entity)
 {
 	{
+		ImGui::Text(std::format("UUID : {}", to_string(entity.GetUUID())).c_str());
+
 		std::array<char, 256> inputText{ 0, };
 		auto& name = entity.Name();
 		std::copy(name.begin(), name.end(), inputText.data());
@@ -180,6 +185,16 @@ void ComponentPanel::DrawComponents(Entity entity)
 
 		if (ImGui::BeginPopup("Add Component"))
 		{
+			if (!entity.HasComponent<ScriptComponent>())
+			{
+				if (ImGui::MenuItem("Script Component"))
+				{
+					entity.AddComponent<ScriptComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+
 			if(!entity.HasComponent<SpriteRendererComponent>())
 			{
 				if (ImGui::MenuItem("Sprite Renderer"))
@@ -218,6 +233,26 @@ void ComponentPanel::DrawComponents(Entity entity)
 			DrawVec3Control("Rotation", rotation);
 			component.Rotation = glm::radians(rotation);
 			DrawVec3Control("Scale", component.Scale, 1.f);
+		});
+
+
+		DrawComponent<ScriptComponent>("C# Script", entity, [](auto& component)
+		{
+			bool scriptClassExists = Script::ScriptEngine::EntityClassExists(component.Name);
+
+			static char buffer[64];
+			std::strcpy(buffer, component.Name.c_str());
+
+			if (!scriptClassExists)
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 0.9f, 0.2f, 0.3f,1.f });
+
+			if(ImGui::InputText("Class", buffer, sizeof(buffer)))
+			{
+				component.Name = buffer;
+			}
+
+			if (!scriptClassExists)
+				ImGui::PopStyleColor();
 		});
 
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)

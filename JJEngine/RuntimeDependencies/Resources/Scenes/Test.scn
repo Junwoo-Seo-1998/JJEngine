@@ -1,33 +1,33 @@
 Scene: Test
 Entities:
   - Name: Test Texture Entity
-    UUID: 86b0d7a7-7dfb-4034-98c0-6f5f9f90f61b
+    UUID: f7b4817b-6779-4009-84b1-7bd32e45a3fc
   - Name: Ground2
-    UUID: a5dc524d-84da-4065-8c35-64994858641c
+    UUID: 7494ac25-6185-4bb4-8839-12f62a858e73
   - Name: Ground
-    UUID: 64da0c9a-c57a-4d11-ad02-24813e053cdc
+    UUID: df93926f-13b6-4739-bb5a-15757cd05cf9
   - Name: Camera
-    UUID: 12775895-072c-4c3e-a625-fa31b42867c1
+    UUID: 5986b917-dd65-47dd-9106-f4dc50600513
 Components:
   Relationship:
-    86b0d7a7-7dfb-4034-98c0-6f5f9f90f61b:
+    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    a5dc524d-84da-4065-8c35-64994858641c:
+    7494ac25-6185-4bb4-8839-12f62a858e73:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    64da0c9a-c57a-4d11-ad02-24813e053cdc:
+    df93926f-13b6-4739-bb5a-15757cd05cf9:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    12775895-072c-4c3e-a625-fa31b42867c1:
+    5986b917-dd65-47dd-9106-f4dc50600513:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
   Transform:
-    86b0d7a7-7dfb-4034-98c0-6f5f9f90f61b:
+    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
       Position:
         - 0
         - 2.5
@@ -40,7 +40,7 @@ Components:
         - 1
         - 1
         - 1
-    a5dc524d-84da-4065-8c35-64994858641c:
+    7494ac25-6185-4bb4-8839-12f62a858e73:
       Position:
         - 0.670000017
         - 1.21000004
@@ -53,7 +53,7 @@ Components:
         - 1
         - 0.25
         - 1
-    64da0c9a-c57a-4d11-ad02-24813e053cdc:
+    df93926f-13b6-4739-bb5a-15757cd05cf9:
       Position:
         - 0
         - -1
@@ -66,7 +66,7 @@ Components:
         - 5
         - 0.25
         - 1
-    12775895-072c-4c3e-a625-fa31b42867c1:
+    5986b917-dd65-47dd-9106-f4dc50600513:
       Position:
         - 0
         - 1.51999998
@@ -79,22 +79,25 @@ Components:
         - 1
         - 1
         - 1
+  Script:
+    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
+      ScriptName: Game.Player
   Sprite:
-    86b0d7a7-7dfb-4034-98c0-6f5f9f90f61b:
+    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
       SpriteHandle: 5d0b7f90-acf7-58d1-9f22-9f6b0d6d60ff
       SpriteColor:
         - 1
         - 1
         - 1
         - 1
-    a5dc524d-84da-4065-8c35-64994858641c:
+    7494ac25-6185-4bb4-8839-12f62a858e73:
       SpriteHandle: 00000000-0000-0000-0000-000000000000
       SpriteColor:
         - 0.5
         - 0.25
         - 0.200000003
         - 1
-    64da0c9a-c57a-4d11-ad02-24813e053cdc:
+    df93926f-13b6-4739-bb5a-15757cd05cf9:
       SpriteHandle: 00000000-0000-0000-0000-000000000000
       SpriteColor:
         - 0.5
@@ -102,28 +105,28 @@ Components:
         - 0.200000003
         - 1
   Camera:
-    12775895-072c-4c3e-a625-fa31b42867c1:
+    5986b917-dd65-47dd-9106-f4dc50600513:
       CameraValues:
         - 0.100000001
         - 0.785398185
-        - 1.85522783
+        - 1.58176947
         - 1
         - 1000000
       CameraBools:
         - true
         - true
   RigidBody2D:
-    86b0d7a7-7dfb-4034-98c0-6f5f9f90f61b:
+    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
       RigidBody2DType: 1
       RigidBody2DBool: false
-    a5dc524d-84da-4065-8c35-64994858641c:
+    7494ac25-6185-4bb4-8839-12f62a858e73:
       RigidBody2DType: 0
       RigidBody2DBool: false
-    64da0c9a-c57a-4d11-ad02-24813e053cdc:
+    df93926f-13b6-4739-bb5a-15757cd05cf9:
       RigidBody2DType: 0
       RigidBody2DBool: false
   BoxCollider2D:
-    86b0d7a7-7dfb-4034-98c0-6f5f9f90f61b:
+    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
       BoxCollider2D_2DValues:
         -
           - 0
@@ -136,7 +139,7 @@ Components:
         - 0.5
         - 0
         - 0.5
-    a5dc524d-84da-4065-8c35-64994858641c:
+    7494ac25-6185-4bb4-8839-12f62a858e73:
       BoxCollider2D_2DValues:
         -
           - 0
@@ -149,7 +152,7 @@ Components:
         - 0.5
         - 0
         - 0.5
-    64da0c9a-c57a-4d11-ad02-24813e053cdc:
+    df93926f-13b6-4739-bb5a-15757cd05cf9:
       BoxCollider2D_2DValues:
         -
           - 0
