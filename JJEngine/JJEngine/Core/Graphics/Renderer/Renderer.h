@@ -17,9 +17,8 @@ class Renderer
 {
 public:
 	static void BeginScene(const glm::mat4& viewProjection, const glm::vec3& pos);
-	static void SetModel(const Model& model, const TransformComponent& transform);
+	static void AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material);
 	static void AddAffectLight(const LightComponent& light, TransformComponent lightTransform);
-	static void SetMaterial(const MaterialComponent& material);
 	static void SetVAO(std::shared_ptr<VertexArray> VAO);
 	static void SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ);
 	static void SetShadowBuffer (const std::shared_ptr<FrameBuffer>& FBO);

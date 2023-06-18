@@ -71,6 +71,11 @@ int FrameBuffer::GetPixelInt(int colorTextureIndex, int x, int y)
 	return val;
 }
 
+unsigned int FrameBuffer::GetHandle()
+{
+	return m_FrameBufferID;
+}
+
 FrameBufferSpecification FrameBuffer::GetSpecification() const
 {
 	return m_DescribedFrameBuffer;
@@ -144,7 +149,7 @@ void FrameBuffer::BuildFrameBuffer()
 					break;
 				}
 				default:
-					ENGINE_ASSERT(false, "Not Supported Type!");
+					ENGINE_ASSERT(true, "Not Supported Type!");
 					break;
 			}
 			unsigned textureID = m_ColorTextures[i]->GetTextureID();
@@ -167,7 +172,7 @@ void FrameBuffer::BuildFrameBuffer()
 				break;
 			}
 			default:
-				ENGINE_ASSERT(false, "Not Supported Type!");
+				ENGINE_ASSERT(true, "Not Supported Type!");
 				break;
 		}
 		unsigned textureID = m_DepthTexture->GetTextureID();

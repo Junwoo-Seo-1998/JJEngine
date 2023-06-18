@@ -35,7 +35,7 @@ void IngameRendererLayer::OnAttach()
 	//for testing
 	renderer_vao = VertexArray::CreateVertexArray();
 	//Position, Normal, Ambient, Diffuse, Specular 
-	g_buffer = FrameBuffer::CreateFrameBuffer({ static_cast<unsigned int>(get<0>(window->GetWidthAndHeight())), static_cast<unsigned int>(get<1>(window->GetWidthAndHeight())),{FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA}});
+	g_buffer = FrameBuffer::CreateFrameBuffer({ static_cast<unsigned int>(get<0>(window->GetWidthAndHeight())), static_cast<unsigned int>(get<1>(window->GetWidthAndHeight())),{FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::Depth}});
 
 	shadow_buffer = FrameBuffer::CreateFrameBuffer({ shadowResolution.x,shadowResolution.y,{FrameBufferFormat::Depth } });
 	
@@ -93,7 +93,7 @@ void IngameRendererLayer::OnRender()
 	auto& reg = active_scene->GetRegistry();
 
 	auto cameraView = reg.view<CameraComponent>();
-	auto objectView = reg.view<Model>();
+	auto objectView = reg.view<MaterialComponent>();
 	auto lightView = reg.view<LightComponent>();
 	int a = cameraView.size();
 
@@ -104,35 +104,27 @@ void IngameRendererLayer::OnRender()
 		auto& camera = camEntity.GetComponent<CameraComponent>();
 		auto& cameraTransform = camEntity.GetComponent<TransformComponent>();
 		const glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.Position + cameraTransform.GetForward(), cameraTransform.GetUp());
-
+		Renderer::BeginScene(camVP, cameraTransform.Position);
+		Renderer::SetVAO(renderer_vao);
+		Renderer::SetShadowBuffer(shadow_buffer);
+		Renderer::SetGBuffer(g_buffer, FSQ);
+		Renderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
 		for (auto& obj : objectView)
 		{
 			Entity objEntity(obj, active_scene.get());
 			auto& transform = objEntity.GetComponent<TransformComponent>();
 			auto& model = objEntity.GetComponent<Model>();
 			auto& material = objEntity.GetComponent<MaterialComponent>();
-			Renderer::BeginScene(camVP, cameraTransform.Position);
-			Renderer::SetVAO(renderer_vao);
-			Renderer::SetShadowBuffer(shadow_buffer);
-			Renderer::SetGBuffer(g_buffer, FSQ);
-
-			Renderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
-			
-			Renderer::SetModel(model, transform);
-			Renderer::SetMaterial(material);
-
-
-			for (auto& light : lightView)
-			{
-				Entity lightEntity(light, active_scene.get());
-				auto& light = lightEntity.GetComponent<LightComponent>();
-				auto& lightTransform = lightEntity.GetComponent<TransformComponent>();
-				Renderer::AddAffectLight(light, lightTransform);
-			}
-			Renderer::EndScene();
-
+			Renderer::AddModel(model, transform, material);
 		}
-
+		for (auto& light : lightView)
+		{
+			Entity lightEntity(light, active_scene.get());
+			auto& light = lightEntity.GetComponent<LightComponent>();
+			auto& lightTransform = lightEntity.GetComponent<TransformComponent>();
+			Renderer::AddAffectLight(light, lightTransform);
+		}
+		Renderer::EndScene();
 	}
 
 }

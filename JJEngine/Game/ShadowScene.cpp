@@ -58,7 +58,7 @@ void ShadowScene::Start()
 	deferredShadowMaterial.defferedFirstPassShader = gBufferShader;
 	deferredShadowMaterial.defferedSecondPassShader = deferredShader;
 	deferredShadowMaterial.isShadowed = true;
-	deferredShadowMaterial.type = MaterialType::Deffered;
+	deferredShadowMaterial.type = MaterialType::Deferred;
 
 
 	MaterialComponent forwardShadowMaterial{};
@@ -73,17 +73,22 @@ void ShadowScene::Start()
 	objectModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreateSphere(20, 20, 1.f, { 0.f, 0.f, 0.f })));
 	object.AddComponent<Model>(objectModel);
 
-
 	MaterialComponent forwardMaterial{};
 	forwardMaterial.forwardShader = forwardShader;
 	forwardMaterial.isShadowed = false;
 	forwardMaterial.type = MaterialType::Forward;
 
+	MaterialComponent DeferredMaterial{};
+	DeferredMaterial.defferedFirstPassShader = gBufferShader;
+	DeferredMaterial.defferedSecondPassShader = deferredShader;
+	DeferredMaterial.isShadowed = false;
+	DeferredMaterial.type = MaterialType::Deferred;
+
 	Entity floor = CreateEntity("Floor");
 	floor.AddComponent<MaterialComponent>(forwardMaterial);
 	TransformComponent& floorTransform = floor.GetComponent<TransformComponent>();
 	floorTransform.Position = { 0.f, -3.f, 0.f };	
-	floorTransform.Scale = { 1000.f, 1000.f, 1000.f };
+	floorTransform.Scale = { 100.f, 100.f, 100.f };
 	Model floorModel;
 	floorModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreatePlane(10, 10)));
 	floor.AddComponent<Model>(floorModel);
