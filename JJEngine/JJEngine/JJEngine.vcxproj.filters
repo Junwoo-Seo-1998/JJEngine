@@ -188,6 +188,9 @@
     <ClInclude Include="Core\Utils\DebugDetection.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Utils\DebugOnly.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Utils\File.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -203,11 +206,13 @@
     <ClInclude Include="Core\Utils\UUIDGenerator.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Utils\UUIDHelper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Utils\YAML_IMPL.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Utils\UUIDHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -318,7 +323,9 @@
     <ClCompile Include="Core\Utils\UUIDGenerator.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Utils\UUIDHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\Utils\UUIDHelper.cpp" />
   </ItemGroup>
 </Project>

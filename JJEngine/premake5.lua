@@ -49,6 +49,12 @@ project "JJEngine"
     targetdir "bin/%{cfg.buildcfg}"
     objdir "bin/%{cfg.buildcfg}-obj"
     architecture "x86_64"
+
+    flags
+    {
+        "MultiProcessorCompile"
+    }
+
     links {
         "GLFW",
         "GLAD",
@@ -164,6 +170,12 @@ project "Game"
     targetdir "bin/%{cfg.buildcfg}"
     objdir "bin/%{cfg.buildcfg}-obj"
     architecture "x86_64"
+
+    flags
+    {
+        "MultiProcessorCompile"
+    }
+
     links {
         "JJEngine",
         "GLAD",
@@ -216,6 +228,12 @@ project "Editor"
     targetdir "bin/%{cfg.buildcfg}"
     objdir "bin/%{cfg.buildcfg}-obj"
     architecture "x86_64"
+
+    flags
+    {
+        "MultiProcessorCompile"
+    }
+
     links {
         "JJEngine",
         "GLAD",
@@ -253,7 +271,7 @@ project "Editor"
     }
 
     debugdir "RuntimeDependencies"
-    
+
     -- All of these settings will appear in the Debug configuration
     filter "configurations:Debug"
         defines { "DEBUG", "JJ_DEBUG" }

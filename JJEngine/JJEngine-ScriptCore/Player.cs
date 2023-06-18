@@ -8,9 +8,11 @@ namespace Game
 {
     class Player : Entity
     {
+        private TransformComponent m_transform;
         protected override void OnCreate()
         {
-            Console.WriteLine("Player create");
+            Console.WriteLine($"Player create");
+            m_transform = GetComponent<TransformComponent>();
         }
 
         protected override void OnUpdate()
@@ -40,7 +42,7 @@ namespace Game
 
             float speed = 3.0f;
             velocity *= speed;
-            Position += velocity * Time.Delta;
+            m_transform.Position += velocity * Time.Delta;
         }
 
     }

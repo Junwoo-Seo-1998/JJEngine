@@ -20,6 +20,11 @@ project "Box2D"
 		"src"
 	}
 
+	flags
+    {
+        "MultiProcessorCompile"
+    }
+
 	filter "system:windows"
 		systemversion "latest"
 

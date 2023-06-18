@@ -15,10 +15,7 @@ namespace JJEngine
         #region Entity
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern void Entity_GetPosition(in UUIDType uuid, out Vector3 returnParam);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern void Entity_SetPosition(in UUIDType uuid, ref Vector3 toSet);
+        internal static extern bool Entity_HasComponent(in UUIDType uuid, Type componentType);
 
         #endregion
 
@@ -46,6 +43,17 @@ namespace JJEngine
         internal static extern bool Input_IsReleased_Mouse(MouseCode mouseCode);
 
         #endregion
+
+        #region TransformComponent
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void TransformComponent_GetPosition(in UUIDType uuid, out Vector3 returnParam);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void TransformComponent_SetPosition(in UUIDType uuid, ref Vector3 toSet);
+
+        #endregion
+
 
         /*#region Graphics
 

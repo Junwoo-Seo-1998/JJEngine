@@ -1,5 +1,6 @@
 #pragma once
 #include "DebugDetection.h"
+#include "DebugOnly.h"
 #include "Log.h"
 #include <filesystem>
 #ifdef JJ_ENABLE_ASSERTS

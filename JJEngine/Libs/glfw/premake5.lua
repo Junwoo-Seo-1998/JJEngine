@@ -45,6 +45,12 @@ project "GLFW"
     }
 
     filter "system:windows"
+
+        flags
+        {
+            "MultiProcessorCompile"
+        }
+
         systemversion "latest"
         staticruntime "On"
         disablewarnings { "4819", "4002", "4005" }

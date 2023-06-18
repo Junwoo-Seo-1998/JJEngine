@@ -19,6 +19,10 @@ project "yaml-cpp"
 	}
 
 	filter "system:windows"
+		flags
+		{
+			"MultiProcessorCompile"
+		}
 		cppdialect "C++20"
 
 	filter "configurations:Debug"

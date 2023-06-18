@@ -40,6 +40,11 @@ project "ImGui"
         "_CRT_SECURE_NO_WARNINGS"
     }
     filter "system:windows"
+        flags
+        {
+            "MultiProcessorCompile"
+        }
+
         systemversion "latest"
     
     filter "configurations:Debug"

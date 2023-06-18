@@ -53,6 +53,9 @@ namespace Script
 		{
 			EngineLog::Trace("Subclass of Entity : {}", p.first);
 		}
+
+
+		ScriptGlue::RegisterComponents();
 		ScriptGlue::RegisterFunctions();
 
 		ScriptClass TimeClass("JJEngine", "Time");
@@ -120,6 +123,11 @@ namespace Script
 	Scene* ScriptEngine::GetSceneContext()
 	{
 		return s_Data->SceneContext;
+	}
+
+	MonoImage* ScriptEngine::GetCoreAssemblyImage()
+	{
+		return s_Data->CoreAssemblyImage;
 	}
 
 	std::unordered_map<std::string, std::shared_ptr<ScriptClass>> ScriptEngine::GetEntityClasses()
@@ -259,8 +267,14 @@ namespace Script
 	{
 		m_Instance = scriptClass->Instantiate();
 		m_Constructor = s_Data->EntityClass.GetMethod(".ctor", 2);
+
 		m_OnCreateMethod = scriptClass->GetMethod("OnCreate", 0);
+		if(!m_OnCreateMethod)
+			m_OnCreateMethod = s_Data->EntityClass.GetMethod("OnCreate", 0);
+
 		m_OnUpdateMethod = scriptClass->GetMethod("OnUpdate", 0);
+		if (!m_OnUpdateMethod)
+			m_OnUpdateMethod = s_Data->EntityClass.GetMethod("OnUpdate", 0);
 
 		{//call entity ctor
 			auto uuid = entity.GetUUID().as_bytes();

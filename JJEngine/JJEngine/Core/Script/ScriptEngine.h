@@ -21,10 +21,11 @@ extern "C" {
 namespace Script
 {
 	class ScriptClass;
-
+	class ScriptGlue;
 	class ScriptEngine
 	{
 		friend ScriptClass;
+		friend ScriptGlue;
 	public:
 		static void Init();
 		static void Shutdown();
@@ -41,9 +42,13 @@ namespace Script
 		static void OnUpdateEntity(Entity entity);
 
 		static Scene* GetSceneContext();
+		static MonoImage* GetCoreAssemblyImage();
+
 	private:
 		static void InitMono();
 		static void ShutdownMono();
+
+		
 	private://inner helper functions
 		static MonoAssembly* LoadMonoAssembly(const std::filesystem::path& assemblyPath);
 		static void LoadAssemblyClasses(MonoAssembly* assembly);
