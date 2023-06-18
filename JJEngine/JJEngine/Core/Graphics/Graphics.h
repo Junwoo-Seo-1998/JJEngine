@@ -11,25 +11,10 @@
 #include "Core/Layer/Layer.h"
 #include "Core/Application.h"
 #include "Core/Window.h"
+#include "Core/Component/MaterialComponent.h"
 
 
-using VariableContainerType = std::unordered_map<std::string, std::any>;
-
-
-enum class CommandType
-{
-	Forward = 1,
-	Deffered,
-	ForwardShaded,
-	DefferedShaded
-};
-
-
-struct RenderCommand
-{
-	CommandType commandType = CommandType::Forward;
-	VariableContainerType variables;
-};
+using RenderCommand = std::unordered_map<std::string, std::any>;
 
 enum class LightType;
 struct LightInfo
@@ -44,6 +29,7 @@ struct ModelInfo
 {
 	Model model;
 	glm::mat4 toWorld;
+	const MaterialComponent& material;
 };
 
 class Graphics
@@ -55,33 +41,27 @@ public:
 		return instance;
 	}
 
-	void AddRenderCommand(CommandType commandType, const VariableContainerType& variables);
+	void AddRenderCommand(const RenderCommand& command);
 
 	void ExecuteRenderCommands();
 
 	void ExcuteInitializing();
-	void ExecutePreRenderCommand(RenderCommand command);
+	void ExecutePreRenderCommand(RenderCommand& command);
 	void ExecuteRenderCommand(RenderCommand command);
 	void ExecutePostRenderCommand(RenderCommand command);
 
 private:
 	std::vector<RenderCommand> renderCommands;
+	//      for one light                 lightpos,       lightSideVP                      maps
 	using shadowInfoByLight = std::pair<glm::vec3, std::tuple<std::vector<glm::mat4>, std::vector<std::shared_ptr<Texture>>>>;
-	std::vector<std::vector<shadowInfoByLight>> shadowsForModel;
-	int shadowIndex = 0;
-
-	std::vector<std::shared_ptr<Texture>> GBuffer;
-
+	
 	int bindNumber = 0;
-
 private:
-	void ShadowSampling(RenderCommand command);
-	void GBufferSampling(RenderCommand command);
-	void ForwardDrawWithShadow(RenderCommand command);
-	void ForwardDrawWithoutShadow(RenderCommand command);
+	void ShadowSampling(RenderCommand& command);
+	void GBufferSampling(RenderCommand& command);
+	void ForwardDraw(RenderCommand command);
 
-	void DefferedDrawWithShadow(RenderCommand command);
-	void DefferedDrawWithoutShadow(RenderCommand command);
+	void DefferedDraw(RenderCommand command);
 
 };
 

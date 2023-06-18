@@ -46,6 +46,7 @@ public:
 	std::shared_ptr<Texture> GetDepthTexture();
 
 	int GetPixelInt(int colorTextureIndex, int x, int y);
+	unsigned int GetHandle();
 
 	FrameBufferSpecification GetSpecification() const;
 private:

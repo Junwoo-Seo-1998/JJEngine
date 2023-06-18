@@ -1,11 +1,12 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 class Shader;
 class Texture;
 enum class MaterialType
 {
-	Forward, Deffered
+	Forward, Deferred
 };
+
 struct MaterialComponent
 {
 	std::shared_ptr<Shader> forwardShader;
@@ -16,4 +17,9 @@ struct MaterialComponent
 	std::shared_ptr<Texture> specularTexture;
 	bool isShadowed = true;
 	MaterialType type;
+
+	bool operator==(const MaterialComponent& right)
+	{
+		return type == right.type && isShadowed == right.isShadowed;
+	}
 };

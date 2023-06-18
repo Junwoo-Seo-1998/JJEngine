@@ -17,16 +17,21 @@ static std::vector<glm::mat4> toLightVP;
 static std::vector<LightInfo> lights;
 
 
-void Renderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3& pos)
+static std::vector<ModelInfo> modelList;
+
+
+
+
+void Renderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3& camPos)
 {
-	command.variables["toVP"] = viewProjection;
-	command.variables["camPos"] = pos;
+	command["toVP"] = viewProjection;
+	command["camPos"] = camPos;
 }
 
-void Renderer::SetModel(const Model& model, const TransformComponent& transform)
+void Renderer::AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material)
 {
-	command.variables["Model"] = ModelInfo{ model, transform.GetTransform() };
-
+	if (material.type == MaterialType::Deferred) command["DefferedShader"] = material.defferedSecondPassShader;
+	modelList.push_back(ModelInfo{ model, transform.GetTransform(), material });
 }
 
 void Renderer::AddAffectLight(const LightComponent& light, TransformComponent lightTransform)
@@ -50,44 +55,42 @@ void Renderer::AddAffectLight(const LightComponent& light, TransformComponent li
 	}
 }
 
-void Renderer::SetMaterial(const MaterialComponent& material)
-{
-	command.commandType = material.isShadowed ? (material.type == MaterialType::Forward ? CommandType::ForwardShaded : CommandType::DefferedShaded) : (material.type == MaterialType::Forward ? CommandType::Forward : CommandType::Deffered);
-	command.variables["ForwardShader"] = material.forwardShader;
-	command.variables["DefferedFirstPassShader"] = material.defferedFirstPassShader;
-	command.variables["DefferedSecondPassShader"] = material.defferedSecondPassShader;
-	command.variables["ShadowSamplingShader"] = material.shadowSamplingShader;
-}
-
 void Renderer::SetVAO(std::shared_ptr<VertexArray> VAO)
 {
-	command.variables["VAO"] = VAO;
+	command["VAO"] = VAO;
 }
 
 void Renderer::SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ)
 {
-	command.variables["GBufferFBO"] = FBO;
-	command.variables["FSQ"] = FSQ;
+	command["GBufferFBO"] = FBO;
+	command["FSQ"] = FSQ;
 
 }
 
 void Renderer::SetShadowBuffer(const std::shared_ptr<FrameBuffer>& FBO)
 {
-	command.variables["ShadowMapFBO"] = FBO;
+	command["ShadowMapFBO"] = FBO;
 }
 
 void Renderer::SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset)
 {
-	command.variables["Shadow Resolution"] = resolution;
-	command.variables["Polygon Offset"] = zOffset;
+	command["Shadow Resolution"] = resolution;
+	command["Polygon Offset"] = zOffset;
 }
 
 
 void Renderer::EndScene()
 {
-	command.variables["Lights"] = lights;
-	Graphics::GetInstance()->AddRenderCommand(command.commandType, command.variables);
+
+	command["Lights"] = lights;
+	command["Models"] = modelList;
+		
+	
+	Graphics::GetInstance()->AddRenderCommand(command);
+
 	lights.clear();
+	modelList.clear();
+	command.clear();
 }
 
 void Renderer::DrawAllScene()
