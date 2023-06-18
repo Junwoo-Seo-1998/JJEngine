@@ -1,6 +1,7 @@
 #include "ScriptGlue.h"
 #include <iostream>
 #include "ScriptEngine.h"
+#include "box2d/b2_body.h"
 #include "Core/Input/Input.h"
 #include "Core/Utils/Log.h"
 #include "Core/Utils/UUIDHelper.h"
@@ -51,6 +52,30 @@ namespace Script
 		Entity entity = scene->GetEntity(*uuid);
 		ENGINE_ASSERT(entity);
 		entity.Transform().Position = *toSet;
+	}
+
+	static void RigidBody2DComponent_ApplyLinearImpulseToCenter(UUIDType* uuid, glm::vec2* impulse, bool wake)
+	{
+		Scene* scene = Script::ScriptEngine::GetSceneContext();
+		ENGINE_ASSERT(scene);
+		Entity entity = scene->GetEntity(*uuid);
+		ENGINE_ASSERT(entity);
+
+		auto& bodyComp = entity.GetComponent<RigidBody2DComponent>();
+		b2Body* body = (b2Body*)bodyComp.RuntimeBody;
+		body->ApplyLinearImpulseToCenter(b2Vec2{ impulse->x, impulse->y }, wake);
+	}
+
+	static void RigidBody2DComponent_ApplyLinearImpulse(UUIDType* uuid, glm::vec2* impulse, glm::vec2* point, bool wake)
+	{
+		Scene* scene = Script::ScriptEngine::GetSceneContext();
+		ENGINE_ASSERT(scene);
+		Entity entity = scene->GetEntity(*uuid);
+		ENGINE_ASSERT(entity);
+
+		auto& bodyComp = entity.GetComponent<RigidBody2DComponent>();
+		b2Body* body = (b2Body*)bodyComp.RuntimeBody;
+		body->ApplyLinearImpulse(b2Vec2{ impulse->x, impulse->y }, b2Vec2{ point->x, point->y }, wake);
 	}
 
 	static bool Input_IsPressed_Key(KeyCode key)
@@ -107,6 +132,9 @@ namespace Script
 
 		ADD_INTERNAL_CALL(Input_IsReleased_Key);
 		ADD_INTERNAL_CALL(Input_IsReleased_Mouse);
+
+		ADD_INTERNAL_CALL(RigidBody2DComponent_ApplyLinearImpulseToCenter);
+		ADD_INTERNAL_CALL(RigidBody2DComponent_ApplyLinearImpulse);
 	}
 
 	//helper
@@ -139,7 +167,7 @@ namespace Script
 				}
 			);
 
-			s_EntityHasComponentFuncs[managedType] = [](Entity entity) { return entity.HasComponent<TransformComponent>(); };
+			s_EntityHasComponentFuncs[managedType] = [](Entity entity) { return entity.HasComponent<Component>(); };
 		}(),
 		//expand it with templates
 		... );
@@ -155,7 +183,5 @@ namespace Script
 	void ScriptGlue::RegisterComponents()
 	{
 		RegisterComponent(AllComponents{});
-		//MonoType* managedType = mono_reflection_type_from_name("JJEngine.TransformComponent", ScriptEngine::GetCoreAssemblyImage());
-		//s_EntityHasComponentFuncs[managedType] = [](Entity entity) { return entity.HasComponent<TransformComponent>()};
 	}
 }

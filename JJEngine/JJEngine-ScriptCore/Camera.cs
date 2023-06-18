@@ -4,52 +4,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JJEngine;
+
 namespace Game
 {
-    class Player : Entity
+    public class CameraControl  : Entity
     {
         private TransformComponent m_transform;
-        private RigidBody2DComponent m_rigidBody;
         protected override void OnCreate()
         {
-            Console.WriteLine($"Player create");
             m_transform = GetComponent<TransformComponent>();
-            m_rigidBody = GetComponent<RigidBody2DComponent>();
         }
 
         protected override void OnUpdate()
         {
-            Vector3 velocity=Vector3.Zero;
-            if (Input.IsPressed(KeyCode.W))
+            Vector3 velocity = Vector3.Zero;
+            if (Input.IsPressed(KeyCode.Up))
             {
                 velocity.Y += 1.0f;
 
             }
-            else if (Input.IsPressed(KeyCode.S))
+            else if (Input.IsPressed(KeyCode.Down))
             {
                 velocity.Y -= 1.0f;
 
             }
 
 
-            if (Input.IsPressed(KeyCode.D))
+            if (Input.IsPressed(KeyCode.Right))
             {
                 velocity.X += 1.0f;
 
             }
-            else if (Input.IsPressed(KeyCode.A))
+            else if (Input.IsPressed(KeyCode.Left))
             {
                 velocity.X -= 1.0f;
             }
 
             float speed = 3.0f;
             velocity *= speed;
-            /*if (m_rigidBody != null)
-            {
-                m_rigidBody.ApplyLinearImpulse(velocity.XY, true);
-            }*/
             m_transform.Position += velocity * Time.Delta;
         }
-
     }
 }

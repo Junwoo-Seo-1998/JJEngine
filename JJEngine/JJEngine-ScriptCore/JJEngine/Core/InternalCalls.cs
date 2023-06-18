@@ -50,7 +50,19 @@ namespace JJEngine
         internal static extern void TransformComponent_GetPosition(in UUIDType uuid, out Vector3 returnParam);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern void TransformComponent_SetPosition(in UUIDType uuid, ref Vector3 toSet);
+        internal static extern void TransformComponent_SetPosition(in UUIDType uuid, in Vector3 toSet);
+
+        #endregion
+
+        #region RigidBody2DComponent
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void RigidBody2DComponent_ApplyLinearImpulseToCenter(in UUIDType uuid,
+            in Vector2 impulse, bool wake);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void RigidBody2DComponent_ApplyLinearImpulse(in UUIDType uuid, in Vector2 impulse,
+            in Vector2 point, bool wake);
 
         #endregion
 

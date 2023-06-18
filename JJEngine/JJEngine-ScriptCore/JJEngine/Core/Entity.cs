@@ -46,7 +46,7 @@ namespace JJEngine
             }
             set
             {
-                InternalCalls.TransformComponent_SetPosition(in UUID, ref value);
+                InternalCalls.TransformComponent_SetPosition(in UUID, in value);
             }
         }
 
