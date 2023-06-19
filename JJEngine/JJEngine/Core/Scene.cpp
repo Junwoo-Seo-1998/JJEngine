@@ -108,17 +108,17 @@ Scene::~Scene()
 
 void Scene::Awake()
 {
-	//const glm::uvec2 shadowResolution{ 512, 512 };
-	//auto window = Application::Instance().GetWindow();
-	////for testing
-	//renderer_vao = VertexArray::CreateVertexArray();
-	////Position, Normal, Ambient, Diffuse, Specular 
-	//g_buffer = FrameBuffer::CreateFrameBuffer({ 
-	//	static_cast<unsigned int>(get<0>(window->GetWidthAndHeight())), static_cast<unsigned int>(get<1>(window->GetWidthAndHeight())),
-	//	{FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::Depth} });
+	const glm::uvec2 shadowResolution{ 512, 512 };
+	auto window = Application::Instance().GetWindow();
+	//for testing
+	renderer_vao = VertexArray::CreateVertexArray();
+	//Position, Normal, Ambient, Diffuse, Specular 
+	g_buffer = FrameBuffer::CreateFrameBuffer({ 
+		static_cast<unsigned int>(get<0>(window->GetWidthAndHeight())), static_cast<unsigned int>(get<1>(window->GetWidthAndHeight())),
+		{FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::Depth} });
 
-	//shadow_buffer = FrameBuffer::CreateFrameBuffer({ shadowResolution.x,shadowResolution.y,{FrameBufferFormat::Depth } });
-	//FSQ = std::make_shared<Mesh>();
+	shadow_buffer = FrameBuffer::CreateFrameBuffer({ shadowResolution.x,shadowResolution.y,{FrameBufferFormat::Depth } });
+	FSQ = std::make_shared<Mesh>();
 }
 
 void Scene::OnEnable()
@@ -127,31 +127,31 @@ void Scene::OnEnable()
 
 void Scene::Start()
 {
-	//{// mesh load?
-	//	auto view = m_Registry.view<Model>();
-	//	for (auto entity : view)
-	//	{
-	//		Entity e(entity, this);
-	//		auto& m = e.GetComponent<Model>();
-	//		for (auto& mesh : m)
-	//		{
-	//			mesh->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(mesh->GetNumOfVertices() * sizeof(Vertex));
-	//			mesh->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(mesh->GetNumOfIndices() * sizeof(int));
-	//		}
-	//	}
-	//	FSQ->GetVertices().push_back(Vertex{ glm::vec3{ -1.f, -1.f, 0.f} });
-	//	FSQ->GetVertices().push_back(Vertex{ glm::vec3{ 1.f, -1.f, 0.f} });
-	//	FSQ->GetVertices().push_back(Vertex{ glm::vec3{ 1.f, 1.f, 0.f} });
-	//	FSQ->GetVertices().push_back(Vertex{ glm::vec3{ -1.f, 1.f, 0.f} });
-	//	FSQ->GetIndices().push_back(0);
-	//	FSQ->GetIndices().push_back(1);
-	//	FSQ->GetIndices().push_back(2);
-	//	FSQ->GetIndices().push_back(0);
-	//	FSQ->GetIndices().push_back(2);
-	//	FSQ->GetIndices().push_back(3);
-	//	FSQ->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(FSQ->GetNumOfVertices() * sizeof(Vertex));
-	//	FSQ->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(FSQ->GetNumOfIndices() * sizeof(int));
-	//}
+	{// mesh load?
+		auto view = m_Registry.view<Model>();
+		for (auto entity : view)
+		{
+			Entity e(entity, this);
+			auto& m = e.GetComponent<Model>();
+			for (auto& mesh : m)
+			{
+				mesh->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(mesh->GetNumOfVertices() * sizeof(Vertex));
+				mesh->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(mesh->GetNumOfIndices() * sizeof(int));
+			}
+		}
+		FSQ->GetVertices().push_back(Vertex{ glm::vec3{ -1.f, -1.f, 0.f} });
+		FSQ->GetVertices().push_back(Vertex{ glm::vec3{ 1.f, -1.f, 0.f} });
+		FSQ->GetVertices().push_back(Vertex{ glm::vec3{ 1.f, 1.f, 0.f} });
+		FSQ->GetVertices().push_back(Vertex{ glm::vec3{ -1.f, 1.f, 0.f} });
+		FSQ->GetIndices().push_back(0);
+		FSQ->GetIndices().push_back(1);
+		FSQ->GetIndices().push_back(2);
+		FSQ->GetIndices().push_back(0);
+		FSQ->GetIndices().push_back(2);
+		FSQ->GetIndices().push_back(3);
+		FSQ->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(FSQ->GetNumOfVertices() * sizeof(Vertex));
+		//FSQ->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(FSQ->GetNumOfIndices() * sizeof(int));
+	}
 }
 
 void Scene::Update()
