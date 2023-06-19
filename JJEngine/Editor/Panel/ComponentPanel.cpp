@@ -12,10 +12,15 @@
 #include "Core/Component/RigidBody2DComponent.h"
 #include "Core/Component/ScriptComponent.h"
 #include "Core/Component/SpriteRendererComponent.h"
+
+#include "Core/Component/LightComponent.h"
+#include "Core/Component/MaterialComponent.h"
+
 #include "Core/Utils/Assert.h"
 
 #include "Core/Script/ScriptEngine.h"
 #include <format>
+#include <Core/Graphics/Mesh.h>
 static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
 {
 	ImGuiIO& io = ImGui::GetIO();
@@ -222,6 +227,34 @@ void ComponentPanel::DrawComponents(Entity entity)
 				}
 			}
 
+			if (!entity.HasComponent<LightComponent>())
+			{
+				if (ImGui::MenuItem("Light"))
+				{
+					entity.AddComponent<LightComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+			if (!entity.HasComponent<MaterialComponent>()) //??
+			{
+				if (ImGui::MenuItem("Material"))
+				{
+					entity.AddComponent<MaterialComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+			if (!entity.HasComponent<Model>())
+			{
+				if (ImGui::MenuItem("Model"))
+				{
+					Model& model = entity.AddComponent<Model>();
+					model.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreateSphere(10, 10, 10, {})));
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
 			ImGui::EndPopup();
 		}
 		ImGui::PopItemWidth();
@@ -259,6 +292,18 @@ void ComponentPanel::DrawComponents(Entity entity)
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 		});
+
+		DrawComponent<LightComponent>("Light", entity, [](auto& component)
+			{
+			});
+
+		DrawComponent<MaterialComponent>("Material", entity, [](auto& component)
+			{
+			});
+
+		DrawComponent<Model>("Model", entity, [](auto& component)
+			{
+			});
 
 		DrawComponent<RigidBody2DComponent>("RigidBody 2D", entity, [](auto& component)
 		{

@@ -57,6 +57,8 @@ void TestScene::Start()
 
 	auto& script=temp.AddComponent<ScriptComponent>();
 	script.Name = "Game.Player";
+
+	Scene::Start();
 }
 
 void TestScene::Update()
