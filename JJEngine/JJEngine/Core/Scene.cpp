@@ -108,17 +108,17 @@ Scene::~Scene()
 
 void Scene::Awake()
 {
-	const glm::uvec2 shadowResolution{ 512, 512 };
-	auto window = Application::Instance().GetWindow();
-	//for testing
-	renderer_vao = VertexArray::CreateVertexArray();
-	//Position, Normal, Ambient, Diffuse, Specular 
-	g_buffer = FrameBuffer::CreateFrameBuffer({ 
-		static_cast<unsigned int>(get<0>(window->GetWidthAndHeight())), static_cast<unsigned int>(get<1>(window->GetWidthAndHeight())),
-		{FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::Depth} });
+	//const glm::uvec2 shadowResolution{ 512, 512 };
+	//auto window = Application::Instance().GetWindow();
+	////for testing
+	//renderer_vao = VertexArray::CreateVertexArray();
+	////Position, Normal, Ambient, Diffuse, Specular 
+	//g_buffer = FrameBuffer::CreateFrameBuffer({ 
+	//	static_cast<unsigned int>(get<0>(window->GetWidthAndHeight())), static_cast<unsigned int>(get<1>(window->GetWidthAndHeight())),
+	//	{FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::Depth} });
 
-	shadow_buffer = FrameBuffer::CreateFrameBuffer({ shadowResolution.x,shadowResolution.y,{FrameBufferFormat::Depth } });
-	FSQ = std::make_shared<Mesh>();
+	//shadow_buffer = FrameBuffer::CreateFrameBuffer({ shadowResolution.x,shadowResolution.y,{FrameBufferFormat::Depth } });
+	//FSQ = std::make_shared<Mesh>();
 }
 
 void Scene::OnEnable()
@@ -127,32 +127,31 @@ void Scene::OnEnable()
 
 void Scene::Start()
 {
-	{// mesh load?
-		auto view = m_Registry.view<Model>();
-
-		for (auto entity : view)
-		{
-			Entity e(entity, this);
-			auto& m = e.GetComponent<Model>();
-			for (auto& mesh : m)
-			{
-				mesh->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(mesh->GetNumOfVertices() * sizeof(Vertex));
-				mesh->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(mesh->GetNumOfIndices() * sizeof(int));
-			}
-		}
-		FSQ->GetVertices().push_back(Vertex{ glm::vec3{ -1.f, -1.f, 0.f} });
-		FSQ->GetVertices().push_back(Vertex{ glm::vec3{ 1.f, -1.f, 0.f} });
-		FSQ->GetVertices().push_back(Vertex{ glm::vec3{ 1.f, 1.f, 0.f} });
-		FSQ->GetVertices().push_back(Vertex{ glm::vec3{ -1.f, 1.f, 0.f} });
-		FSQ->GetIndices().push_back(0);
-		FSQ->GetIndices().push_back(1);
-		FSQ->GetIndices().push_back(2);
-		FSQ->GetIndices().push_back(0);
-		FSQ->GetIndices().push_back(2);
-		FSQ->GetIndices().push_back(3);
-		FSQ->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(FSQ->GetNumOfVertices() * sizeof(Vertex));
-		FSQ->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(FSQ->GetNumOfIndices() * sizeof(int));
-	}
+	//{// mesh load?
+	//	auto view = m_Registry.view<Model>();
+	//	for (auto entity : view)
+	//	{
+	//		Entity e(entity, this);
+	//		auto& m = e.GetComponent<Model>();
+	//		for (auto& mesh : m)
+	//		{
+	//			mesh->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(mesh->GetNumOfVertices() * sizeof(Vertex));
+	//			mesh->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(mesh->GetNumOfIndices() * sizeof(int));
+	//		}
+	//	}
+	//	FSQ->GetVertices().push_back(Vertex{ glm::vec3{ -1.f, -1.f, 0.f} });
+	//	FSQ->GetVertices().push_back(Vertex{ glm::vec3{ 1.f, -1.f, 0.f} });
+	//	FSQ->GetVertices().push_back(Vertex{ glm::vec3{ 1.f, 1.f, 0.f} });
+	//	FSQ->GetVertices().push_back(Vertex{ glm::vec3{ -1.f, 1.f, 0.f} });
+	//	FSQ->GetIndices().push_back(0);
+	//	FSQ->GetIndices().push_back(1);
+	//	FSQ->GetIndices().push_back(2);
+	//	FSQ->GetIndices().push_back(0);
+	//	FSQ->GetIndices().push_back(2);
+	//	FSQ->GetIndices().push_back(3);
+	//	FSQ->GetMeshVBO() = VertexBuffer::CreateVertexBuffer(FSQ->GetNumOfVertices() * sizeof(Vertex));
+	//	FSQ->GetMeshEBO() = IndexBuffer::CreateIndexBuffer(FSQ->GetNumOfIndices() * sizeof(int));
+	//}
 }
 
 void Scene::Update()
@@ -176,7 +175,6 @@ void Scene::RenderScene(const glm::mat4& viewProj, const glm::vec3& cameraPos)
 	//{
 	//	auto objectView = m_Registry.view<MaterialComponent>();
 	//	auto lightView = m_Registry.view<LightComponent>();
-
 	//	Renderer::BeginScene(viewProj, cameraPos);
 	//	Renderer::SetVAO(renderer_vao);
 	//	Renderer::SetShadowBuffer(shadow_buffer);
@@ -198,7 +196,6 @@ void Scene::RenderScene(const glm::mat4& viewProj, const glm::vec3& cameraPos)
 	//		Renderer::AddAffectLight(light, lightTransform);
 	//	}
 	//	Renderer::EndScene();
-
 	//	Renderer::DrawAllScene();
 	//}
 
@@ -221,18 +218,7 @@ void Scene::UpdateEditor(EditorCamera& camera)
 {
 	glm::mat4 viewProj{camera.GetViewProjection()};
 	Renderer2D::BeginScene(viewProj);
-	auto view = m_Registry.view<SpriteRendererComponent>();
-	for (auto e : view)
-	{
-		Entity entity{ e, this };
-		auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
-		if (spriteComp.asset)
-			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.asset->data, spriteComp.color);
-		else
-			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
-	}
-	Renderer2D::EndScene();
-	//RenderScene(viewProj, camera.GetPosition());
+	RenderScene(viewProj, camera.GetPosition());
 }
 
 void Scene::RenderEntityID(EditorCamera& camera)
@@ -312,19 +298,7 @@ void Scene::UpdateRuntime()
 		auto& camComp = camera.GetComponent<CameraComponent>();
 		glm::mat4 viewProj = camComp.GetProjection() *
 			MatrixMath::BuildCameraMatrixWithDirection(camTransform.Position, camTransform.GetForward(), camTransform.GetUp());
-		//RenderScene(viewProj, camTransform.Position);
-		Renderer2D::BeginScene(viewProj);
-		auto view = m_Registry.view<SpriteRendererComponent>();
-		for (auto e : view)
-		{
-			Entity entity{ e, this };
-			auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
-			if (spriteComp.asset)
-				Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.asset->data, spriteComp.color);
-			else
-				Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
-		}
-		Renderer2D::EndScene();
+		RenderScene(viewProj, camTransform.Position);
 	}
 }
 

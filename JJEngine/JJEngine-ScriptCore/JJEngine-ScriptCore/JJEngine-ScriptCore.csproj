@@ -78,6 +78,9 @@
     <Compile Include="..\Player.cs">
       <Link>Player.cs</Link>
     </Compile>
+    <Compile Include="..\obj\Win64\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs">
+      <Link>obj\Win64\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
