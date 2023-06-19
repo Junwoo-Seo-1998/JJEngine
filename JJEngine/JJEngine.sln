@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JJEngine", "JJEngine", "{56
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JJEngine", "JJEngine\JJEngine.vcxproj", "{EF2505B0-DBF2-5FBB-040C-4E63F0379549}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JJEngine-ScriptCore", "JJEngine-ScriptCore\JJEngine-ScriptCore.csproj", "{FA0C0005-666E-DD12-EFDB-23C55B3C14D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JJEngine-ScriptCore", "JJEngine-ScriptCore\JJEngine-ScriptCore\JJEngine-ScriptCore.csproj", "{FA0C0005-666E-DD12-EFDB-23C55B3C14D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{F673C85D-E22B-0AAB-4B33-E306370AA59B}"
 EndProject

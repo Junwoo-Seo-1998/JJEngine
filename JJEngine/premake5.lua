@@ -41,6 +41,9 @@ Library["WinVersion"] = "Version.lib"
 Library["BCrypt"] = "Bcrypt.lib"
 
 group "JJEngine"
+
+include "JJEngine-ScriptCore"
+
 project "JJEngine"
     location "JJEngine"
     kind "StaticLib"
@@ -133,33 +136,6 @@ project "JJEngine"
             "%{Library.Mono_Release}",
         }
 group ""
-
-group "JJEngine"
-project "JJEngine-ScriptCore"
-    kind "SharedLib"
-    language "C#"
-    dotnetframework "4.8"
-    location "JJEngine-ScriptCore"
-    targetdir ("RuntimeDependencies/Resources/Scripts")
-    objdir ("bin/%{cfg.buildcfg}-obj")
-
-    files 
-    {
-        "JJEngine-ScriptCore/**.cs",
-    }
-
-    filter "configurations:Debug"
-        optimize "Off"
-        symbols "Default"
-
-    filter "configurations:Release"
-        optimize "On"
-        symbols "Default"
-
-    filter "configurations:Dist"
-        optimize "Full"
-        symbols "Off"
-    
 
 group "Executable"
 project "Game"
