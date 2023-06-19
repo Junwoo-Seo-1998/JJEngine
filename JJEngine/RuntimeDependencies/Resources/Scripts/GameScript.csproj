@@ -46,7 +46,7 @@
     <Compile Include="Source\Player.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\JJEngine-ScriptCore\JJEngine-ScriptCore\JJEngine-ScriptCore.csproj">
+    <ProjectReference Include="..\..\..\JJEngine-ScriptCore\JJEngine-ScriptCore.csproj">
       <Project>{FA0C0005-666E-DD12-EFDB-23C55B3C14D2}</Project>
       <Name>JJEngine-ScriptCore</Name>
     </ProjectReference>
