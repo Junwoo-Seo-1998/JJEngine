@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameScript", "GameScript.csproj", "{94836037-803B-A284-E942-7BE0D5193D75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JJEngine", "JJEngine", "{56AD96C5-427B-8ACB-2B0F-FBF1177C6630}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JJEngine-ScriptCore", "..\..\..\JJEngine-ScriptCore\JJEngine-ScriptCore\JJEngine-ScriptCore.csproj", "{FA0C0005-666E-DD12-EFDB-23C55B3C14D2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94836037-803B-A284-E942-7BE0D5193D75}.Debug|x64.ActiveCfg = Debug|x64
+		{94836037-803B-A284-E942-7BE0D5193D75}.Debug|x64.Build.0 = Debug|x64
+		{94836037-803B-A284-E942-7BE0D5193D75}.Release|x64.ActiveCfg = Release|x64
+		{94836037-803B-A284-E942-7BE0D5193D75}.Release|x64.Build.0 = Release|x64
+		{FA0C0005-666E-DD12-EFDB-23C55B3C14D2}.Debug|x64.ActiveCfg = Debug|x64
+		{FA0C0005-666E-DD12-EFDB-23C55B3C14D2}.Debug|x64.Build.0 = Debug|x64
+		{FA0C0005-666E-DD12-EFDB-23C55B3C14D2}.Release|x64.ActiveCfg = Release|x64
+		{FA0C0005-666E-DD12-EFDB-23C55B3C14D2}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FA0C0005-666E-DD12-EFDB-23C55B3C14D2} = {56AD96C5-427B-8ACB-2B0F-FBF1177C6630}
+	EndGlobalSection
+EndGlobal

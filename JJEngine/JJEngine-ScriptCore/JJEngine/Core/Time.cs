@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JJEngine
 {
-    class Time
+    public class Time
     {
         public static float Delta
         {

@@ -4,12 +4,11 @@ project "JJEngine-ScriptCore"
     dotnetframework "4.8"
     location "JJEngine-ScriptCore"
     targetdir ("../RuntimeDependencies/Resources/Scripts")
-    objdir ("../bin/%{cfg.buildcfg}-obj")
+    objdir ("Intermediates")
 
     files 
     {
         "JJEngine/**.cs",
-        "**.cs",
     }
 
     filter "configurations:Debug"

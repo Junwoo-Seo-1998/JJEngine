@@ -35,6 +35,8 @@ namespace Script
 		static void StopRuntime();
 
 		static void LoadAssembly(const std::filesystem::path& filepath);
+		static void LoadAppAssembly(const std::filesystem::path& filepath);
+
 		static std::unordered_map<std::string, std::shared_ptr<ScriptClass>> GetEntityClasses();
 		static bool EntityClassExists(const std::string& fullName);
 
@@ -51,7 +53,7 @@ namespace Script
 		
 	private://inner helper functions
 		static MonoAssembly* LoadMonoAssembly(const std::filesystem::path& assemblyPath);
-		static void LoadAssemblyClasses(MonoAssembly* assembly);
+		static void LoadAssemblyClasses();
 
 		static void PrintAssemblyTypes(MonoAssembly* assembly);
 		static MonoObject* InstantiateClass(MonoClass* monoClass);
@@ -61,7 +63,7 @@ namespace Script
 	{
 	public:
 		ScriptClass() = default;
-		ScriptClass(const std::string& nameSpace, const std::string& className);
+		ScriptClass(const std::string& nameSpace, const std::string& className, bool isCore = false);
 		MonoObject* Instantiate();
 
 		MonoMethod* GetMethod(const std::string& methodName, int paramCount);
