@@ -21,8 +21,7 @@
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\bin\Debug-obj\Win64\Debug\JJEngine-ScriptCore\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -34,8 +33,7 @@
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\bin\Release-obj\Win64\Release\JJEngine-ScriptCore\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -56,6 +54,7 @@
     <Compile Include="JJEngine\Math\Vector3.cs" />
     <Compile Include="JJEngine\main.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="obj\Win64\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

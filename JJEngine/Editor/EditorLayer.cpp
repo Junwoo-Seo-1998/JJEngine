@@ -134,6 +134,7 @@ void EditorLayer::OnRender()
 	{
 	case SceneState::Edit:
 		m_ActiveScene->UpdateEditor(m_EditorCamera);
+
 		break;
 	case SceneState::Play:
 		m_ActiveScene->UpdateRuntime();
@@ -338,6 +339,8 @@ void EditorLayer::OnScenePlay()
 
 	m_RuntimeScene = Scene::Copy(m_EditorScene);
 	m_RuntimeScene->ResizeViewport((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
+	m_RuntimeScene->Awake();
+	m_RuntimeScene->Start();
 	m_RuntimeScene->StartRuntime();
 	m_ActiveScene = m_RuntimeScene;
 }

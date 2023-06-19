@@ -10,12 +10,15 @@ End Header-------------------------------------------------------- */
 #include <filesystem>
 #include "Type.h"
 #include <memory>
+#include <glm/glm.hpp>
 
 class EditorCamera;
 class Entity;
 class SceneHierarchyPanel;
 class b2World;
-
+class VertexArray;
+class FrameBuffer;
+class Mesh;
 using EntityMap = std::unordered_map<UUIDType, Entity>;
 
 class Scene
@@ -24,6 +27,13 @@ class Scene
 	friend class SceneHierarchyPanel;
 	friend class SceneSerializer;
 	//static function
+
+	static constexpr unsigned int MAX_SHADOW_BUFFER = 6;
+	std::shared_ptr<VertexArray> renderer_vao;
+	std::shared_ptr<FrameBuffer> g_buffer;
+	std::shared_ptr<FrameBuffer> shadow_buffer; 
+	std::shared_ptr <Mesh> FSQ;
+
 public:
 	static std::shared_ptr<Scene> Copy(std::shared_ptr<Scene> toCopy);
 public:
@@ -38,6 +48,8 @@ public:
 	virtual void PostUpdate();
 	virtual void OnDisable();
 	virtual void OnDestroy();
+
+	void RenderScene(const glm::mat4& viewProj, const glm::vec3& cameraPos);
 
 	//editor only
 	void UpdateEditor(EditorCamera& camera);
