@@ -48,6 +48,29 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLType() const
 	return 0;
 }
 
+unsigned TextureWrapData::TextureWrapDataToOpenGLType() const
+{
+	switch (wrap)
+	{
+	case TextureWrap::ClampToEdge: return GL_CLAMP_TO_EDGE;
+	case TextureWrap::ClampToBorder: return GL_CLAMP_TO_BORDER;
+	case TextureWrap::Repeat: return GL_REPEAT;
+	}
+	ENGINE_ASSERT(false, "Not Supported Texture Wrapping Method");
+	return 0;
+}
+
+unsigned TextureFilterData::TextureFilterDataToOpenGLType() const
+{
+	switch (filter)
+	{
+	case TextureFilter::Linear: return GL_LINEAR;
+	case TextureFilter::Nearest: return GL_NEAREST;
+	}
+	ENGINE_ASSERT(false, "Not Supported Texture Filtering Medthod");
+	return 0;
+}
+
 std::shared_ptr<Texture> Texture::CopyTexture(std::shared_ptr<Texture> texture)
 {
 	return std::shared_ptr<Texture>(new Texture{ texture });
@@ -100,18 +123,22 @@ void Texture::ClearTexture(int value)
 }
 
 Texture::Texture(std::shared_ptr<TextureData> texture_data)
-	:m_Width(texture_data->width), m_Height(texture_data->height), m_TextureChannel(texture_data->channel)
+	:m_Width(texture_data->width), m_Height(texture_data->height), m_TextureChannel(texture_data->channel),
+	m_Wrap(texture_data->wrap), m_Filter(texture_data->filter)
 {
 	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
 	
-	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, m_Wrap.TextureWrapDataToOpenGLType());
+	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, m_Wrap.TextureWrapDataToOpenGLType());
 
-	glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	GLfloat border[] = { 0 };
+	glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, m_Filter.TextureFilterDataToOpenGLType());
+	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, m_Filter.TextureFilterDataToOpenGLType());
 
-	glTextureParameterfv(m_TextureID, GL_TEXTURE_BORDER_COLOR, border);
+	if (m_Wrap.wrap == TextureWrap::ClampToBorder)
+	{
+		GLfloat border[] = { 0 };
+		glTextureParameterfv(m_TextureID, GL_TEXTURE_BORDER_COLOR, border);
+	}
 
 	glTextureStorage2D(m_TextureID, 1, texture_data->channel.TextureChannelTypeToOpenGLInnerType(), m_Width, m_Height);
 
@@ -123,19 +150,22 @@ Texture::Texture(std::shared_ptr<TextureData> texture_data)
 }
 
 Texture::Texture(const TextureData& texture_data)
-	:m_Width(texture_data.width), m_Height(texture_data.height), m_TextureChannel(texture_data.channel)
+	:m_Width(texture_data.width), m_Height(texture_data.height), m_TextureChannel(texture_data.channel),
+	m_Wrap(texture_data.wrap), m_Filter(texture_data.filter)
 {
 	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
 
-	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, m_Wrap.TextureWrapDataToOpenGLType());
+	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, m_Wrap.TextureWrapDataToOpenGLType());
 
-	glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, m_Filter.TextureFilterDataToOpenGLType());
+	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, m_Filter.TextureFilterDataToOpenGLType());
 
-	GLfloat border[] = { 0 };
-
-	glTextureParameterfv(m_TextureID, GL_TEXTURE_BORDER_COLOR, border);
+	if (m_Wrap.wrap == TextureWrap::ClampToBorder)
+	{
+		GLfloat border[] = { 0 };
+		glTextureParameterfv(m_TextureID, GL_TEXTURE_BORDER_COLOR, border);
+	}
 
 	glTextureStorage2D(m_TextureID, 1, texture_data.channel.TextureChannelTypeToOpenGLInnerType(), m_Width, m_Height);
 
@@ -149,20 +179,23 @@ Texture::Texture(const TextureData& texture_data)
 
 
 Texture::Texture(std::shared_ptr<Texture> texture)
-	:m_Width(texture->m_Width), m_Height(texture->m_Height), m_TextureChannel(texture->m_TextureChannel)
+	:m_Width(texture->m_Width), m_Height(texture->m_Height), m_TextureChannel(texture->m_TextureChannel),
+	m_Wrap(texture->m_Wrap), m_Filter(texture->m_Filter)
+
 {
 	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
 
-	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, m_Wrap.TextureWrapDataToOpenGLType());
+	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, m_Wrap.TextureWrapDataToOpenGLType());
 
-	glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, m_Filter.TextureFilterDataToOpenGLType());
+	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, m_Filter.TextureFilterDataToOpenGLType());
 
-	GLfloat border[] = { 0 };
-
-
-	glTextureParameterfv(m_TextureID, GL_TEXTURE_BORDER_COLOR, border);
+	if (m_Wrap.wrap == TextureWrap::ClampToBorder)
+	{
+		GLfloat border[] = { 0 };
+		glTextureParameterfv(m_TextureID, GL_TEXTURE_BORDER_COLOR, border);
+	}
 
 	glTextureStorage2D(m_TextureID, 1, texture->m_TextureChannel.TextureChannelTypeToOpenGLInnerType(), m_Width, m_Height);
 	glCopyImageSubData(texture->GetTextureID(), GL_TEXTURE_2D, 0, 0, 0, 0, m_TextureID, GL_TEXTURE_2D, 0, 0, 0, 0, m_Width, m_Height, 1);

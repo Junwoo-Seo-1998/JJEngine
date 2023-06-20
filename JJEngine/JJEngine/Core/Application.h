@@ -6,7 +6,7 @@ Date: 12/16/2022
 End Header-------------------------------------------------------- */
 #pragma once
 #include <memory>
-
+class Event;
 class EventManager;
 class Application;
 
@@ -24,6 +24,9 @@ public:
 	bool Init();
 	void Update();
 	void Shutdown();
+
+	void OnEvent(Event& event);
+
 	std::shared_ptr<SceneManager> GetSceneManager();
 	std::shared_ptr<Window> GetWindow();
 	std::shared_ptr<LayerManager> GetLayerManager();

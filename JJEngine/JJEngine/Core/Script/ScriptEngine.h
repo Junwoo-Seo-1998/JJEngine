@@ -40,6 +40,8 @@ namespace Script
 		static void LoadAssembly(const std::filesystem::path& filepath);
 		static void LoadAppAssembly(const std::filesystem::path& filepath);
 
+		static void ReloadAssembly();
+
 		static std::unordered_map<std::string, std::shared_ptr<ScriptClass>> GetEntityClasses();
 		static std::shared_ptr<ScriptInstance> GetEntityScriptInstance(UUIDType entityUUID);
 

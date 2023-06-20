@@ -17,12 +17,41 @@ enum class TextureChannel
 	None,
 };
 
+enum class TextureWrap
+{
+	None = 0,
+	ClampToEdge,
+	ClampToBorder,
+	Repeat
+};
+
+enum class TextureFilter
+{
+	None = 0,
+	Linear,
+	Nearest,
+};
+
 struct TextureChannelData
 {
 	unsigned TextureChannelTypeToOpenGLInnerType() const;
 	unsigned TextureChannelTypeToOpenGLType() const;
 	TextureChannelData(TextureChannel channel):channel(channel) {}
 	TextureChannel channel;
+};
+
+struct TextureWrapData
+{
+	unsigned TextureWrapDataToOpenGLType() const;
+	TextureWrapData(TextureWrap wrap) :wrap(wrap) {}
+	TextureWrap wrap;
+};
+
+struct TextureFilterData
+{
+	unsigned TextureFilterDataToOpenGLType() const;
+	TextureFilterData(TextureFilter filter) :filter(filter) {}
+	TextureFilter filter;
 };
 
 struct TextureData
@@ -35,6 +64,8 @@ struct TextureData
 	int height = 0;
 	std::shared_ptr<unsigned char[]> data{};
 	TextureChannelData channel = TextureChannel::RGBA;
+	TextureWrapData wrap = TextureWrap::ClampToBorder;
+	TextureFilter filter = TextureFilter::Linear;
 };
 
 class Texture
@@ -61,6 +92,8 @@ private:
 	int m_Width;
 	int m_Height;
 	TextureChannelData m_TextureChannel;
+	TextureWrapData m_Wrap;
+	TextureFilterData m_Filter;
 	unsigned int m_TextureID;
 	unsigned int m_UnitID;
 

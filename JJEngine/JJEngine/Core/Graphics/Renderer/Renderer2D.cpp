@@ -78,6 +78,8 @@ void Renderer2D::Init()
 	whiteTexture->width = 1;
 	whiteTexture->height = 1;
 	whiteTexture->channel = TextureChannel::RGBA;
+	whiteTexture->wrap = TextureWrap::ClampToEdge;
+	whiteTexture->filter = TextureFilter::Linear;
 	whiteTexture->data[0] = 0xff;
 	whiteTexture->data[1] = 0xff;
 	whiteTexture->data[2] = 0xff;
@@ -106,6 +108,7 @@ void Renderer2D::BeginScene(const glm::mat4& viewProjection)
 	s_Data.TextureShader->SetMat4("ViewProjection", viewProjection);
 
 	s_Data.QuadVertexArray->Bind();
+	s_Data.WhiteTexture->BindTexture();
 }
 
 void Renderer2D::BeginScene(const EditorCamera& camera)
@@ -114,6 +117,7 @@ void Renderer2D::BeginScene(const EditorCamera& camera)
 	s_Data.TextureShader->SetMat4("ViewProjection", camera.GetViewProjection());
 
 	s_Data.QuadVertexArray->Bind();
+	s_Data.WhiteTexture->BindTexture();
 }
 
 

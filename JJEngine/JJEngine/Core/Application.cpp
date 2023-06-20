@@ -83,6 +83,7 @@ void Application::Update()
 			while (event)
 			{
 				{//dispatch event
+					OnEvent(*event);
 					for (auto layer : overlays)
 						layer->OnEvent(*event);
 					for (auto layer : layers)
@@ -139,6 +140,11 @@ void Application::Shutdown()
 	Script::ScriptEngine::Shutdown();
 	Renderer2D::Shutdown();
 	ImGuiRenderer::Instance()->Shutdown();
+}
+
+void Application::OnEvent(Event& event)
+{
+
 }
 
 std::shared_ptr<SceneManager> Application::GetSceneManager()

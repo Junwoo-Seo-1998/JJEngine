@@ -10,8 +10,9 @@ namespace Game
     {
         private TransformComponent m_transform;
         private RigidBody2DComponent m_rigidBody;
-
-        public float Speed = 3.0f;
+        
+        public float Speed =60.0f;
+        public float ttttt = 3.0f;
         protected override void OnCreate()
         {
             Console.WriteLine($"Player create");
