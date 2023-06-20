@@ -27,6 +27,7 @@
 #include "Core/Input/Input.h"
 
 #include "Core/Graphics/Graphics.h"
+#include "Core/Script/ScriptEngine.h"
 
 EditorLayer::~EditorLayer()
 {
@@ -63,6 +64,11 @@ void EditorLayer::OnStart()
 
 void EditorLayer::OnUpdate()
 {
+	if(Input::IsTriggered(KeyCode::P))
+	{
+		Script::ScriptEngine::ReloadAssembly();
+	}
+
 	switch (m_SceneState)
 	{
 	case SceneState::Edit:

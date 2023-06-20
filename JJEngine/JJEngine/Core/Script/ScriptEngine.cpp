@@ -114,6 +114,8 @@ namespace Script
 	{
 		s_Data = std::make_unique<ScriptEngineData>();
 		InitMono();
+		ScriptGlue::RegisterFunctions();
+
 		LoadAssembly("Resources/Scripts/JJEngine-ScriptCore.dll");
 		LoadAppAssembly("Resources/Scripts/GameScript.dll");
 
@@ -124,9 +126,7 @@ namespace Script
 			EngineLog::Trace("Subclass of Entity : {}", p.first);
 		}
 
-
 		ScriptGlue::RegisterComponents();
-		ScriptGlue::RegisterFunctions();
 
 		ScriptClass TimeClass{ "JJEngine", "Time", true };
 		s_Data->UpdateDelta = TimeClass.GetMethod("UpdateDelta", 1);
@@ -176,6 +176,24 @@ namespace Script
 		s_Data->AppAssemblyImage = mono_assembly_get_image(s_Data->AppAssembly);
 		//debug
 		//PrintAssemblyTypes(s_Data->AppAssembly);
+	}
+
+	void ScriptEngine::ReloadAssembly()
+	{
+		mono_domain_set(mono_get_root_domain(), false);
+
+		mono_domain_unload(s_Data->AppDomain);
+
+		//todo: make filepath
+		LoadAssembly("Resources/Scripts/JJEngine-ScriptCore.dll");
+		LoadAppAssembly("Resources/Scripts/GameScript.dll");
+		LoadAssemblyClasses();
+
+		ScriptGlue::RegisterComponents();
+
+		ScriptClass TimeClass{ "JJEngine", "Time", true };
+		s_Data->UpdateDelta = TimeClass.GetMethod("UpdateDelta", 1);
+		s_Data->EntityClass = ScriptClass{ "JJEngine", "Entity", true };
 	}
 
 	void ScriptEngine::OnCreateEntity(Entity entity)
