@@ -12,7 +12,7 @@
 #include "glad.h"
 #include "Core/Graphics/IndexBuffer.h"
  
-static RenderCommand command{};
+static RenderCommandType command{};
 static std::vector<glm::mat4> toLightVP;
 static std::vector<LightInfo> lights;
 

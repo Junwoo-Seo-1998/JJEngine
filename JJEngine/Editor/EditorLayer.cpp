@@ -26,6 +26,8 @@
 #include "Core/Graphics/RenderCommand.h"
 #include "Core/Input/Input.h"
 
+#include "Core/Graphics/Graphics.h"
+
 EditorLayer::~EditorLayer()
 {
 }
@@ -40,6 +42,8 @@ void EditorLayer::OnAttach()
 	m_EditorSelectionViewport = FrameBuffer::CreateFrameBuffer({ 400, 400, {FrameBufferFormat::R_INT, FrameBufferFormat::Depth} });
 	m_PlayIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/PlayButton.png"));
 	m_StopIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/Stop.png"));
+
+	Graphics::GetInstance()->SetFinalFBOID(m_EditorViewport->GetHandle());
 }
 
 void EditorLayer::OnDetach()

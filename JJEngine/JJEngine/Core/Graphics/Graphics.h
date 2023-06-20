@@ -14,7 +14,7 @@
 #include "Core/Component/MaterialComponent.h"
 
 
-using RenderCommand = std::unordered_map<std::string, std::any>;
+using RenderCommandType = std::unordered_map<std::string, std::any>;
 
 enum class LightType;
 struct LightInfo
@@ -41,27 +41,31 @@ public:
 		return instance;
 	}
 
-	void AddRenderCommand(const RenderCommand& command);
+	void AddRenderCommand(const RenderCommandType& command);
 
 	void ExecuteRenderCommands();
 
 	void ExcuteInitializing();
-	void ExecutePreRenderCommand(RenderCommand& command);
-	void ExecuteRenderCommand(RenderCommand command);
-	void ExecutePostRenderCommand(RenderCommand command);
+	void ExecutePreRenderCommand(RenderCommandType& command);
+	void ExecuteRenderCommand(RenderCommandType command);
+	void ExecutePostRenderCommand(RenderCommandType command);
+
+	void SetFinalFBOID(int ID) { finalFBO = ID; }
 
 private:
-	std::vector<RenderCommand> renderCommands;
+	std::vector<RenderCommandType> renderCommands;
 	//      for one light                 lightpos,       lightSideVP                      maps
 	using shadowInfoByLight = std::pair<glm::vec3, std::tuple<std::vector<glm::mat4>, std::vector<std::shared_ptr<Texture>>>>;
 	
 	int bindNumber = 0;
-private:
-	void ShadowSampling(RenderCommand& command);
-	void GBufferSampling(RenderCommand& command);
-	void ForwardDraw(RenderCommand command);
 
-	void DefferedDraw(RenderCommand command);
+	int finalFBO{0};
+private:
+	void ShadowSampling(RenderCommandType& command);
+	void GBufferSampling(RenderCommandType& command);
+	void ForwardDraw(RenderCommandType command);
+
+	void DefferedDraw(RenderCommandType command);
 
 };
 

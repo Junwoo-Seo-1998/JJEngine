@@ -6,7 +6,7 @@
 #include "Core/Component/LightComponent.h"
 #include <imgui.h>
 
-void Graphics::AddRenderCommand(const RenderCommand& command)
+void Graphics::AddRenderCommand(const RenderCommandType& command)
 {
 	renderCommands.push_back(command);
 }
@@ -20,7 +20,7 @@ void Graphics::ExecuteRenderCommands() {
 	for (auto& command : renderCommands) {
 		ExecutePreRenderCommand(command);
 	}
-
+	//.
 		ExecuteRenderCommand(renderCommands[0]);
 
 
@@ -38,7 +38,7 @@ void Graphics::ExcuteInitializing()
 
 }
 
-void Graphics::ExecutePreRenderCommand(RenderCommand& command)
+void Graphics::ExecutePreRenderCommand(RenderCommandType& command)
 {
 	
 	ShadowSampling(command);
@@ -46,18 +46,18 @@ void Graphics::ExecutePreRenderCommand(RenderCommand& command)
 	
 }
 
-void Graphics::ExecuteRenderCommand(RenderCommand command)
+void Graphics::ExecuteRenderCommand(RenderCommandType command)
 {
-
+	glBindFramebuffer(GL_FRAMEBUFFER, finalFBO);
 	DefferedDraw(command);
 }
 
-void Graphics::ExecutePostRenderCommand(RenderCommand command)
+void Graphics::ExecutePostRenderCommand(RenderCommandType command)
 {
 	auto& GBufferFBO = std::any_cast<std::shared_ptr<FrameBuffer>&>(command["GBufferFBO"]);
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, GBufferFBO->GetHandle());
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, finalFBO);
 	const int width = GBufferFBO->GetSpecification().Width;
 	const int height = GBufferFBO->GetSpecification().Height;
 	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
@@ -65,7 +65,7 @@ void Graphics::ExecutePostRenderCommand(RenderCommand command)
 	
 }
 
-void Graphics::ShadowSampling(RenderCommand& command)
+void Graphics::ShadowSampling(RenderCommandType& command)
 {
 	auto& shadowMapFBO = std::any_cast<std::shared_ptr<FrameBuffer>&>(command["ShadowMapFBO"]);
 	const auto resolution = std::any_cast<glm::ivec2&>(command["Shadow Resolution"]);
@@ -164,7 +164,7 @@ void Graphics::ShadowSampling(RenderCommand& command)
 
 }
 
-void Graphics::GBufferSampling(RenderCommand& command)
+void Graphics::GBufferSampling(RenderCommandType& command)
 {
 
 	auto modelInfos = std::any_cast<std::vector<ModelInfo>&>(command["Models"]);
@@ -220,7 +220,7 @@ void Graphics::GBufferSampling(RenderCommand& command)
 
 }
 
-void Graphics::ForwardDraw(RenderCommand command)
+void Graphics::ForwardDraw(RenderCommandType command)
 {
 	auto modelInfos = std::any_cast<std::vector<ModelInfo>&>(command["Models"]);
 	auto lights = std::any_cast<std::vector<LightInfo>&> (command["Lights"]);
@@ -292,7 +292,7 @@ void Graphics::ForwardDraw(RenderCommand command)
 }
 
 
-void Graphics::DefferedDraw(RenderCommand command)
+void Graphics::DefferedDraw(RenderCommandType command)
 {
 	if (command.find("DefferedShader") == command.end()) return;
 	auto& DefferedSecondPassShader = std::any_cast<std::shared_ptr<Shader>&>(command["DefferedShader"]);
