@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "ImGuizmo.h"
 #include "TestScene.h"
+#include "Test3DScene.h"
 #include "Core/ImGui/ImGuiRenderer.h"
 #include "Core/Graphics/FrameBuffer.h"
 #include "Core/Utils/Log.h"
@@ -36,7 +37,7 @@ void EditorLayer::OnAttach()
 {
 	Log::Info("Editor Layer Added");
 	m_EditorCamera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
-	SetNewScene(std::make_shared<TestScene>("Test"));
+	SetNewScene(std::make_shared<Test3DScene>());
 	//for testing
 	m_EditorViewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::R_INT,FrameBufferFormat::Depth } });
 	m_EditorSelectionViewport = FrameBuffer::CreateFrameBuffer({ 400, 400, {FrameBufferFormat::R_INT, FrameBufferFormat::Depth} });
@@ -76,15 +77,15 @@ void EditorLayer::OnUpdate()
 		break;
 	}
 
-	
-	if (shouldOpenFile.extension().string() == ".scn") {
-		//TODO: ask save now scene
-		SetNewScene(std::make_shared<Scene>(shouldOpenFile.filename().string()));
-		SceneSerializer see_real(m_ActiveScene);
-		m_ActiveScene->SetScenePath(shouldOpenFile);
-		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize Scene: " + shouldOpenFile.filename().string());
-	}
-	shouldOpenFile.clear();
+	//
+	//if (shouldOpenFile.extension().string() == ".scn") {
+	//	//TODO: ask save now scene
+	//	SetNewScene(std::make_shared<Scene>(shouldOpenFile.filename().string()));
+	//	SceneSerializer see_real(m_ActiveScene);
+	//	m_ActiveScene->SetScenePath(shouldOpenFile);
+	//	if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize Scene: " + shouldOpenFile.filename().string());
+	//}
+	//shouldOpenFile.clear();
 
 	if (Input::IsTriggered(MouseCode::Left) && m_SceneState != SceneState::Play && !ImGuizmo::IsOver() && !Input::IsPressed(KeyCode::LeftAlt))
 	{

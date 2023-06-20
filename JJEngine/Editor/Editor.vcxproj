@@ -105,6 +105,7 @@
     <ClInclude Include="Panel\AssetBrowserPanel.h" />
     <ClInclude Include="Panel\ComponentPanel.h" />
     <ClInclude Include="Panel\SceneHierarchyPanel.h" />
+    <ClInclude Include="Test3DScene.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +113,7 @@
     <ClCompile Include="Panel\AssetBrowserPanel.cpp" />
     <ClCompile Include="Panel\ComponentPanel.cpp" />
     <ClCompile Include="Panel\SceneHierarchyPanel.cpp" />
+    <ClCompile Include="Test3DScene.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
