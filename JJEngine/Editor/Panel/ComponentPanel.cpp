@@ -135,6 +135,10 @@ static void DrawComponent(const std::string& name, Entity entity, UIFunction uiF
 	}
 }
 
+ComponentPanel::ComponentPanel(PanelMessenger& mg): messenger(mg)
+{
+}
+
 void ComponentPanel::SetScene(std::weak_ptr<Scene> scene)
 {
 	m_scene = scene;

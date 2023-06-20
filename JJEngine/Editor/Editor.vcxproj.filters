@@ -17,7 +17,11 @@
       <Filter>Panel</Filter>
     </ClInclude>
     <ClInclude Include="TestScene.h" />
+
     <ClInclude Include="Test3DScene.h" />
+
+    <ClInclude Include="Panel\PanelMessenger.h" />
+
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorLayer.cpp" />

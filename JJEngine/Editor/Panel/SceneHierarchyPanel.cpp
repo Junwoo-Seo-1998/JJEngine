@@ -8,9 +8,14 @@
 #include "Core/Utils/Assert.h"
 #include "Core/Component/CameraComponent.h"
 
-void SceneHierarchyPanel::SetSlected_EntityFunc(std::function<void(entt::entity)> func)
+SceneHierarchyPanel::SceneHierarchyPanel(PanelMessenger& mg) : messenger(mg)
 {
-	setSelectedEntity = func;
+}
+
+void SceneHierarchyPanel::EntitySlectedFunc(unsigned entityID)
+{
+	messenger.LeaveMessage(ENTITY_SELECTED);
+	messenger.LeaveMessage(std::to_string(entityID));
 }
 
 void SceneHierarchyPanel::SetScene(std::weak_ptr<Scene> scene)
@@ -31,7 +36,7 @@ void SceneHierarchyPanel::DrawEntityTree(entt::entity entityID)
 	bool opened = ImGui::TreeNodeEx(name.c_str(), flag);
 	bool isHovered{ ImGui::IsItemHovered()};
 	if (ImGui::IsItemClicked()) {
-		setSelectedEntity(entityID);
+		EntitySlectedFunc((unsigned)entityID);
 	}
 	if (ImGui::IsItemActive() == true) {
 		//Log::Info("EID" + std::to_string((int)entityID));
@@ -106,7 +111,7 @@ void SceneHierarchyPanel::OnImGuiRender()
 
 	bool opened = ImGui::TreeNodeEx("Scene", ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_DefaultOpen);
 	if (ImGui::IsItemClicked()) {
-		setSelectedEntity(entt::null);
+		EntitySlectedFunc((unsigned)entt::null);
 		clickedEntity = entt::null;
 	}
 	if (opened == true) {
@@ -133,7 +138,7 @@ void SceneHierarchyPanel::OnImGuiRender()
 	{
 		if (ImGui::Button("Remove")) { // will change into event-driven
 			scene->DestroyEntity(Entity{ shouldRemoveEntity, scene.get() });
-			setSelectedEntity(entt::null);//jun: don't forget
+			EntitySlectedFunc((unsigned)entt::null);//jun: don't forget
 			shouldRemoveEntity = entt::null;
 			clickedEntity = entt::null;
 			ImGui::CloseCurrentPopup();
