@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 
 #include "Core/ImGui/ImGuiSubWindow.h"
+
+#include "Panel/PanelMessenger.h"
 class Scene;
 class FrameBuffer;
 class EditorLayer : public Layer
@@ -56,9 +58,11 @@ private:
 	entt::entity m_SelectedEntityID{entt::null};
 	std::filesystem::path shouldOpenFile{""};
 
-	ComponentPanel m_ComponentPanel;
-	SceneHierarchyPanel m_SceneHierarchyPanel;
-	AssetBrowserPanel m_AssetBrowserPanel{};
+	PanelMessenger messenger{};
+
+	ComponentPanel m_ComponentPanel{messenger};
+	SceneHierarchyPanel m_SceneHierarchyPanel{messenger};
+	AssetBrowserPanel m_AssetBrowserPanel{messenger};
 
 	ImGuiSubWindow m_AssetBrowserWindow{ "Asset browser" };
 

@@ -17,6 +17,7 @@
       <Filter>Panel</Filter>
     </ClInclude>
     <ClInclude Include="TestScene.h" />
+    <ClInclude Include="Panel\PanelMessenger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorLayer.cpp" />
@@ -31,5 +32,6 @@
     </ClCompile>
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Panel\PanelMessenger.cpp" />
   </ItemGroup>
 </Project>

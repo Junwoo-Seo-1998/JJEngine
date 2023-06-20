@@ -4,18 +4,19 @@
 #include <Core/Utils/Log.h>
 #include <Core/Graphics/Texture.h>
 
-AssetBrowserPanel::AssetBrowserPanel()
+void AssetBrowserPanel::OpenFile(std::string path)
 {
+	messenger.LeaveMessage(FILE_OPEN);
+	messenger.LeaveMessage(path);
+}
 
+AssetBrowserPanel::AssetBrowserPanel(PanelMessenger& mg) : messenger(mg)
+{
 }
 void AssetBrowserPanel::Set()
 {
 	Folder_texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/FolderImage.png"));
 	File_texture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/FileImage.png"));
-}
-void AssetBrowserPanel::SetSelectedFileFunc(std::function<void(std::filesystem::path)> func)
-{
-	setSelectedFile = func;
 }
 void AssetBrowserPanel::OnImGuiRender_ResorceHierarchy(std::filesystem::path p)
 {
@@ -85,7 +86,7 @@ void AssetBrowserPanel::OnImGuiRender()
 				nowDirectory /= p.filename();
 			}
 			else {
-				setSelectedFile(nowDirectory / p.filename());
+				OpenFile((nowDirectory / p.filename()).string());
 			}
 		}
 		ImGui::Text(p.filename().string().c_str());

@@ -55,10 +55,8 @@ void EditorLayer::OnStart()
 {
 	m_ComponentPanel.SetScene(m_ActiveScene);
 	m_SceneHierarchyPanel.SetScene(m_ActiveScene);
-	m_SceneHierarchyPanel.SetSlected_EntityFunc([&](entt::entity ID)->void {m_SelectedEntityID = ID; });
 
 	m_AssetBrowserPanel.Set();
-	m_AssetBrowserPanel.SetSelectedFileFunc([&](std::filesystem::path str)->void {shouldOpenFile = str; });
 	//m_AssetBrowserWindow.Push_ImGuiCommand([&]()->void {m_AssetBrowserPanel.OnImGuiRender_ResorceHierarchy("."); });
 	m_AssetBrowserWindow.Push_ImGuiCommand([&]()->void {m_AssetBrowserPanel.OnImGuiRender(); });
 }
@@ -85,6 +83,23 @@ void EditorLayer::OnUpdate()
 		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize Scene: " + shouldOpenFile.filename().string());
 	}
 	shouldOpenFile.clear();
+	
+	//Message handling
+	if (messenger.HasMessage()){
+		std::string message = messenger.ReadMessage();
+		if (message == ENTITY_SELECTED) {
+			messenger.DeleteMessage();
+			m_SelectedEntityID = (entt::entity)std::stoul(messenger.ReadMessage());
+		}
+		else if (message == FILE_OPEN) {
+			messenger.DeleteMessage();
+			shouldOpenFile = messenger.ReadMessage();
+		}
+		else {
+			//send message to panels
+		}
+		messenger.DeleteMessage();
+	}
 
 	if (Input::IsTriggered(MouseCode::Left) && m_SceneState != SceneState::Play && !ImGuizmo::IsOver() && !Input::IsPressed(KeyCode::LeftAlt))
 	{
