@@ -13,11 +13,13 @@
     <ClInclude Include="Panel\ComponentPanel.h">
       <Filter>Panel</Filter>
     </ClInclude>
+    <ClInclude Include="Panel\PanelMessenger.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
     <ClInclude Include="Panel\SceneHierarchyPanel.h">
       <Filter>Panel</Filter>
     </ClInclude>
     <ClInclude Include="TestScene.h" />
-    <ClInclude Include="Panel\PanelMessenger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorLayer.cpp" />
@@ -27,11 +29,13 @@
     <ClCompile Include="Panel\ComponentPanel.cpp">
       <Filter>Panel</Filter>
     </ClCompile>
+    <ClCompile Include="Panel\PanelMessenger.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
     <ClCompile Include="Panel\SceneHierarchyPanel.cpp">
       <Filter>Panel</Filter>
     </ClCompile>
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Panel\PanelMessenger.cpp" />
   </ItemGroup>
 </Project>

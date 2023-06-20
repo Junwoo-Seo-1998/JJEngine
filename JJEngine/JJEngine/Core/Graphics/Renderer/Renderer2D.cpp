@@ -78,6 +78,8 @@ void Renderer2D::Init()
 	whiteTexture->width = 1;
 	whiteTexture->height = 1;
 	whiteTexture->channel = TextureChannel::RGBA;
+	whiteTexture->wrap = TextureWrap::ClampToEdge;
+	whiteTexture->filter = TextureFilter::Linear;
 	whiteTexture->data[0] = 0xff;
 	whiteTexture->data[1] = 0xff;
 	whiteTexture->data[2] = 0xff;
