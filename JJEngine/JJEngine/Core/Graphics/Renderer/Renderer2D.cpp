@@ -108,6 +108,7 @@ void Renderer2D::BeginScene(const glm::mat4& viewProjection)
 	s_Data.TextureShader->SetMat4("ViewProjection", viewProjection);
 
 	s_Data.QuadVertexArray->Bind();
+	s_Data.WhiteTexture->BindTexture();
 }
 
 void Renderer2D::BeginScene(const EditorCamera& camera)
@@ -116,6 +117,7 @@ void Renderer2D::BeginScene(const EditorCamera& camera)
 	s_Data.TextureShader->SetMat4("ViewProjection", camera.GetViewProjection());
 
 	s_Data.QuadVertexArray->Bind();
+	s_Data.WhiteTexture->BindTexture();
 }
 
 
