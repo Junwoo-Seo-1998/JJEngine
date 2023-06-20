@@ -10,6 +10,8 @@ namespace Game
     {
         private TransformComponent m_transform;
         private RigidBody2DComponent m_rigidBody;
+
+        public float Speed = 3.0f;
         protected override void OnCreate()
         {
             Console.WriteLine($"Player create");
@@ -42,8 +44,7 @@ namespace Game
                 velocity.X -= 1.0f;
             }
 
-            float speed = 3.0f;
-            velocity *= speed;
+            velocity *= Speed;
             /*if (m_rigidBody != null)
             {
                 m_rigidBody.ApplyLinearImpulse(velocity.XY, true);

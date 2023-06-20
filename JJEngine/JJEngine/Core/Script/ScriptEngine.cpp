@@ -2,10 +2,11 @@
 #include "Core/Type.h"
 #include <iostream>
 #include <fstream>
-#include "mono/jit/jit.h"
-#include "mono/metadata/assembly.h"
-#include "mono/metadata/threads.h"
-#include "glad.h"
+#include <mono/jit/jit.h>
+#include <mono/metadata/assembly.h>
+#include <mono/metadata/threads.h>
+#include <mono/metadata/attrdefs.h>
+
 #include "Core/Utils/Assert.h"
 #include "Core/Utils/File.h"
 #include "Core/Script/ScriptGlue.h"
@@ -18,6 +19,70 @@
 
 namespace Script
 {
+	//todo: move this out to other class
+	static std::unordered_map<std::string, ScriptFieldType> s_ScriptFieldTypeMap
+	{
+		{ "System.Single", ScriptFieldType::Float },
+		{ "System.Double", ScriptFieldType::Double },
+
+		{ "System.Boolean", ScriptFieldType::Bool },
+
+		{ "System.Char", ScriptFieldType::Char },
+
+		{ "System.Byte", ScriptFieldType::Byte },
+		{ "System.Int16", ScriptFieldType::Short },
+		{ "System.Int32", ScriptFieldType::Int },
+		{ "System.Int64", ScriptFieldType::Long },
+
+		{ "System.UInt16", ScriptFieldType::UShort },
+		{ "System.UInt32", ScriptFieldType::UInt },
+		{ "System.UInt64", ScriptFieldType::ULong },
+
+
+		{ "JJEngine.Vector2", ScriptFieldType::Vector2 },
+		{ "JJEngine.Vector3", ScriptFieldType::Vector3 },
+		{ "JJEngine.Vector4", ScriptFieldType::Vector4 },
+		{ "JJEngine.Entity", ScriptFieldType::Entity },
+
+	};
+
+	ScriptFieldType MonoTypeToScriptFieldType(MonoType* monoType)
+	{
+		std::string typeName = mono_type_get_name(monoType);
+
+		auto found = s_ScriptFieldTypeMap.find(typeName);
+		if (found == s_ScriptFieldTypeMap.end())
+			return ScriptFieldType::None;
+		return found->second;
+	}
+
+	const char* ScriptFieldTypeToString(ScriptFieldType type)
+	{
+		switch (type)
+		{
+		case ScriptFieldType::Float: return "Float";
+		case ScriptFieldType::Double: return "Double";
+
+		case ScriptFieldType::Bool: return "Bool";
+
+		case ScriptFieldType::Byte: return "Byte";
+		case ScriptFieldType::Short: return "Short";
+		case ScriptFieldType::Int: return "Int";
+		case ScriptFieldType::Long: return "Long";
+
+		case ScriptFieldType::UShort: return "UShort";
+		case ScriptFieldType::UInt: return "UInt";
+		case ScriptFieldType::ULong: return "ULong";
+
+		case ScriptFieldType::Vector2: return "Vector2";
+		case ScriptFieldType::Vector3: return "Vector3";
+		case ScriptFieldType::Vector4: return "Vector4";
+
+		case ScriptFieldType::Entity: return "Entity";
+		}
+		return "Undefined Type Name";
+	}
+
 	struct ScriptEngineData;
 	static std::unique_ptr<ScriptEngineData> s_Data = nullptr;
 
@@ -148,6 +213,15 @@ namespace Script
 		return s_Data->EntityClasses;
 	}
 
+	std::shared_ptr<ScriptInstance> ScriptEngine::GetEntityScriptInstance(UUIDType entityUUID)
+	{
+		auto found = s_Data->EntityInstances.find(entityUUID);
+		if (found == s_Data->EntityInstances.end())
+			return nullptr;
+		
+		return found->second;
+	}
+
 	bool ScriptEngine::EntityClassExists(const std::string& fullName)
 	{
 		return s_Data->EntityClasses.contains(fullName);
@@ -209,11 +283,12 @@ namespace Script
 
 			const char* nameSpace = mono_metadata_string_heap(s_Data->AppAssemblyImage, cols[MONO_TYPEDEF_NAMESPACE]);
 			const char* name = mono_metadata_string_heap(s_Data->AppAssemblyImage, cols[MONO_TYPEDEF_NAME]);
-			std::string fullName;
+			std::string className;
+
 			if (strlen(nameSpace) != 0)
-				fullName = std::format("{}.{}", nameSpace, name);
+				className = std::format("{}.{}", nameSpace, name);
 			else
-				fullName = name;
+				className = name;
 
 			MonoClass* monoClass = mono_class_from_name(s_Data->AppAssemblyImage, nameSpace, name);
 
@@ -221,9 +296,29 @@ namespace Script
 				continue;
 
 			bool is_subclass = mono_class_is_subclass_of(monoClass, entityClass, false);
-			if(is_subclass)
+			if(!is_subclass)
+				continue;
+
+			std::shared_ptr<ScriptClass> scriptClass = std::make_shared<ScriptClass>(nameSpace, name);
+			s_Data->EntityClasses[className] = scriptClass;
+
+			int fieldCount = mono_class_num_fields(monoClass);
+			EngineLog::Trace("C# Class {} has {} fields: ", className, fieldCount);
+			void* iterator = nullptr;
+			while (MonoClassField* field = mono_class_get_fields(monoClass, &iterator))
 			{
-				s_Data->EntityClasses[fullName] = std::make_shared<ScriptClass>(nameSpace, name);
+				const char* fieldName = mono_field_get_name(field);
+
+				uint32_t flags= mono_field_get_flags(field);
+				if(flags & MONO_FIELD_ATTR_PUBLIC)
+				{
+					MonoType* monoType = mono_field_get_type(field);
+					ScriptFieldType type = MonoTypeToScriptFieldType(monoType);
+					const char* typeName = ScriptFieldTypeToString(type);
+					scriptClass->m_Fields[fieldName] = ScriptField{ type, fieldName, field };
+					EngineLog::Trace("- Public ({}) {}", typeName, fieldName);
+					
+				}
 			}
 		}
 	}
@@ -307,5 +402,25 @@ namespace Script
 	void ScriptInstance::InvokeOnUpdate()
 	{
 		m_ScriptClass->InvokeMethod(m_Instance, m_OnUpdateMethod, nullptr);
+	}
+
+	bool ScriptInstance::GetFieldValueInternal(const std::string& name, void* buffer)
+	{
+		const auto& fields = m_ScriptClass->GetFields();
+		auto found = fields.find(name);
+		if (found == fields.end())
+			return false;
+		mono_field_get_value(m_Instance, found->second.ClassField, buffer);
+		return true;
+	}
+
+	bool ScriptInstance::SetFieldValueInternal(const std::string& name, const void* value)
+	{
+		const auto& fields = m_ScriptClass->GetFields();
+		auto found = fields.find(name);
+		if (found == fields.end())
+			return false;
+		mono_field_set_value(m_Instance, found->second.ClassField, (void*)value);
+		return true;
 	}
 }

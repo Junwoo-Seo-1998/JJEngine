@@ -269,7 +269,7 @@ void ComponentPanel::DrawComponents(Entity entity)
 		});
 
 
-		DrawComponent<ScriptComponent>("C# Script", entity, [](auto& component)
+		DrawComponent<ScriptComponent>("C# Script", entity, [entity](auto& component)
 		{
 			bool scriptClassExists = Script::ScriptEngine::EntityClassExists(component.Name);
 
@@ -282,6 +282,25 @@ void ComponentPanel::DrawComponents(Entity entity)
 			if(ImGui::InputText("Class", buffer, sizeof(buffer)))
 			{
 				component.Name = buffer;
+			}
+
+			//fields
+
+			std::shared_ptr<Script::ScriptInstance> scriptInstance = Script::ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
+			if(scriptInstance)
+			{
+				const auto& fields = scriptInstance->GetScriptClass()->GetFields();
+				for(const auto& [name, field] : fields)
+				{
+					if(field.Type==Script::ScriptFieldType::Float)
+					{
+						float data = scriptInstance->GetFieldValue<float>(name);
+						if(ImGui::DragFloat(name.c_str(), &data))
+						{
+							scriptInstance->SetFieldValue<float>(name, data);
+						}
+					}
+				}
 			}
 
 			if (!scriptClassExists)
