@@ -11,12 +11,6 @@ void Test3DScene::Start()
 {
 
 
-	Entity camera = CreateEntity("Cam");
-	TransformComponent& cameraTransform = camera.GetComponent<TransformComponent>();
-	cameraTransform.Position = { 0.f, 0.f, -3.f };
-	cameraTransform.LookAtDir({ 0.f, 0.f, 1.f });
-	camera.AddComponent<CameraComponent>(CameraComponent{});
-
 
 
 	Entity light1 = CreateEntity("Light 1");
@@ -71,6 +65,17 @@ void Test3DScene::Start()
 	Model objectModel;
 	objectModel.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreateSphere(20, 20, 1.f, { 0.f, 0.f, 0.f })));
 	object.AddComponent<Model>(objectModel);
+
+
+	Entity object2 = CreateEntity("Object2");
+	TransformComponent& object2Transform = object2.GetComponent<TransformComponent>();
+	object2Transform.Position = {6.f, 1.f, 8.f};
+	object2Transform.Scale = { 1.f, 2.f, 1.f };
+	object2.AddComponent<MaterialComponent>(deferredShadowMaterial);
+	Model object2Model;
+	object2Model.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreateSphere(20, 20, 1.f, { 0.f, 0.f, 0.f })));
+	object2.AddComponent<Model>(objectModel);
+
 
 	MaterialComponent forwardMaterial{};
 	forwardMaterial.forwardShader = forwardShader;
