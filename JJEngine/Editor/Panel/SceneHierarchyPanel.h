@@ -6,7 +6,7 @@ class Scene;
 class SceneHierarchyPanel
 {
 	PanelMessenger& messenger;
-	void EntitySlectedFunc(unsigned entityID);
+	void EntitySlectedFunc(entt::entity entityID);
 public:
 	SceneHierarchyPanel(PanelMessenger& mg);
 	void SetScene(std::weak_ptr<Scene> scene);

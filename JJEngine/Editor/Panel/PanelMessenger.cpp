@@ -5,12 +5,12 @@ bool PanelMessenger::HasMessage()
 	return message.empty() == false;
 }
 
-void PanelMessenger::LeaveMessage(std::string text)
+void PanelMessenger::LeaveMessage(MessageType text)
 {
 	message.push(text);
 }
 
-std::string PanelMessenger::ReadMessage()
+MessageType PanelMessenger::ReadMessage()
 {
 	return message.front();
 }

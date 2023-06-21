@@ -6,8 +6,7 @@
 
 void AssetBrowserPanel::OpenFile(std::string path)
 {
-	messenger.LeaveMessage(FILE_OPEN);
-	messenger.LeaveMessage(path);
+	messenger.LeaveMessage({ FILE_OPEN, std::make_shared<ContentType<std::string>>(path)});
 }
 
 AssetBrowserPanel::AssetBrowserPanel(PanelMessenger& mg) : messenger(mg)
