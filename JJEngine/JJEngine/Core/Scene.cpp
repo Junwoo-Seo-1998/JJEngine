@@ -175,28 +175,28 @@ void Scene::RenderScene(const glm::mat4& viewProj, const glm::vec3& cameraPos)
 	{
 		auto objectView = m_Registry.view<MaterialComponent>();
 		auto lightView = m_Registry.view<LightComponent>();
-		Renderer::BeginScene(viewProj, cameraPos);
-		Renderer::SetVAO(renderer_vao);
-		Renderer::SetShadowBuffer(shadow_buffer);
-		Renderer::SetGBuffer(g_buffer, *FSQ.get());
-		Renderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
+		SceneRenderer::BeginScene(viewProj, cameraPos);
+		SceneRenderer::SetVAO(renderer_vao);
+		SceneRenderer::SetShadowBuffer(shadow_buffer);
+		SceneRenderer::SetGBuffer(g_buffer, *FSQ.get());
+		SceneRenderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
 		for (auto& obj : objectView)
 		{
 			Entity objEntity(obj, this);
 			auto& transform = objEntity.GetComponent<TransformComponent>();
 			auto& model = objEntity.GetComponent<Model>();
 			auto& material = objEntity.GetComponent<MaterialComponent>();
-			Renderer::AddModel(model, transform, material);
+			SceneRenderer::AddModel(model, transform, material);
 		}
 		for (auto& light : lightView)
 		{
 			Entity lightEntity(light, this);
 			auto& light = lightEntity.GetComponent<LightComponent>();
 			auto& lightTransform = lightEntity.GetComponent<TransformComponent>();
-			Renderer::AddAffectLight(light, lightTransform);
+			SceneRenderer::AddAffectLight(light, lightTransform);
 		}
-		Renderer::EndScene();
-		Renderer::DrawAllScene();
+		SceneRenderer::EndScene();
+		SceneRenderer::DrawAllScene();
 	}
 
 

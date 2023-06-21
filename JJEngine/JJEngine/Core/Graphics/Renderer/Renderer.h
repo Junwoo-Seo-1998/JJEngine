@@ -9,11 +9,20 @@
 
 #include "Core/Graphics/Mesh.h"
 
+class RenderPass;
 class Texture;
 class VertexArray;
 class FrameBuffer;
 
+//어느 곳에 그릴지
 class Renderer
+{
+public:
+	static void BeginRenderPass(std::shared_ptr<RenderPass> renderPass, bool clear = true);
+	static void EndRenderPass();
+};
+
+class SceneRenderer
 {
 public:
 	static void BeginScene(const glm::mat4& viewProjection, const glm::vec3& pos);

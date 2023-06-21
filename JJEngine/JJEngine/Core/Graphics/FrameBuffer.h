@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <glm/vec4.hpp>
+
 #include "Texture.h"
 enum class FrameBufferFormat
 {
@@ -27,6 +29,8 @@ struct FrameBufferSpecification
 {
 	unsigned int Width, Height;
 	DescribedFrameBufferFormats Formats;
+
+	glm::vec4 ClearColor = { 1.f, 1.f,1.f,1.f };
 };
 
 class FrameBuffer

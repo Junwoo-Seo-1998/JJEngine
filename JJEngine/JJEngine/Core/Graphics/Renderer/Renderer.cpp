@@ -11,7 +11,11 @@
 
 #include "glad.h"
 #include "Core/Graphics/IndexBuffer.h"
- 
+#include "Core/Graphics/RenderCommand.h"
+
+#include "Core/Graphics/RenderPass.h"
+#include "Core/Utils/Assert.h"
+
 static RenderCommandType command{};
 static std::vector<glm::mat4> toLightVP;
 static std::vector<LightInfo> lights;
@@ -19,22 +23,53 @@ static std::vector<LightInfo> lights;
 
 static std::vector<ModelInfo> modelList;
 
+struct RendererData
+{
+	std::shared_ptr<RenderPass> m_ActiveRenderPass;
+
+	//TODO
+	/*
+	std::shared_ptr<VertexBuffer> m_FullscreenQuadVertexBuffer;
+	std::shared_ptr<IndexBuffer> m_FullscreenQuadIndexBuffer;
+	std::shared_ptr<Pipeline> m_FullscreenQuadPipeline;*/
+};
+
+static RendererData s_Data;
 
 
+void Renderer::BeginRenderPass(std::shared_ptr<RenderPass> renderPass, bool clear)
+{
+	ENGINE_ASSERT(renderPass, "Render pass cannot be nullptr!");
+	s_Data.m_ActiveRenderPass = renderPass;
+	renderPass->GetSpecification().TargetFramebuffer->Bind();
+	if (clear)
+	{
+		const glm::vec4& clearColor = renderPass->GetSpecification().TargetFramebuffer->GetSpecification().ClearColor;
+		RenderCommand::SetClearColor(clearColor);
+		RenderCommand::Clear();
+	}
+}
 
-void Renderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3& camPos)
+void Renderer::EndRenderPass()
+{
+	ENGINE_ASSERT(s_Data.m_ActiveRenderPass, "No active render pass!");
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	s_Data.m_ActiveRenderPass = nullptr;
+}
+
+void SceneRenderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3& camPos)
 {
 	command["toVP"] = viewProjection;
 	command["camPos"] = camPos;
 }
 
-void Renderer::AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material)
+void SceneRenderer::AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material)
 {
 	if (material.type == MaterialType::Deferred) command["DefferedShader"] = material.defferedSecondPassShader;
 	modelList.push_back(ModelInfo{ model, transform.GetTransform(), material });
 }
 
-void Renderer::AddAffectLight(const LightComponent& light, TransformComponent lightTransform)
+void SceneRenderer::AddAffectLight(const LightComponent& light, TransformComponent lightTransform)
 {
 	switch (light.type)
 	{
@@ -55,33 +90,32 @@ void Renderer::AddAffectLight(const LightComponent& light, TransformComponent li
 	}
 }
 
-void Renderer::SetVAO(std::shared_ptr<VertexArray> VAO)
+void SceneRenderer::SetVAO(std::shared_ptr<VertexArray> VAO)
 {
 	command["VAO"] = VAO;
 }
 
-void Renderer::SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ)
+void SceneRenderer::SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ)
 {
 	command["GBufferFBO"] = FBO;
 	command["FSQ"] = FSQ;
 
 }
 
-void Renderer::SetShadowBuffer(const std::shared_ptr<FrameBuffer>& FBO)
+void SceneRenderer::SetShadowBuffer(const std::shared_ptr<FrameBuffer>& FBO)
 {
 	command["ShadowMapFBO"] = FBO;
 }
 
-void Renderer::SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset)
+void SceneRenderer::SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset)
 {
 	command["Shadow Resolution"] = resolution;
 	command["Polygon Offset"] = zOffset;
 }
 
 
-void Renderer::EndScene()
+void SceneRenderer::EndScene()
 {
-
 	command["Lights"] = lights;
 	command["Models"] = modelList;
 		
@@ -93,7 +127,7 @@ void Renderer::EndScene()
 	command.clear();
 }
 
-void Renderer::DrawAllScene()
+void SceneRenderer::DrawAllScene()
 {
 	Graphics::GetInstance()->ExecuteRenderCommands();
 }
