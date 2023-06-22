@@ -16,12 +16,8 @@ const PipelineSpecification& Pipeline::GetSpecification() const
 	return m_Specification;
 }
 
-void Pipeline::Bind()
-{
-	m_VertexArray->Bind();
-}
 
 Pipeline::Pipeline(const PipelineSpecification& spec)
+	:m_Specification(spec)
 {
-	m_VertexArray = VertexArray::CreateVertexArray();
 }

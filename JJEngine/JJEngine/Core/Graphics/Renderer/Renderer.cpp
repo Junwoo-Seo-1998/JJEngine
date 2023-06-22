@@ -19,8 +19,6 @@
 static RenderCommandType command{};
 static std::vector<glm::mat4> toLightVP;
 static std::vector<LightInfo> lights;
-
-
 static std::vector<ModelInfo> modelList;
 
 struct RendererData
@@ -56,6 +54,16 @@ void Renderer::EndRenderPass()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	s_Data.m_ActiveRenderPass = nullptr;
 }
+
+//todo: move this to scenerenderer file
+
+struct SceneRendererData
+{
+	//todo:implement
+};
+
+static SceneRendererData s_data;
+
 
 void SceneRenderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3& camPos)
 {

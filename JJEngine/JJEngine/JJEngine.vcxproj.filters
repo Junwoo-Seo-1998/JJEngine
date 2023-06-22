@@ -215,6 +215,7 @@
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\Graphics\RenderPass.h" />
     <ClInclude Include="Core\Graphics\Pipeline.h" />
+    <ClInclude Include="Core\Utils\ShaderPreprocessor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -331,5 +332,6 @@
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\Graphics\RenderPass.cpp" />
     <ClCompile Include="Core\Graphics\Pipeline.cpp" />
+    <ClCompile Include="Core\Utils\ShaderPreprocessor.cpp" />
   </ItemGroup>
 </Project>

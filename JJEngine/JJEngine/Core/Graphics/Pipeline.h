@@ -7,7 +7,6 @@ class Shader;
 class RenderPass;
 struct PipelineSpecification
 {
-	//Quad Shader
 	std::shared_ptr<Shader> Shader;
 	std::shared_ptr<RenderPass> RenderPass;
 	bool BackfaceCulling = true;
@@ -19,6 +18,7 @@ struct PipelineSpecification
 	std::string DebugName;
 };
 
+//아직은 특별한 기능은 없음 나중에 확장성을 위해서 클래스로 존재
 class Pipeline
 {
 public:
@@ -26,12 +26,8 @@ public:
 
 	PipelineSpecification& GetSpecification();
 	const PipelineSpecification& GetSpecification() const;
-
-	//call after binding vertex buffer
-	void Bind();
 public:
 	Pipeline(const PipelineSpecification& spec);
 private:
 	PipelineSpecification m_Specification;
-	std::shared_ptr<VertexArray> m_VertexArray;
 };
