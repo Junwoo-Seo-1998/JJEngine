@@ -4,7 +4,7 @@
 #include "ScriptComponent.h"
 #include "RigidBody2DComponent.h"
 #include "BoxCollider2DComponent.h"
-
+#include "MeshComponent.h"
 
 template<typename ... Comp>
 struct ComponentGroup

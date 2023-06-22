@@ -23,6 +23,9 @@ public:
 	void SetViewportSize(unsigned int width, unsigned int height);
 	void BeginScene(const glm::mat4& viewProjection, const glm::vec3& camPos);
 	void EndScene();
+	//todo:
+	//void DrawMesh(std::shared_ptr<Mesh> mesh, const glm::mat4& transformMat);
+
 
 	std::shared_ptr<RenderPass> GetFinalRenderPass();
 private:

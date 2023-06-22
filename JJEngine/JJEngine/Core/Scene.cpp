@@ -14,7 +14,7 @@ End Header-------------------------------------------------------- */
 #include "Component/RigidBody2DComponent.h"
 #include "Component/ScriptComponent.h"
 #include "Component/SpriteRendererComponent.h"
-
+#include "Component/Components.h"
 #include "Component/TransformComponent.h"
 #include "Graphics/Renderer/Renderer2D.h"
 #include "Utils/Assert.h"
@@ -208,22 +208,41 @@ void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm:
 	//draw 3d
 	SceneRenderer::EndScene();
 	*/
-	sceneRenderer->BeginScene(viewProj, cameraPos);
-	Renderer::BeginRenderPass(sceneRenderer->GetFinalRenderPass(), true);
-	Renderer2D::BeginScene(viewProj);
-	auto view = m_Registry.view<SpriteRendererComponent>();
-	for (auto e : view)
+	//3D not implemented yet
 	{
-		Entity entity{ e, this };
-		auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
-		if (spriteComp.asset)
-			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.asset->data, spriteComp.color);
-		else
-			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
+		sceneRenderer->BeginScene(viewProj, cameraPos);
+		Renderer::BeginRenderPass(sceneRenderer->GetFinalRenderPass(), true);
+		{
+			auto view = m_Registry.view<TransformComponent, MeshComponent>();
+			for (auto entity : view)
+			{
+				auto [transformComponent, meshComponent] = view.get<TransformComponent, MeshComponent>(entity);
+				//sceneRenderer->
+			}
+
+		}
+		Renderer::EndRenderPass();
+		sceneRenderer->EndScene();
 	}
-	Renderer2D::EndScene();
-	Renderer::EndRenderPass();
-	sceneRenderer->EndScene();
+
+	//2D
+	{
+		Renderer::BeginRenderPass(sceneRenderer->GetFinalRenderPass(), false);
+		Renderer2D::BeginScene(viewProj);
+		auto view = m_Registry.view<SpriteRendererComponent>();
+		for (auto e : view)
+		{
+			Entity entity{ e, this };
+			auto& spriteComp = entity.GetComponent<SpriteRendererComponent>();
+			if (spriteComp.asset)
+				Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.asset->data, spriteComp.color);
+			else
+				Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
+		}
+		Renderer2D::EndScene();
+		Renderer::EndRenderPass();
+	}
+	
 }
 
 void Scene::UpdateEditor(std::shared_ptr<SceneRenderer> sceneRenderer, EditorCamera& camera)

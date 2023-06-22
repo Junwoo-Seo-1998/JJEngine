@@ -217,6 +217,7 @@
     <ClInclude Include="Core\Graphics\Pipeline.h" />
     <ClInclude Include="Core\Utils\ShaderPreprocessor.h" />
     <ClInclude Include="Core\Graphics\Renderer\SceneRenderer.h" />
+    <ClInclude Include="Core\Component\MeshComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
