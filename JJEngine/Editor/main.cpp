@@ -6,7 +6,7 @@
 #include "Core/Layer/LayerManager.h"
 #include "Core/Utils/Log.h"
 #include "Core/Utils/Math/MatrixMath.h"
-
+#include "Core/Utils/ShaderPreprocessor.h"
 class EditorApp : public Application
 {
 	virtual void UserDefinedInit() override
@@ -20,6 +20,8 @@ class EditorApp : public Application
 		EngineLog::Info(glm::mat3{ 1.f });
 		EngineLog::Info(MatrixMath::BuildPerspectiveProjectionMatrixFovy(glm::radians(45.f), 1.f, 0.1f, 1000.f));
 		GetLayerManager()->PushLayer(std::make_shared<EditorLayer>());
+
+		ShaderPreprocesssor::Preprocess("Resources/Shaders/TestPreProcessor.glsl");
 	}
 };
 
