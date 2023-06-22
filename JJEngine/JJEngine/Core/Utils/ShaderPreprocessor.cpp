@@ -9,7 +9,7 @@
 std::vector<std::string> SplitStringAndKeepDelims(std::string str)
 {
 
-	const static std::regex re(R"((^\W|^\w+))", std::regex_constants::optimize);
+	const static std::regex re(R"((^\W|^\w+)|(\w+)|[:()])", std::regex_constants::optimize);
 
 	std::regex_iterator<std::string::iterator> rit(str.begin(), str.end(), re);
 	std::regex_iterator<std::string::iterator> rend;
