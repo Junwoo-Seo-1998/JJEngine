@@ -21,6 +21,7 @@
 
 #include "Core/Window.h"
 #include "ShadowScene.h"
+#include "Core/Graphics/Renderer/SceneRenderer.h"
 
 IngameRendererLayer::~IngameRendererLayer()
 {

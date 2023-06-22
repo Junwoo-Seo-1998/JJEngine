@@ -135,6 +135,7 @@
     <ClInclude Include="Core\Graphics\Renderer\EditorCamera.h" />
     <ClInclude Include="Core\Graphics\Renderer\Renderer.h" />
     <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h" />
+    <ClInclude Include="Core\Graphics\Renderer\SceneRenderer.h" />
     <ClInclude Include="Core\Graphics\RenderPass.h" />
     <ClInclude Include="Core\Graphics\Shader.h" />
     <ClInclude Include="Core\Graphics\Texture.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="Core\Graphics\Renderer\EditorCamera.cpp" />
     <ClCompile Include="Core\Graphics\Renderer\Renderer.cpp" />
     <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp" />
+    <ClCompile Include="Core\Graphics\Renderer\SceneRenderer.cpp" />
     <ClCompile Include="Core\Graphics\RenderPass.cpp" />
     <ClCompile Include="Core\Graphics\Shader.cpp" />
     <ClCompile Include="Core\Graphics\Texture.cpp" />

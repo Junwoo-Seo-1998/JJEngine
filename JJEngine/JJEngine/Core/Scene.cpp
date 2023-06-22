@@ -217,7 +217,6 @@ void Scene::RenderScene(const glm::mat4& viewProj, const glm::vec3& cameraPos)
 void Scene::UpdateEditor(EditorCamera& camera)
 {
 	glm::mat4 viewProj{camera.GetViewProjection()};
-	//Renderer2D::BeginScene(viewProj);
 	RenderScene(viewProj, camera.GetPosition());
 }
 

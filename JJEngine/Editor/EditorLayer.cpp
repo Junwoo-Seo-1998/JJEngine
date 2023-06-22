@@ -38,7 +38,7 @@ void EditorLayer::OnAttach()
 {
 	Log::Info("Editor Layer Added");
 	m_EditorCamera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
-	SetNewScene(std::make_shared<Test3DScene>());
+	SetNewScene(std::make_shared<TestScene>(""));
 	//for testing
 	m_EditorViewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::R_INT,FrameBufferFormat::Depth } });
 	m_EditorSelectionViewport = FrameBuffer::CreateFrameBuffer({ 400, 400, {FrameBufferFormat::R_INT, FrameBufferFormat::Depth} });
