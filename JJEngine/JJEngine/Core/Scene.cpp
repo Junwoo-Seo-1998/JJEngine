@@ -33,7 +33,9 @@ End Header-------------------------------------------------------- */
 #include "Core/Window.h"
 #include "Component/MaterialComponent.h"
 #include "Component/LightComponent.h"
+#include "Graphics/RenderPass.h"
 #include "Graphics/Renderer/Renderer.h"
+#include "Graphics/Renderer/SceneRenderer.h"
 
 static b2BodyType RigidBody2DTypeToBox2D(RigidBody2DComponent::BodyType bodyType)
 {
@@ -170,8 +172,9 @@ void Scene::OnDestroy()
 {
 }
 
-void Scene::RenderScene(const glm::mat4& viewProj, const glm::vec3& cameraPos)
+void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm::mat4& viewProj, const glm::vec3& cameraPos)
 {
+	sceneRenderer->SetScene(this);
 	//{
 	//	auto objectView = m_Registry.view<MaterialComponent>();
 	//	auto lightView = m_Registry.view<LightComponent>();
@@ -199,7 +202,14 @@ void Scene::RenderScene(const glm::mat4& viewProj, const glm::vec3& cameraPos)
 	//	SceneRenderer::DrawAllScene();
 	//}
 
-
+	//todo remove later!!!!!!!! (for clearing)
+	/*
+	SceneRenderer::BeginScene();
+	//draw 3d
+	SceneRenderer::EndScene();
+	*/
+	sceneRenderer->BeginScene(viewProj, cameraPos);
+	Renderer::BeginRenderPass(sceneRenderer->GetFinalRenderPass(), true);
 	Renderer2D::BeginScene(viewProj);
 	auto view = m_Registry.view<SpriteRendererComponent>();
 	for (auto e : view)
@@ -212,12 +222,14 @@ void Scene::RenderScene(const glm::mat4& viewProj, const glm::vec3& cameraPos)
 			Renderer2D::DrawQuad(entity.GetWorldSpaceTransformMatrix(), spriteComp.color);
 	}
 	Renderer2D::EndScene();
+	Renderer::EndRenderPass();
+	sceneRenderer->EndScene();
 }
 
-void Scene::UpdateEditor(EditorCamera& camera)
+void Scene::UpdateEditor(std::shared_ptr<SceneRenderer> sceneRenderer, EditorCamera& camera)
 {
 	glm::mat4 viewProj{camera.GetViewProjection()};
-	RenderScene(viewProj, camera.GetPosition());
+	RenderScene(sceneRenderer, viewProj, camera.GetPosition());
 }
 
 void Scene::RenderEntityID(EditorCamera& camera)
@@ -251,7 +263,7 @@ void Scene::StartRuntime()
 	}
 }
 
-void Scene::UpdateRuntime()
+void Scene::UpdateRuntime(std::shared_ptr<SceneRenderer> sceneRenderer)
 {
 	//script
 	{
@@ -297,7 +309,7 @@ void Scene::UpdateRuntime()
 		auto& camComp = camera.GetComponent<CameraComponent>();
 		glm::mat4 viewProj = camComp.GetProjection() *
 			MatrixMath::BuildCameraMatrixWithDirection(camTransform.Position, camTransform.GetForward(), camTransform.GetUp());
-		RenderScene(viewProj, camTransform.Position);
+		RenderScene(sceneRenderer, viewProj, camTransform.Position);
 	}
 }
 

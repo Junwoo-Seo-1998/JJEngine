@@ -3,6 +3,9 @@
 #include "Core/Component/LightComponent.h"
 #include "Core/Component/MaterialComponent.h"
 #include "Core/Graphics/Graphics.h"
+#include "Core/Graphics/RenderPass.h"
+#include "Core/Graphics/FrameBuffer.h"
+#include "Core/Graphics/RenderCommand.h"
 #include "Core/Utils/Math/MatrixMath.h"
 
 static RenderCommandType command{};
@@ -10,17 +13,62 @@ static std::vector<glm::mat4> toLightVP;
 static std::vector<LightInfo> lights;
 static std::vector<ModelInfo> modelList;
 
-struct SceneRendererData
+SceneRenderer::SceneRenderer()
 {
-	//todo:implement
-	std::shared_ptr<RenderPass> FinalRenderPass;
+	Init();
+}
 
-};
+void SceneRenderer::SetScene(Scene* scene)
+{
+	m_ActiveScene = scene;
+}
 
-static SceneRendererData s_data;
-
+void SceneRenderer::SetViewportSize(unsigned width, unsigned height)
+{
+	if(width > 0.0f && height > 0.0f)
+	{
+		m_Width = width;
+		m_Height = height;
+		m_NeedsResize = true;
+	}
+}
 
 void SceneRenderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3& camPos)
+{
+	m_Active = true;
+	if(m_NeedsResize)
+	{
+		m_FinalRenderPass->GetSpecification().TargetFramebuffer->Resize(m_Width, m_Height);
+		m_NeedsResize = false;
+	}
+}
+
+void SceneRenderer::EndScene()
+{
+	m_Active = false;
+}
+
+std::shared_ptr<RenderPass> SceneRenderer::GetFinalRenderPass()
+{
+	return m_FinalRenderPass;
+}
+
+void SceneRenderer::Init()
+{
+	m_Width = 400;
+	m_Height = 400;
+	RenderPassSpecification spec;
+	spec.DebugName = "Final Render";
+	FrameBufferSpecification fb_spec;
+	fb_spec.ClearColor = { 0,0,0,1.f };
+	fb_spec.Width = 400;
+	fb_spec.Height = 400;
+	fb_spec.Formats = { FrameBufferFormat::RGBA, FrameBufferFormat::Depth };
+	spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
+	m_FinalRenderPass = RenderPass::Create(spec);
+}
+
+void SceneRenderer::BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& camPos)
 {
 	command["toVP"] = viewProjection;
 	command["camPos"] = camPos;
@@ -77,7 +125,7 @@ void SceneRenderer::SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffs
 }
 
 
-void SceneRenderer::EndScene()
+void SceneRenderer::EndSceneCommand()
 {
 	command["Lights"] = lights;
 	command["Models"] = modelList;
@@ -95,7 +143,3 @@ void SceneRenderer::DrawAllScene()
 	Graphics::GetInstance()->ExecuteRenderCommands();
 }
 
-std::shared_ptr<RenderPass> SceneRenderer::GetFinalRenderPass()
-{
-	return s_data.FinalRenderPass;
-}

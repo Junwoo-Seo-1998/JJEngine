@@ -53,7 +53,10 @@ private:
 	std::shared_ptr<Scene> m_ActiveScene;
 	//for play and pause
 	std::shared_ptr<Scene> m_EditorScene, m_RuntimeScene;
-	
+
+	//for drawing
+	std::shared_ptr<SceneRenderer> m_SceneRenderer;
+	std::shared_ptr<FrameBuffer> m_EditorSelectionViewport;
 
 	entt::entity m_SelectedEntityID{entt::null};
 	std::filesystem::path shouldOpenFile{""};
@@ -66,8 +69,7 @@ private:
 
 	ImGuiSubWindow m_AssetBrowserWindow{ "Asset browser" };
 
-	std::shared_ptr<FrameBuffer> m_EditorViewport;
-	std::shared_ptr<FrameBuffer> m_EditorSelectionViewport;
+	//std::shared_ptr<FrameBuffer> m_EditorViewport;
 
 	std::shared_ptr<Texture> m_PlayIcon;
 	std::shared_ptr<Texture> m_StopIcon;

@@ -28,6 +28,8 @@
 #include "Core/Input/Input.h"
 
 #include "Core/Graphics/Graphics.h"
+#include "Core/Graphics/RenderPass.h"
+#include "Core/Graphics/Renderer/SceneRenderer.h"
 #include "Core/Script/ScriptEngine.h"
 
 EditorLayer::~EditorLayer()
@@ -39,13 +41,13 @@ void EditorLayer::OnAttach()
 	Log::Info("Editor Layer Added");
 	m_EditorCamera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
 	SetNewScene(std::make_shared<TestScene>(""));
-	//for testing
-	m_EditorViewport = FrameBuffer::CreateFrameBuffer({ 400,400,{FrameBufferFormat::RGBA, FrameBufferFormat::R_INT,FrameBufferFormat::Depth } });
+
+	m_SceneRenderer = std::make_shared<SceneRenderer>();
+	//todo: make it class
 	m_EditorSelectionViewport = FrameBuffer::CreateFrameBuffer({ 400, 400, {FrameBufferFormat::R_INT, FrameBufferFormat::Depth} });
 	m_PlayIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/PlayButton.png"));
 	m_StopIcon = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/UI/Stop.png"));
 
-	Graphics::GetInstance()->SetFinalFBOID(m_EditorViewport->GetHandle());
 }
 
 void EditorLayer::OnDetach()
@@ -138,17 +140,16 @@ void EditorLayer::OnUpdate()
 
 void EditorLayer::OnPreRender()
 {
-	auto spec = m_EditorViewport->GetSpecification();
+	//replace it later
+	auto spec = m_EditorSelectionViewport->GetSpecification();
 	const bool viewportSizeChanged = (spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y);
 	if (viewportSizeChanged && m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f)
 	{
 		m_EditorCamera.SetViewportSize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 		m_ActiveScene->ResizeViewport((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
-		m_EditorViewport->Resize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
+		m_SceneRenderer->SetViewportSize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 		m_EditorSelectionViewport->Resize((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 	}
-	m_EditorViewport->Bind();
-	RenderCommand::Clear();
 }
 
 void EditorLayer::OnRender()
@@ -158,18 +159,17 @@ void EditorLayer::OnRender()
 	switch (m_SceneState)
 	{
 	case SceneState::Edit:
-		m_ActiveScene->UpdateEditor(m_EditorCamera);
+		m_ActiveScene->UpdateEditor(m_SceneRenderer, m_EditorCamera);
 
 		break;
 	case SceneState::Play:
-		m_ActiveScene->UpdateRuntime();
+		m_ActiveScene->UpdateRuntime(m_SceneRenderer);
 		break;
 	}
 }
 
 void EditorLayer::OnPostRender()
 {
-	m_EditorViewport->UnBind();
 	if (m_SceneState != SceneState::Play)
 	{
 		m_EditorSelectionViewport->Bind();
@@ -243,7 +243,8 @@ void EditorLayer::OnImGuiRender()
 		m_ViewportBoundMax = { vMax.x, vMax.y };
 		m_ViewportBoundMin = { vMin.x, vMin.y };
 
-		ImGui::Image((void*)m_EditorViewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+		auto EditorViewport = m_SceneRenderer->GetFinalRenderPass()->GetSpecification().TargetFramebuffer;
+		ImGui::Image((void*)EditorViewport->GetColorTexture(0)->GetTextureID(), viewportPanelSize, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 		if (m_SceneState == SceneState::Edit)
 			DrawGuizmo(m_EditorCamera, { m_SelectedEntityID, m_ActiveScene.get() }, m_GizmoType);
 		ImGui::End();

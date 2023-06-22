@@ -12,6 +12,7 @@ End Header-------------------------------------------------------- */
 #include <memory>
 #include <glm/glm.hpp>
 
+class SceneRenderer;
 class EditorCamera;
 class Entity;
 class SceneHierarchyPanel;
@@ -49,14 +50,14 @@ public:
 	virtual void OnDisable();
 	virtual void OnDestroy();
 
-	void RenderScene(const glm::mat4& viewProj, const glm::vec3& cameraPos);
+	void RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm::mat4& viewProj, const glm::vec3& cameraPos);
 
 	//editor only
-	void UpdateEditor(EditorCamera& camera);
+	void UpdateEditor(std::shared_ptr<SceneRenderer> sceneRenderer, EditorCamera& camera);
 	void RenderEntityID(EditorCamera& camera);
 	//runtime only
 	void StartRuntime();
-	void UpdateRuntime();
+	void UpdateRuntime(std::shared_ptr<SceneRenderer> sceneRenderer);
 	void StopRuntime();
 
 	Entity CreateEntity(const std::string& name = "No Name");

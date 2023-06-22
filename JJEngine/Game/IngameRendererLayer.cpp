@@ -105,7 +105,7 @@ void IngameRendererLayer::OnRender()
 		auto& camera = camEntity.GetComponent<CameraComponent>();
 		auto& cameraTransform = camEntity.GetComponent<TransformComponent>();
 		const glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.Position + cameraTransform.GetForward(), cameraTransform.GetUp());
-		SceneRenderer::BeginScene(camVP, cameraTransform.Position);
+		SceneRenderer::BeginSceneCommand(camVP, cameraTransform.Position);
 		SceneRenderer::SetVAO(renderer_vao);
 		SceneRenderer::SetShadowBuffer(shadow_buffer);
 		SceneRenderer::SetGBuffer(g_buffer, FSQ);
@@ -125,7 +125,7 @@ void IngameRendererLayer::OnRender()
 			auto& lightTransform = lightEntity.GetComponent<TransformComponent>();
 			SceneRenderer::AddAffectLight(light, lightTransform);
 		}
-		SceneRenderer::EndScene();
+		SceneRenderer::EndSceneCommand();
 	}
 
 }
