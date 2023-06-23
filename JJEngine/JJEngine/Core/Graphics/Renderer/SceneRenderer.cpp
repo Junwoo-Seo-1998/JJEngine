@@ -48,7 +48,14 @@ void SceneRenderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3&
 
 void SceneRenderer::EndScene()
 {
+	
 	GeometryPass();
+
+	Renderer::Submit([this]() {Renderer::BeginRenderPass(m_FinalRenderPass, true); });
+	{//submit final fsq
+		
+	}
+	Renderer::Submit([this]() {	Renderer::EndRenderPass(); });
 
 	Renderer::Render();
 	m_Active = false;
@@ -68,17 +75,30 @@ void SceneRenderer::Init()
 {
 	m_Width = 400;
 	m_Height = 400;
-	RenderPassSpecification spec;
-	spec.DebugName = "Final Render";
-	FrameBufferSpecification fb_spec;
-	fb_spec.ClearColor = { 0,0,0,1.f };
-	fb_spec.Width = 400;
-	fb_spec.Height = 400;
-	fb_spec.Formats = { FrameBufferFormat::RGBA, FrameBufferFormat::Depth };
-	spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
 
-	m_GeometryRenderPass = RenderPass::Create(spec);
-	m_FinalRenderPass = RenderPass::Create(spec);
+	{//geo
+		RenderPassSpecification spec;
+		spec.DebugName = "Final Render";
+		FrameBufferSpecification fb_spec;
+		fb_spec.ClearColor = { 0,0,0,1.f };
+		fb_spec.Width = 400;
+		fb_spec.Height = 400;
+		fb_spec.Formats = { FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::Depth };
+		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
+		m_GeometryRenderPass = RenderPass::Create(spec);
+	}
+
+	{//final
+		RenderPassSpecification spec;
+		spec.DebugName = "Final Render";
+		FrameBufferSpecification fb_spec;
+		fb_spec.ClearColor = { 0,0,0,1.f };
+		fb_spec.Width = 400;
+		fb_spec.Height = 400;
+		fb_spec.Formats = { FrameBufferFormat::RGBA, FrameBufferFormat::Depth };
+		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
+		m_FinalRenderPass = RenderPass::Create(spec);
+	}
 }
 
 void SceneRenderer::GeometryPass()

@@ -35,6 +35,7 @@ private:
 
 	//todo change it to shared ptr later 
 	Scene* m_ActiveScene = nullptr;
+
 	bool m_Active = false;
 	unsigned int m_Width, m_Height;
 	bool m_NeedsResize = true;//viewport

@@ -44,6 +44,7 @@ CommandQueue Renderer::m_RenderCommandQueue;
 
 void Renderer::BeginRenderPass(std::shared_ptr<RenderPass> renderPass, bool clear)
 {
+	//DEBUG_ONLY(EngineLog::Info("Begin RenderPass : {}",renderPass->GetSpecification().DebugName));
 	ENGINE_ASSERT(renderPass, "Render pass cannot be nullptr!");
 	s_Data.m_ActiveRenderPass = renderPass;
 	renderPass->GetSpecification().TargetFramebuffer->Bind();
@@ -57,6 +58,7 @@ void Renderer::BeginRenderPass(std::shared_ptr<RenderPass> renderPass, bool clea
 
 void Renderer::EndRenderPass()
 {
+	//DEBUG_ONLY(EngineLog::Info("End RenderPass : {}", s_Data.m_ActiveRenderPass->GetSpecification().DebugName));
 	ENGINE_ASSERT(s_Data.m_ActiveRenderPass, "No active render pass!");
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	s_Data.m_ActiveRenderPass = nullptr;
