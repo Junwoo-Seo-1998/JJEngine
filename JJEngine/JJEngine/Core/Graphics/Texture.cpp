@@ -48,6 +48,27 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLType() const
 	return 0;
 }
 
+unsigned TextureChannelData::TextureChannelTypeToOpenGLDataType() const
+{
+	switch (channel)
+	{
+	case TextureChannel::R_INT:
+		return GL_INT;
+	case TextureChannel::RGB:
+	case TextureChannel::RGBA:
+		return GL_UNSIGNED_BYTE;
+	case TextureChannel::RGBA32F:
+		return GL_FLOAT;
+	case TextureChannel::Depth:
+		return GL_UNSIGNED_INT_24_8;
+	default:
+		break;
+	}
+	ENGINE_ASSERT(false, "Not Supported Texture Channel");
+	return 0;
+}
+
+
 unsigned TextureWrapData::TextureWrapDataToOpenGLType() const
 {
 	switch (wrap)
@@ -86,6 +107,24 @@ std::shared_ptr<Texture> Texture::CreateTexture(const TextureData& texture_data)
 	return std::shared_ptr<Texture>(new Texture{ texture_data });
 }
 
+std::shared_ptr<Texture> Texture::CreateTexture(const glm::vec4& color)
+{
+	auto textureData = std::make_shared<TextureData>();
+	textureData->data = std::shared_ptr<unsigned char[]>(new unsigned char[4]);
+	textureData->width = 1;
+	textureData->height = 1;
+	textureData->channel = TextureChannel::RGBA;
+	textureData->wrap = TextureWrap::ClampToEdge;
+	textureData->filter = TextureFilter::Linear;
+
+	textureData->data[0] = static_cast<unsigned char>(color.r * 255);
+	textureData->data[1] = static_cast<unsigned char>(color.g * 255);
+	textureData->data[2] = static_cast<unsigned char>(color.b * 255);
+	textureData->data[3] = static_cast<unsigned char>(color.a * 255);
+
+	return std::shared_ptr<Texture>(new Texture{ textureData });
+}
+
 Texture::~Texture()
 {
 	glDeleteTextures(1, &m_TextureID);
@@ -119,7 +158,7 @@ void Texture::UnBindTexture()
 
 void Texture::ClearTexture(int value)
 {
-	glClearTexImage(m_TextureID, 0, m_TextureChannel.TextureChannelTypeToOpenGLType(), GL_INT, &value);
+	glClearTexImage(m_TextureID, 0, m_TextureChannel.TextureChannelTypeToOpenGLType(), m_TextureChannel.TextureChannelTypeToOpenGLDataType(), &value);
 }
 
 Texture::Texture(std::shared_ptr<TextureData> texture_data)
@@ -144,7 +183,7 @@ Texture::Texture(std::shared_ptr<TextureData> texture_data)
 
 	if (texture_data->data != nullptr)
 	{
-		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, texture_data->channel.TextureChannelTypeToOpenGLType(), GL_UNSIGNED_BYTE, texture_data->data.get());
+		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, texture_data->channel.TextureChannelTypeToOpenGLType(), m_TextureChannel.TextureChannelTypeToOpenGLDataType(), texture_data->data.get());
 		glGenerateTextureMipmap(m_TextureID);
 	}
 }
@@ -171,7 +210,7 @@ Texture::Texture(const TextureData& texture_data)
 
 	if (texture_data.data != nullptr)
 	{
-		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, texture_data.channel.TextureChannelTypeToOpenGLType(), GL_UNSIGNED_BYTE, texture_data.data.get());
+		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, texture_data.channel.TextureChannelTypeToOpenGLType(), m_TextureChannel.TextureChannelTypeToOpenGLDataType(), texture_data.data.get());
 		glGenerateTextureMipmap(m_TextureID);
 	}
 }

@@ -7,6 +7,8 @@ End Header-------------------------------------------------------- */
 #pragma once
 #include<memory>
 #include<tuple>
+#include <glm/vec4.hpp>
+
 enum class TextureChannel
 {
 	R_INT,
@@ -36,6 +38,7 @@ struct TextureChannelData
 {
 	unsigned TextureChannelTypeToOpenGLInnerType() const;
 	unsigned TextureChannelTypeToOpenGLType() const;
+	unsigned TextureChannelTypeToOpenGLDataType() const;
 	TextureChannelData(TextureChannel channel):channel(channel) {}
 	TextureChannel channel;
 };
@@ -74,6 +77,7 @@ public:
 	static std::shared_ptr<Texture> CopyTexture(std::shared_ptr<Texture> texture);
 	static std::shared_ptr<Texture> CreateTexture(std::shared_ptr<TextureData> texture_data);
 	static std::shared_ptr<Texture> CreateTexture(const TextureData& texture_data);
+	static std::shared_ptr<Texture> CreateTexture(const glm::vec4& color);
 	virtual ~Texture();
 	std::tuple<int, int> GetWidthHeight() const;
 	unsigned int GetTextureID() const;

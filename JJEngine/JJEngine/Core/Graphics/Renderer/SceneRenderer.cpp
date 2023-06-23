@@ -31,7 +31,7 @@ void SceneRenderer::SetScene(Scene* scene)
 
 void SceneRenderer::SetViewportSize(unsigned width, unsigned height)
 {
-	if(width > 0.0f && height > 0.0f)
+	if(width > 0 && height > 0)
 	{
 		m_Width = width;
 		m_Height = height;
@@ -77,84 +77,7 @@ void SceneRenderer::EndScene()
 
 	GeometryPass();
 
-	Renderer::Submit([this]()
-	{//draw result of geometry pass
-		Renderer::BeginRenderPass(m_FinalRenderPass, true);
-
-		{
-			m_FinalRenderShader->Use();
-
-			//bind gbuffer
-			{
-				m_FinalRenderShader->SetInt("gPosition", 0);
-				m_FinalRenderShader->SetInt("gNormal", 1);
-				m_FinalRenderShader->SetInt("gDiffuse", 2);
-				m_FinalRenderShader->SetInt("gSpecular", 3);
-				m_FinalRenderShader->SetInt("gEmissive", 4);
-
-				auto fb = m_GeometryRenderPass->GetSpecification().TargetFramebuffer;
-
-				fb->GetColorTexture(0)->BindTexture(0);
-				fb->GetColorTexture(1)->BindTexture(1);
-				fb->GetColorTexture(2)->BindTexture(2);
-				fb->GetColorTexture(3)->BindTexture(3);
-				fb->GetColorTexture(4)->BindTexture(4);
-			}
-
-			m_FinalRenderShader->SetFloat3("CameraPosition", m_CameraPosition);
-
-			//light set up
-			{
-				m_FinalRenderShader->SetInt("LightNumbers", m_ActiveLights.size());
-				int index = 0;
-				for (auto& [lightPosition, lightDir, light] : m_ActiveLights)
-				{
-					std::string lightIndex = std::format("Light[{}].", index);
-
-					m_FinalRenderShader->SetInt(lightIndex + "LightType", static_cast<int>(light.m_LightType));
-					m_FinalRenderShader->SetFloat3(lightIndex + "Position", lightPosition);
-					m_FinalRenderShader->SetFloat3(lightIndex + "Direction", lightDir);
-					m_FinalRenderShader->SetFloat(lightIndex + "InnerAngle", light.m_Angle.inner);
-					m_FinalRenderShader->SetFloat(lightIndex + "OuterAngle", light.m_Angle.outer);
-					m_FinalRenderShader->SetFloat(lightIndex + "FallOff", light.falloff);
-					m_FinalRenderShader->SetFloat3(lightIndex + "Ambient", light.Ambient);
-					m_FinalRenderShader->SetFloat3(lightIndex + "Diffuse", light.Diffuse);
-					m_FinalRenderShader->SetFloat3(lightIndex + "Specular", light.Specular);
-				}
-			}
-
-			{
-				m_FinalRenderShader->SetFloat3("globalAmbient", {});
-
-				m_FinalRenderShader->SetFloat("Attenuation.c1", 1.f);
-				m_FinalRenderShader->SetFloat("Attenuation.c2", 0.4f);
-				m_FinalRenderShader->SetFloat("Attenuation.c3", 0.03f);
-
-				m_FinalRenderShader->SetFloat3("Fog.Color", { 0.5f,0.5f,0.5f });
-				m_FinalRenderShader->SetFloat("Fog.Near", 1.f);
-				m_FinalRenderShader->SetFloat("Fog.Far", 500000.f);
-			}
-
-			//vbo and ibo is provided inside of this func 
-			Renderer::DrawFullScreenQuad();
-		}
-
-		Renderer::EndRenderPass();
-
-		//copy depth
-		{
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_GeometryRenderPass->GetSpecification().TargetFramebuffer->GetFrameBufferID());
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FinalRenderPass->GetSpecification().TargetFramebuffer->GetFrameBufferID());
-			glBlitFramebuffer(
-				0, 0, m_Width, m_Height, // source region
-				0, 0, m_Width, m_Height, // destination region
-				GL_DEPTH_BUFFER_BIT, // field to copy
-				GL_NEAREST // filtering mechanism
-			);
-		}
-	});
-
-
+	GeometryPassFSQ();
 
 	//real rendering happens here
 	Renderer::Render();
@@ -197,17 +120,18 @@ void SceneRenderer::Init()
 
 	{//setting up default material
 		m_DefaultMaterial = Material::Create(m_GeometryShader);
-		m_DefaultMaterial->Set("MatTexture.Diffuse", Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/TestDiff.png")));
-		m_DefaultMaterial->Set("MatTexture.Specular", Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/TestSpec.png")));
-		m_DefaultMaterial->Set("MatTexture.Emissive", Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/TestSpec.png")));
-		m_DefaultMaterial->Set("MatTexture.Shininess", 2.0f);
+		m_DefaultMaterial->Set("MatTexture.Diffuse", Texture::CreateTexture(glm::vec4{ 0.8f, 0.8f, 0.8f, 1.f }));
+		m_DefaultMaterial->Set("MatTexture.Specular", Texture::CreateTexture(glm::vec4{ 0.5f, 0.5f, 0.5f, 1.f }));
+		m_DefaultMaterial->Set("MatTexture.Emissive", Renderer::BlackTexture);
+		m_DefaultMaterial->Set("MatTexture.Shininess", 32.0f);
 	}
 
 	{//geo
 		RenderPassSpecification spec;
 		spec.DebugName = "GeometryRenderPass";
 		FrameBufferSpecification fb_spec;
-		fb_spec.ClearColor = { 0.3,0.3,0.3,1.f };
+		//should keep black!!
+		fb_spec.ClearColor = { 0.0f, 0.0f, 0.0f,0.f };
 		fb_spec.Width = 400;
 		fb_spec.Height = 400;
 		fb_spec.Formats = {
@@ -258,6 +182,7 @@ void SceneRenderer::GeometryPass()
 			toDraw.Mesh->GetMeshEBO()->BindToVertexArray();
 
 			m_GeometryShader->SetMat4("Matrix.Model", toDraw.Transform);
+			m_GeometryShader->SetMat4("Matrix.Normal", glm::transpose(glm::inverse(toDraw.Transform)));
 			m_DefaultMaterial->Bind();
 			//todo:draw it material instance
 			//toDraw.Mesh->GetMaterial()->Bind();
@@ -266,23 +191,87 @@ void SceneRenderer::GeometryPass()
 	}
 	Renderer::Submit([]() {Renderer::EndRenderPass(); });
 }
-	
 
+void SceneRenderer::GeometryPassFSQ()
+{
+	Renderer::Submit([this]()
+	{//draw result of geometry pass
+		Renderer::BeginRenderPass(m_FinalRenderPass, true);
 
+		{
+			m_FinalRenderShader->Use();
 
+			//bind gbuffer
+			{
+				m_FinalRenderShader->SetInt("gPosition", 0);
+				m_FinalRenderShader->SetInt("gNormal", 1);
+				m_FinalRenderShader->SetInt("gDiffuse", 2);
+				m_FinalRenderShader->SetInt("gSpecular", 3);
+				m_FinalRenderShader->SetInt("gEmissive", 4);
 
+				auto fb = m_GeometryRenderPass->GetSpecification().TargetFramebuffer;
 
+				fb->GetColorTexture(0)->BindTexture(0);
+				fb->GetColorTexture(1)->BindTexture(1);
+				fb->GetColorTexture(2)->BindTexture(2);
+				fb->GetColorTexture(3)->BindTexture(3);
+				fb->GetColorTexture(4)->BindTexture(4);
+			}
 
+			m_FinalRenderShader->SetFloat3("CameraPosition", m_CameraPosition);
 
+			//light set up
+			{
+				m_FinalRenderShader->SetInt("LightNumbers", m_ActiveLights.size());
+				int index = 0;
+				for (auto& [lightPosition, lightDir, light] : m_ActiveLights)
+				{
+					std::string lightIndex = std::format("Light[{}].", index++);
 
+					m_FinalRenderShader->SetInt(lightIndex + "LightType", static_cast<int>(light.m_LightType));
+					m_FinalRenderShader->SetFloat3(lightIndex + "Position", lightPosition);
+					m_FinalRenderShader->SetFloat3(lightIndex + "Direction", lightDir);
+					m_FinalRenderShader->SetFloat(lightIndex + "InnerAngle", light.m_Angle.inner);
+					m_FinalRenderShader->SetFloat(lightIndex + "OuterAngle", light.m_Angle.outer);
+					m_FinalRenderShader->SetFloat(lightIndex + "FallOff", light.falloff);
+					m_FinalRenderShader->SetFloat3(lightIndex + "Ambient", light.Ambient);
+					m_FinalRenderShader->SetFloat3(lightIndex + "Diffuse", light.Diffuse);
+					m_FinalRenderShader->SetFloat3(lightIndex + "Specular", light.Specular);
+				}
+			}
 
+			//hard coded for now
+			{
+				m_FinalRenderShader->SetFloat3("globalAmbient", {});
 
+				m_FinalRenderShader->SetFloat("Attenuation.c1", 1.f);
+				m_FinalRenderShader->SetFloat("Attenuation.c2", 0.027f);
+				m_FinalRenderShader->SetFloat("Attenuation.c3", 0.0028f);
 
+				m_FinalRenderShader->SetFloat3("Fog.Color", { 0.5f,0.5f,0.5f });
+				m_FinalRenderShader->SetFloat("Fog.Near", 1.f);
+				m_FinalRenderShader->SetFloat("Fog.Far", 500000.f);
+			}
 
+			//vbo and ibo is provided inside of this func 
+			Renderer::DrawFullScreenQuad();
+		}
 
+		Renderer::EndRenderPass();
 
-
-
+		//copy depth
+		{
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_GeometryRenderPass->GetSpecification().TargetFramebuffer->GetFrameBufferID());
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FinalRenderPass->GetSpecification().TargetFramebuffer->GetFrameBufferID());
+			glBlitFramebuffer(
+				0, 0, m_Width, m_Height, // source region
+				0, 0, m_Width, m_Height, // destination region
+				GL_DEPTH_BUFFER_BIT, // field to copy
+				GL_NEAREST // filtering mechanism
+			);
+		}
+	});
+}
 
 
 void SceneRenderer::BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& camPos)

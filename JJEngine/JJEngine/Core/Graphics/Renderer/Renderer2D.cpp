@@ -8,6 +8,7 @@
 
 #include "EditorCamera.h"
 #include "glad.h"
+#include "Renderer.h"
 #include "Core/Graphics/IndexBuffer.h"
 
 struct QuadVertex
@@ -73,18 +74,8 @@ void Renderer2D::Init()
 		s_Data.QuadIndexBuffer->SetData(6 * sizeof(uint32_t), &quadIndices[0]);
 		s_Data.QuadIndexBuffer->BindToVertexArray();
 	}
-	auto whiteTexture = std::make_shared<TextureData>();
-	whiteTexture->data = std::shared_ptr<unsigned char[]>(new unsigned char[4]);
-	whiteTexture->width = 1;
-	whiteTexture->height = 1;
-	whiteTexture->channel = TextureChannel::RGBA;
-	whiteTexture->wrap = TextureWrap::ClampToEdge;
-	whiteTexture->filter = TextureFilter::Linear;
-	whiteTexture->data[0] = 0xff;
-	whiteTexture->data[1] = 0xff;
-	whiteTexture->data[2] = 0xff;
-	whiteTexture->data[3] = 0xff;
-	s_Data.WhiteTexture = Texture::CreateTexture(whiteTexture);
+
+	s_Data.WhiteTexture = Renderer::WhiteTexture;
 	s_Data.WhiteTexture->BindTexture();
 	s_Data.TextureShader = Shader::CreateShaderFromFile({
 		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/simple.vert"}},
@@ -111,6 +102,7 @@ void Renderer2D::BeginScene(const glm::mat4& viewProjection)
 	s_Data.WhiteTexture->BindTexture();
 
 	glDisable(GL_CULL_FACE);
+	
 }
 
 void Renderer2D::BeginScene(const EditorCamera& camera)

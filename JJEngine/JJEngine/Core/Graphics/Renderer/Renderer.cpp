@@ -3,6 +3,7 @@
 #include "Core/Graphics/VertexBuffer.h"
 #include "Core/Graphics/Shader.h"
 #include "Core/Graphics/Graphics.h"
+#include "Core/Graphics/Texture.h"
 #include "Core/Utils/Math/MatrixMath.h"
 
 #include <memory>
@@ -40,7 +41,8 @@ static RendererData s_Data;
 
 //needs to be accessed from template function
 CommandQueue Renderer::m_RenderCommandQueue;
-
+std::shared_ptr<Texture> Renderer::WhiteTexture;
+std::shared_ptr<Texture> Renderer::BlackTexture;
 
 void Renderer::BeginRenderPass(std::shared_ptr<RenderPass> renderPass, bool clear)
 {
@@ -80,6 +82,14 @@ void Renderer::Render()
 
 void Renderer::Init()
 {
+	{	//white texture
+		WhiteTexture = Texture::CreateTexture(glm::vec4{1.f, 1.f, 1.f, 1.f});
+
+		//black texture
+		BlackTexture = Texture::CreateTexture(glm::vec4{0.f, 0.f, 0.f, 1.f});
+	}
+
+
 	{//set vertex
 		QuadVertex QuadVertices[4];
 		QuadVertices[0] = { {-1.f, -1.f, 0.0f}, {0.0f, 0.0f} };//bottom left

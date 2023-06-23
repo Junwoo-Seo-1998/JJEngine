@@ -12,6 +12,8 @@ class Renderer
 {
 	friend Application;
 public:
+	static std::shared_ptr<Texture> WhiteTexture;
+	static std::shared_ptr<Texture> BlackTexture;
 
 	static void BeginRenderPass(std::shared_ptr<RenderPass> renderPass, bool clear = true);
 	static void EndRenderPass();

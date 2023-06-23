@@ -27,14 +27,6 @@ class Scene
 	friend class Entity;
 	friend class SceneHierarchyPanel;
 	friend class SceneSerializer;
-	//static function
-
-	static constexpr unsigned int MAX_SHADOW_BUFFER = 6;
-	std::shared_ptr<VertexArray> renderer_vao;
-	std::shared_ptr<FrameBuffer> g_buffer;
-	std::shared_ptr<FrameBuffer> shadow_buffer; 
-	std::shared_ptr <Mesh> FSQ;
-
 public:
 	static std::shared_ptr<Scene> Copy(std::shared_ptr<Scene> toCopy);
 public:

@@ -62,8 +62,16 @@ void TestScene::Start()
 	auto& script=temp.AddComponent<ScriptComponent>();
 	script.Name = "Game.Player";
 
-	auto light = CreateEntity("Test light");
+	auto light = CreateEntity("Test light1");
 	light.Transform().Position = { 2.f, 0.f,0.f };
+	light.AddComponent<LightComponent>();
+
+	light = CreateEntity("Test light2");
+	light.Transform().Position = { -2.f, 0.f,0.f };
+	light.AddComponent<LightComponent>();
+
+	light = CreateEntity("Test light3");
+	light.Transform().Position = { 0.f, 0.f,2.f };
 	light.AddComponent<LightComponent>();
 
 

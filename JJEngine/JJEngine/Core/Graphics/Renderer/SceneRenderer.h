@@ -35,6 +35,8 @@ private:
 
 	void GeometryPass();
 
+	void GeometryPassFSQ();
+
 	//todo change it to shared ptr later 
 	Scene* m_ActiveScene = nullptr;
 
