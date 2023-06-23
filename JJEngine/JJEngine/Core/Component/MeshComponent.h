@@ -2,6 +2,6 @@
 class Mesh;
 struct MeshComponent
 {
-	bool reserved;
+	//todo : will be replaced with mesh asset handle
 	std::shared_ptr<Mesh> mesh;
 };

@@ -23,6 +23,8 @@ public:
 
 	void Set(const std::string& name, const std::shared_ptr<Texture>& texture);
 
+	std::shared_ptr<Shader> GetShader();
+
 private:
 	void BindTextures(int textureSlotStart);
 

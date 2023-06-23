@@ -5,6 +5,7 @@
 #include <cmath>
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+class MeshFactory;
 class Material;
 
 struct Vertex
@@ -20,6 +21,7 @@ typedef std::vector<unsigned> IndexBufferType;
 
 class Mesh
 {
+	friend MeshFactory;
 public:
 	[[nodiscard]] std::shared_ptr<Material> GetMaterial() { return m_BaseMaterial; }
 
@@ -29,8 +31,8 @@ public:
 	[[nodiscard]] unsigned int GetNumOfIndices() const { return static_cast<unsigned int>(indices.size()); }
 
 	
-	[[nodiscard]] std::shared_ptr<VertexBuffer>& GetMeshVBO() { return VBO; }
-	[[nodiscard]] std::shared_ptr<IndexBuffer>& GetMeshEBO() { return EBO; }
+	[[nodiscard]] std::shared_ptr<VertexBuffer> GetMeshVBO() { return VBO; }
+	[[nodiscard]] std::shared_ptr<IndexBuffer> GetMeshEBO() { return EBO; }
 
 private:
 	VertexBufferType vertices;

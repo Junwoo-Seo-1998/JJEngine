@@ -220,6 +220,7 @@
     <ClInclude Include="Core\Component\MeshComponent.h" />
     <ClInclude Include="Core\Command\CommandQueue.h" />
     <ClInclude Include="Core\Graphics\Material.h" />
+    <ClInclude Include="Core\Graphics\MeshFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -340,5 +341,6 @@
     <ClCompile Include="Core\Graphics\Renderer\SceneRenderer.cpp" />
     <ClCompile Include="Core\Command\CommandQueue.cpp" />
     <ClCompile Include="Core\Graphics\Material.cpp" />
+    <ClCompile Include="Core\Graphics\MeshFactory.cpp" />
   </ItemGroup>
 </Project>

@@ -50,6 +50,11 @@ void Material::Set(const std::string& name, const std::shared_ptr<Texture>& text
 	m_Textures[name] = texture;
 }
 
+std::shared_ptr<Shader> Material::GetShader()
+{
+	return m_Shader;
+}
+
 void Material::BindTextures(int textureSlotStart)
 {
 	for (auto& [name, texture]:m_Textures)

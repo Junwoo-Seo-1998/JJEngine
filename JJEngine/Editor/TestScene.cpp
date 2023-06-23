@@ -11,7 +11,10 @@
 #include "Core/Component/BoxCollider2DComponent.h"
 #include "Core/Application.h"
 #include "Core/Asset/Manager/AssetManager.h"
+#include "Core/Component/MeshComponent.h"
 #include "Core/Component/ScriptComponent.h"
+#include "Core/Graphics/Mesh.h"
+#include "Core/Graphics/MeshFactory.h"
 
 TestScene::TestScene(std::string t)
 	:Scene(t)
@@ -58,7 +61,10 @@ void TestScene::Start()
 	auto& script=temp.AddComponent<ScriptComponent>();
 	script.Name = "Game.Player";
 
-	Scene::Start();
+	auto ThreeDObject = CreateEntity("Test 3D Object");
+	auto& meshcomp = ThreeDObject.AddComponent<MeshComponent>();
+	meshcomp.mesh = MeshFactory::CreateBox(glm::vec3{1.f});
+
 }
 
 void TestScene::Update()

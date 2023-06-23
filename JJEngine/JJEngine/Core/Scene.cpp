@@ -172,31 +172,19 @@ void Scene::OnDestroy()
 {
 }
 
-void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm::mat4& viewProj, const glm::vec3& cameraPos)
+void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm::mat4& view, const glm::mat4& projection, const glm::vec3& cameraPos)
 {
 	sceneRenderer->SetScene(this);
-
-	//todo remove later!!!!!!!! (for clearing)
-	/*
-	SceneRenderer::BeginScene();
-	//draw 3d
-	SceneRenderer::EndScene();
-	*/
 	//3D not implemented yet
 	{
-		sceneRenderer->BeginScene(viewProj, cameraPos);
+		sceneRenderer->BeginScene(view, projection, cameraPos);
 		{
 			auto view = m_Registry.view<TransformComponent, MeshComponent>();
 			for (auto entity : view)
 			{
 				auto [transformComponent, meshComponent] = view.get<TransformComponent, MeshComponent>(entity);
-				//only for testing todo: remove later
-				Renderer::Submit([]() { EngineLog::Trace("Draw call test"); });
 				sceneRenderer->SubmitMesh(meshComponent.mesh, transformComponent.GetTransform());
-				//sceneRenderer->SubmitMesh()
-				//sceneRenderer->
 			}
-
 		}
 		sceneRenderer->EndScene();
 	}
@@ -205,7 +193,7 @@ void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm:
 	{
 		//2D renderer needs to use it for now
 		Renderer::BeginRenderPass(sceneRenderer->GetFinalRenderPass(), false);
-		Renderer2D::BeginScene(viewProj);
+		Renderer2D::BeginScene(projection * view);
 		auto view = m_Registry.view<SpriteRendererComponent>();
 		for (auto e : view)
 		{
@@ -224,8 +212,7 @@ void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm:
 
 void Scene::UpdateEditor(std::shared_ptr<SceneRenderer> sceneRenderer, EditorCamera& camera)
 {
-	glm::mat4 viewProj{camera.GetViewProjection()};
-	RenderScene(sceneRenderer, viewProj, camera.GetPosition());
+	RenderScene(sceneRenderer, camera.GetViewMatrix(), camera.GetProjectionMatrix(), camera.GetPosition());
 }
 
 void Scene::RenderEntityID(EditorCamera& camera)
@@ -303,9 +290,11 @@ void Scene::UpdateRuntime(std::shared_ptr<SceneRenderer> sceneRenderer)
 	{
 		auto& camTransform = camera.Transform();
 		auto& camComp = camera.GetComponent<CameraComponent>();
-		glm::mat4 viewProj = camComp.GetProjection() *
-			MatrixMath::BuildCameraMatrixWithDirection(camTransform.Position, camTransform.GetForward(), camTransform.GetUp());
-		RenderScene(sceneRenderer, viewProj, camTransform.Position);
+		RenderScene(sceneRenderer,
+		//view matrix
+		MatrixMath::BuildCameraMatrixWithDirection(camTransform.Position, camTransform.GetForward(), camTransform.GetUp()), 
+		camComp.GetProjection(),
+		camTransform.Position);
 	}
 }
 

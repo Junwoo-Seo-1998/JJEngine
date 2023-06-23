@@ -3,6 +3,7 @@
 
 #include "Core/Graphics/Mesh.h"
 #include "glm/glm.hpp"
+class Shader;
 class Scene;
 class Application;
 class FrameBuffer;
@@ -21,10 +22,10 @@ public:
 
 	void SetScene(Scene* scene);
 	void SetViewportSize(unsigned int width, unsigned int height);
-	void BeginScene(const glm::mat4& viewProjection, const glm::vec3& camPos);
+	void BeginScene(const glm::mat4& view, const glm::mat4& Projection, const glm::vec3& camPos);
 	void EndScene();
 
-	//todo: implement with material
+	//todo: implement with material instance (not material, material instance)
 	void SubmitMesh(std::shared_ptr<Mesh> mesh, const glm::mat4& transformMat);
 
 	std::shared_ptr<RenderPass> GetFinalRenderPass();
@@ -39,6 +40,21 @@ private:
 	bool m_Active = false;
 	unsigned int m_Width, m_Height;
 	bool m_NeedsResize = true;//viewport
+
+	std::shared_ptr<VertexArray> m_VertexArray;
+
+	//just for now it will be removed later
+	//view projection
+	//camPos
+	glm::mat4 m_Projection;
+	glm::mat4 m_View;
+	glm::vec3 m_CameraPosition;
+
+
+	//Default Shader
+	std::shared_ptr<Material> m_DefaultMaterial;
+	std::shared_ptr<Shader> m_GeometryShader;
+	std::shared_ptr<Shader> m_FinalRenderShader;
 
 	std::shared_ptr<RenderPass> m_GeometryRenderPass;
 	std::shared_ptr<RenderPass> m_FinalRenderPass;

@@ -7,7 +7,9 @@
 #include "Core/Graphics/Graphics.h"
 #include "Core/Graphics/RenderPass.h"
 #include "Core/Graphics/FrameBuffer.h"
+#include "Core/Graphics/Material.h"
 #include "Core/Graphics/RenderCommand.h"
+#include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
 
 static RenderCommandType command{};
@@ -35,7 +37,7 @@ void SceneRenderer::SetViewportSize(unsigned width, unsigned height)
 	}
 }
 
-void SceneRenderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3& camPos)
+void SceneRenderer::BeginScene(const glm::mat4& view, const glm::mat4& Projection, const glm::vec3& camPos)
 {
 	m_Active = true;
 	if(m_NeedsResize)
@@ -44,25 +46,36 @@ void SceneRenderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3&
 		m_FinalRenderPass->GetSpecification().TargetFramebuffer->Resize(m_Width, m_Height);
 		m_NeedsResize = false;
 	}
+
+	//it will be removed later // get it from scene
+	m_View = view;
+	m_Projection = Projection;
+	m_CameraPosition = camPos;
 }
 
 void SceneRenderer::EndScene()
 {
-	
+	Renderer::Submit([this]() {m_VertexArray->Bind(); });
+
 	GeometryPass();
 
 	Renderer::Submit([this]() {Renderer::BeginRenderPass(m_FinalRenderPass, true); });
 	{//submit final fsq
 		
+
+
 	}
 	Renderer::Submit([this]() {	Renderer::EndRenderPass(); });
 
 	Renderer::Render();
+
+	m_DrawList.clear();
 	m_Active = false;
 }
 
 void SceneRenderer::SubmitMesh(std::shared_ptr<Mesh> mesh, const glm::mat4& transformMat)
 {
+	//todo: make user defined draw list later
 	m_DrawList.emplace_back(mesh, transformMat);
 }
 
@@ -73,8 +86,25 @@ std::shared_ptr<RenderPass> SceneRenderer::GetFinalRenderPass()
 
 void SceneRenderer::Init()
 {
+	m_VertexArray = VertexArray::CreateVertexArray();
+
 	m_Width = 400;
 	m_Height = 400;
+
+	{//setting up shader 
+		m_GeometryShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/GBufferShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/GBufferShader.frag"} }
+		});
+	}
+
+	{//setting up default material
+		m_DefaultMaterial = Material::Create(m_GeometryShader);
+		m_DefaultMaterial->Set("MatTexture.Diffuse", Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/TestDiff.png")));
+		m_DefaultMaterial->Set("MatTexture.Specular", Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/TestSpec.png")));
+		m_DefaultMaterial->Set("MatTexture.Emissive", Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/TestSpec.png")));
+		m_DefaultMaterial->Set("MatTexture.Shininess", 2.0f);
+	}
 
 	{//geo
 		RenderPassSpecification spec;
@@ -83,7 +113,11 @@ void SceneRenderer::Init()
 		fb_spec.ClearColor = { 0,0,0,1.f };
 		fb_spec.Width = 400;
 		fb_spec.Height = 400;
-		fb_spec.Formats = { FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::RGBA, FrameBufferFormat::Depth };
+		fb_spec.Formats = {
+			FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA32F, //gPosition, gNormal 
+			FrameBufferFormat::RGBA32F, FrameBufferFormat::RGBA32F, //gDiffuse, gSpecular
+			FrameBufferFormat::RGBA32F, FrameBufferFormat::Depth //gEmissive, Depth
+		};
 		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
 		m_GeometryRenderPass = RenderPass::Create(spec);
 	}
@@ -105,7 +139,29 @@ void SceneRenderer::GeometryPass()
 {
 	Renderer::Submit([this]() {Renderer::BeginRenderPass(m_GeometryRenderPass); });
 
-	
+	Renderer::Submit([this]()
+	{
+		m_GeometryShader->Use();
+		m_GeometryShader->SetMat4("Matrix.View", m_View);
+		m_GeometryShader->SetMat4("Matrix.Projection", m_Projection);
+	});
+
+	//we should check time it will be faster to run the loop inside of submit or call it with small chunk
+	//since lambda could be faster when it's small
+	for (auto& toDraw : m_DrawList)
+	{
+		Renderer::Submit([this, &toDraw]()
+		{
+			toDraw.Mesh->GetMeshVBO()->BindToVertexArray();
+			toDraw.Mesh->GetMeshEBO()->BindToVertexArray();
+
+			m_GeometryShader->SetMat4("Matrix.Model", toDraw.Transform);
+			m_DefaultMaterial->Bind();
+			//todo:draw it material instance
+			//toDraw.Mesh->GetMaterial()->Bind();
+			glDrawElements(GL_TRIANGLES, toDraw.Mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+		});
+	}
 	Renderer::Submit([]() {Renderer::EndRenderPass(); });
 }
 	

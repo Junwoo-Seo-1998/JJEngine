@@ -50,7 +50,7 @@ public:
 	virtual void OnDisable();
 	virtual void OnDestroy();
 
-	void RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm::mat4& viewProj, const glm::vec3& cameraPos);
+	void RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm::mat4& view, const glm::mat4& projection, const glm::vec3& cameraPos);
 
 	//editor only
 	void UpdateEditor(std::shared_ptr<SceneRenderer> sceneRenderer, EditorCamera& camera);
