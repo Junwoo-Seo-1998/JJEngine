@@ -221,6 +221,7 @@
     <ClInclude Include="Core\Command\CommandQueue.h" />
     <ClInclude Include="Core\Graphics\Material.h" />
     <ClInclude Include="Core\Graphics\MeshFactory.h" />
+    <ClInclude Include="Core\Graphics\Light.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />

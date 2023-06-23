@@ -11,6 +11,7 @@
 #include "Core/Component/BoxCollider2DComponent.h"
 #include "Core/Application.h"
 #include "Core/Asset/Manager/AssetManager.h"
+#include "Core/Component/LightComponent.h"
 #include "Core/Component/MeshComponent.h"
 #include "Core/Component/ScriptComponent.h"
 #include "Core/Graphics/Mesh.h"
@@ -60,6 +61,11 @@ void TestScene::Start()
 
 	auto& script=temp.AddComponent<ScriptComponent>();
 	script.Name = "Game.Player";
+
+	auto light = CreateEntity("Test light");
+	light.Transform().Position = { 2.f, 0.f,0.f };
+	light.AddComponent<LightComponent>();
+
 
 	auto ThreeDObject = CreateEntity("Test 3D Object");
 	auto& meshcomp = ThreeDObject.AddComponent<MeshComponent>();

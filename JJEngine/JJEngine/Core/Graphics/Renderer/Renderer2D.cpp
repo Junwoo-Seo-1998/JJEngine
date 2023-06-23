@@ -109,6 +109,8 @@ void Renderer2D::BeginScene(const glm::mat4& viewProjection)
 
 	s_Data.QuadVertexArray->Bind();
 	s_Data.WhiteTexture->BindTexture();
+
+	glDisable(GL_CULL_FACE);
 }
 
 void Renderer2D::BeginScene(const EditorCamera& camera)

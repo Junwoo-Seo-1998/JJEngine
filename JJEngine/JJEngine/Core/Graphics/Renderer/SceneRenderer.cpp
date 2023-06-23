@@ -1,6 +1,7 @@
 #include "SceneRenderer.h"
 
 #include "Renderer.h"
+#include "Core/Scene.h"
 #include "Core/Component/TransformComponent.h"
 #include "Core/Component/LightComponent.h"
 #include "Core/Component/MaterialComponent.h"
@@ -9,6 +10,7 @@
 #include "Core/Graphics/FrameBuffer.h"
 #include "Core/Graphics/Material.h"
 #include "Core/Graphics/RenderCommand.h"
+#include "Core/Utils/Assert.h"
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
 
@@ -39,6 +41,7 @@ void SceneRenderer::SetViewportSize(unsigned width, unsigned height)
 
 void SceneRenderer::BeginScene(const glm::mat4& view, const glm::mat4& Projection, const glm::vec3& camPos)
 {
+	ENGINE_ASSERT(m_ActiveScene != nullptr, "Scene is nullptr");
 	m_Active = true;
 	if(m_NeedsResize)
 	{
@@ -51,25 +54,114 @@ void SceneRenderer::BeginScene(const glm::mat4& view, const glm::mat4& Projectio
 	m_View = view;
 	m_Projection = Projection;
 	m_CameraPosition = camPos;
+
+	{//collect lights
+		auto view = m_ActiveScene->GetRegistry().view<TransformComponent, LightComponent>();
+		for (auto entity: view)
+		{
+			auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
+			m_ActiveLights.emplace_back(std::tuple{ transform.Position, transform.GetForward(), light.light });
+		}
+
+		if(m_ActiveLights.empty())
+		{
+			EngineLog::Warn("There is no light");
+		}
+	}
 }
 
 void SceneRenderer::EndScene()
 {
+	ENGINE_ASSERT(m_ActiveScene != nullptr, "Scene is nullptr");
 	Renderer::Submit([this]() {m_VertexArray->Bind(); });
 
 	GeometryPass();
 
-	Renderer::Submit([this]() {Renderer::BeginRenderPass(m_FinalRenderPass, true); });
-	{//submit final fsq
-		
+	Renderer::Submit([this]()
+	{//draw result of geometry pass
+		Renderer::BeginRenderPass(m_FinalRenderPass, true);
+
+		{
+			m_FinalRenderShader->Use();
+
+			//bind gbuffer
+			{
+				m_FinalRenderShader->SetInt("gPosition", 0);
+				m_FinalRenderShader->SetInt("gNormal", 1);
+				m_FinalRenderShader->SetInt("gDiffuse", 2);
+				m_FinalRenderShader->SetInt("gSpecular", 3);
+				m_FinalRenderShader->SetInt("gEmissive", 4);
+
+				auto fb = m_GeometryRenderPass->GetSpecification().TargetFramebuffer;
+
+				fb->GetColorTexture(0)->BindTexture(0);
+				fb->GetColorTexture(1)->BindTexture(1);
+				fb->GetColorTexture(2)->BindTexture(2);
+				fb->GetColorTexture(3)->BindTexture(3);
+				fb->GetColorTexture(4)->BindTexture(4);
+			}
+
+			m_FinalRenderShader->SetFloat3("CameraPosition", m_CameraPosition);
+
+			//light set up
+			{
+				m_FinalRenderShader->SetInt("LightNumbers", m_ActiveLights.size());
+				int index = 0;
+				for (auto& [lightPosition, lightDir, light] : m_ActiveLights)
+				{
+					std::string lightIndex = std::format("Light[{}].", index);
+
+					m_FinalRenderShader->SetInt(lightIndex + "LightType", static_cast<int>(light.m_LightType));
+					m_FinalRenderShader->SetFloat3(lightIndex + "Position", lightPosition);
+					m_FinalRenderShader->SetFloat3(lightIndex + "Direction", lightDir);
+					m_FinalRenderShader->SetFloat(lightIndex + "InnerAngle", light.m_Angle.inner);
+					m_FinalRenderShader->SetFloat(lightIndex + "OuterAngle", light.m_Angle.outer);
+					m_FinalRenderShader->SetFloat(lightIndex + "FallOff", light.falloff);
+					m_FinalRenderShader->SetFloat3(lightIndex + "Ambient", light.Ambient);
+					m_FinalRenderShader->SetFloat3(lightIndex + "Diffuse", light.Diffuse);
+					m_FinalRenderShader->SetFloat3(lightIndex + "Specular", light.Specular);
+				}
+			}
+
+			{
+				m_FinalRenderShader->SetFloat3("globalAmbient", {});
+
+				m_FinalRenderShader->SetFloat("Attenuation.c1", 1.f);
+				m_FinalRenderShader->SetFloat("Attenuation.c2", 0.4f);
+				m_FinalRenderShader->SetFloat("Attenuation.c3", 0.03f);
+
+				m_FinalRenderShader->SetFloat3("Fog.Color", { 0.5f,0.5f,0.5f });
+				m_FinalRenderShader->SetFloat("Fog.Near", 1.f);
+				m_FinalRenderShader->SetFloat("Fog.Far", 500000.f);
+			}
+
+			//vbo and ibo is provided inside of this func 
+			Renderer::DrawFullScreenQuad();
+		}
+
+		Renderer::EndRenderPass();
+
+		//copy depth
+		{
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_GeometryRenderPass->GetSpecification().TargetFramebuffer->GetFrameBufferID());
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FinalRenderPass->GetSpecification().TargetFramebuffer->GetFrameBufferID());
+			glBlitFramebuffer(
+				0, 0, m_Width, m_Height, // source region
+				0, 0, m_Width, m_Height, // destination region
+				GL_DEPTH_BUFFER_BIT, // field to copy
+				GL_NEAREST // filtering mechanism
+			);
+		}
+	});
 
 
-	}
-	Renderer::Submit([this]() {	Renderer::EndRenderPass(); });
 
+	//real rendering happens here
 	Renderer::Render();
 
 	m_DrawList.clear();
+	m_ActiveLights.clear();
+
 	m_Active = false;
 }
 
@@ -96,6 +188,11 @@ void SceneRenderer::Init()
 		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/GBufferShader.vert"}},
 		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/GBufferShader.frag"} }
 		});
+
+		m_FinalRenderShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/FSQShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/FSQShader.frag"} }
+		});
 	}
 
 	{//setting up default material
@@ -108,9 +205,9 @@ void SceneRenderer::Init()
 
 	{//geo
 		RenderPassSpecification spec;
-		spec.DebugName = "Final Render";
+		spec.DebugName = "GeometryRenderPass";
 		FrameBufferSpecification fb_spec;
-		fb_spec.ClearColor = { 0,0,0,1.f };
+		fb_spec.ClearColor = { 0.3,0.3,0.3,1.f };
 		fb_spec.Width = 400;
 		fb_spec.Height = 400;
 		fb_spec.Formats = {
@@ -126,7 +223,7 @@ void SceneRenderer::Init()
 		RenderPassSpecification spec;
 		spec.DebugName = "Final Render";
 		FrameBufferSpecification fb_spec;
-		fb_spec.ClearColor = { 0,0,0,1.f };
+		fb_spec.ClearColor = { 0.3,0.3,0.3,1.f };
 		fb_spec.Width = 400;
 		fb_spec.Height = 400;
 		fb_spec.Formats = { FrameBufferFormat::RGBA, FrameBufferFormat::Depth };
@@ -137,7 +234,12 @@ void SceneRenderer::Init()
 
 void SceneRenderer::GeometryPass()
 {
-	Renderer::Submit([this]() {Renderer::BeginRenderPass(m_GeometryRenderPass); });
+	Renderer::Submit([this]()
+	{
+		Renderer::BeginRenderPass(m_GeometryRenderPass);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	});
 
 	Renderer::Submit([this]()
 	{
@@ -166,6 +268,23 @@ void SceneRenderer::GeometryPass()
 }
 	
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void SceneRenderer::BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& camPos)
 {
 	command["toVP"] = viewProjection;
@@ -182,7 +301,7 @@ void SceneRenderer::AddAffectLight(const LightComponent& light, TransformCompone
 {
 	switch (light.type)
 	{
-	case LightType::Point:
+	case LightType::PointLight:
 	{
 
 		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 1.f, 0.f, 0.f }));

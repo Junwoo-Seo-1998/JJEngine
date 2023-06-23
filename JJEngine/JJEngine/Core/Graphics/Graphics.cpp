@@ -88,7 +88,7 @@ void Graphics::ShadowSampling(RenderCommandType& command)
 	{
 		switch (l.type)
 		{
-		case LightType::Point:
+		case LightType::PointLight:
 		{
 			for (const auto& vp : l.toLightVP) // One light has 6 VP. Because it is point light.
 			{

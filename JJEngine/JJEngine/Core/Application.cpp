@@ -18,6 +18,7 @@ End Header-------------------------------------------------------- */
 #include "Script/ScriptEngine.h"
 #include "Utils/Assert.h"
 #include "Core/Asset/Manager/AssetManager.h"
+#include "Graphics/Renderer/Renderer.h"
 
 #include "Graphics/Renderer/Renderer2D.h"
 Application* Application::s_Instance = nullptr;
@@ -39,6 +40,7 @@ Application::~Application()
 
 bool Application::Init()
 {
+	Renderer::Init();
 	Renderer2D::Init();
 	ImGuiRenderer::Instance()->Init(GetWindow()->GetGLFWWindow());
 	Script::ScriptEngine::Init();

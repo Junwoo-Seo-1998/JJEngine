@@ -66,6 +66,10 @@ void Renderer::EndRenderPass()
 
 void Renderer::DrawFullScreenQuad()
 {
+	//you should set shader out side of this function
+
+	s_Data.m_FullScreenQuadVertexBuffer->BindToVertexArray();
+	s_Data.m_FullScreenQuadIndexBuffer->BindToVertexArray();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
@@ -76,18 +80,12 @@ void Renderer::Render()
 
 void Renderer::Init()
 {
-	s_Data.m_FullScreenQuadShader = Shader::CreateShaderFromFile({
-		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/FSQShader.vert"}},
-		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/FSQShader.frag"} }
-	});
-
-
 	{//set vertex
 		QuadVertex QuadVertices[4];
-		QuadVertices[0] = { {-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f} };
-		QuadVertices[1] = { {0.5f, -0.5f, 0.0f}, { 1.0f, 0.0f} };
-		QuadVertices[2] = { {0.5f,  0.5f, 0.0f}, {1.0f, 1.0f} };
-		QuadVertices[3] = { {-0.5f,  0.5f, 0.0f}, { 0.0f, 1.0f} };
+		QuadVertices[0] = { {-1.f, -1.f, 0.0f}, {0.0f, 0.0f} };//bottom left
+		QuadVertices[1] = { {1.f, -1.f, 0.0f}, { 1.0f, 0.0f} };//bottom right
+		QuadVertices[2] = { {1.f,  1.f, 0.0f}, {1.0f, 1.0f} };//top right
+		QuadVertices[3] = { {-1.f,  1.f, 0.0f}, { 0.0f, 1.0f} };//top left
 
 		s_Data.m_FullScreenQuadVertexBuffer = VertexBuffer::CreateVertexBuffer(sizeof(QuadVertex) * 4);
 		s_Data.m_FullScreenQuadVertexBuffer->SetData(sizeof(QuadVertex) * 4, &QuadVertices[0]);

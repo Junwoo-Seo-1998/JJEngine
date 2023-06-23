@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+#include "Core/Graphics/Light.h"
 #include "Core/Graphics/Mesh.h"
 #include "glm/glm.hpp"
 class Shader;
@@ -49,6 +50,9 @@ private:
 	glm::mat4 m_Projection;
 	glm::mat4 m_View;
 	glm::vec3 m_CameraPosition;
+
+	//scene data
+	std::vector<std::tuple<glm::vec3, glm::vec3, Light>> m_ActiveLights;
 
 
 	//Default Shader
