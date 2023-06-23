@@ -175,32 +175,6 @@ void Scene::OnDestroy()
 void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm::mat4& viewProj, const glm::vec3& cameraPos)
 {
 	sceneRenderer->SetScene(this);
-	//{
-	//	auto objectView = m_Registry.view<MaterialComponent>();
-	//	auto lightView = m_Registry.view<LightComponent>();
-	//	SceneRenderer::BeginScene(viewProj, cameraPos);
-	//	SceneRenderer::SetVAO(renderer_vao);
-	//	SceneRenderer::SetShadowBuffer(shadow_buffer);
-	//	SceneRenderer::SetGBuffer(g_buffer, *FSQ.get());
-	//	SceneRenderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
-	//	for (auto& obj : objectView)
-	//	{
-	//		Entity objEntity(obj, this);
-	//		auto& transform = objEntity.GetComponent<TransformComponent>();
-	//		auto& model = objEntity.GetComponent<Model>();
-	//		auto& material = objEntity.GetComponent<MaterialComponent>();
-	//		SceneRenderer::AddModel(model, transform, material);
-	//	}
-	//	for (auto& light : lightView)
-	//	{
-	//		Entity lightEntity(light, this);
-	//		auto& light = lightEntity.GetComponent<LightComponent>();
-	//		auto& lightTransform = lightEntity.GetComponent<TransformComponent>();
-	//		SceneRenderer::AddAffectLight(light, lightTransform);
-	//	}
-	//	SceneRenderer::EndScene();
-	//	SceneRenderer::DrawAllScene();
-	//}
 
 	//todo remove later!!!!!!!! (for clearing)
 	/*
@@ -211,22 +185,25 @@ void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm:
 	//3D not implemented yet
 	{
 		sceneRenderer->BeginScene(viewProj, cameraPos);
-		Renderer::BeginRenderPass(sceneRenderer->GetFinalRenderPass(), true);
 		{
 			auto view = m_Registry.view<TransformComponent, MeshComponent>();
 			for (auto entity : view)
 			{
 				auto [transformComponent, meshComponent] = view.get<TransformComponent, MeshComponent>(entity);
+				//only for testing todo: remove later
+				Renderer::Submit([]() { EngineLog::Trace("Draw call test"); });
+				sceneRenderer->SubmitMesh(meshComponent.mesh, transformComponent.GetTransform());
+				//sceneRenderer->SubmitMesh()
 				//sceneRenderer->
 			}
 
 		}
-		Renderer::EndRenderPass();
 		sceneRenderer->EndScene();
 	}
 
 	//2D
 	{
+		//2D renderer needs to use it for now
 		Renderer::BeginRenderPass(sceneRenderer->GetFinalRenderPass(), false);
 		Renderer2D::BeginScene(viewProj);
 		auto view = m_Registry.view<SpriteRendererComponent>();

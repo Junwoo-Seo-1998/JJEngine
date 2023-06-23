@@ -5,6 +5,8 @@
 #include <cmath>
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+class Material;
+
 struct Vertex
 {
 	glm::vec3 position;
@@ -19,6 +21,8 @@ typedef std::vector<unsigned> IndexBufferType;
 class Mesh
 {
 public:
+	[[nodiscard]] std::shared_ptr<Material> GetMaterial() { return m_BaseMaterial; }
+
 	[[nodiscard]] VertexBufferType& GetVertices() { return vertices; }
 	[[nodiscard]] unsigned int GetNumOfVertices() const { return static_cast<unsigned int>(vertices.size()); }
 	[[nodiscard]] IndexBufferType& GetIndices() { return indices; }
@@ -33,6 +37,9 @@ private:
 	IndexBufferType indices;
 	std::shared_ptr<VertexBuffer> VBO;
 	std::shared_ptr<IndexBuffer> EBO;
+
+	std::shared_ptr<Material> m_BaseMaterial;
+
 public:
 	static Mesh CreateSphere(int stacks, int slices, float radius, glm::vec3 center) {
 		Mesh mesh;

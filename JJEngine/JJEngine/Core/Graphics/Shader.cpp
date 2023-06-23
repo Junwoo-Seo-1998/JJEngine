@@ -54,14 +54,6 @@ void Shader::SetFloat3(const std::string& name, const glm::vec3& value) const
 	glUniform3f(location, value.x, value.y, value.z);
 }
 
-void Shader::SetFloatVector3(const std::string& name, const std::vector<glm::vec3>& value) const
-{
-	Use();
-	int location = GetUniformLocation(name);
-	glUniform3fv(location, value.size(), glm::value_ptr(value[0]));
-}
-
-
 void Shader::SetFloat4(const std::string& name, const glm::vec4& value) const
 {
 	Use();

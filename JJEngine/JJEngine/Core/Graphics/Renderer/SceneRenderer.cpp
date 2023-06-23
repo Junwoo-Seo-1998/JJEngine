@@ -1,4 +1,6 @@
 #include "SceneRenderer.h"
+
+#include "Renderer.h"
 #include "Core/Component/TransformComponent.h"
 #include "Core/Component/LightComponent.h"
 #include "Core/Component/MaterialComponent.h"
@@ -38,6 +40,7 @@ void SceneRenderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3&
 	m_Active = true;
 	if(m_NeedsResize)
 	{
+		m_GeometryRenderPass->GetSpecification().TargetFramebuffer->Resize(m_Width, m_Height);
 		m_FinalRenderPass->GetSpecification().TargetFramebuffer->Resize(m_Width, m_Height);
 		m_NeedsResize = false;
 	}
@@ -45,7 +48,15 @@ void SceneRenderer::BeginScene(const glm::mat4& viewProjection, const glm::vec3&
 
 void SceneRenderer::EndScene()
 {
+	GeometryPass();
+
+	Renderer::Render();
 	m_Active = false;
+}
+
+void SceneRenderer::SubmitMesh(std::shared_ptr<Mesh> mesh, const glm::mat4& transformMat)
+{
+	m_DrawList.emplace_back(mesh, transformMat);
 }
 
 std::shared_ptr<RenderPass> SceneRenderer::GetFinalRenderPass()
@@ -65,8 +76,19 @@ void SceneRenderer::Init()
 	fb_spec.Height = 400;
 	fb_spec.Formats = { FrameBufferFormat::RGBA, FrameBufferFormat::Depth };
 	spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
+
+	m_GeometryRenderPass = RenderPass::Create(spec);
 	m_FinalRenderPass = RenderPass::Create(spec);
 }
+
+void SceneRenderer::GeometryPass()
+{
+	Renderer::Submit([this]() {Renderer::BeginRenderPass(m_GeometryRenderPass); });
+
+	
+	Renderer::Submit([]() {Renderer::EndRenderPass(); });
+}
+	
 
 void SceneRenderer::BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& camPos)
 {

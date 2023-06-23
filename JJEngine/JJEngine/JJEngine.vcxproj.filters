@@ -218,6 +218,8 @@
     <ClInclude Include="Core\Utils\ShaderPreprocessor.h" />
     <ClInclude Include="Core\Graphics\Renderer\SceneRenderer.h" />
     <ClInclude Include="Core\Component\MeshComponent.h" />
+    <ClInclude Include="Core\Command\CommandQueue.h" />
+    <ClInclude Include="Core\Graphics\Material.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -336,5 +338,7 @@
     <ClCompile Include="Core\Graphics\Pipeline.cpp" />
     <ClCompile Include="Core\Utils\ShaderPreprocessor.cpp" />
     <ClCompile Include="Core\Graphics\Renderer\SceneRenderer.cpp" />
+    <ClCompile Include="Core\Command\CommandQueue.cpp" />
+    <ClCompile Include="Core\Graphics\Material.cpp" />
   </ItemGroup>
 </Project>

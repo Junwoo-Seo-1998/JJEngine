@@ -13,9 +13,9 @@ struct LightComponent;
 class Model;
 class RenderPass;
 
+
 class SceneRenderer
 {
-	friend Application;
 public:
 	SceneRenderer();
 
@@ -23,13 +23,15 @@ public:
 	void SetViewportSize(unsigned int width, unsigned int height);
 	void BeginScene(const glm::mat4& viewProjection, const glm::vec3& camPos);
 	void EndScene();
-	//todo:
-	//void DrawMesh(std::shared_ptr<Mesh> mesh, const glm::mat4& transformMat);
 
+	//todo: implement with material
+	void SubmitMesh(std::shared_ptr<Mesh> mesh, const glm::mat4& transformMat);
 
 	std::shared_ptr<RenderPass> GetFinalRenderPass();
 private:
 	void Init();
+
+	void GeometryPass();
 
 	//todo change it to shared ptr later 
 	Scene* m_ActiveScene = nullptr;
@@ -37,7 +39,15 @@ private:
 	unsigned int m_Width, m_Height;
 	bool m_NeedsResize = true;//viewport
 
+	std::shared_ptr<RenderPass> m_GeometryRenderPass;
 	std::shared_ptr<RenderPass> m_FinalRenderPass;
+
+	struct DrawCommand
+	{
+		std::shared_ptr<Mesh> Mesh;
+		glm::mat4 Transform;
+	};
+	std::vector<DrawCommand> m_DrawList;
 public:
 	//Áö¿ï°Å
 	static void BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& pos);
