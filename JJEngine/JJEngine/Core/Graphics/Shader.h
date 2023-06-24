@@ -13,9 +13,10 @@ End Header-------------------------------------------------------- */
 
 enum class ShaderType
 {
-	VertexShader=0,
+	None = 0,
+	VertexShader,
 	FragmentShader,
-	//TessellationShader,
+	TessellationShader,
 	GeometryShader,
 	TypeCounts,
 };

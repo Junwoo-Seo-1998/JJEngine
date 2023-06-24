@@ -1,3 +1,10 @@
+
+testing 
+
+#include "./Resources/Shaders/simple.vert"
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec2 aUv;
+
 #pragma vert
 
 layout (location = 0) in vec3 aPos;
@@ -9,7 +16,6 @@ out vec2 TexCoord;
 
 //this is test 
 
-
 void main() /*this is test*/
 {
     /*this is test22*/
@@ -18,3 +24,11 @@ void main() /*this is test*/
 }
 
 #pragma frag
+
+void main() /*this is test*/
+{
+    /*this is test22*/
+    gl_Position = ViewProjection * Transform * vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    TexCoord = aUv;
+}
+
