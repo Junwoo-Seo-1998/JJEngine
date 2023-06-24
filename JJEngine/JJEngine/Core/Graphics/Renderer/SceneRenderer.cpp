@@ -222,6 +222,7 @@ void SceneRenderer::GeometryPass()
 		Renderer::BeginRenderPass(m_GeometryRenderPass);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
+		glDisable(GL_BLEND);
 	});
 
 	Renderer::Submit([this]()

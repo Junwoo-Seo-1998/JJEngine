@@ -80,6 +80,18 @@ void TestScene::Start()
 	meshcomp.mesh = MeshFactory::CreateBox(glm::vec3{1.f});
 	ThreeDObject.Transform().Position = { 0.f, -2.f, 0.f };
 	ThreeDObject.Transform().Scale = { 9.f, 1.f, 9.f };
+
+	ThreeDObject = CreateEntity("Test 3D Object2");
+	auto& meshcomp2 = ThreeDObject.AddComponent<MeshComponent>();
+	meshcomp2.mesh = MeshFactory::CreateBox(glm::vec3{1.f});
+	ThreeDObject.Transform().Position = { 0.f, -1.f, 0.f };
+	ThreeDObject.Transform().Scale = { 1.f, 1.f, 1.f };
+
+	ThreeDObject = CreateEntity("Test 3D Object3");
+	auto& meshcomp3 = ThreeDObject.AddComponent<MeshComponent>();
+	meshcomp3.mesh = MeshFactory::CreateBox(glm::vec3{1.f});
+	ThreeDObject.Transform().Position = { 0.f, 1.f, 0.f };
+	ThreeDObject.Transform().Scale = { 2.f, 1.f, 2.f };
 }
 
 void TestScene::Update()
