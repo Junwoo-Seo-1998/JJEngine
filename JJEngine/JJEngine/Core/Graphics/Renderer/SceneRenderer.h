@@ -39,6 +39,8 @@ private:
 
 	void ForwardPass();
 
+	void HDRPass();
+
 	void DebugRenderingPass();
 
 	//todo change it to shared ptr later 
@@ -68,6 +70,9 @@ private:
 	std::shared_ptr<Shader> m_GeometryShader;
 	std::shared_ptr<Shader> m_FinalRenderShader;
 
+	//post processing
+	std::shared_ptr<Shader> m_HDRRenderShader;
+
 	std::shared_ptr<RenderPass> m_GeometryRenderPass;
 	std::shared_ptr<RenderPass> m_FinalRenderPass;
 
@@ -79,7 +84,7 @@ private:
 	std::vector<DrawCommand> m_GeometryDrawList;
 	std::vector<DrawCommand> m_DrawList;
 public:
-	//지울거
+	//remove later 
 	static void BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& pos);
 	static void AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material);
 	static void AddAffectLight(const LightComponent& light, TransformComponent lightTransform);
@@ -92,5 +97,3 @@ public:
 
 
 };
-
-//begin에서 커맨드 타입 정하고 end에서 커맨드 추가
