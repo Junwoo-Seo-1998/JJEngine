@@ -39,6 +39,9 @@ private:
 
 	void ForwardPass();
 
+
+	//post processing
+	void BloomPass();
 	void HDRPass();
 
 	void DebugRenderingPass();
@@ -71,10 +74,15 @@ private:
 	std::shared_ptr<Shader> m_FinalRenderShader;
 
 	//post processing
+	std::shared_ptr<Shader> m_BloomExtractShader;
+	std::shared_ptr<Shader> m_BloomBlurShader;
+	std::shared_ptr<Shader> m_BloomRenderShader;
 	std::shared_ptr<Shader> m_HDRRenderShader;
 
 	std::shared_ptr<RenderPass> m_GeometryRenderPass;
 	std::shared_ptr<RenderPass> m_FinalRenderPass;
+	std::shared_ptr<RenderPass> m_BloomExtractRenderPass;
+	std::shared_ptr<RenderPass> m_BloomBlurRenderPass[2];
 
 	struct DrawCommand
 	{

@@ -67,7 +67,7 @@ struct TextureData
 	int height = 0;
 	std::shared_ptr<unsigned char[]> data{};
 	TextureChannelData channel = TextureChannel::RGBA;
-	TextureWrapData wrap = TextureWrap::ClampToBorder;
+	TextureWrapData wrap = TextureWrap::ClampToEdge;
 	TextureFilter filter = TextureFilter::Linear;
 };
 
