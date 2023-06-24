@@ -14,11 +14,6 @@
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
 
-static RenderCommandType command{};
-static std::vector<glm::mat4> toLightVP;
-static std::vector<LightInfo> lights;
-static std::vector<ModelInfo> modelList;
-
 SceneRenderer::SceneRenderer()
 {
 	Init();
@@ -83,6 +78,9 @@ void SceneRenderer::EndScene()
 
 	ForwardPass();
 
+	//post processing
+	HDRPass();
+
 	//todo: make flags for it
 	//DebugRenderingPass();
 
@@ -132,6 +130,11 @@ void SceneRenderer::Init()
 		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/FSQShader.vert"}},
 		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/FSQShader.frag"} }
 		});
+
+		m_HDRRenderShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/HDRShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/HDRShader.frag"} }
+		});
 	}
 
 	{//setting up default material
@@ -139,7 +142,7 @@ void SceneRenderer::Init()
 		m_DefaultMaterial->Set("MatTexture.Diffuse", Texture::CreateTexture(glm::vec4{ 0.8f, 0.8f, 0.8f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Specular", Texture::CreateTexture(glm::vec4{ 0.5f, 0.5f, 0.5f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Emissive", Renderer::BlackTexture);
-		m_DefaultMaterial->Set("MatTexture.Shininess", 1.0f);
+		m_DefaultMaterial->Set("MatTexture.Shininess", 12.0f);
 	}
 
 	{//geo
@@ -166,7 +169,7 @@ void SceneRenderer::Init()
 		fb_spec.ClearColor = { 0.3,0.3,0.3,1.f };
 		fb_spec.Width = 400;
 		fb_spec.Height = 400;
-		fb_spec.Formats = { FrameBufferFormat::RGBA, FrameBufferFormat::Depth };
+		fb_spec.Formats = { FrameBufferFormat::RGBA32F, FrameBufferFormat::Depth };
 		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
 		m_FinalRenderPass = RenderPass::Create(spec);
 	}
@@ -306,6 +309,26 @@ void SceneRenderer::ForwardPass()
 	});
 }
 
+void SceneRenderer::HDRPass()
+{
+	Renderer::Submit([this]()
+	{
+		std::shared_ptr<Texture> HDRColor = Texture::CopyTexture(m_FinalRenderPass->GetSpecification().TargetFramebuffer->GetColorTexture(0));
+		Renderer::BeginRenderPass(m_FinalRenderPass, false);
+		glDisable(GL_DEPTH_TEST);
+		glDepthMask(GL_FALSE);
+
+		m_HDRRenderShader->Use();
+		m_HDRRenderShader->SetInt("HDRTexture", 0);
+		HDRColor->BindTexture(0);
+		Renderer::DrawFullScreenQuad();
+
+		glDepthMask(GL_TRUE);
+		glEnable(GL_DEPTH_TEST);
+		Renderer::EndRenderPass();
+	});
+}
+
 void SceneRenderer::DebugRenderingPass()
 {
 	//debug
@@ -337,6 +360,12 @@ void SceneRenderer::DebugRenderingPass()
 	});
 }
 
+//remove later
+
+static RenderCommandType command{};
+static std::vector<glm::mat4> toLightVP;
+static std::vector<LightInfo> lights;
+static std::vector<ModelInfo> modelList;
 
 void SceneRenderer::BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& camPos)
 {
