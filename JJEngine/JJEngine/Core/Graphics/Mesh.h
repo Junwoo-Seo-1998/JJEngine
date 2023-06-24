@@ -5,6 +5,7 @@
 #include <cmath>
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+class SceneRenderer;
 class MeshFactory;
 class Material;
 
@@ -21,6 +22,7 @@ typedef std::vector<unsigned> IndexBufferType;
 
 class Mesh
 {
+	friend SceneRenderer;
 	friend MeshFactory;
 public:
 	[[nodiscard]] std::shared_ptr<Material> GetMaterial() { return m_BaseMaterial; }

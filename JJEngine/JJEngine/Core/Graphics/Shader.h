@@ -16,7 +16,7 @@ enum class ShaderType
 	VertexShader=0,
 	FragmentShader,
 	//TessellationShader,
-	//GeometryShader,
+	GeometryShader,
 	TypeCounts,
 };
 

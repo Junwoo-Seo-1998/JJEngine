@@ -37,6 +37,10 @@ private:
 
 	void GeometryPassFSQ();
 
+	void ForwardPass();
+
+	void DebugRenderingPass();
+
 	//todo change it to shared ptr later 
 	Scene* m_ActiveScene = nullptr;
 
@@ -59,6 +63,8 @@ private:
 
 	//Default Shader
 	std::shared_ptr<Material> m_DefaultMaterial;
+	std::shared_ptr<Shader> m_NormalRenderShader;
+
 	std::shared_ptr<Shader> m_GeometryShader;
 	std::shared_ptr<Shader> m_FinalRenderShader;
 
@@ -70,6 +76,7 @@ private:
 		std::shared_ptr<Mesh> Mesh;
 		glm::mat4 Transform;
 	};
+	std::vector<DrawCommand> m_GeometryDrawList;
 	std::vector<DrawCommand> m_DrawList;
 public:
 	//Áö¿ï°Å

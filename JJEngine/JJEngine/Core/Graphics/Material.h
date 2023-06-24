@@ -3,11 +3,13 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+class SceneRenderer;
 class Texture;
 class Shader;
 
 class Material
 {
+	friend SceneRenderer;
 public:
 	static std::shared_ptr<Material> Create(std::shared_ptr<Shader> shader);
 	Material(std::shared_ptr<Shader> shader);
@@ -34,4 +36,7 @@ private:
 
 	//for now, will be changed later using buffer
 	std::unordered_map<std::string, std::shared_ptr<Texture>> m_Textures;
+
+	//if it's true deferred rendered
+	bool IsTransparent = false;
 };

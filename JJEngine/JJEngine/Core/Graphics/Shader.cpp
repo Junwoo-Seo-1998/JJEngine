@@ -152,6 +152,9 @@ unsigned Shader::CompileShader(ShaderType type, const std::vector<std::string>& 
 	case ShaderType::FragmentShader:
 		glsl_type = GL_FRAGMENT_SHADER;
 		break;
+	case ShaderType::GeometryShader:
+		glsl_type = GL_GEOMETRY_SHADER;
+		break;
 	}
 
 	GLuint shader = glCreateShader(glsl_type);

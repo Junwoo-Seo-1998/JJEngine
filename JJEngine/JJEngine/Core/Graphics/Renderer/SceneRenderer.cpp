@@ -55,6 +55,7 @@ void SceneRenderer::BeginScene(const glm::mat4& view, const glm::mat4& Projectio
 	m_Projection = Projection;
 	m_CameraPosition = camPos;
 
+
 	{//collect lights
 		auto view = m_ActiveScene->GetRegistry().view<TransformComponent, LightComponent>();
 		for (auto entity: view)
@@ -79,10 +80,16 @@ void SceneRenderer::EndScene()
 
 	GeometryPassFSQ();
 
+	ForwardPass();
+
+	//todo: make flags for it
+	//DebugRenderingPass();
+
 	//real rendering happens here
 	Renderer::Render();
 
 	m_DrawList.clear();
+	m_GeometryDrawList.clear();
 	m_ActiveLights.clear();
 
 	m_Active = false;
@@ -91,7 +98,8 @@ void SceneRenderer::EndScene()
 void SceneRenderer::SubmitMesh(std::shared_ptr<Mesh> mesh, const glm::mat4& transformMat)
 {
 	//todo: make user defined draw list later
-	m_DrawList.emplace_back(mesh, transformMat);
+
+	m_GeometryDrawList.emplace_back(mesh, transformMat);
 }
 
 std::shared_ptr<RenderPass> SceneRenderer::GetFinalRenderPass()
@@ -106,7 +114,14 @@ void SceneRenderer::Init()
 	m_Width = 400;
 	m_Height = 400;
 
-	{//setting up shader 
+	{//setting up shader
+
+		m_NormalRenderShader = Shader::CreateShaderFromFile({
+			{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.vert"}},
+	{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.frag"}},
+	{ ShaderType::GeometryShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.geo"}}
+		});
+
 		m_GeometryShader = Shader::CreateShaderFromFile({
 		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/GBufferShader.vert"}},
 		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/GBufferShader.frag"} }
@@ -131,7 +146,7 @@ void SceneRenderer::Init()
 		spec.DebugName = "GeometryRenderPass";
 		FrameBufferSpecification fb_spec;
 		//should keep black!!
-		fb_spec.ClearColor = { 0.0f, 0.0f, 0.0f,0.f };
+		fb_spec.ClearColor = { 0.0f, 0.0f, 0.0f,1.f };
 		fb_spec.Width = 400;
 		fb_spec.Height = 400;
 		fb_spec.Formats = {
@@ -174,7 +189,7 @@ void SceneRenderer::GeometryPass()
 
 	//we should check time it will be faster to run the loop inside of submit or call it with small chunk
 	//since lambda could be faster when it's small
-	for (auto& toDraw : m_DrawList)
+	for (auto& toDraw : m_GeometryDrawList)
 	{
 		Renderer::Submit([this, &toDraw]()
 		{
@@ -197,7 +212,7 @@ void SceneRenderer::GeometryPassFSQ()
 	Renderer::Submit([this]()
 	{//draw result of geometry pass
 		Renderer::BeginRenderPass(m_FinalRenderPass, true);
-
+		glEnable(GL_FRAMEBUFFER_SRGB);
 		{
 			m_FinalRenderShader->Use();
 
@@ -219,7 +234,7 @@ void SceneRenderer::GeometryPassFSQ()
 			}
 
 			m_FinalRenderShader->SetFloat3("CameraPosition", m_CameraPosition);
-
+			Log::Info(m_CameraPosition);
 			//light set up
 			{
 				m_FinalRenderShader->SetInt("LightNumbers", m_ActiveLights.size());
@@ -245,18 +260,18 @@ void SceneRenderer::GeometryPassFSQ()
 				m_FinalRenderShader->SetFloat3("globalAmbient", {});
 
 				m_FinalRenderShader->SetFloat("Attenuation.c1", 1.f);
-				m_FinalRenderShader->SetFloat("Attenuation.c2", 0.027f);
-				m_FinalRenderShader->SetFloat("Attenuation.c3", 0.0028f);
+				m_FinalRenderShader->SetFloat("Attenuation.c2", 0.35f);
+				m_FinalRenderShader->SetFloat("Attenuation.c3", 0.44f);
 
 				m_FinalRenderShader->SetFloat3("Fog.Color", { 0.5f,0.5f,0.5f });
 				m_FinalRenderShader->SetFloat("Fog.Near", 1.f);
-				m_FinalRenderShader->SetFloat("Fog.Far", 500000.f);
+				m_FinalRenderShader->SetFloat("Fog.Far", 5000.f);
 			}
 
 			//vbo and ibo is provided inside of this func 
 			Renderer::DrawFullScreenQuad();
 		}
-
+		glDisable(GL_FRAMEBUFFER_SRGB);
 		Renderer::EndRenderPass();
 
 		//copy depth
@@ -269,7 +284,56 @@ void SceneRenderer::GeometryPassFSQ()
 				GL_DEPTH_BUFFER_BIT, // field to copy
 				GL_NEAREST // filtering mechanism
 			);
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
+	});
+}
+
+void SceneRenderer::ForwardPass()
+{
+	Renderer::Submit([this]()
+	{	//draw
+		Renderer::BeginRenderPass(m_FinalRenderPass, false);
+
+		//todo: 
+		for (auto& toDraw : m_DrawList)
+		{
+
+
+		}
+
+		Renderer::EndRenderPass();
+	});
+}
+
+void SceneRenderer::DebugRenderingPass()
+{
+	//debug
+	Renderer::Submit([this]()
+	{	//draw
+		Renderer::BeginRenderPass(m_FinalRenderPass, false);
+		m_NormalRenderShader->Use();
+		m_NormalRenderShader->SetMat4("View", m_View);
+		m_NormalRenderShader->SetMat4("Projection", m_Projection);
+		for (auto& toDraw : m_GeometryDrawList)
+		{
+			toDraw.Mesh->GetMeshVBO()->BindToVertexArray();
+			toDraw.Mesh->GetMeshEBO()->BindToVertexArray();
+
+			m_NormalRenderShader->SetMat4("Model", toDraw.Transform);
+			glDrawElements(GL_TRIANGLES, toDraw.Mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+		}
+
+		for (auto& toDraw : m_DrawList)
+		{
+			toDraw.Mesh->GetMeshVBO()->BindToVertexArray();
+			toDraw.Mesh->GetMeshEBO()->BindToVertexArray();
+
+			m_NormalRenderShader->SetMat4("Model", toDraw.Transform);
+			glDrawElements(GL_TRIANGLES, toDraw.Mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+		}
+
+		Renderer::EndRenderPass();
 	});
 }
 
