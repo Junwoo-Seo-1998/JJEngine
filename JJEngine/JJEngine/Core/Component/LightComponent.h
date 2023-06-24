@@ -5,7 +5,7 @@
 struct LightComponent
 {
 public:
-	Light light;
+	Light light{};
 
 
 

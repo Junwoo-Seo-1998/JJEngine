@@ -62,23 +62,24 @@ void TestScene::Start()
 	auto& script=temp.AddComponent<ScriptComponent>();
 	script.Name = "Game.Player";
 
-	auto light = CreateEntity("Test light1");
+	auto light = CreateEntity("Direction Light");
+	light.Transform().Position = { 0.f, 0.f,0.f };
+	light.Transform().Rotation = glm::radians(glm::vec3{-40.f, 45.f, 0.f});
+	auto& lightComp = light.AddComponent<LightComponent>();
+	lightComp.light.m_LightType = LightType::DirectionLight;
+
+
+	light = CreateEntity("Test light1");
 	light.Transform().Position = { 2.f, 0.f,0.f };
 	light.AddComponent<LightComponent>();
 
-	light = CreateEntity("Test light2");
-	light.Transform().Position = { -2.f, 0.f,0.f };
-	light.AddComponent<LightComponent>();
-
-	light = CreateEntity("Test light3");
-	light.Transform().Position = { 0.f, 0.f,2.f };
-	light.AddComponent<LightComponent>();
 
 
 	auto ThreeDObject = CreateEntity("Test 3D Object");
 	auto& meshcomp = ThreeDObject.AddComponent<MeshComponent>();
 	meshcomp.mesh = MeshFactory::CreateBox(glm::vec3{1.f});
-
+	ThreeDObject.Transform().Position = { 0.f, -2.f, 0.f };
+	ThreeDObject.Transform().Scale = { 9.f, 1.f, 9.f };
 }
 
 void TestScene::Update()

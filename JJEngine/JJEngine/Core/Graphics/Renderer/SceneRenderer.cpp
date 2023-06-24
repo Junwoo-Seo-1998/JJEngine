@@ -58,10 +58,11 @@ void SceneRenderer::BeginScene(const glm::mat4& view, const glm::mat4& Projectio
 
 	{//collect lights
 		auto view = m_ActiveScene->GetRegistry().view<TransformComponent, LightComponent>();
+		int index = 0;
 		for (auto entity: view)
 		{
 			auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
-			m_ActiveLights.emplace_back(std::tuple{ transform.Position, transform.GetForward(), light.light });
+			m_ActiveLights.push_back(std::tuple{ transform.Position, transform.GetForward(), light.light });
 		}
 
 		if(m_ActiveLights.empty())
@@ -138,7 +139,7 @@ void SceneRenderer::Init()
 		m_DefaultMaterial->Set("MatTexture.Diffuse", Texture::CreateTexture(glm::vec4{ 0.8f, 0.8f, 0.8f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Specular", Texture::CreateTexture(glm::vec4{ 0.5f, 0.5f, 0.5f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Emissive", Renderer::BlackTexture);
-		m_DefaultMaterial->Set("MatTexture.Shininess", 32.0f);
+		m_DefaultMaterial->Set("MatTexture.Shininess", 1.0f);
 	}
 
 	{//geo
@@ -234,7 +235,7 @@ void SceneRenderer::GeometryPassFSQ()
 			}
 
 			m_FinalRenderShader->SetFloat3("CameraPosition", m_CameraPosition);
-			Log::Info(m_CameraPosition);
+
 			//light set up
 			{
 				m_FinalRenderShader->SetInt("LightNumbers", m_ActiveLights.size());
@@ -242,7 +243,6 @@ void SceneRenderer::GeometryPassFSQ()
 				for (auto& [lightPosition, lightDir, light] : m_ActiveLights)
 				{
 					std::string lightIndex = std::format("Light[{}].", index++);
-
 					m_FinalRenderShader->SetInt(lightIndex + "LightType", static_cast<int>(light.m_LightType));
 					m_FinalRenderShader->SetFloat3(lightIndex + "Position", lightPosition);
 					m_FinalRenderShader->SetFloat3(lightIndex + "Direction", lightDir);
@@ -260,8 +260,8 @@ void SceneRenderer::GeometryPassFSQ()
 				m_FinalRenderShader->SetFloat3("globalAmbient", {});
 
 				m_FinalRenderShader->SetFloat("Attenuation.c1", 1.f);
-				m_FinalRenderShader->SetFloat("Attenuation.c2", 0.35f);
-				m_FinalRenderShader->SetFloat("Attenuation.c3", 0.44f);
+				m_FinalRenderShader->SetFloat("Attenuation.c2", 0.22f);
+				m_FinalRenderShader->SetFloat("Attenuation.c3", 0.20f);
 
 				m_FinalRenderShader->SetFloat3("Fog.Color", { 0.5f,0.5f,0.5f });
 				m_FinalRenderShader->SetFloat("Fog.Near", 1.f);
