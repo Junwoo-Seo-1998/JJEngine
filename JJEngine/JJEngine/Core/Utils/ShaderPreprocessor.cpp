@@ -21,7 +21,7 @@ const std::string TranslateShaderTypeToStr(const ShaderType& type);
 std::vector<std::string_view> SplitStringWithCommand(const std::string_view& sourceString, std::string regex_command);
 std::vector<std::string> SplitStringAndKeepDelims(std::string str)
 {
-
+	
 	const static std::regex re(R"((^\W|^\w+)|(\w+)|[:()])", std::regex_constants::optimize);
 
 	std::regex_iterator<std::string::iterator> rit(str.begin(), str.end(), re);
@@ -51,7 +51,11 @@ void ShaderPreprocesssor::Preprocess(const std::filesystem::path& file)
 	std::unordered_map<ShaderType, std::string> shaders{};
 	completedShader = std::vector<bool>(static_cast<int>(ShaderType::TypeCounts));
 	std::string_view temp{source};
+	auto now=std::chrono::system_clock::now();
 	CommandProcessing(shaders, ShaderType::None, temp);
+	auto end = std::chrono::system_clock::now();
+	auto duration = end - now;
+	EngineLog::Info("Time took:{}", std::chrono::duration_cast<std::chrono::milliseconds>(duration));
 
 	for (auto & t: shaders) {
 		EngineLog::Debug("Current shader: {}", TranslateShaderTypeToStr(t.first));
@@ -118,17 +122,18 @@ std::string ShaderPreprocesssor::CopyWithoutComments(const std::string& sourceSt
 void ShaderPreprocesssor::Testing(std::string& sourceString)
 {
 	std::string str{sourceString};
-	const static std::regex re(R"(([^#]*)([#])(\w+)([^#]*)([^]*))", std::regex_constants::optimize);
+	const static std::regex re(R"([#][^\w]*(\w+)([^#]*))", std::regex_constants::optimize);
 	std::smatch m;
 	ENGINE_ASSERT(std::regex_search(str,m,re),"");
 
+
+	EngineLog::Warn("Testing regex prefix : {}", m.prefix());
 	EngineLog::Warn("Testing regex[0] : {}", m[0].str());
 	EngineLog::Warn("Testing regex[1] : {}", m[1].str());
 	EngineLog::Warn("Testing regex[2] : {}", m[2].str());
-	EngineLog::Warn("Testing regex[3] : {}", m[3].str());
-	EngineLog::Warn("Testing regex[4] : {}", m[4].str());
-	EngineLog::Warn("Testing regex[5] : {}", m[5].str());
-	EngineLog::Warn("Testing regex[6] : {}", m[7].str());
+	EngineLog::Warn("Testing regex suffix : {}", m.suffix());
+	//EngineLog::Warn("Testing regex[5] : {}", m[5].str());
+	//EngineLog::Warn("Testing regex[6] : {}", m[7].str());
 	
 	//for (auto x : m)
 	//	EngineLog::Warn("Testing regex : {}", x.str());
@@ -137,17 +142,21 @@ void ShaderPreprocesssor::Testing(std::string& sourceString)
 
 void ShaderPreprocesssor::CommandProcessing(std::unordered_map<ShaderType, std::string>& shaders, ShaderType current_shader_type, std::string_view& source)
 {
-	const static std::regex re(R"(([^#]*)[#][^\w]*(\w+)([^#]*)([^]*))", std::regex_constants::optimize);
+	const static std::regex re(R"([#][^\w]*(\w+)([^#]*))", std::regex_constants::optimize);
 	std::cmatch m;
+	auto now = std::chrono::system_clock::now();
 	bool success = std::regex_search(source.data(), m, re);
+	auto end = std::chrono::system_clock::now();
+	auto duration = end - now;
+	EngineLog::Info("Time took:{}", std::chrono::duration_cast<std::chrono::milliseconds>(duration));
 	if (success == false) {
 		shaders[current_shader_type] += source.data();
 		return;
 	}
 
-	shaders[current_shader_type] += m[1].str();
-	std::string_view command{m[2].first, m[2].second};
-	std::string_view content{m[3].first, m[3].second};
+	shaders[current_shader_type] += m.prefix();
+	std::string_view command{m[1].first, m[1].second};
+	std::string_view content{m[2].first, m[2].second};
 
 	if (command == PRAGMA) {
 		std::vector<std::string_view> contentSplit{SplitStringWithCommand(content, R"((\w+)([^#]*))")};
@@ -176,7 +185,7 @@ void ShaderPreprocesssor::CommandProcessing(std::unordered_map<ShaderType, std::
 	//shaders[current_shader_type] += content;
 
 	//re-parsing m[4]
-	std::string_view last{m[4].first,m[4].second};
+	std::string_view last{m.suffix().first, m.suffix().second};
 	CommandProcessing(shaders, current_shader_type, last);
 }
 
