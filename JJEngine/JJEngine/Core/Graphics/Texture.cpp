@@ -15,6 +15,8 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLInnerType() const
 		return GL_R32I;
 	case TextureChannel::RGB:
 		return GL_RGB8;
+	case TextureChannel::RGB16F:
+		return GL_RGB16F;
 	case TextureChannel::RGBA:
 		return GL_RGBA8;
 	case TextureChannel::RGBA32F:
@@ -35,6 +37,7 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLType() const
 	case TextureChannel::R_INT:
 		return GL_RED_INTEGER;
 	case TextureChannel::RGB:
+	case TextureChannel::RGB16F:
 		return GL_RGB;
 	case TextureChannel::RGBA:
 	case TextureChannel::RGBA32F:
@@ -57,6 +60,7 @@ unsigned TextureChannelData::TextureChannelTypeToOpenGLDataType() const
 	case TextureChannel::RGB:
 	case TextureChannel::RGBA:
 		return GL_UNSIGNED_BYTE;
+	case TextureChannel::RGB16F:
 	case TextureChannel::RGBA32F:
 		return GL_FLOAT;
 	case TextureChannel::Depth:
@@ -110,17 +114,18 @@ std::shared_ptr<Texture> Texture::CreateTexture(const TextureData& texture_data)
 std::shared_ptr<Texture> Texture::CreateTexture(const glm::vec4& color)
 {
 	auto textureData = std::make_shared<TextureData>();
-	textureData->data = std::shared_ptr<unsigned char[]>(new unsigned char[4]);
+	auto data = std::shared_ptr<float[]>(new float[4]);
+	textureData->data = data;
 	textureData->width = 1;
 	textureData->height = 1;
-	textureData->channel = TextureChannel::RGBA;
+	textureData->channel = TextureChannel::RGBA32F;
 	textureData->wrap = TextureWrap::ClampToEdge;
 	textureData->filter = TextureFilter::Linear;
 
-	textureData->data[0] = static_cast<unsigned char>(color.r * 255);
-	textureData->data[1] = static_cast<unsigned char>(color.g * 255);
-	textureData->data[2] = static_cast<unsigned char>(color.b * 255);
-	textureData->data[3] = static_cast<unsigned char>(color.a * 255);
+	data[0] = color.r;
+	data[1] = color.g;
+	data[2] = color.b;
+	data[3] = color.a;
 
 	return std::shared_ptr<Texture>(new Texture{ textureData });
 }

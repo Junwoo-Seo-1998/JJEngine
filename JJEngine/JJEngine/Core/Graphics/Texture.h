@@ -13,6 +13,7 @@ enum class TextureChannel
 {
 	R_INT,
 	RGB,
+	RGB16F,
 	RGBA,
 	RGBA32F,
 	Depth,
@@ -61,11 +62,11 @@ struct TextureData
 {
 	TextureData() :width(0), height(0), data(nullptr), channel(TextureChannel::RGBA) {}
 	TextureData(int width, int height, 
-		std::shared_ptr<unsigned char[]> data = nullptr, TextureChannelData channel = TextureChannel::RGBA)
+		std::shared_ptr<void> data = nullptr, TextureChannelData channel = TextureChannel::RGBA)
 		:width(width),height(height), channel(channel), data(data) {}
 	int width = 0;
 	int height = 0;
-	std::shared_ptr<unsigned char[]> data{};
+	std::shared_ptr<void> data{};
 	TextureChannelData channel = TextureChannel::RGBA;
 	TextureWrapData wrap = TextureWrap::ClampToEdge;
 	TextureFilter filter = TextureFilter::Linear;
