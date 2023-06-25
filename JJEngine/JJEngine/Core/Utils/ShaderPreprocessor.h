@@ -11,5 +11,5 @@ public:
 private:
 	static std::string CopyWithoutComments(const std::string& sourceString);
 	static void Testing(std::string& sourceString);
-	static void CommandProcessing(std::unordered_map<ShaderType, std::string>& shaders, ShaderType current_shader_type, std::string& source);
+	static void CommandProcessing(std::unordered_map<ShaderType, std::string>& shaders, ShaderType current_shader_type, std::string_view& source);
 };

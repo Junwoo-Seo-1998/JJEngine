@@ -6,9 +6,6 @@
 #include "File.h"
 #include "Log.h"
 
-
-// R"(([^#]*)([#])(\w+) +("[^"]*"|\w+)([^#]*)([^]*))"
-#define SHARP_COMMAND R"(([^#]*)([#])(\w+)([^#]*)([^]*))"
 #define PRAGMA "pragma"
 #define INCLUDE "include"
 
@@ -21,7 +18,7 @@ std::vector<bool> completedShader(static_cast<int>(ShaderType::TypeCounts));
 
 ShaderType TranslateShaderType(const std::string& type);
 const std::string TranslateShaderTypeToStr(const ShaderType& type);
-std::vector<std::string> SplitStringWithCommand(const std::string& sourceString, std::string regex_command);
+std::vector<std::string_view> SplitStringWithCommand(const std::string_view& sourceString, std::string regex_command);
 std::vector<std::string> SplitStringAndKeepDelims(std::string str)
 {
 
@@ -51,10 +48,10 @@ void ShaderPreprocesssor::Preprocess(const std::filesystem::path& file)
 		EngineLog::Warn("Delims : {}", str);
 	}
 
-	//
 	std::unordered_map<ShaderType, std::string> shaders{};
 	completedShader = std::vector<bool>(static_cast<int>(ShaderType::TypeCounts));
-	CommandProcessing(shaders, ShaderType::None, source);
+	std::string_view temp{source};
+	CommandProcessing(shaders, ShaderType::None, temp);
 
 	for (auto & t: shaders) {
 		EngineLog::Debug("Current shader: {}", TranslateShaderTypeToStr(t.first));
@@ -138,48 +135,48 @@ void ShaderPreprocesssor::Testing(std::string& sourceString)
 	
 }
 
-void ShaderPreprocesssor::CommandProcessing(std::unordered_map<ShaderType, std::string>& shaders, ShaderType current_shader_type, std::string& source)
+void ShaderPreprocesssor::CommandProcessing(std::unordered_map<ShaderType, std::string>& shaders, ShaderType current_shader_type, std::string_view& source)
 {
-	const static std::regex re(R"(([^#]*)[#](\w+)([^#]*)([^]*))", std::regex_constants::optimize);
-	std::smatch m;
-	bool success = std::regex_search(source, m, re);
+	const static std::regex re(R"(([^#]*)[#][^\w]*(\w+)([^#]*)([^]*))", std::regex_constants::optimize);
+	std::cmatch m;
+	bool success = std::regex_search(source.data(), m, re);
 	if (success == false) {
-		shaders[current_shader_type] += source;
+		shaders[current_shader_type] += source.data();
 		return;
 	}
 
 	shaders[current_shader_type] += m[1].str();
-	std::string command{m[2].str()};
-	std::string content{m[3].str()};
+	std::string_view command{m[2].first, m[2].second};
+	std::string_view content{m[3].first, m[3].second};
 
 	if (command == PRAGMA) {
-		std::vector<std::string> contentSplit{SplitStringWithCommand(content, R"((\w+)([^]*))")};
-		ShaderType commandOption{ TranslateShaderType(contentSplit[1])};
-		bool isAvailableType{ commandOption != ShaderType::None };
+		std::vector<std::string_view> contentSplit{SplitStringWithCommand(content, R"((\w+)([^#]*))")};
+		ShaderType commandOption{ TranslateShaderType(std::string{ contentSplit[1].begin(),contentSplit[1].end()}) };
 		ENGINE_ASSERT(commandOption != ShaderType::None, "Not available shader type");
 		ENGINE_ASSERT(commandOption != current_shader_type, "Continuously repeated shader type");
 		ENGINE_ASSERT(completedShader[static_cast<int>(commandOption)] == false, "Repeated shader type");
 		completedShader[static_cast<int>(current_shader_type)] = true;
 		current_shader_type = commandOption;
-		content = contentSplit[2];
+		shaders[current_shader_type] += std::string{contentSplit[2].begin(), contentSplit[2].end()};
+		//content = contentSplit[2];
 	}
 	else if (command == INCLUDE) {
-		std::vector<std::string> contentSplit{SplitStringWithCommand(content, R"(["]([^]*)["]([^]*))")};
-		std::string commandOption{contentSplit[1]};
-		//file check
+		std::vector<std::string_view> contentSplit{SplitStringWithCommand(content, R"(["]([^]*)["]([^#]*))")};
+		std::string_view commandOption{contentSplit[1]};
 		//file read
-		//file put
-		std::string include_source = File::ReadFileToString(commandOption);
-		CommandProcessing(shaders, current_shader_type, include_source);
-		content = contentSplit[2];
+		std::string include_source = File::ReadFileToString(std::string{ commandOption.begin(),commandOption.end() });
+		std::string_view temp{include_source};
+		CommandProcessing(shaders, current_shader_type, temp);
+		shaders[current_shader_type] +=  std::string{contentSplit[2].begin(), contentSplit[2].end()};
+		//content = contentSplit[2];
 	}
 	else {
 		ENGINE_ASSERT(false, "Not available command");
 	}
-	shaders[current_shader_type] += content;
+	//shaders[current_shader_type] += content;
 
-	//re parsing m[4]
-	std::string last{m[4].str()};
+	//re-parsing m[4]
+	std::string_view last{m[4].first,m[4].second};
 	CommandProcessing(shaders, current_shader_type, last);
 }
 
@@ -214,15 +211,15 @@ const std::string TranslateShaderTypeToStr(const ShaderType& type)
 	}
 }
 
-std::vector<std::string> SplitStringWithCommand(const std::string& sourceString, std::string regex_command)
+std::vector<std::string_view> SplitStringWithCommand(const std::string_view& sourceString, std::string regex_command)
 {
-	const std::regex reg(regex_command, std::regex_constants::optimize);
-	std::smatch m;
-	ENGINE_ASSERT(std::regex_search(sourceString, m, reg), "Can't find Command option");
+	const std::regex reg(regex_command);
+	std::cmatch m;
+	ENGINE_ASSERT(std::regex_search(sourceString.data(), m, reg), "Can't find Command option");
 
-	std::vector<std::string> result;
+	std::vector<std::string_view> result;
 	for (auto& s:m) {
-		result.emplace_back(s.str());
+		result.emplace_back(s.first,s.second);
 	}
 	return result;
 }
