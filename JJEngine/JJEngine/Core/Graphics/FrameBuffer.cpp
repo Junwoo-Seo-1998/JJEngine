@@ -181,7 +181,7 @@ void FrameBuffer::BuildFrameBuffer()
 	}
 
 
-	if (m_ColorFormats.size() > 1)
+	if (m_ColorFormats.size()>=1)
 	{
 		const unsigned int size = static_cast<unsigned int>(m_ColorFormats.size());
 
