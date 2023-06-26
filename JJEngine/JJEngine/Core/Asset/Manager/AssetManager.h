@@ -35,6 +35,8 @@ public:
 	//template<typename t>
 	//std::shared_ptr<t> GetAssetData(AssetHandle assetHandle);
 
+	// manual load func
+	// manual unload func
 	bool ReloadData(AssetHandle assetHandle);
 	bool IsAssetHandleValid(AssetHandle assetHandle);
 	bool IsAssetLoaded(AssetHandle handle);

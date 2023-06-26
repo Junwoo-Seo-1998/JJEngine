@@ -102,7 +102,7 @@ void Renderer2D::BeginScene(const glm::mat4& viewProjection)
 	s_Data.WhiteTexture->BindTexture();
 
 	glDisable(GL_CULL_FACE);
-	
+	glEnable(GL_BLEND);
 }
 
 void Renderer2D::BeginScene(const EditorCamera& camera)

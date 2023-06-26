@@ -115,3 +115,35 @@ std::shared_ptr<TextureData> File::ReadImageToTexture(const std::string& file_na
     texture->data = data;
     return texture;
 }
+
+std::shared_ptr<TextureData> File::ReadHDRImageToTexture(const std::string& file_name)
+{
+    if (!std::filesystem::exists(file_name))
+    {
+        Log::Error("There is no file : {}", file_name);
+        return {};
+    }
+    std::shared_ptr<TextureData> texture = std::make_shared<TextureData>();
+    stbi_set_flip_vertically_on_load(true);
+    int number_of_channels = 0;
+    float* img = stbi_loadf(file_name.c_str(), &(texture->width), &(texture->height), &number_of_channels, 0);
+    if (img == nullptr)
+    {
+        std::cout << "error - on loading texture" << std::endl;
+    }
+    switch (number_of_channels)
+    {
+    case 3:
+        texture->channel = TextureChannel::RGB16F;
+        break;
+    case 4:
+        texture->channel = TextureChannel::RGBA32F;
+        break;
+    default:
+        ENGINE_ASSERT(false, "Not Supported Channel");
+        break;
+    }
+    std::shared_ptr<float[]> data{ img, [](float* to_delete) { stbi_image_free(to_delete); } };
+    texture->data = data;
+    return texture;
+}

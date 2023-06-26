@@ -14,10 +14,7 @@
 #include "Core/Utils/Assert.h"
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
-//static RenderCommandType command{};
-//static std::vector<glm::mat4> toLightVP;
-//static std::vector<LightInfo> lights;
-//static std::vector<ModelInfo> modelList;
+#include "imgui.h"
 
 SceneRenderer::SceneRenderer()
 {
@@ -47,6 +44,12 @@ void SceneRenderer::BeginScene(const glm::mat4& view, const glm::mat4& Projectio
 	{
 		m_GeometryRenderPass->GetSpecification().TargetFramebuffer->Resize(m_Width, m_Height);
 		m_FinalRenderPass->GetSpecification().TargetFramebuffer->Resize(m_Width, m_Height);
+
+		//bloom
+		m_BloomExtractRenderPass->GetSpecification().TargetFramebuffer->Resize(m_Width, m_Height);
+		m_BloomBlurRenderPass[0]->GetSpecification().TargetFramebuffer->Resize(m_Width, m_Height);
+		m_BloomBlurRenderPass[1]->GetSpecification().TargetFramebuffer->Resize(m_Width, m_Height);
+
 		m_NeedsResize = false;
 	}
 
@@ -84,6 +87,10 @@ void SceneRenderer::EndScene()
 	GeometryPassFSQ();
 
 	ForwardPass();
+
+	//post processing
+	BloomPass();
+	HDRPass();
 
 	//todo: make flags for it
 	//DebugRenderingPass();
@@ -134,6 +141,26 @@ void SceneRenderer::Init()
 		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/FSQShader.vert"}},
 		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/FSQShader.frag"} }
 		});
+
+		m_BloomExtractShader= Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/Bloom/BloomExtractShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/Bloom/BloomExtractShader.frag"} }
+		});
+
+		m_BloomBlurShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/Bloom/BloomBlurShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/Bloom/BloomBlurShader.frag"} }
+		});
+
+		m_BloomRenderShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/Bloom/BloomRenderShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/Bloom/BloomRenderShader.frag"} }
+		});
+
+		m_HDRRenderShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/HDRShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/HDRShader.frag"} }
+		});
 	}
 
 	{//setting up default material
@@ -141,7 +168,7 @@ void SceneRenderer::Init()
 		m_DefaultMaterial->Set("MatTexture.Diffuse", Texture::CreateTexture(glm::vec4{ 0.8f, 0.8f, 0.8f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Specular", Texture::CreateTexture(glm::vec4{ 0.5f, 0.5f, 0.5f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Emissive", Renderer::BlackTexture);
-		m_DefaultMaterial->Set("MatTexture.Shininess", 1.0f);
+		m_DefaultMaterial->Set("MatTexture.Shininess", 12.0f);
 	}
 
 	{//geo
@@ -149,7 +176,7 @@ void SceneRenderer::Init()
 		spec.DebugName = "GeometryRenderPass";
 		FrameBufferSpecification fb_spec;
 		//should keep black!!
-		fb_spec.ClearColor = { 0.0f, 0.0f, 0.0f,1.f };
+		fb_spec.ClearColor = { 0.0f, 0.0f, 0.0f,0.f };
 		fb_spec.Width = 400;
 		fb_spec.Height = 400;
 		fb_spec.Formats = {
@@ -165,12 +192,28 @@ void SceneRenderer::Init()
 		RenderPassSpecification spec;
 		spec.DebugName = "Final Render";
 		FrameBufferSpecification fb_spec;
-		fb_spec.ClearColor = { 0.3,0.3,0.3,1.f };
+		fb_spec.ClearColor = { 0.0,0.0,0.0,1.f };
 		fb_spec.Width = 400;
 		fb_spec.Height = 400;
-		fb_spec.Formats = { FrameBufferFormat::RGBA, FrameBufferFormat::Depth };
+		fb_spec.Formats = { FrameBufferFormat::RGBA32F, FrameBufferFormat::Depth };
 		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
 		m_FinalRenderPass = RenderPass::Create(spec);
+	}
+
+	{//for bloom
+		RenderPassSpecification spec;
+		spec.DebugName = "Bloom Render";
+		FrameBufferSpecification fb_spec;
+		fb_spec.ClearColor = { 0.0, 0.0, 0.0,0.f };
+		fb_spec.Width = 400;
+		fb_spec.Height = 400;
+		fb_spec.Formats = { FrameBufferFormat::RGBA32F, FrameBufferFormat::Depth };
+		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
+		m_BloomExtractRenderPass = RenderPass::Create(spec);
+		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
+		m_BloomBlurRenderPass[0] = RenderPass::Create(spec);
+		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
+		m_BloomBlurRenderPass[1] = RenderPass::Create(spec);
 	}
 
 	{//cubemap initialization
@@ -211,7 +254,6 @@ void SceneRenderer::CubemapPass()
 			glDrawElements(GL_TRIANGLES, m_CubemapMesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
 		});
 	Renderer::Submit([]() {Renderer::EndRenderPass(); });
-
 }
 
 void SceneRenderer::GeometryPass()
@@ -221,6 +263,7 @@ void SceneRenderer::GeometryPass()
 		Renderer::BeginRenderPass(m_GeometryRenderPass);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
+		glDisable(GL_BLEND);
 	});
 
 	Renderer::Submit([this]()
@@ -255,7 +298,6 @@ void SceneRenderer::GeometryPassFSQ()
 	Renderer::Submit([this]()
 	{//draw result of geometry pass
 		Renderer::BeginRenderPass(m_FinalRenderPass, true);
-		glEnable(GL_FRAMEBUFFER_SRGB);
 		{
 			m_FinalRenderShader->Use();
 
@@ -313,7 +355,6 @@ void SceneRenderer::GeometryPassFSQ()
 			//vbo and ibo is provided inside of this func 
 			Renderer::DrawFullScreenQuad();
 		}
-		glDisable(GL_FRAMEBUFFER_SRGB);
 		Renderer::EndRenderPass();
 
 		//copy depth
@@ -348,6 +389,101 @@ void SceneRenderer::ForwardPass()
 	});
 }
 
+void SceneRenderer::BloomPass()
+{
+	Renderer::Submit([this]()
+	{
+		glDisable(GL_DEPTH_TEST);
+		glDepthMask(GL_FALSE);
+	});
+
+	//extract brightness
+	Renderer::Submit([this]()
+	{
+		Renderer::BeginRenderPass(m_BloomExtractRenderPass, true);
+		m_BloomExtractShader->Use();
+		//Bloom Threshold
+		m_BloomExtractShader->SetFloat("Threshold", 1.f);
+		m_BloomExtractShader->SetInt("ToExtract", 0);
+		m_FinalRenderPass->GetSpecification().TargetFramebuffer->GetColorTexture(0)->BindTexture(0);
+
+		Renderer::DrawFullScreenQuad();
+		Renderer::EndRenderPass();
+	});
+
+	//render blur 
+	Renderer::Submit([this]()
+	{
+		bool horizontal = true, first_iteration = true;
+		int amount = 10;
+		m_BloomBlurShader->Use();
+		m_BloomBlurRenderPass[0]->GetSpecification().TargetFramebuffer->GetColorTexture(0)->BindTexture(0);
+		m_BloomBlurRenderPass[1]->GetSpecification().TargetFramebuffer->GetColorTexture(0)->BindTexture(1);
+		m_BloomExtractRenderPass->GetSpecification().TargetFramebuffer->GetColorTexture(0)->BindTexture(2);
+		
+		for (unsigned int i = 0; i < amount; i++)
+		{
+			Renderer::BeginRenderPass(m_BloomBlurRenderPass[static_cast<int>(horizontal)], false);
+			m_BloomBlurShader->SetInt("horizontal", static_cast<int>(horizontal));
+			if(first_iteration)
+			{
+				m_BloomBlurShader->SetInt("image", 2);
+				first_iteration = false;
+			}
+			else
+			{
+				m_BloomBlurShader->SetInt("image", static_cast<int>(!horizontal));
+			}
+
+			Renderer::DrawFullScreenQuad();
+			horizontal = !horizontal;
+			Renderer::EndRenderPass();
+		}
+	});
+
+
+	//render bloom
+	Renderer::Submit([this]()
+	{
+		Renderer::BeginRenderPass(m_FinalRenderPass, false);
+		m_BloomRenderShader->Use();
+
+		m_BloomRenderShader->SetInt("scene", 0);
+		m_BloomRenderShader->SetInt("bloomBlur", 1);
+		m_FinalRenderPass->GetSpecification().TargetFramebuffer->GetColorTexture(0)->BindTexture(0);
+		m_BloomBlurRenderPass[1]->GetSpecification().TargetFramebuffer->GetColorTexture(0)->BindTexture(1);
+		Renderer::DrawFullScreenQuad();
+		Renderer::EndRenderPass();
+	});
+
+
+	Renderer::Submit([this]()
+	{
+		glDepthMask(GL_TRUE);
+		glEnable(GL_DEPTH_TEST);
+	});
+}
+
+void SceneRenderer::HDRPass()
+{
+	Renderer::Submit([this]()
+	{
+		std::shared_ptr<Texture> HDRColor = Texture::CopyTexture(m_FinalRenderPass->GetSpecification().TargetFramebuffer->GetColorTexture(0));
+		Renderer::BeginRenderPass(m_FinalRenderPass, false);
+		glDisable(GL_DEPTH_TEST);
+		glDepthMask(GL_FALSE);
+
+		m_HDRRenderShader->Use();
+		m_HDRRenderShader->SetInt("HDRTexture", 0);
+		HDRColor->BindTexture(0);
+		Renderer::DrawFullScreenQuad();
+
+		glDepthMask(GL_TRUE);
+		glEnable(GL_DEPTH_TEST);
+		Renderer::EndRenderPass();
+	});
+}
+
 void SceneRenderer::DebugRenderingPass()
 {
 	//debug
@@ -378,80 +514,3 @@ void SceneRenderer::DebugRenderingPass()
 		Renderer::EndRenderPass();
 	});
 }
-
-//
-//void SceneRenderer::BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& camPos)
-//{
-//	command["toVP"] = viewProjection;
-//	command["camPos"] = camPos;
-//}
-//
-//void SceneRenderer::AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material)
-//{
-//	if (material.type == MaterialType::Deferred) command["DefferedShader"] = material.defferedSecondPassShader;
-//	modelList.push_back(ModelInfo{ model, transform.GetTransform(), material });
-//}
-//
-//void SceneRenderer::AddAffectLight(const LightComponent& light, TransformComponent lightTransform)
-//{
-//	switch (light.type)
-//	{
-//	case LightType::PointLight:
-//	{
-//
-//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 1.f, 0.f, 0.f }));
-//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { -1.f, 0.f, 0.f }));
-//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 1.f, 0.f }, { 0, 0, 1 }));
-//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, -1.f, 0.f }, { 0, 0, -1 }));
-//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.f, 1.f }));
-//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.f, -1.f }));
-//
-//		lights.push_back({ light.type, toLightVP , lightTransform.Position });
-//		toLightVP.clear();
-//	}
-//	break;
-//	}
-//}
-//
-//void SceneRenderer::SetVAO(std::shared_ptr<VertexArray> VAO)
-//{
-//	command["VAO"] = VAO;
-//}
-//
-//void SceneRenderer::SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ)
-//{
-//	command["GBufferFBO"] = FBO;
-//	command["FSQ"] = FSQ;
-//
-//}
-//
-//void SceneRenderer::SetShadowBuffer(const std::shared_ptr<FrameBuffer>& FBO)
-//{
-//	command["ShadowMapFBO"] = FBO;
-//}
-//
-//void SceneRenderer::SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset)
-//{
-//	command["Shadow Resolution"] = resolution;
-//	command["Polygon Offset"] = zOffset;
-//}
-//
-//
-//void SceneRenderer::EndSceneCommand()
-//{
-//	command["Lights"] = lights;
-//	command["Models"] = modelList;
-//
-//
-//	Graphics::GetInstance()->AddRenderCommand(command);
-//
-//	lights.clear();
-//	modelList.clear();
-//	command.clear();
-//}
-//
-//void SceneRenderer::DrawAllScene()
-//{
-//	Graphics::GetInstance()->ExecuteRenderCommands();
-//}
-//

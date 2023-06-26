@@ -42,6 +42,11 @@ private:
 
 	void ForwardPass();
 
+
+	//post processing
+	void BloomPass();
+	void HDRPass();
+
 	void DebugRenderingPass();
 
 	//todo change it to shared ptr later 
@@ -71,8 +76,16 @@ private:
 	std::shared_ptr<Shader> m_GeometryShader;
 	std::shared_ptr<Shader> m_FinalRenderShader;
 
+	//post processing
+	std::shared_ptr<Shader> m_BloomExtractShader;
+	std::shared_ptr<Shader> m_BloomBlurShader;
+	std::shared_ptr<Shader> m_BloomRenderShader;
+	std::shared_ptr<Shader> m_HDRRenderShader;
+
 	std::shared_ptr<RenderPass> m_GeometryRenderPass;
 	std::shared_ptr<RenderPass> m_FinalRenderPass;
+	std::shared_ptr<RenderPass> m_BloomExtractRenderPass;
+	std::shared_ptr<RenderPass> m_BloomBlurRenderPass[2];
 
 	//Cubemap
 
@@ -88,19 +101,6 @@ private:
 	};
 	std::vector<DrawCommand> m_GeometryDrawList;
 	std::vector<DrawCommand> m_DrawList;
-//public:
-//	//지울거
-//	static void BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& pos);
-//	static void AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material);
-//	static void AddAffectLight(const LightComponent& light, TransformComponent lightTransform);
-//	static void SetVAO(std::shared_ptr<VertexArray> VAO);
-//	static void SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ);
-//	static void SetShadowBuffer(const std::shared_ptr<FrameBuffer>& FBO);
-//	static void SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset);
-//	static void EndSceneCommand();
-//	static void DrawAllScene();
 
 
 };
-
-//begin에서 커맨드 타입 정하고 end에서 커맨드 추가
