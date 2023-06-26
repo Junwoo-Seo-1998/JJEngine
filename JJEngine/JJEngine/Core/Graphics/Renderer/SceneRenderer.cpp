@@ -83,14 +83,15 @@ void SceneRenderer::EndScene()
 
 	HDRItoCubemapPass();
 
+	
+
+	GeometryPass();
+	
+	GeometryPassFSQ();
+	
+	ForwardPass();
+
 	CubemapPass();
-
-	//GeometryPass();
-	//
-	//GeometryPassFSQ();
-	//
-	//ForwardPass();
-
 	//post processing
 	BloomPass();
 	HDRPass();
@@ -252,62 +253,63 @@ void SceneRenderer::HDRItoCubemapPass()
 {
 	if (isFirst)
 	{
-			
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		unsigned int captureFBO, captureRBO;
-		glGenFramebuffers(1, &captureFBO);
-		glGenRenderbuffers(1, &captureRBO);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-		glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
-
-		glGenTextures(1, &envCubemap);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
-		for (unsigned int i = 0; i < 6; ++i)
+		Renderer::Submit([this]()
 		{
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
-		}
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			unsigned int captureFBO, captureRBO;
+			glGenFramebuffers(1, &captureFBO);
+			glGenRenderbuffers(1, &captureRBO);
 
-		glTextureParameteri(envCubemap, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(envCubemap, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(envCubemap, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(envCubemap, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(envCubemap, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+			glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
 
-		glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
-		glm::mat4 captureViews[] =
-		{
-		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
-		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
-		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
-		};
+			glGenTextures(1, &envCubemap);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+			for (unsigned int i = 0; i < 6; ++i)
+			{
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
+			}
 
-		m_HDRItoCubemapShader->Use();
-		m_HDRItoCubemapShader->SetMat4("projection", captureProjection);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_HDRICubemapTexture->GetTextureID());
-		m_HDRItoCubemapShader->SetInt("equirectangularMap", 0);
-		glViewport(0, 0, 512, 512); 
+			glTextureParameteri(envCubemap, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(envCubemap, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(envCubemap, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(envCubemap, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTextureParameteri(envCubemap, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		for (unsigned int i = 0; i < 6; ++i)
-		{
-			m_HDRItoCubemapShader->SetMat4("view", captureViews[i]);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, 0);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+			glm::mat4 captureViews[] =
+			{
+			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+			};
 
-			m_CubemapMesh->GetMeshVBO()->BindToVertexArray();
-			m_CubemapMesh->GetMeshEBO()->BindToVertexArray();
-			glDrawElements(GL_TRIANGLES, m_CubemapMesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
-		}
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glViewport(0, 0, m_Width, m_Height);
+			m_HDRItoCubemapShader->Use();
+			m_HDRItoCubemapShader->SetMat4("projection", captureProjection);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, m_HDRICubemapTexture->GetTextureID());
+			m_HDRItoCubemapShader->SetInt("equirectangularMap", 0);
+			glViewport(0, 0, 512, 512);
 
+			for (unsigned int i = 0; i < 6; ++i)
+			{
+				m_HDRItoCubemapShader->SetMat4("view", captureViews[i]);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, 0);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+				m_CubemapMesh->GetMeshVBO()->BindToVertexArray();
+				m_CubemapMesh->GetMeshEBO()->BindToVertexArray();
+				glDrawElements(GL_TRIANGLES, m_CubemapMesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+			}
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glViewport(0, 0, m_Width, m_Height);
+		});
 		isFirst = false;
 	}
 	
@@ -318,15 +320,17 @@ void SceneRenderer::CubemapPass()
 {
 	Renderer::Submit([this]()
 		{
-			Renderer::BeginRenderPass(m_FinalRenderPass);
+			Renderer::BeginRenderPass(m_FinalRenderPass, false);
 		});
 
 	Renderer::Submit([this]()
-		{
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glDepthFunc(GL_LEQUAL);
-	glDepthMask(GL_FALSE);
+	{
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glDepthFunc(GL_LEQUAL);
+		glDepthMask(GL_FALSE);
+		glDisable(GL_BLEND);
 
 	m_CubemapShader->Use();
 	glm::mat4 view = glm::mat4(glm::mat3(m_View));
