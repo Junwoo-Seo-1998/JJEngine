@@ -6,12 +6,12 @@ Assets:
   - Handle: 52c913f1-447c-5c4a-b3d8-f3c78f5f0717
     Type: 1
     FilePath: ./Resources\Scenes\Default.scn
-  - Handle: 7ceecaae-04d1-5769-b18e-9d3b9b6333d3
-    Type: 2
-    FilePath: ./Resources\Textures\FileImage.png
   - Handle: 9c821a52-28ae-5f92-b359-c252d9fd8548
     Type: 1
     FilePath: ./Resources\Scenes\Default123.scn
+  - Handle: 7ceecaae-04d1-5769-b18e-9d3b9b6333d3
+    Type: 2
+    FilePath: ./Resources\Textures\FileImage.png
   - Handle: ef91cb69-50f7-5015-a5a5-cd398d224ec6
     Type: 1
     FilePath: ./Resources\Scenes\Test.scn
@@ -48,3 +48,6 @@ Assets:
   - Handle: bff1a1a4-48b2-51b2-a92f-fb9fc02664c0
     Type: 2
     FilePath: ./Resources\Textures\hdri_skybox.jpg
+  - Handle: ea63fd39-1664-5be9-8c96-b27e959e9436
+    Type: 2
+    FilePath: ./Resources\Textures\hdri_skybox.png

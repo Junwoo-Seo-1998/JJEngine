@@ -34,6 +34,9 @@ public:
 private:
 	void Init();
 
+	bool isFirst = true;
+	void HDRItoCubemapPass();
+
 	void CubemapPass();
 
 	void GeometryPass();
@@ -88,10 +91,15 @@ private:
 	std::shared_ptr<RenderPass> m_BloomBlurRenderPass[2];
 
 	//Cubemap
-
 	std::shared_ptr<Shader> m_CubemapShader;
-	std::shared_ptr<Texture> m_CubemapTexture;
 	std::shared_ptr<Mesh> m_CubemapMesh;
+
+	//HDRI to Cubemap
+
+	unsigned int envCubemap;
+	std::shared_ptr<Texture> m_HDRICubemapTexture;
+	std::shared_ptr<RenderPass> m_HDRItoCubemapRenderPass;
+	std::shared_ptr<Shader> m_HDRItoCubemapShader;
 
 
 	struct DrawCommand
