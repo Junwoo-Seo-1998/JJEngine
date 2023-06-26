@@ -8,16 +8,16 @@
 #include "Core/Graphics/Graphics.h"
 #include "Core/Graphics/RenderPass.h"
 #include "Core/Graphics/FrameBuffer.h"
+#include "Core/Graphics/MeshFactory.h"
 #include "Core/Graphics/Material.h"
 #include "Core/Graphics/RenderCommand.h"
 #include "Core/Utils/Assert.h"
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
-
-static RenderCommandType command{};
-static std::vector<glm::mat4> toLightVP;
-static std::vector<LightInfo> lights;
-static std::vector<ModelInfo> modelList;
+//static RenderCommandType command{};
+//static std::vector<glm::mat4> toLightVP;
+//static std::vector<LightInfo> lights;
+//static std::vector<ModelInfo> modelList;
 
 SceneRenderer::SceneRenderer()
 {
@@ -77,6 +77,8 @@ void SceneRenderer::EndScene()
 	ENGINE_ASSERT(m_ActiveScene != nullptr, "Scene is nullptr");
 	Renderer::Submit([this]() {m_VertexArray->Bind(); });
 
+	CubemapPass();
+
 	GeometryPass();
 
 	GeometryPassFSQ();
@@ -118,9 +120,9 @@ void SceneRenderer::Init()
 	{//setting up shader
 
 		m_NormalRenderShader = Shader::CreateShaderFromFile({
-			{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.vert"}},
-	{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.frag"}},
-	{ ShaderType::GeometryShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.geo"}}
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.frag"}},
+		{ ShaderType::GeometryShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.geo"}}
 		});
 
 		m_GeometryShader = Shader::CreateShaderFromFile({
@@ -170,6 +172,46 @@ void SceneRenderer::Init()
 		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
 		m_FinalRenderPass = RenderPass::Create(spec);
 	}
+
+	{//cubemap initialization
+		m_CubemapShader = Shader::CreateShaderFromFile({
+			{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.vert"}},
+			{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.frag"} }
+			});
+
+		m_CubemapTexture = Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/hdri_skybox.jpg"));
+		
+		m_CubemapMesh = MeshFactory::CreateBox({ 2.f, 2.f, 2.f });
+	}
+}
+
+void SceneRenderer::CubemapPass()
+{
+	Renderer::Submit([this]()
+		{
+			Renderer::BeginRenderPass(m_FinalRenderPass);
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+		});
+
+	Renderer::Submit([this]()
+		{
+			m_CubemapShader->Use();
+			m_CubemapShader->SetMat4("view", m_View);
+			m_CubemapShader->SetMat4("projection", m_Projection);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, m_CubemapTexture->GetTextureID());
+			m_CubemapShader->SetInt("environmentMap", GL_TEXTURE0);
+		});
+
+	Renderer::Submit([this]()
+		{
+			m_CubemapMesh->GetMeshVBO()->BindToVertexArray();
+			m_CubemapMesh->GetMeshEBO()->BindToVertexArray();
+			glDrawElements(GL_TRIANGLES, m_CubemapMesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+		});
+	Renderer::Submit([]() {Renderer::EndRenderPass(); });
+
 }
 
 void SceneRenderer::GeometryPass()
@@ -337,79 +379,79 @@ void SceneRenderer::DebugRenderingPass()
 	});
 }
 
-
-void SceneRenderer::BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& camPos)
-{
-	command["toVP"] = viewProjection;
-	command["camPos"] = camPos;
-}
-
-void SceneRenderer::AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material)
-{
-	if (material.type == MaterialType::Deferred) command["DefferedShader"] = material.defferedSecondPassShader;
-	modelList.push_back(ModelInfo{ model, transform.GetTransform(), material });
-}
-
-void SceneRenderer::AddAffectLight(const LightComponent& light, TransformComponent lightTransform)
-{
-	switch (light.type)
-	{
-	case LightType::PointLight:
-	{
-
-		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 1.f, 0.f, 0.f }));
-		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { -1.f, 0.f, 0.f }));
-		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 1.f, 0.f }, { 0, 0, 1 }));
-		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, -1.f, 0.f }, { 0, 0, -1 }));
-		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.f, 1.f }));
-		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.f, -1.f }));
-
-		lights.push_back({ light.type, toLightVP , lightTransform.Position });
-		toLightVP.clear();
-	}
-	break;
-	}
-}
-
-void SceneRenderer::SetVAO(std::shared_ptr<VertexArray> VAO)
-{
-	command["VAO"] = VAO;
-}
-
-void SceneRenderer::SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ)
-{
-	command["GBufferFBO"] = FBO;
-	command["FSQ"] = FSQ;
-
-}
-
-void SceneRenderer::SetShadowBuffer(const std::shared_ptr<FrameBuffer>& FBO)
-{
-	command["ShadowMapFBO"] = FBO;
-}
-
-void SceneRenderer::SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset)
-{
-	command["Shadow Resolution"] = resolution;
-	command["Polygon Offset"] = zOffset;
-}
-
-
-void SceneRenderer::EndSceneCommand()
-{
-	command["Lights"] = lights;
-	command["Models"] = modelList;
-
-
-	Graphics::GetInstance()->AddRenderCommand(command);
-
-	lights.clear();
-	modelList.clear();
-	command.clear();
-}
-
-void SceneRenderer::DrawAllScene()
-{
-	Graphics::GetInstance()->ExecuteRenderCommands();
-}
-
+//
+//void SceneRenderer::BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& camPos)
+//{
+//	command["toVP"] = viewProjection;
+//	command["camPos"] = camPos;
+//}
+//
+//void SceneRenderer::AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material)
+//{
+//	if (material.type == MaterialType::Deferred) command["DefferedShader"] = material.defferedSecondPassShader;
+//	modelList.push_back(ModelInfo{ model, transform.GetTransform(), material });
+//}
+//
+//void SceneRenderer::AddAffectLight(const LightComponent& light, TransformComponent lightTransform)
+//{
+//	switch (light.type)
+//	{
+//	case LightType::PointLight:
+//	{
+//
+//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 1.f, 0.f, 0.f }));
+//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { -1.f, 0.f, 0.f }));
+//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 1.f, 0.f }, { 0, 0, 1 }));
+//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, -1.f, 0.f }, { 0, 0, -1 }));
+//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.f, 1.f }));
+//		toLightVP.push_back(light.GetProjection() * MatrixMath::BuildCameraMatrixWithDirection(lightTransform.Position, { 0.f, 0.f, -1.f }));
+//
+//		lights.push_back({ light.type, toLightVP , lightTransform.Position });
+//		toLightVP.clear();
+//	}
+//	break;
+//	}
+//}
+//
+//void SceneRenderer::SetVAO(std::shared_ptr<VertexArray> VAO)
+//{
+//	command["VAO"] = VAO;
+//}
+//
+//void SceneRenderer::SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ)
+//{
+//	command["GBufferFBO"] = FBO;
+//	command["FSQ"] = FSQ;
+//
+//}
+//
+//void SceneRenderer::SetShadowBuffer(const std::shared_ptr<FrameBuffer>& FBO)
+//{
+//	command["ShadowMapFBO"] = FBO;
+//}
+//
+//void SceneRenderer::SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset)
+//{
+//	command["Shadow Resolution"] = resolution;
+//	command["Polygon Offset"] = zOffset;
+//}
+//
+//
+//void SceneRenderer::EndSceneCommand()
+//{
+//	command["Lights"] = lights;
+//	command["Models"] = modelList;
+//
+//
+//	Graphics::GetInstance()->AddRenderCommand(command);
+//
+//	lights.clear();
+//	modelList.clear();
+//	command.clear();
+//}
+//
+//void SceneRenderer::DrawAllScene()
+//{
+//	Graphics::GetInstance()->ExecuteRenderCommands();
+//}
+//

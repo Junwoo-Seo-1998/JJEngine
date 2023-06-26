@@ -136,12 +136,12 @@
     <ClInclude Include="Core\Graphics\MeshFactory.h" />
     <ClInclude Include="Core\Graphics\Pipeline.h" />
     <ClInclude Include="Core\Graphics\RenderCommand.h" />
+    <ClInclude Include="Core\Graphics\RenderPass.h" />
     <ClInclude Include="Core\Graphics\Renderer\CameraBase.h" />
     <ClInclude Include="Core\Graphics\Renderer\EditorCamera.h" />
     <ClInclude Include="Core\Graphics\Renderer\Renderer.h" />
     <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h" />
     <ClInclude Include="Core\Graphics\Renderer\SceneRenderer.h" />
-    <ClInclude Include="Core\Graphics\RenderPass.h" />
     <ClInclude Include="Core\Graphics\Shader.h" />
     <ClInclude Include="Core\Graphics\Texture.h" />
     <ClInclude Include="Core\Graphics\VertexArray.h" />
@@ -195,11 +195,11 @@
     <ClCompile Include="Core\Graphics\MeshFactory.cpp" />
     <ClCompile Include="Core\Graphics\Pipeline.cpp" />
     <ClCompile Include="Core\Graphics\RenderCommand.cpp" />
+    <ClCompile Include="Core\Graphics\RenderPass.cpp" />
     <ClCompile Include="Core\Graphics\Renderer\EditorCamera.cpp" />
     <ClCompile Include="Core\Graphics\Renderer\Renderer.cpp" />
     <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp" />
     <ClCompile Include="Core\Graphics\Renderer\SceneRenderer.cpp" />
-    <ClCompile Include="Core\Graphics\RenderPass.cpp" />
     <ClCompile Include="Core\Graphics\Shader.cpp" />
     <ClCompile Include="Core\Graphics\Texture.cpp" />
     <ClCompile Include="Core\Graphics\VertexArray.cpp" />
@@ -219,8 +219,8 @@
     <ClCompile Include="Core\Utils\IMGUI_IMPL.cpp" />
     <ClCompile Include="Core\Utils\Log.cpp" />
     <ClCompile Include="Core\Utils\Math\MatrixMath.cpp" />
-    <ClCompile Include="Core\Utils\ShaderPreprocessor.cpp" />
     <ClCompile Include="Core\Utils\STB_IMPL.cpp" />
+    <ClCompile Include="Core\Utils\ShaderPreprocessor.cpp" />
     <ClCompile Include="Core\Utils\UUIDGenerator.cpp" />
     <ClCompile Include="Core\Utils\UUIDHelper.cpp" />
     <ClCompile Include="Core\Window.cpp" />

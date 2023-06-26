@@ -14,6 +14,7 @@ struct TransformComponent;
 struct LightComponent;
 class Model;
 class RenderPass;
+class Texture;
 
 
 class SceneRenderer
@@ -32,6 +33,8 @@ public:
 	std::shared_ptr<RenderPass> GetFinalRenderPass();
 private:
 	void Init();
+
+	void CubemapPass();
 
 	void GeometryPass();
 
@@ -71,6 +74,13 @@ private:
 	std::shared_ptr<RenderPass> m_GeometryRenderPass;
 	std::shared_ptr<RenderPass> m_FinalRenderPass;
 
+	//Cubemap
+
+	std::shared_ptr<Shader> m_CubemapShader;
+	std::shared_ptr<Texture> m_CubemapTexture;
+	std::shared_ptr<Mesh> m_CubemapMesh;
+
+
 	struct DrawCommand
 	{
 		std::shared_ptr<Mesh> Mesh;
@@ -78,17 +88,17 @@ private:
 	};
 	std::vector<DrawCommand> m_GeometryDrawList;
 	std::vector<DrawCommand> m_DrawList;
-public:
-	//지울거
-	static void BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& pos);
-	static void AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material);
-	static void AddAffectLight(const LightComponent& light, TransformComponent lightTransform);
-	static void SetVAO(std::shared_ptr<VertexArray> VAO);
-	static void SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ);
-	static void SetShadowBuffer(const std::shared_ptr<FrameBuffer>& FBO);
-	static void SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset);
-	static void EndSceneCommand();
-	static void DrawAllScene();
+//public:
+//	//지울거
+//	static void BeginSceneCommand(const glm::mat4& viewProjection, const glm::vec3& pos);
+//	static void AddModel(const Model& model, const TransformComponent& transform, const MaterialComponent& material);
+//	static void AddAffectLight(const LightComponent& light, TransformComponent lightTransform);
+//	static void SetVAO(std::shared_ptr<VertexArray> VAO);
+//	static void SetGBuffer(std::shared_ptr<FrameBuffer> FBO, Mesh FSQ);
+//	static void SetShadowBuffer(const std::shared_ptr<FrameBuffer>& FBO);
+//	static void SetShadowInformation(glm::ivec2 resolution, glm::ivec2 zOffset);
+//	static void EndSceneCommand();
+//	static void DrawAllScene();
 
 
 };

@@ -7,6 +7,9 @@
     <Filter Include="Asset\Manager">
       <UniqueIdentifier>{4FD03F4C-BB90-BB82-84CB-0400F04A005F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Command">
+      <UniqueIdentifier>{24011C34-90E0-9ACF-99F8-25A605570131}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Component">
       <UniqueIdentifier>{F8BD1DB3-6428-D229-AD66-83CF1910B07E}</UniqueIdentifier>
     </Filter>
@@ -59,6 +62,9 @@
       <Filter>Asset\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Core\Camera.h" />
+    <ClInclude Include="Core\Command\CommandQueue.h">
+      <Filter>Command</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Component\BoxCollider2DComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -72,6 +78,9 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Core\Component\MaterialComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Component\MeshComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Core\Component\RigidBody2DComponent.h">
@@ -117,10 +126,25 @@
     <ClInclude Include="Core\Graphics\IndexBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Graphics\Light.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Material.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Graphics\Mesh.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Graphics\MeshFactory.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Pipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Graphics\RenderCommand.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\RenderPass.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\Renderer\CameraBase.h">
@@ -133,6 +157,9 @@
       <Filter>Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\Renderer\Renderer2D.h">
+      <Filter>Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Renderer\SceneRenderer.h">
       <Filter>Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Core\Graphics\Shader.h">
@@ -203,6 +230,9 @@
     <ClInclude Include="Core\Utils\PlatformDetection.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Utils\ShaderPreprocessor.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Utils\UUIDGenerator.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -213,15 +243,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Graphics\RenderPass.h" />
-    <ClInclude Include="Core\Graphics\Pipeline.h" />
-    <ClInclude Include="Core\Utils\ShaderPreprocessor.h" />
-    <ClInclude Include="Core\Graphics\Renderer\SceneRenderer.h" />
-    <ClInclude Include="Core\Component\MeshComponent.h" />
-    <ClInclude Include="Core\Command\CommandQueue.h" />
-    <ClInclude Include="Core\Graphics\Material.h" />
-    <ClInclude Include="Core\Graphics\MeshFactory.h" />
-    <ClInclude Include="Core\Graphics\Light.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -235,6 +256,9 @@
       <Filter>Asset\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Core\Camera.cpp" />
+    <ClCompile Include="Core\Command\CommandQueue.cpp">
+      <Filter>Command</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Component\CameraComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
@@ -262,10 +286,22 @@
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Graphics\Material.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Graphics\Mesh.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Graphics\MeshFactory.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\Pipeline.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Graphics\RenderCommand.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\RenderPass.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Renderer\EditorCamera.cpp">
@@ -275,6 +311,9 @@
       <Filter>Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Renderer\Renderer2D.cpp">
+      <Filter>Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\Renderer\SceneRenderer.cpp">
       <Filter>Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Shader.cpp">
@@ -329,6 +368,9 @@
     <ClCompile Include="Core\Utils\STB_IMPL.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Utils\ShaderPreprocessor.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Utils\UUIDGenerator.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -336,12 +378,5 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\Graphics\RenderPass.cpp" />
-    <ClCompile Include="Core\Graphics\Pipeline.cpp" />
-    <ClCompile Include="Core\Utils\ShaderPreprocessor.cpp" />
-    <ClCompile Include="Core\Graphics\Renderer\SceneRenderer.cpp" />
-    <ClCompile Include="Core\Command\CommandQueue.cpp" />
-    <ClCompile Include="Core\Graphics\Material.cpp" />
-    <ClCompile Include="Core\Graphics\MeshFactory.cpp" />
   </ItemGroup>
 </Project>
