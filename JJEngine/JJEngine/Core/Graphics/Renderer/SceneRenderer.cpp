@@ -253,9 +253,9 @@ void SceneRenderer::HDRItoCubemapPass()
 	if (isFirst)
 	{
 			
-				glEnable(GL_CULL_FACE);
+		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
-				unsigned int captureFBO, captureRBO;
+		unsigned int captureFBO, captureRBO;
 		glGenFramebuffers(1, &captureFBO);
 		glGenRenderbuffers(1, &captureRBO);
 
@@ -323,13 +323,14 @@ void SceneRenderer::CubemapPass()
 
 	Renderer::Submit([this]()
 		{
-			glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glDepthFunc(GL_LEQUAL);
 	glDepthMask(GL_FALSE);
 
 	m_CubemapShader->Use();
-	m_CubemapShader->SetMat4("view", m_View);
+	glm::mat4 view = glm::mat4(glm::mat3(m_View));
+	m_CubemapShader->SetMat4("view", view);
 	m_CubemapShader->SetMat4("projection", m_Projection);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);

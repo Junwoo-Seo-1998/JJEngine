@@ -171,30 +171,47 @@ std::shared_ptr<Mesh> MeshFactory::CreateSkyCube(const glm::vec3& size)
 
 	square.indices.push_back(0);
 	square.indices.push_back(1);
-	square.indices.push_back(1);
 	square.indices.push_back(2);
 	square.indices.push_back(2);
-	square.indices.push_back(3);
 	square.indices.push_back(3);
 	square.indices.push_back(0);
 
-	square.indices.push_back(0);
-	square.indices.push_back(4);
+
 	square.indices.push_back(1);
 	square.indices.push_back(5);
-	square.indices.push_back(2);
 	square.indices.push_back(6);
+	square.indices.push_back(6);
+	square.indices.push_back(2);
+	square.indices.push_back(1);
+
+
+	square.indices.push_back(5);
+	square.indices.push_back(4);
+	square.indices.push_back(7);
+	square.indices.push_back(7);
+	square.indices.push_back(6);
+	square.indices.push_back(5);
+
+	square.indices.push_back(4);
+	square.indices.push_back(0);
+	square.indices.push_back(3);
 	square.indices.push_back(3);
 	square.indices.push_back(7);
+	square.indices.push_back(4);
 
+	square.indices.push_back(3);
+	square.indices.push_back(2);
+	square.indices.push_back(6);
 	square.indices.push_back(6);
 	square.indices.push_back(7);
-	square.indices.push_back(7);
-	square.indices.push_back(4);
+	square.indices.push_back(3);
+
 	square.indices.push_back(4);
 	square.indices.push_back(5);
-	square.indices.push_back(5);
-	square.indices.push_back(6);
+	square.indices.push_back(1);
+	square.indices.push_back(1);
+	square.indices.push_back(0);
+	square.indices.push_back(4);
 
 	square.VBO = VertexBuffer::CreateVertexBuffer(sizeof(Vertex) * square.vertices.size());
 	square.VBO->SetData(sizeof(Vertex) * square.vertices.size(), square.vertices.data());
