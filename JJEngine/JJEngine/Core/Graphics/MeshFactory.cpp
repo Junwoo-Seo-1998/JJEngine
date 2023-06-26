@@ -152,3 +152,49 @@ std::shared_ptr<Mesh> MeshFactory::CreateBox(const glm::vec3& size)
 	to_return->EBO->SetData(sizeof(Face) * faces.size(), faces.data());
 	return to_return;
 }
+
+std::shared_ptr<Mesh> MeshFactory::CreateCube(const glm::vec3& size)
+{
+	glm::vec3 posMin = -size / 2.f;
+	glm::vec3 posMax = size / 2.f;
+	Mesh square;
+
+	square.vertices.push_back(Vertex{ posMin });
+	square.vertices.push_back(Vertex{ glm::vec3{ posMax.x, posMin.y, posMin.z } });
+	square.vertices.push_back(Vertex{glm::vec3{ posMax.x, posMax.y, posMin.z }});
+	square.vertices.push_back(Vertex{glm::vec3{ posMin.x, posMax.y, posMin.z }});
+							  												  
+	square.vertices.push_back(Vertex{glm::vec3{ posMin.x, posMin.y, posMax.z }});
+	square.vertices.push_back(Vertex{glm::vec3{ posMax.x, posMin.y, posMax.z }});
+	square.vertices.push_back(Vertex{ posMax });
+	square.vertices.push_back(Vertex{glm::vec3{ posMin.x, posMax.y, posMax.z }});
+
+	square.indices.push_back(0);
+	square.indices.push_back(1);
+	square.indices.push_back(1);
+	square.indices.push_back(2);
+	square.indices.push_back(2);
+	square.indices.push_back(3);
+	square.indices.push_back(3);
+	square.indices.push_back(0);
+
+	square.indices.push_back(0);
+	square.indices.push_back(4);
+	square.indices.push_back(1);
+	square.indices.push_back(5);
+	square.indices.push_back(2);
+	square.indices.push_back(6);
+	square.indices.push_back(3);
+	square.indices.push_back(7);
+
+	square.indices.push_back(6);
+	square.indices.push_back(7);
+	square.indices.push_back(7);
+	square.indices.push_back(4);
+	square.indices.push_back(4);
+	square.indices.push_back(5);
+	square.indices.push_back(5);
+	square.indices.push_back(6);
+
+	return std::make_shared<Mesh>(square);
+}
