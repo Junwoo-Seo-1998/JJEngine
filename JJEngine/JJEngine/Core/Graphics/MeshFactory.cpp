@@ -153,7 +153,7 @@ std::shared_ptr<Mesh> MeshFactory::CreateBox(const glm::vec3& size)
 	return to_return;
 }
 
-std::shared_ptr<Mesh> MeshFactory::CreateCube(const glm::vec3& size)
+std::shared_ptr<Mesh> MeshFactory::CreateSkyCube(const glm::vec3& size)
 {
 	glm::vec3 posMin = -size / 2.f;
 	glm::vec3 posMax = size / 2.f;
@@ -195,6 +195,17 @@ std::shared_ptr<Mesh> MeshFactory::CreateCube(const glm::vec3& size)
 	square.indices.push_back(5);
 	square.indices.push_back(5);
 	square.indices.push_back(6);
+
+	square.VBO = VertexBuffer::CreateVertexBuffer(sizeof(Vertex) * square.vertices.size());
+	square.VBO->SetData(sizeof(Vertex) * square.vertices.size(), square.vertices.data());
+	square.VBO->SetDataTypes({
+			{0, DataType::Float3},//location=0, pos
+			{1, DataType::Float3},//location=1, normal
+			{2, DataType::Float2},//location=2, uv
+		});
+
+	square.EBO = IndexBuffer::CreateIndexBuffer(sizeof(unsigned) * square.indices.size());
+	square.EBO->SetData(sizeof(unsigned) * square.indices.size(), square.indices.data());
 
 	return std::make_shared<Mesh>(square);
 }

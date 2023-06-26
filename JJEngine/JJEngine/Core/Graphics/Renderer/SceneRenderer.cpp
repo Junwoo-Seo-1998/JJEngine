@@ -244,7 +244,7 @@ void SceneRenderer::Init()
 
 		m_HDRICubemapTexture = Texture::CreateTexture(File::ReadHDRImageToTexture("Resources/Textures/hdri_skybox.png"));
 		
-		m_CubemapMesh = MeshFactory::CreateCube({ 2.f, 2.f, 2.f });
+		m_CubemapMesh = MeshFactory::CreateSkyCube({ 2.f, 2.f, 2.f });
 	}
 }
 	
