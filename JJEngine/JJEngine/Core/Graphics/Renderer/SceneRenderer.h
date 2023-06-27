@@ -73,6 +73,7 @@ private:
 	std::shared_ptr<Material> m_DefaultMaterial;
 	std::shared_ptr<Shader> m_NormalRenderShader;
 
+	std::shared_ptr<Shader> m_ForwardRenderShader;
 	std::shared_ptr<Shader> m_GeometryShader;
 	std::shared_ptr<Shader> m_FinalRenderShader;
 

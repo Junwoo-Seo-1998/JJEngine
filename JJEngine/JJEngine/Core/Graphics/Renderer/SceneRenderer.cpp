@@ -82,9 +82,9 @@ void SceneRenderer::EndScene()
 	ENGINE_ASSERT(m_ActiveScene != nullptr, "Scene is nullptr");
 	Renderer::Submit([this]() {m_VertexArray->Bind(); });
 
-	GeometryPass();
+	//GeometryPass();
 	
-	GeometryPassFSQ();
+	//GeometryPassFSQ();
 	
 	ForwardPass();
 
@@ -110,7 +110,7 @@ void SceneRenderer::SubmitMesh(std::shared_ptr<Mesh> mesh, const glm::mat4& tran
 {
 	//todo: make user defined draw list later
 
-	m_GeometryDrawList.emplace_back(mesh, transformMat);
+	m_DrawList.emplace_back(mesh, transformMat);
 }
 
 std::shared_ptr<RenderPass> SceneRenderer::GetFinalRenderPass()
@@ -132,6 +132,11 @@ void SceneRenderer::Init()
 		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.frag"}},
 		{ ShaderType::GeometryShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.geo"}}
 		});
+
+		m_ForwardRenderShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ForwardShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ForwardShader.frag"} }
+			});
 
 		m_GeometryShader = Shader::CreateShaderFromFile({
 		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/GBufferShader.vert"}},
@@ -165,7 +170,7 @@ void SceneRenderer::Init()
 	}
 
 	{//setting up default material
-		m_DefaultMaterial = Material::Create(m_GeometryShader);
+		m_DefaultMaterial = Material::Create(m_ForwardRenderShader);
 		m_DefaultMaterial->Set("MatTexture.Diffuse", Texture::CreateTexture(glm::vec4{ 0.8f, 0.8f, 0.8f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Specular", Texture::CreateTexture(glm::vec4{ 0.5f, 0.5f, 0.5f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Emissive", Renderer::BlackTexture);
@@ -217,7 +222,7 @@ void SceneRenderer::Init()
 		m_BloomBlurRenderPass[1] = RenderPass::Create(spec);
 	}
 
-	{//cubemap initialization
+	{//cubemap variable initialization
 
 		m_CubemapShader = Shader::CreateShaderFromFile({
 			{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.vert"}},
@@ -389,13 +394,63 @@ void SceneRenderer::ForwardPass()
 {
 	Renderer::Submit([this]()
 	{	//draw
-		Renderer::BeginRenderPass(m_FinalRenderPass, false);
+		Renderer::BeginRenderPass(m_FinalRenderPass);
+
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glDisable(GL_BLEND);
+
+		m_ForwardRenderShader->Use();
+		m_ForwardRenderShader->SetMat4("Matrix.View", m_View);
+		m_ForwardRenderShader->SetMat4("Matrix.Projection", m_Projection);
+
+		//light set up
+		{
+			m_ForwardRenderShader->SetInt("LightNumbers", m_ActiveLights.size());
+			int index = 0;
+			for (auto& [lightPosition, lightDir, light] : m_ActiveLights)
+			{
+				std::string lightIndex = std::format("Light[{}].", index++);
+				m_ForwardRenderShader->SetInt(lightIndex + "LightType", static_cast<int>(light.m_LightType));
+				m_ForwardRenderShader->SetFloat3(lightIndex + "Position", lightPosition);
+				m_ForwardRenderShader->SetFloat3(lightIndex + "Direction", lightDir);
+				m_ForwardRenderShader->SetFloat(lightIndex + "InnerAngle", light.m_Angle.inner);
+				m_ForwardRenderShader->SetFloat(lightIndex + "OuterAngle", light.m_Angle.outer);
+				m_ForwardRenderShader->SetFloat(lightIndex + "FallOff", light.falloff);
+				m_ForwardRenderShader->SetFloat3(lightIndex + "Ambient", light.Ambient);
+				m_ForwardRenderShader->SetFloat3(lightIndex + "Diffuse", light.Diffuse);
+				m_ForwardRenderShader->SetFloat3(lightIndex + "Specular", light.Specular);
+			}
+		}
+
+		//hard coded for now
+		{
+			m_ForwardRenderShader->SetFloat3("globalAmbient", {});
+
+			m_ForwardRenderShader->SetFloat("Attenuation.c1", 1.f);
+			m_ForwardRenderShader->SetFloat("Attenuation.c2", 0.22f);
+			m_ForwardRenderShader->SetFloat("Attenuation.c3", 0.20f);
+
+			m_ForwardRenderShader->SetFloat3("Fog.Color", { 0.5f,0.5f,0.5f });
+			m_ForwardRenderShader->SetFloat("Fog.Near", 1.f);
+			m_ForwardRenderShader->SetFloat("Fog.Far", 5000.f);
+		}
+
+		m_ForwardRenderShader->SetFloat3("CameraPosition", m_CameraPosition);
+
 
 		//todo: 
 		for (auto& toDraw : m_DrawList)
 		{
+			toDraw.Mesh->GetMeshVBO()->BindToVertexArray();
+			toDraw.Mesh->GetMeshEBO()->BindToVertexArray();
+			m_DefaultMaterial->Bind();
 
+			m_ForwardRenderShader->SetMat4("Matrix.Model", toDraw.Transform);
+			m_ForwardRenderShader->SetMat4("Matrix.Normal", glm::transpose(glm::inverse(toDraw.Transform)));
+			
 
+			glDrawElements(GL_TRIANGLES, toDraw.Mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
 		}
 
 		Renderer::EndRenderPass();
