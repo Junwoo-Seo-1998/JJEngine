@@ -11,12 +11,13 @@
 #include "Core/Graphics/MeshFactory.h"
 #include "Core/Graphics/Material.h"
 #include "Core/Graphics/RenderCommand.h"
+#include "Core/Graphics/HDRIConverter.h"
+
 #include "Core/Utils/Assert.h"
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
 #include "imgui.h"
 
-#include "glm/gtc/matrix_transform.hpp"
 SceneRenderer::SceneRenderer()
 {
 	Init();
@@ -80,10 +81,6 @@ void SceneRenderer::EndScene()
 {
 	ENGINE_ASSERT(m_ActiveScene != nullptr, "Scene is nullptr");
 	Renderer::Submit([this]() {m_VertexArray->Bind(); });
-
-	HDRItoCubemapPass();
-
-	
 
 	GeometryPass();
 	
@@ -222,98 +219,17 @@ void SceneRenderer::Init()
 
 	{//cubemap initialization
 
-		RenderPassSpecification spec;
-		spec.DebugName = "Cubemap Render";
-		FrameBufferSpecification fb_spec;
-		fb_spec.ClearColor = { 0.0,0.0,0.0,1.f };
-		fb_spec.Width = 400;
-		fb_spec.Height = 400;
-		fb_spec.Formats = { FrameBufferFormat::RGBA32F, FrameBufferFormat::Depth };
-		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
-		m_HDRItoCubemapRenderPass = RenderPass::Create(spec);
-
-		m_HDRItoCubemapShader = Shader::CreateShaderFromFile({
-		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/HDRIConvertShader.vert"}},
-		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/HDRIConvertShader.frag"} }
-			});
-
-
 		m_CubemapShader = Shader::CreateShaderFromFile({
 			{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.vert"}},
 			{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.frag"} }
 			});
 
-		m_HDRICubemapTexture = Texture::CreateTexture(File::ReadHDRImageToTexture("Resources/Textures/hdri_skybox.png"));
+		m_DefaultHDRICubemapTexture = Texture::CreateTexture(File::ReadHDRImageToTexture("Resources/Textures/hdri_skybox.png"));
 		
 		m_CubemapMesh = MeshFactory::CreateSkyCube({ 2.f, 2.f, 2.f });
+		m_HDRIConverter = std::make_shared<HDRIConverter>(HDRIConverter(m_Width, m_Height, m_CubemapMesh));
+		m_SkyboxTextureHandle = m_HDRIConverter->HDRItoCubemap(m_DefaultHDRICubemapTexture);
 	}
-}
-	
-void SceneRenderer::HDRItoCubemapPass()
-{
-	if (isFirst)
-	{
-		Renderer::Submit([this]()
-		{
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
-			unsigned int captureFBO, captureRBO;
-			glGenFramebuffers(1, &captureFBO);
-			glGenRenderbuffers(1, &captureRBO);
-
-			glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-			glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
-
-			glGenTextures(1, &envCubemap);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
-			for (unsigned int i = 0; i < 6; ++i)
-			{
-				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
-			}
-
-			glTextureParameteri(envCubemap, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTextureParameteri(envCubemap, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glTextureParameteri(envCubemap, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-			glTextureParameteri(envCubemap, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTextureParameteri(envCubemap, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-			glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
-			glm::mat4 captureViews[] =
-			{
-			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
-			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
-			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-			   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
-			};
-
-			m_HDRItoCubemapShader->Use();
-			m_HDRItoCubemapShader->SetMat4("projection", captureProjection);
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, m_HDRICubemapTexture->GetTextureID());
-			m_HDRItoCubemapShader->SetInt("equirectangularMap", 0);
-			glViewport(0, 0, 512, 512);
-
-			for (unsigned int i = 0; i < 6; ++i)
-			{
-				m_HDRItoCubemapShader->SetMat4("view", captureViews[i]);
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, 0);
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-				m_CubemapMesh->GetMeshVBO()->BindToVertexArray();
-				m_CubemapMesh->GetMeshEBO()->BindToVertexArray();
-				glDrawElements(GL_TRIANGLES, m_CubemapMesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
-			}
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			glViewport(0, 0, m_Width, m_Height);
-		});
-		isFirst = false;
-	}
-	
-
 }
 
 void SceneRenderer::CubemapPass()
@@ -337,7 +253,7 @@ void SceneRenderer::CubemapPass()
 	m_CubemapShader->SetMat4("view", view);
 	m_CubemapShader->SetMat4("projection", m_Projection);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxTextureHandle);
 	m_CubemapShader->SetInt("environmentMap", 0);
 
 	m_CubemapMesh->GetMeshVBO()->BindToVertexArray();

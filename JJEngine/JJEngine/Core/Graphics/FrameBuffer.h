@@ -8,6 +8,7 @@ enum class FrameBufferFormat
 	None = 0,
 	R_INT,
 	RGB,
+	RGB16F,
 	RGBA,
 	RGBA32F,
 	Depth,

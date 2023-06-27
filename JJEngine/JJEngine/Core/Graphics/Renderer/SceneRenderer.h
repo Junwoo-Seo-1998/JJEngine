@@ -15,7 +15,7 @@ struct LightComponent;
 class Model;
 class RenderPass;
 class Texture;
-
+class HDRIConverter;
 
 class SceneRenderer
 {
@@ -33,9 +33,6 @@ public:
 	std::shared_ptr<RenderPass> GetFinalRenderPass();
 private:
 	void Init();
-
-	bool isFirst = true;
-	void HDRItoCubemapPass();
 
 	void CubemapPass();
 
@@ -93,14 +90,9 @@ private:
 	//Cubemap
 	std::shared_ptr<Shader> m_CubemapShader;
 	std::shared_ptr<Mesh> m_CubemapMesh;
-
-	//HDRI to Cubemap
-
-	unsigned int envCubemap;
-	std::shared_ptr<Texture> m_HDRICubemapTexture;
-	std::shared_ptr<RenderPass> m_HDRItoCubemapRenderPass;
-	std::shared_ptr<Shader> m_HDRItoCubemapShader;
-
+	std::shared_ptr<Texture> m_DefaultHDRICubemapTexture;
+	std::shared_ptr<HDRIConverter> m_HDRIConverter;
+	unsigned int m_SkyboxTextureHandle = 0;
 
 	struct DrawCommand
 	{

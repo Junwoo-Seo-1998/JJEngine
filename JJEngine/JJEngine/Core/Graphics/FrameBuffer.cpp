@@ -139,6 +139,11 @@ void FrameBuffer::BuildFrameBuffer()
 					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGB });
 					break;
 				}
+				case  FrameBufferFormat::RGB16F:
+				{
+					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGB16F });
+					break;
+				}
 				case  FrameBufferFormat::RGBA:
 				{
 					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGBA });
