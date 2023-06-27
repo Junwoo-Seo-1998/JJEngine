@@ -29,7 +29,7 @@ void AssetManager::AddAsset(std::shared_ptr<Asset>& empty_asset, AssetType type)
 		empty_asset = std::make_shared<Asset_Texture>();
 		break;
 	default:
-		ASSERT("Unexpected Asset type");
+		ENGINE_ASSERT(false,"Unexpected Asset type");
 	}
 }
 
@@ -133,9 +133,9 @@ AssetType AssetManager::GetAssetType(AssetHandle assetHandle)
 
 std::shared_ptr<Asset> AssetManager::GetAsset(AssetHandle assetHandle)
 {
-	if (IsAssetHandleValid(assetHandle) == false) ASSERT("No asset is there");
+	ENGINE_ASSERT(IsAssetHandleValid(assetHandle) == true, "No asset is there");
 	if (latestFoundAsset->second->CheckIsDataLoaded() == false) {
-		if (latestFoundAsset->second->LoadData() == false) ASSERT("Fail to load asset");
+		ENGINE_ASSERT(latestFoundAsset->second->LoadData() == true, "Fail to load asset");
 	}
 	return latestFoundAsset->second;
 }
@@ -174,7 +174,7 @@ std::shared_ptr<Asset> AssetManager::GetAssetFromPath(std::filesystem::path p)
 			break;
 		}
 	}
-	if (it == assets.end()) ASSERT("Path is not an asset");
+	ENGINE_ASSERT(it != assets.end(),"Path is not an asset");
 	return it->second;
 }
 
