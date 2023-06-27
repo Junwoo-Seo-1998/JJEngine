@@ -24,6 +24,8 @@ std::vector<bool> completedShader(static_cast<int>(ShaderType::TypeCounts));
 std::set<std::string> definedParameter{};
 std::stack<bool> ifnifStack({true});
 
+
+void Testing(std::string& sourceString);
 ShaderType TranslateShaderType(const std::string& type);
 const std::string TranslateShaderTypeToStr(const ShaderType& type);
 std::vector<std::string_view> SplitStringWithCommand(const std::string_view& sourceString, std::string regex_command);
@@ -43,7 +45,7 @@ std::vector<std::string> SplitStringAndKeepDelims(std::string str)
 	}
 	return result;
 }
-void ShaderPreprocesssor::Preprocess(const std::filesystem::path& file)
+std::unordered_map<ShaderType, std::string> ShaderPreprocesssor::Preprocess(const std::filesystem::path& file)
 {
 	std::string source = File::ReadFileToString(file.string());
 	EngineLog::Trace("Shader Src Before Removing Comment : \n{}", source);
@@ -82,6 +84,8 @@ void ShaderPreprocesssor::Preprocess(const std::filesystem::path& file)
 	// clear settings
 	completedShader = std::vector<bool>(static_cast<int>(ShaderType::TypeCounts));
 	definedParameter.clear();
+
+	return shaders;
 }
 
 
@@ -137,28 +141,6 @@ std::string ShaderPreprocesssor::CopyWithoutComments(const std::string& sourceSt
 	return sourceStream.str();
 }
 
-
-void ShaderPreprocesssor::Testing(std::string& sourceString)
-{
-	std::string str{sourceString};
-	const static std::regex re(R"([#][^\w]*(\w+)([^#]*))", std::regex_constants::optimize);
-	std::smatch m;
-	ENGINE_ASSERT(std::regex_search(str,m,re),"");
-
-
-	EngineLog::Warn("Testing regex prefix : {}", m.prefix());
-	EngineLog::Warn("Testing regex[0] : {}", m[0].str());
-	EngineLog::Warn("Testing regex[1] : {}", m[1].str());
-	EngineLog::Warn("Testing regex[2] : {}", m[2].str());
-	EngineLog::Warn("Testing regex suffix : {}", m.suffix());
-	//EngineLog::Warn("Testing regex[5] : {}", m[5].str());
-	//EngineLog::Warn("Testing regex[6] : {}", m[7].str());
-	
-	//for (auto x : m)
-	//	EngineLog::Warn("Testing regex : {}", x.str());
-	
-}
-
 void ShaderPreprocesssor::CommandProcessing(std::unordered_map<ShaderType, std::string>& shaders, ShaderType current_shader_type, std::string_view& source)
 {
 	const static std::regex re(R"([#][^\w]*(\w+)([^#]*))", std::regex_constants::optimize);
@@ -203,7 +185,10 @@ void ShaderPreprocesssor::CommandProcessing(std::unordered_map<ShaderType, std::
 			std::vector<std::string_view> contentSplit{SplitStringWithCommand(content, R"(["]([^"]*)["]([^#]*))")};
 			std::string_view commandOption{contentSplit[1]};
 			//file read
-			std::string include_source = File::ReadFileToString(std::string{ commandOption.begin(), commandOption.end() });
+			std::string includePath{ commandOption.begin(), commandOption.end()};
+			bool pathCheck{ File::CheckExists(includePath)};
+			// relative path check
+			std::string include_source = File::ReadFileToString(includePath);
 			std::string_view temp{include_source};
 			CommandProcessing(shaders, current_shader_type, temp);
 			//shaders[current_shader_type] +=  std::string{contentSplit[2].begin(), contentSplit[2].end()};
@@ -242,6 +227,27 @@ void ShaderPreprocesssor::CommandProcessing(std::unordered_map<ShaderType, std::
 	CommandProcessing(shaders, current_shader_type, last);
 }
 
+
+void Testing(std::string& sourceString)
+{
+	std::string str{sourceString};
+	const static std::regex re(R"([#][^\w]*(\w+)([^#]*))", std::regex_constants::optimize);
+	std::smatch m;
+	ENGINE_ASSERT(std::regex_search(str, m, re), "");
+
+
+	EngineLog::Warn("Testing regex prefix : {}", m.prefix());
+	EngineLog::Warn("Testing regex[0] : {}", m[0].str());
+	EngineLog::Warn("Testing regex[1] : {}", m[1].str());
+	EngineLog::Warn("Testing regex[2] : {}", m[2].str());
+	EngineLog::Warn("Testing regex suffix : {}", m.suffix());
+	//EngineLog::Warn("Testing regex[5] : {}", m[5].str());
+	//EngineLog::Warn("Testing regex[6] : {}", m[7].str());
+
+	//for (auto x : m)
+	//	EngineLog::Warn("Testing regex : {}", x.str());
+
+}
 
 ShaderType TranslateShaderType(const std::string& type)
 {
