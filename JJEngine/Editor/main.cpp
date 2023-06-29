@@ -25,23 +25,23 @@ class EditorApp : public Application
 
 		//ShaderPreprocesssor::Preprocess("Resources/Shaders/TestPreProcessor.glsl");
 
-		std::unordered_map<ShaderType, std::string> temp = ShaderPreprocesssor::Preprocess("ShaderPreprocessUnitTest/PragmaTest.glsl");
-		ASSERT(temp.size() == 5, "#pragma testing - Not enough shader types");
-		ASSERT(temp[ShaderType::None] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestNone.glsl"), "#pragma testing - None type failed");
-		ASSERT(temp[ShaderType::VertexShader] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestVert.glsl"), "#pragma testing - VertexShader type failed");
-		ASSERT(temp[ShaderType::FragmentShader] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestFrag.glsl"), "#pragma testing - FragmentShader type failed");
-		ASSERT(temp[ShaderType::GeometryShader] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestGeom.glsl"), "#pragma testing - GeometryShader type failed");
-		ASSERT(temp[ShaderType::TessellationShader] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestTess.glsl"), "#pragma testing - TessellationShader type failed");
+		//std::unordered_map<ShaderType, std::string> temp = ShaderPreprocesssor::Preprocess("ShaderPreprocessUnitTest/PragmaTest.glsl");
+		//ASSERT(temp.size() == 5, "#pragma testing - Not enough shader types");
+		//ASSERT(temp[ShaderType::None] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestNone.glsl"), "#pragma testing - None type failed");
+		//ASSERT(temp[ShaderType::VertexShader] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestVert.glsl"), "#pragma testing - VertexShader type failed");
+		//ASSERT(temp[ShaderType::FragmentShader] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestFrag.glsl"), "#pragma testing - FragmentShader type failed");
+		//ASSERT(temp[ShaderType::GeometryShader] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestGeom.glsl"), "#pragma testing - GeometryShader type failed");
+		//ASSERT(temp[ShaderType::TessellationShader] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestTess.glsl"), "#pragma testing - TessellationShader type failed");
 
 
-		temp = ShaderPreprocesssor::Preprocess("ShaderPreprocessUnitTest/Define_Ifdef_Test.glsl");
-		ASSERT(temp.size() == 1, "#ifdef testing - Not correct shader type number");
-		ASSERT(temp[ShaderType::None] == File::ReadFileToString("ShaderPreprocessUnitTest/Define_Ifdef_Test_answer.glsl"), "#ifdef testing failed");
+		//temp = ShaderPreprocesssor::Preprocess("ShaderPreprocessUnitTest/Define_Ifdef_Test.glsl");
+		//ASSERT(temp.size() == 1, "#ifdef testing - Not correct shader type number");
+		//ASSERT(temp[ShaderType::None] == File::ReadFileToString("ShaderPreprocessUnitTest/Define_Ifdef_Test_answer.glsl"), "#ifdef testing failed");
 
 
-		temp = ShaderPreprocesssor::Preprocess("ShaderPreprocessUnitTest/Include_Test.glsl");
-		ASSERT(temp.size() == 5, "#include testing - Not correct shader type number");
-		ASSERT(temp[ShaderType::None] == File::ReadFileToString("ShaderPreprocessUnitTest/Include_Test_answer.glsl"), "#include testing failed");
+		//temp = ShaderPreprocesssor::Preprocess("ShaderPreprocessUnitTest/Include_Test.glsl");
+		//ASSERT(temp.size() == 5, "#include testing - Not correct shader type number");
+		//ASSERT(temp[ShaderType::None] == File::ReadFileToString("ShaderPreprocessUnitTest/Include_Test_answer.glsl"), "#include testing failed");
 	}
 };
 

@@ -67,7 +67,7 @@ void SceneRenderer::BeginScene(const glm::mat4& view, const glm::mat4& Projectio
 		for (auto entity: view)
 		{
 			auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
-			m_ActiveLights.push_back(std::tuple{ transform.Position, transform.GetForward(), light.light });
+			m_ActiveLights.push_back(std::tuple{ transform.Position, transform.GetForward(), light.GetProjection(), light.light, std::shared_ptr<Texture>()});
 		}
 
 		if(m_ActiveLights.empty())
@@ -81,6 +81,8 @@ void SceneRenderer::EndScene()
 {
 	ENGINE_ASSERT(m_ActiveScene != nullptr, "Scene is nullptr");
 	Renderer::Submit([this]() {m_VertexArray->Bind(); });
+
+	ShadowmapPass();
 
 	//GeometryPass();
 	
@@ -133,6 +135,11 @@ void SceneRenderer::Init()
 		{ ShaderType::GeometryShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.geo"}}
 		});
 
+		m_ShadowShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ShadowShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ShadowShader.frag"} }
+			});
+
 		m_ForwardRenderShader = Shader::CreateShaderFromFile({
 		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ForwardShader.vert"}},
 		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ForwardShader.frag"} }
@@ -175,6 +182,21 @@ void SceneRenderer::Init()
 		m_DefaultMaterial->Set("MatTexture.Specular", Texture::CreateTexture(glm::vec4{ 0.5f, 0.5f, 0.5f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Emissive", Renderer::BlackTexture);
 		m_DefaultMaterial->Set("MatTexture.Shininess", 12.0f);
+	}
+
+	{//shadow
+		RenderPassSpecification spec;
+		spec.DebugName = "ShadowRenderPass";
+		FrameBufferSpecification fb_spec;
+		//should keep black!!
+		fb_spec.ClearColor = { 1.0f, 1.0f, 1.0f,1.f };
+		fb_spec.Width = 512;
+		fb_spec.Height = 512;
+		fb_spec.Formats = {
+			FrameBufferFormat::Depth //Depth
+		};
+		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
+		m_ShadowRenderPass = RenderPass::Create(spec);
 	}
 
 	{//geo
@@ -274,6 +296,59 @@ void SceneRenderer::CubemapPass()
 		Renderer::EndRenderPass(); });
 }
 
+void SceneRenderer::ShadowmapPass()
+{
+
+	for (auto& [lightPosition, lightDir, lightProjection, light, shadowMap] : m_ActiveLights)
+	{
+		
+		const glm::mat4 lightView = MatrixMath::BuildCameraMatrixWithDirection(lightPosition, {-1.f, -1.f, 0.f});
+		
+		Renderer::Submit([this, &lightView , &lightProjection]()
+			{
+				Renderer::BeginRenderPass(m_ShadowRenderPass, true);
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_BACK);
+				glDisable(GL_BLEND);
+				m_ShadowShader->Use();
+				m_ShadowShader->SetMat4("toLight", m_Projection * m_View);
+			});
+
+		for (auto& toDraw : m_GeometryDrawList)
+		{
+			Renderer::Submit([this, &toDraw]()
+				{
+					toDraw.Mesh->GetMeshVBO()->BindToVertexArray();
+					toDraw.Mesh->GetMeshEBO()->BindToVertexArray();
+
+					m_ShadowShader->SetMat4("toWorld", toDraw.Transform);
+					//todo:draw it material instance
+					//toDraw.Mesh->GetMaterial()->Bind();
+					glDrawElements(GL_TRIANGLES, toDraw.Mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+				});
+		}
+
+		for (auto& toDraw : m_DrawList)
+		{
+			Renderer::Submit([this, &toDraw]()
+				{
+					toDraw.Mesh->GetMeshVBO()->BindToVertexArray();
+					toDraw.Mesh->GetMeshEBO()->BindToVertexArray();
+
+					m_ShadowShader->SetMat4("toWorld", toDraw.Transform);
+					//todo:draw it material instance
+					//toDraw.Mesh->GetMaterial()->Bind();
+					glDrawElements(GL_TRIANGLES, toDraw.Mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+				});
+		}
+
+		
+		Renderer::Submit([this, &shadowMap]() {
+			shadowMap = Texture::CopyTexture(m_ShadowRenderPass->GetSpecification().TargetFramebuffer->GetDepthTexture());
+			Renderer::EndRenderPass(); });
+	}
+}
+
 void SceneRenderer::GeometryPass()
 {
 	Renderer::Submit([this]()
@@ -342,10 +417,13 @@ void SceneRenderer::GeometryPassFSQ()
 			{
 				m_FinalRenderShader->SetInt("LightNumbers", m_ActiveLights.size());
 				int index = 0;
-				for (auto& [lightPosition, lightDir, light] : m_ActiveLights)
+				for (auto& [lightPosition, lightDir, lightProjection, light, shadowMap] : m_ActiveLights)
 				{
+					shadowMap->BindTexture(index);
 					std::string lightIndex = std::format("Light[{}].", index++);
 					m_FinalRenderShader->SetInt(lightIndex + "LightType", static_cast<int>(light.m_LightType));
+					m_ForwardRenderShader->SetMat4(lightIndex + "ViewProjection", MatrixMath::BuildCameraMatrixWithDirection(lightPosition, lightDir) * lightProjection);
+					m_ForwardRenderShader->SetInt(lightIndex + "ShadowMap", shadowMap->GetUnitID());
 					m_FinalRenderShader->SetFloat3(lightIndex + "Position", lightPosition);
 					m_FinalRenderShader->SetFloat3(lightIndex + "Direction", lightDir);
 					m_FinalRenderShader->SetFloat(lightIndex + "InnerAngle", light.m_Angle.inner);
@@ -408,10 +486,11 @@ void SceneRenderer::ForwardPass()
 		{
 			m_ForwardRenderShader->SetInt("LightNumbers", m_ActiveLights.size());
 			int index = 0;
-			for (auto& [lightPosition, lightDir, light] : m_ActiveLights)
+			for (auto& [lightPosition, lightDir, lightProjection, light, shadowMap] : m_ActiveLights)
 			{
 				std::string lightIndex = std::format("Light[{}].", index++);
 				m_ForwardRenderShader->SetInt(lightIndex + "LightType", static_cast<int>(light.m_LightType));
+				m_ForwardRenderShader->SetMat4(lightIndex + "ViewProjection", MatrixMath::BuildCameraMatrixWithDirection(lightPosition, lightDir) * lightProjection);
 				m_ForwardRenderShader->SetFloat3(lightIndex + "Position", lightPosition);
 				m_ForwardRenderShader->SetFloat3(lightIndex + "Direction", lightDir);
 				m_ForwardRenderShader->SetFloat(lightIndex + "InnerAngle", light.m_Angle.inner);
@@ -448,11 +527,9 @@ void SceneRenderer::ForwardPass()
 
 			m_ForwardRenderShader->SetMat4("Matrix.Model", toDraw.Transform);
 			m_ForwardRenderShader->SetMat4("Matrix.Normal", glm::transpose(glm::inverse(toDraw.Transform)));
-			
 
 			glDrawElements(GL_TRIANGLES, toDraw.Mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
 		}
-
 		Renderer::EndRenderPass();
 	});
 }
@@ -556,7 +633,8 @@ void SceneRenderer::DebugRenderingPass()
 {
 	//debug
 	Renderer::Submit([this]()
-	{	//draw
+	{	
+		//draw
 		Renderer::BeginRenderPass(m_FinalRenderPass, false);
 		m_NormalRenderShader->Use();
 		m_NormalRenderShader->SetMat4("View", m_View);
