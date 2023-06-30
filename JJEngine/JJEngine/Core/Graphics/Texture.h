@@ -9,6 +9,12 @@ End Header-------------------------------------------------------- */
 #include<tuple>
 #include <glm/vec4.hpp>
 
+enum class TextureTarget
+{
+	Texture2D,
+	CubeMap,
+};
+
 enum class TextureChannel
 {
 	R_INT,
@@ -33,6 +39,13 @@ enum class TextureFilter
 	None = 0,
 	Linear,
 	Nearest,
+};
+
+struct TextureTargetData
+{
+	unsigned TextureTargetDataToOpenGLType() const;
+	TextureTargetData(TextureTarget target) :target(target) {}
+	TextureTarget target;
 };
 
 struct TextureChannelData
@@ -67,6 +80,8 @@ struct TextureData
 	int width = 0;
 	int height = 0;
 	std::shared_ptr<void> data{};
+
+	TextureTargetData target = TextureTarget::Texture2D;
 	TextureChannelData channel = TextureChannel::RGBA;
 	TextureWrapData wrap = TextureWrap::ClampToEdge;
 	TextureFilter filter = TextureFilter::Linear;
@@ -82,24 +97,23 @@ public:
 	virtual ~Texture();
 	std::tuple<int, int> GetWidthHeight() const;
 	unsigned int GetTextureID() const;
-	unsigned int GetUnitID() const;
 
 	void BindTexture(unsigned int unit = 0);
-	void UnBindTexture();
 
 	//clear texture with the value
 	void ClearTexture(int value = -1);
 private:
 	Texture(std::shared_ptr<TextureData> texture_data);
 	Texture(const TextureData& texture_data);
+	void CreateTextureInner(const TextureData& texture_data);
+
 	Texture(std::shared_ptr<Texture> texture_data);
 
 	int m_Width;
 	int m_Height;
+	TextureTargetData m_TextureTarget;
 	TextureChannelData m_TextureChannel;
 	TextureWrapData m_Wrap;
 	TextureFilterData m_Filter;
 	unsigned int m_TextureID;
-	unsigned int m_UnitID;
-
 };

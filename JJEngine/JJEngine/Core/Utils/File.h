@@ -14,4 +14,5 @@ public:
 	static std::tuple<std::shared_ptr<char[]>, int> ReadFileToBytes(const std::filesystem::path& file_name);
 	static std::shared_ptr<TextureData> ReadImageToTexture(const std::string& file_name);
 	static std::shared_ptr<TextureData> ReadHDRImageToTexture(const std::string& file_name);
+	static std::shared_ptr<TextureData> ReadCubeMapImagesToTexture(const std::vector<std::string>& file_names);
 };

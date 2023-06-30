@@ -1,5 +1,8 @@
 #include "SceneRenderer.h"
 
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
+
 #include "Renderer.h"
 #include "Core/Scene.h"
 #include "Core/Component/TransformComponent.h"
@@ -11,7 +14,6 @@
 #include "Core/Graphics/MeshFactory.h"
 #include "Core/Graphics/Material.h"
 #include "Core/Graphics/RenderCommand.h"
-#include "Core/Graphics/HDRIConverter.h"
 
 #include "Core/Utils/Assert.h"
 #include "Core/Utils/File.h"
@@ -81,6 +83,9 @@ void SceneRenderer::EndScene()
 {
 	ENGINE_ASSERT(m_ActiveScene != nullptr, "Scene is nullptr");
 	Renderer::Submit([this]() {m_VertexArray->Bind(); });
+
+	//jun: it's capturing at every loop but it will be removed later after the asset work
+	BakeCubeMap();
 
 	//GeometryPass();
 	
@@ -224,25 +229,80 @@ void SceneRenderer::Init()
 
 	{//cubemap variable initialization
 
-		m_CubemapShader = Shader::CreateShaderFromFile({
-			{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.vert"}},
-			{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.frag"} }
-			});
+		m_BakeCubeMapShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/HDRIConvertShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/HDRIConvertShader.frag"} }
+		});
+
+		m_CubeMapShader = Shader::CreateShaderFromFile({
+		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.vert"}},
+		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.frag"} }
+		});
 
 		m_DefaultHDRICubemapTexture = Texture::CreateTexture(File::ReadHDRImageToTexture("Resources/Textures/hdri_skybox.png"));
 		
-		m_CubemapMesh = MeshFactory::CreateSkyCube({ 2.f, 2.f, 2.f });
-		m_HDRIConverter = std::make_shared<HDRIConverter>(HDRIConverter(m_Width, m_Height, m_CubemapMesh));
-		m_SkyboxTextureHandle = m_HDRIConverter->HDRItoCubemap(m_DefaultHDRICubemapTexture);
+		m_CubeMapMesh = MeshFactory::CreateSkyCube({ 2.f, 2.f, 2.f });
+
+		RenderPassSpecification spec;
+		spec.DebugName = "Bake CubeMap";
+		FrameBufferSpecification fb_spec;
+		fb_spec.ClearColor = { 0.0, 0.0, 0.0,0.f };
+		fb_spec.Width = 1024;
+		fb_spec.Height = 1024;
+		fb_spec.Formats = { FrameBufferFormat::CubeMap16F, FrameBufferFormat::Depth };
+		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
+		m_BakeCubeMapRenderPass = RenderPass::Create(spec);
 	}
+}
+
+void SceneRenderer::BakeCubeMap()
+{
+
+	Renderer::Submit([this]()
+	{
+		static const glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+		static const glm::mat4 captureViews[] =
+		{
+		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+		};
+
+		{
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glDisable(GL_DEPTH_TEST);
+		}
+
+		Renderer::BeginRenderPass(m_BakeCubeMapRenderPass, true);
+		m_BakeCubeMapShader->Use();
+		m_BakeCubeMapShader->SetMat4("projection", captureProjection);
+		m_DefaultHDRICubemapTexture->BindTexture(0);
+		m_BakeCubeMapShader->SetInt("equirectangularMap", 0);
+		for (unsigned int i = 0; i < 6; ++i)
+		{
+			m_BakeCubeMapShader->SetMat4("view", captureViews[i]);
+			m_BakeCubeMapRenderPass->GetSpecification().TargetFramebuffer->ChangeCubeMapTextureFace(0, i);
+
+			RenderCommand::Clear();
+
+			m_CubeMapMesh->GetMeshVBO()->BindToVertexArray();
+			m_CubeMapMesh->GetMeshEBO()->BindToVertexArray();
+			glDrawElements(GL_TRIANGLES, m_CubeMapMesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+		}
+		Renderer::EndRenderPass();
+	});
 }
 
 void SceneRenderer::CubemapPass()
 {
 	Renderer::Submit([this]()
-		{
-			Renderer::BeginRenderPass(m_FinalRenderPass, false);
-		});
+	{
+		Renderer::BeginRenderPass(m_FinalRenderPass, false);
+	});
 
 	Renderer::Submit([this]()
 	{
@@ -253,25 +313,25 @@ void SceneRenderer::CubemapPass()
 		glDepthMask(GL_FALSE);
 		glDisable(GL_BLEND);
 
-	m_CubemapShader->Use();
-	glm::mat4 view = glm::mat4(glm::mat3(m_View));
-	m_CubemapShader->SetMat4("view", view);
-	m_CubemapShader->SetMat4("projection", m_Projection);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxTextureHandle);
-	m_CubemapShader->SetInt("environmentMap", 0);
+		m_CubeMapShader->Use();
+		glm::mat4 view = glm::mat4(glm::mat3(m_View));
+		m_CubeMapShader->SetMat4("view", view);
+		m_CubeMapShader->SetMat4("projection", m_Projection);
+		m_BakeCubeMapRenderPass->GetSpecification().TargetFramebuffer->GetColorTexture(0)->BindTexture(0);
+		m_CubeMapShader->SetInt("environmentMap", 0);
+		m_CubeMapMesh->GetMeshVBO()->BindToVertexArray();
+		m_CubeMapMesh->GetMeshEBO()->BindToVertexArray();
+		glDrawElements(GL_TRIANGLES, m_CubeMapMesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
 
-	m_CubemapMesh->GetMeshVBO()->BindToVertexArray();
-	m_CubemapMesh->GetMeshEBO()->BindToVertexArray();
-	glDrawElements(GL_TRIANGLES, m_CubemapMesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
-
-	glDepthFunc(GL_LESS);
-	glDepthMask(GL_TRUE);
-		});
+		glDepthFunc(GL_LESS);
+		glDepthMask(GL_TRUE);
+	});
 
 
-	Renderer::Submit([]() {
-		Renderer::EndRenderPass(); });
+	Renderer::Submit([]() 
+	{
+		Renderer::EndRenderPass();
+	});
 }
 
 void SceneRenderer::GeometryPass()
@@ -279,6 +339,7 @@ void SceneRenderer::GeometryPass()
 	Renderer::Submit([this]()
 	{
 		Renderer::BeginRenderPass(m_GeometryRenderPass);
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		glDisable(GL_BLEND);
@@ -395,7 +456,7 @@ void SceneRenderer::ForwardPass()
 	Renderer::Submit([this]()
 	{	//draw
 		Renderer::BeginRenderPass(m_FinalRenderPass);
-
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		glDisable(GL_BLEND);

@@ -243,7 +243,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Graphics\HDRIConverter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -379,8 +378,5 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\Graphics\HDRIConverter.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

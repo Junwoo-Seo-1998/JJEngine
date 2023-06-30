@@ -46,6 +46,12 @@ void FrameBuffer::Resize(unsigned int width, unsigned int height)
 	BuildFrameBuffer();
 }
 
+void FrameBuffer::ChangeCubeMapTextureFace(int color_index, int face_index)
+{
+	ENGINE_ASSERT(m_ColorFormats[color_index] == FrameBufferFormat::CubeMap16F, "Not a CubeMap!");
+	glNamedFramebufferTextureLayer(m_FrameBufferID, GL_COLOR_ATTACHMENT0 + color_index, m_ColorTextures[color_index]->GetTextureID(), 0, face_index);
+}
+
 unsigned int FrameBuffer::GetFrameBufferID() const
 {
 	return m_FrameBufferID;
@@ -70,11 +76,6 @@ int FrameBuffer::GetPixelInt(int colorTextureIndex, int x, int y)
 	glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &val);
 
 	return val;
-}
-
-unsigned int FrameBuffer::GetHandle()
-{
-	return m_FrameBufferID;
 }
 
 FrameBufferSpecification FrameBuffer::GetSpecification() const
@@ -154,12 +155,26 @@ void FrameBuffer::BuildFrameBuffer()
 					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGBA32F });
 					break;
 				}
+				case FrameBufferFormat::CubeMap16F:
+				{
+					TextureData textureSpec{ width, height,nullptr,  TextureChannel::RGB16F };
+					textureSpec.target = TextureTarget::CubeMap;
+					m_ColorTextures[i] = Texture::CreateTexture(textureSpec);
+					break;
+				}
 				default:
 					ENGINE_ASSERT(true, "Not Supported Type!");
 					break;
 			}
 			unsigned textureID = m_ColorTextures[i]->GetTextureID();
-			glNamedFramebufferTexture(m_FrameBufferID, GL_COLOR_ATTACHMENT0 + i, textureID, 0);
+			if (m_ColorFormats[i] == FrameBufferFormat::CubeMap16F)
+			{
+				glNamedFramebufferTextureLayer(m_FrameBufferID, GL_COLOR_ATTACHMENT0 + i, textureID, 0, 0);
+			}
+			else
+			{
+				glNamedFramebufferTexture(m_FrameBufferID, GL_COLOR_ATTACHMENT0 + i, textureID, 0);
+			}
 		}
 	}
 
