@@ -484,7 +484,9 @@ void SceneRenderer::GeometryPassFSQ()
 					std::string lightIndex = std::format("Light[{}].", index++);
 					m_FinalRenderShader->SetInt(lightIndex + "LightType", static_cast<int>(light.m_LightType));
 					m_ForwardRenderShader->SetMat4(lightIndex + "ViewProjection", MatrixMath::BuildCameraMatrixWithDirection(lightPosition, lightDir) * lightProjection);
-					m_ForwardRenderShader->SetInt(lightIndex + "ShadowMap", shadowMap->GetUnitID());
+					//jun: not good practice since opengl is not designed for using specific unit id per texture
+					//can be anything just use same index that you used for bind texture
+					m_ForwardRenderShader->SetInt(lightIndex + "ShadowMap", index);
 					m_FinalRenderShader->SetFloat3(lightIndex + "Position", lightPosition);
 					m_FinalRenderShader->SetFloat3(lightIndex + "Direction", lightDir);
 					m_FinalRenderShader->SetFloat(lightIndex + "InnerAngle", light.m_Angle.inner);
