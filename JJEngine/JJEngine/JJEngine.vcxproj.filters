@@ -123,9 +123,6 @@
     <ClInclude Include="Core\Graphics\Graphics.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Graphics\HDRIConverter.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Graphics\IndexBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -246,6 +243,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\Asset\Metadata.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -284,9 +282,6 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Graphics.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Graphics\HDRIConverter.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp">

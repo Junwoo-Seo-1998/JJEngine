@@ -33,11 +33,9 @@ class EditorApp : public Application
 		//ASSERT(temp[ShaderType::GeometryShader] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestGeom.glsl"), "#pragma testing - GeometryShader type failed");
 		//ASSERT(temp[ShaderType::TessellationShader] == File::ReadFileToString("ShaderPreprocessUnitTest/PragmaTestTess.glsl"), "#pragma testing - TessellationShader type failed");
 
-
 		//temp = ShaderPreprocesssor::Preprocess("ShaderPreprocessUnitTest/Define_Ifdef_Test.glsl");
 		//ASSERT(temp.size() == 1, "#ifdef testing - Not correct shader type number");
 		//ASSERT(temp[ShaderType::None] == File::ReadFileToString("ShaderPreprocessUnitTest/Define_Ifdef_Test_answer.glsl"), "#ifdef testing failed");
-
 
 		//temp = ShaderPreprocesssor::Preprocess("ShaderPreprocessUnitTest/Include_Test.glsl");
 		//ASSERT(temp.size() == 5, "#include testing - Not correct shader type number");
