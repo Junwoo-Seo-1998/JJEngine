@@ -123,6 +123,9 @@
     <ClInclude Include="Core\Graphics\Graphics.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Graphics\HDRIConverter.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Graphics\IndexBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -281,6 +284,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\Graphics.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\HDRIConverter.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp">

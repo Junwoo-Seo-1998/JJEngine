@@ -70,7 +70,9 @@ void TestScene::Start()
 
 
 	auto light = CreateEntity("Test light1");
-	light.Transform().Position = { 2.f, 0.f,0.f };
+	light.Transform().Position = { 5.f, 5.f,0.f };
+	light.Transform().LookAtDir({ -1.f, -1.f,0.f });
+
 	light.AddComponent<LightComponent>();
 
 

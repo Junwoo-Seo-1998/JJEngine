@@ -39,6 +39,8 @@ private:
 
 	void CubemapPass();
 
+	void ShadowmapPass();
+
 	void GeometryPass();
 
 	void GeometryPassFSQ();
@@ -69,13 +71,14 @@ private:
 	glm::vec3 m_CameraPosition;
 
 	//scene data
-	std::vector<std::tuple<glm::vec3, glm::vec3, Light>> m_ActiveLights;
+	std::vector<std::tuple<glm::vec3, glm::vec3, glm::mat4, Light, std::shared_ptr<Texture>>> m_ActiveLights;
 
 
 	//Default Shader
 	std::shared_ptr<Material> m_DefaultMaterial;
 	std::shared_ptr<Shader> m_NormalRenderShader;
 
+	std::shared_ptr<Shader> m_ShadowShader;
 	std::shared_ptr<Shader> m_ForwardRenderShader;
 	std::shared_ptr<Shader> m_GeometryShader;
 	std::shared_ptr<Shader> m_FinalRenderShader;
@@ -86,6 +89,8 @@ private:
 	std::shared_ptr<Shader> m_BloomRenderShader;
 	std::shared_ptr<Shader> m_HDRRenderShader;
 
+	//RenderPass
+	std::shared_ptr<RenderPass> m_ShadowRenderPass;
 	std::shared_ptr<RenderPass> m_GeometryRenderPass;
 	std::shared_ptr<RenderPass> m_FinalRenderPass;
 	std::shared_ptr<RenderPass> m_BloomExtractRenderPass;

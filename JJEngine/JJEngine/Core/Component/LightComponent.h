@@ -5,5 +5,7 @@
 struct LightComponent
 {
 public:
+	glm::mat4 GetProjection() const;
+public:
 	Light light{};
 };
