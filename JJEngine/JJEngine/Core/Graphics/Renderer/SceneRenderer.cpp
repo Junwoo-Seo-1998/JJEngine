@@ -17,6 +17,7 @@
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
 #include "imgui.h"
+#include "glm/gtc/matrix_transform.hpp"
 
 SceneRenderer::SceneRenderer()
 {
@@ -90,10 +91,10 @@ void SceneRenderer::EndScene()
 	
 	ForwardPass();
 
-	CubemapPass();
+	//CubemapPass();
 	//post processing
-	BloomPass();
-	HDRPass();
+	//BloomPass();
+	//HDRPass();
 
 	//todo: make flags for it
 	//DebugRenderingPass();
@@ -302,16 +303,15 @@ void SceneRenderer::ShadowmapPass()
 	for (auto& [lightPosition, lightDir, lightProjection, light, shadowMap] : m_ActiveLights)
 	{
 		
-		const glm::mat4 lightView = MatrixMath::BuildCameraMatrixWithDirection(lightPosition, {-1.f, -1.f, 0.f});
-		
+		//const glm::mat4 lightView = MatrixMath::BuildCameraMatrixWithDirection(lightPosition, glm::normalize(glm::vec3{ -1.f, -1.f, -1.f }));
+		const glm::mat4 lightView = glm::lookAt(20.f * lightPosition, { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
 		Renderer::Submit([this, &lightView , &lightProjection]()
 			{
 				Renderer::BeginRenderPass(m_ShadowRenderPass, true);
-				glEnable(GL_CULL_FACE);
+				glEnable(GL_DEPTH_TEST);
 				glCullFace(GL_BACK);
-				glDisable(GL_BLEND);
 				m_ShadowShader->Use();
-				m_ShadowShader->SetMat4("toLight", m_Projection * m_View);
+				m_ShadowShader->SetMat4("toLight", lightProjection * lightView);
 			});
 
 		for (auto& toDraw : m_GeometryDrawList)
@@ -422,7 +422,7 @@ void SceneRenderer::GeometryPassFSQ()
 					shadowMap->BindTexture(index);
 					std::string lightIndex = std::format("Light[{}].", index++);
 					m_FinalRenderShader->SetInt(lightIndex + "LightType", static_cast<int>(light.m_LightType));
-					m_ForwardRenderShader->SetMat4(lightIndex + "ViewProjection", MatrixMath::BuildCameraMatrixWithDirection(lightPosition, lightDir) * lightProjection);
+					m_ForwardRenderShader->SetMat4(lightIndex + "ViewProjection", lightProjection * MatrixMath::BuildCameraMatrix(lightPosition, { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f }));
 					m_ForwardRenderShader->SetInt(lightIndex + "ShadowMap", shadowMap->GetUnitID());
 					m_FinalRenderShader->SetFloat3(lightIndex + "Position", lightPosition);
 					m_FinalRenderShader->SetFloat3(lightIndex + "Direction", lightDir);
@@ -481,16 +481,20 @@ void SceneRenderer::ForwardPass()
 		m_ForwardRenderShader->Use();
 		m_ForwardRenderShader->SetMat4("Matrix.View", m_View);
 		m_ForwardRenderShader->SetMat4("Matrix.Projection", m_Projection);
+		int index = 0;
 
 		//light set up
 		{
 			m_ForwardRenderShader->SetInt("LightNumbers", m_ActiveLights.size());
-			int index = 0;
 			for (auto& [lightPosition, lightDir, lightProjection, light, shadowMap] : m_ActiveLights)
 			{
-				std::string lightIndex = std::format("Light[{}].", index++);
+				//const glm::mat4 lightView = MatrixMath::BuildCameraMatrixWithDirection(lightPosition, glm::normalize(glm::vec3{ -1.f, -1.f, -1.f }));
+				const glm::mat4 lightView = glm::lookAt(20.f * lightPosition, { 0.f, 0.f, 0.f }, { 0.f, 1.f, 0.f });
+				shadowMap->BindTexture(index);
+				std::string lightIndex = std::format("Light[{}].", index);
 				m_ForwardRenderShader->SetInt(lightIndex + "LightType", static_cast<int>(light.m_LightType));
-				m_ForwardRenderShader->SetMat4(lightIndex + "ViewProjection", MatrixMath::BuildCameraMatrixWithDirection(lightPosition, lightDir) * lightProjection);
+				m_ForwardRenderShader->SetMat4(lightIndex + "ViewProjection", lightProjection * lightView);
+				m_ForwardRenderShader->SetInt(lightIndex + "ShadowMap", index++);
 				m_ForwardRenderShader->SetFloat3(lightIndex + "Position", lightPosition);
 				m_ForwardRenderShader->SetFloat3(lightIndex + "Direction", lightDir);
 				m_ForwardRenderShader->SetFloat(lightIndex + "InnerAngle", light.m_Angle.inner);
@@ -523,7 +527,7 @@ void SceneRenderer::ForwardPass()
 		{
 			toDraw.Mesh->GetMeshVBO()->BindToVertexArray();
 			toDraw.Mesh->GetMeshEBO()->BindToVertexArray();
-			m_DefaultMaterial->Bind();
+			m_DefaultMaterial->Bind(index);
 
 			m_ForwardRenderShader->SetMat4("Matrix.Model", toDraw.Transform);
 			m_ForwardRenderShader->SetMat4("Matrix.Normal", glm::transpose(glm::inverse(toDraw.Transform)));

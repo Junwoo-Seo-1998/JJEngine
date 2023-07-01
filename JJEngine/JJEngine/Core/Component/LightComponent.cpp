@@ -1,9 +1,12 @@
 #include "LightComponent.h"
 #include "glm/gtc/matrix_transform.hpp"
-
+#include "Core/Utils/Math/MatrixMath.h"
 glm::mat4 LightComponent::GetProjection() const
 {
-	//return glm::frustum(leftPlane, rightPlane, bottomPlane, topPlane, nearPlane, farPlane);
+	//return glm::frustum(-0.6f, 0.6f, -0.6f, 0.6f, 0.1f, 500.f);
+	//return MatrixMath::BuildPerspectiveProjectionMatrixFovy(Fov_y, Aspect_ratio, Near, Far);
+
+	
 	switch (light.m_LightType)
 	{
 		case LightType::DirectionLight:
