@@ -4,7 +4,7 @@ class Scene;
 class Asset_Scene :public Asset {
 
 	bool CheckIsDataLoaded() const override;
-	bool LoadData()override;
+	bool LoadData(std::filesystem::path p)override;
 	void UnloadData()override;
 
 public:

@@ -2,6 +2,7 @@
 #include "Core/Utils/YAML_IMPL.hpp"
 #include "Core/Utils/File.h"
 #include "Core/Utils/UUIDGenerator.h"
+#include "Core/Asset/Metadata.h"
 
 #define ADATA_PATH "./Assets.AData"
 #define RESORCE_PATH "./Resources"
@@ -18,7 +19,7 @@
 #define YM_ASSET_TYPE "Type"
 #define YM_ASSET_PATH "FilePath"
 
-void AssetManager::AddAsset(std::shared_ptr<Asset>& empty_asset, AssetType type)
+void AssetManager::GenAsset(std::shared_ptr<Asset>& empty_asset, AssetType type)
 {
 	switch (type)
 	{
@@ -48,10 +49,16 @@ bool AssetManager::ReadAData()
 		AssetType type = AssetType(D[YM_ASSET_TYPE].as<int>());
 
 		std::shared_ptr<Asset> temp;
-		AddAsset(temp,type);
+		GenAsset(temp,type);
 		assets[handle] = temp;
 		temp->Handle = handle;
-		temp->path = D[YM_ASSET_PATH].as<std::string>();
+
+		std::shared_ptr<Metadata> Meta_temp = std::make_shared<Metadata>();
+		assetMetadatas[handle] = Meta_temp;
+		Meta_temp->Handle = handle;
+		Meta_temp->path = D[YM_ASSET_PATH].as<std::string>();
+		Meta_temp->type = type;
+		Meta_temp->isMemoryOnlyAsset = false;
 	}
 	return true;
 }
@@ -64,10 +71,11 @@ void AssetManager::SaveAData()
 	out << YAML::Value << "All engine resorce assets";
 	out << YAML::Key << YM_ASSETS;
 	out << YAML::Value << YAML::BeginSeq;
-	for (auto& a : assets) {
+	for (auto& a : assetMetadatas) {
+		if (a.second->isMemoryOnlyAsset == true) continue;
 		out << YAML::BeginMap;
 		YAML_KEY_VALUE(out, YM_ASSET_HANDLE, a.second->Handle);
-		YAML_KEY_VALUE(out, YM_ASSET_TYPE, static_cast<int>(a.second->GetAssetType()));
+		YAML_KEY_VALUE(out, YM_ASSET_TYPE, static_cast<int>(a.second->type));
 		YAML_KEY_VALUE(out, YM_ASSET_PATH, a.second->path.string());
 		out << YAML::EndMap;
 	}
@@ -99,10 +107,9 @@ void AssetManager::UpdateAData()
 		else {
 			continue;
 		}
-
 		bool isNewAsset{true};
-		for (auto it = assets.begin(); it != assets.end();++it) {
-			if (*(it->second.get()) == f) {
+		for (auto it = assetMetadatas.begin(); it != assetMetadatas.end();++it) {
+			if (it->second->path == f) {
 				isNewAsset = false;
 				break;
 			}
@@ -111,14 +118,29 @@ void AssetManager::UpdateAData()
 			isUpdated = true;
 			AssetHandle handle{ UUIDGenerator::Generate(f.string())};// handel generate
 			std::shared_ptr<Asset> temp;
-			AddAsset(temp, type);
+			GenAsset(temp, type);
 			assets[handle] = temp;
 			temp->Handle = handle;
-			temp->path = f;
+
+			std::shared_ptr<Metadata> Meta_temp = std::make_shared<Metadata>();
+			assetMetadatas[handle] = Meta_temp;
+			Meta_temp->Handle = handle;
+			Meta_temp->path = f;
+			Meta_temp->type = type;
+			Meta_temp->isMemoryOnlyAsset = false;
 		}
 	}
 
-
+	std::vector<AssetHandle> deletedAssets{};
+	for (auto it = assetMetadatas.begin(); it != assetMetadatas.end(); ++it) {
+		if (File::CheckExists(it->second->path)== false) {
+			deletedAssets.push_back(it->second->Handle);
+		}
+	}
+	for (auto & d:deletedAssets) {
+		assetMetadatas.erase(d);
+		assets.erase(d);
+	}
 
 	if (isUpdated == true) {
 		SaveAData();
@@ -135,16 +157,30 @@ std::shared_ptr<Asset> AssetManager::GetAsset(AssetHandle assetHandle)
 {
 	ENGINE_ASSERT(IsAssetHandleValid(assetHandle) == true, "No asset is there");
 	if (latestFoundAsset->second->CheckIsDataLoaded() == false) {
-		ENGINE_ASSERT(latestFoundAsset->second->LoadData() == true, "Fail to load asset");
+		ENGINE_ASSERT(latestFoundAsset->second->LoadData(assetMetadatas[assetHandle]->path) == true, "Fail to load asset");
 	}
 	return latestFoundAsset->second;
+}
+
+bool AssetManager::LoadData(AssetHandle assetHandle)
+{
+	if (IsAssetHandleValid(assetHandle) == false) return false;
+	if (latestFoundAsset->second->LoadData(assetMetadatas[assetHandle]->path) == false) return false;
+	return true;
 }
 
 bool AssetManager::ReloadData(AssetHandle assetHandle)
 {
 	if (IsAssetHandleValid(assetHandle) == false) return false;
 	latestFoundAsset->second->UnloadData();
-	if (latestFoundAsset->second->LoadData() == false) return false;
+	if (latestFoundAsset->second->LoadData(assetMetadatas[assetHandle]->path) == false) return false;
+	return true;
+}
+
+bool AssetManager::UnloadData(AssetHandle assetHandle)
+{
+	if (IsAssetHandleValid(assetHandle) == false) return false;
+	latestFoundAsset->second->UnloadData();
 	return true;
 }
 
@@ -163,19 +199,21 @@ bool AssetManager::IsAssetLoaded(AssetHandle handle)
 
 AssetHandle AssetManager::GetHandleFromPath(std::filesystem::path p)
 {
-	return GetAssetFromPath(p)->Handle;
+	auto it = assetMetadatas.begin();
+	for (; it != assetMetadatas.end(); ++it) {
+		if (it->second->path == p) {
+			break;
+		}
+	}
+	if (it == assetMetadatas.end())return AssetHandle{};
+	return it->second->Handle;
 }
 
 std::shared_ptr<Asset> AssetManager::GetAssetFromPath(std::filesystem::path p)
 {
-	auto it = assets.begin();
-	for (; it != assets.end(); ++it) {
-		if (*(it->second.get()) == p) {
-			break;
-		}
-	}
-	ENGINE_ASSERT(it != assets.end(),"Path is not an asset");
-	return it->second;
+	AssetHandle temp = GetHandleFromPath(p);
+	ENGINE_ASSERT(temp != AssetHandle{}, "Path is not an asset");
+	return GetAsset(temp);
 }
 
 std::unordered_set<AssetHandle> AssetManager::GetAllAssetsWithType(AssetType type)
@@ -201,4 +239,9 @@ std::unordered_set<AssetHandle> AssetManager::GetAllHandles()
 		handles.insert(a.second->Handle);
 	}
 	return handles;
+}
+
+const std::unordered_map<AssetHandle, std::shared_ptr<Metadata>>& AssetManager::GetAllMetadatas()
+{
+	return assetMetadatas;
 }

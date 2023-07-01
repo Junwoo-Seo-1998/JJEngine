@@ -5,7 +5,7 @@ class Texture;
 class Asset_Texture :public Asset {
 
 	bool CheckIsDataLoaded() const override;
-	bool LoadData()override;
+	bool LoadData(std::filesystem::path p)override;
 	void UnloadData()override;
 
 public:

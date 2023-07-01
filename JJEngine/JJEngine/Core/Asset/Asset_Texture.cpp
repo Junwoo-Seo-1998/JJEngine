@@ -7,7 +7,7 @@ bool Asset_Texture::CheckIsDataLoaded() const
 	return data != nullptr;
 }
 
-bool Asset_Texture::LoadData()
+bool Asset_Texture::LoadData(std::filesystem::path path)
 {
 	data = Texture::CreateTexture(File::ReadImageToTexture(path.string()));
 	//fail check?

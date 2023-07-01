@@ -1,53 +1,50 @@
 ADATA: All engine resorce assets
 Assets:
-  - Handle: 89b57b0f-6d08-5895-b804-64e384106bac
-    Type: 1
-    FilePath: ./Resources\Scenes\Default tt.scn
-  - Handle: 52c913f1-447c-5c4a-b3d8-f3c78f5f0717
-    Type: 1
-    FilePath: ./Resources\Scenes\Default.scn
-  - Handle: 9c821a52-28ae-5f92-b359-c252d9fd8548
-    Type: 1
-    FilePath: ./Resources\Scenes\Default123.scn
-  - Handle: 7ceecaae-04d1-5769-b18e-9d3b9b6333d3
-    Type: 2
-    FilePath: ./Resources\Textures\FileImage.png
-  - Handle: ef91cb69-50f7-5015-a5a5-cd398d224ec6
-    Type: 1
-    FilePath: ./Resources\Scenes\Test.scn
-  - Handle: 6ff14046-5fbb-5fe2-bd73-50ca6dee8b3c
-    Type: 1
-    FilePath: ./Resources\Scenes\testScene.scn
-  - Handle: 374f8fc9-4902-586c-a2ed-8dcf580af4fc
-    Type: 2
-    FilePath: ./Resources\Textures\grid.png
-  - Handle: 46c9b71b-1d42-51e7-877e-1c89ff8071b7
-    Type: 1
-    FilePath: ./Resources\Scenes\testScene22.scn
-  - Handle: df44f695-c594-5277-a7d4-d2e04b599f00
-    Type: 2
-    FilePath: ./Resources\Textures\FolderImage.png
-  - Handle: 5d0b7f90-acf7-58d1-9f22-9f6b0d6d60ff
-    Type: 2
-    FilePath: ./Resources\Textures\test.jpg
-  - Handle: 5e7c40dc-ad78-5235-ac5c-c1764c53ce5f
-    Type: 2
-    FilePath: ./Resources\Textures\UI\PlayButton.png
-  - Handle: 77674609-0750-58b0-9db8-c6b56630de8d
-    Type: 2
-    FilePath: ./Resources\Textures\UI\Stop.png
-  - Handle: 9dbb1660-da8c-5198-aaec-f3e44b619c9d
-    Type: 2
-    FilePath: ./Resources\Textures\Check.png
-  - Handle: 8970bc04-d770-5a2d-9a69-dff9fa69483f
+  - Handle: 415e89cd-71f4-50c0-9716-cf0c6662cae5
     Type: 2
     FilePath: ./Resources\Textures\TestDiff.png
-  - Handle: 3d0428e6-6c3b-5013-ac4d-cc3e392df507
-    Type: 2
-    FilePath: ./Resources\Textures\TestSpec.png
-  - Handle: bff1a1a4-48b2-51b2-a92f-fb9fc02664c0
-    Type: 2
-    FilePath: ./Resources\Textures\hdri_skybox.jpg
-  - Handle: ea63fd39-1664-5be9-8c96-b27e959e9436
+  - Handle: 67ecaac6-797a-5325-a086-24adcc7d9380
     Type: 2
     FilePath: ./Resources\Textures\hdri_skybox.png
+  - Handle: acf97a73-97e8-51c0-981f-027a69ae0965
+    Type: 1
+    FilePath: ./Resources\Scenes\testScene22.scn
+  - Handle: d12c2f7c-9587-55d8-92d9-78af90787cdd
+    Type: 1
+    FilePath: ./Resources\Scenes\Default.scn
+  - Handle: adfc2d32-60ac-568d-b923-a53698c7ab70
+    Type: 1
+    FilePath: ./Resources\Scenes\Default tt.scn
+  - Handle: 3e1688ac-d1b1-56ea-b3b3-fb4ead56dd7d
+    Type: 1
+    FilePath: ./Resources\Scenes\Default123.scn
+  - Handle: 6c7237b9-b538-5ffa-8178-f61edc571f8c
+    Type: 1
+    FilePath: ./Resources\Scenes\Test.scn
+  - Handle: 6b780608-16db-5fad-afb8-3eeb140fa354
+    Type: 1
+    FilePath: ./Resources\Scenes\testScene.scn
+  - Handle: 4d2c2996-06d9-55b4-90ec-9b079019f30c
+    Type: 2
+    FilePath: ./Resources\Textures\Check.png
+  - Handle: 4574080e-bbc2-5bce-9a58-c21c04bdb0ed
+    Type: 2
+    FilePath: ./Resources\Textures\FileImage.png
+  - Handle: ca2140ad-ea7c-55cb-aa70-89f13dc6e5a1
+    Type: 2
+    FilePath: ./Resources\Textures\FolderImage.png
+  - Handle: a228b2b7-31ef-5b22-9e2f-48af02f1ffd3
+    Type: 2
+    FilePath: ./Resources\Textures\hdri_skybox.jpg
+  - Handle: d954a28c-3331-5eda-9253-fa3586bf4ca9
+    Type: 2
+    FilePath: ./Resources\Textures\test.jpg
+  - Handle: afebb1da-b106-5986-bfcd-9e72644a741e
+    Type: 2
+    FilePath: ./Resources\Textures\TestSpec.png
+  - Handle: 204ae32a-bfde-59b5-8b37-d639eb9e59fc
+    Type: 2
+    FilePath: ./Resources\Textures\UI\PlayButton.png
+  - Handle: 6bb43570-8a47-5c2e-9c8a-24b593934005
+    Type: 2
+    FilePath: ./Resources\Textures\UI\Stop.png
