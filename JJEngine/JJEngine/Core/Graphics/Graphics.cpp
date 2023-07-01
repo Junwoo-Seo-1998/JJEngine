@@ -56,7 +56,7 @@ void Graphics::ExecutePostRenderCommand(RenderCommandType command)
 {
 	auto& GBufferFBO = std::any_cast<std::shared_ptr<FrameBuffer>&>(command["GBufferFBO"]);
 
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, GBufferFBO->GetHandle());
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, GBufferFBO->GetFrameBufferID());
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, finalFBO);
 	const int width = GBufferFBO->GetSpecification().Width;
 	const int height = GBufferFBO->GetSpecification().Height;
@@ -264,7 +264,7 @@ void Graphics::ForwardDraw(RenderCommandType command)
 			const int sides = get<1>(s.second).size();
 			for (int j = 0; j < sides; j++)
 			{
-				ForwardShader->SetInt("sampleInfo[" + std::to_string(lightIndex) + "].shadowMaps[" + std::to_string(j) + "]", get<1>(s.second)[j]->GetUnitID());
+				//ForwardShader->SetInt("sampleInfo[" + std::to_string(lightIndex) + "].shadowMaps[" + std::to_string(j) + "]", get<1>(s.second)[j]->GetUnitID());
 			}
 			
 			lightIndex++;
@@ -305,11 +305,13 @@ void Graphics::DefferedDraw(RenderCommandType command)
 	auto& GBuffer = std::any_cast<std::shared_ptr<FrameBuffer>&>(command["GBufferFBO"]);
 	DefferedSecondPassShader->Use();
 	DefferedSecondPassShader->SetInt("current_lights", lightsNumber);
+	/*
 	DefferedSecondPassShader->SetInt("gPos", GBuffer->GetColorTexture(0)->GetUnitID());
 	DefferedSecondPassShader->SetInt("gNormal", GBuffer->GetColorTexture(1)->GetUnitID());
 	DefferedSecondPassShader->SetInt("gAmb", GBuffer->GetColorTexture(2)->GetUnitID());
 	DefferedSecondPassShader->SetInt("gDiff", GBuffer->GetColorTexture(3)->GetUnitID());
 	DefferedSecondPassShader->SetInt("gSpec", GBuffer->GetColorTexture(4)->GetUnitID());
+	*/
 
 	DefferedSecondPassShader->SetFloat3("cam", camPos);
 
@@ -330,7 +332,7 @@ void Graphics::DefferedDraw(RenderCommandType command)
 		const int sides = get<1>(s.second).size();
 		for (int j = 0; j < sides; j++)
 		{
-			DefferedSecondPassShader->SetInt("sampleInfo[" + std::to_string(lightIndex) + "].shadowMaps[" + std::to_string(j) + "]", get<1>(s.second)[j]->GetUnitID());
+			//DefferedSecondPassShader->SetInt("sampleInfo[" + std::to_string(lightIndex) + "].shadowMaps[" + std::to_string(j) + "]", get<1>(s.second)[j]->GetUnitID());
 		}
 		lightIndex++;
 	}

@@ -147,3 +147,40 @@ std::shared_ptr<TextureData> File::ReadHDRImageToTexture(const std::string& file
     texture->data = data;
     return texture;
 }
+
+std::shared_ptr<TextureData> File::ReadCubeMapImagesToTexture(const std::vector<std::string>& file_names)
+{
+    ENGINE_ASSERT(file_names.size() == 6, "There should be 6 faces");
+    std::shared_ptr<TextureData> texture = std::make_shared<TextureData>();
+    texture->target = TextureTarget::CubeMap;
+    texture->channel = TextureChannel::RGB16F;
+
+    stbi_set_flip_vertically_on_load(false);
+
+    std::shared_ptr<float* []> datas{new float* [6],
+    [](float** imgs_to_delete)
+    {
+        for (int i = 0; i < 6; ++i)
+        {
+            stbi_image_free(imgs_to_delete[i]);
+        }
+    	delete[] imgs_to_delete;
+    }};
+
+    for (int i = 0; i < 6; ++i)
+    {
+        if (!std::filesystem::exists(file_names[i]))
+        {
+            EngineLog::Error("There is no file : {}", file_names[i]);
+            return {};
+        }
+
+        datas[i] = stbi_loadf(file_names[i].c_str(), &(texture->width), &(texture->height), nullptr, 3);
+        if (datas[i] == nullptr)
+        {
+            EngineLog::Error("Error - On loading texture : {}", file_names[i]);
+        }
+    }
+    texture->data = datas;
+    return texture;
+}

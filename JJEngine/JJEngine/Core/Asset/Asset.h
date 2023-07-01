@@ -11,11 +11,11 @@ protected:
 	friend class AssetManager;
 
 	virtual bool CheckIsDataLoaded() const = 0;
-	virtual bool LoadData() = 0;
+	virtual bool LoadData(std::filesystem::path p) = 0;
 	virtual void UnloadData() = 0;
 
 	AssetHandle Handle;
-	std::filesystem::path path;
+	//std::filesystem::path path;
 	//void* dataPtr{};
 	// loaded time?
 public:
@@ -46,53 +46,4 @@ public:
 		return !(*this == other);
 	}
 
-	virtual bool operator==(const std::filesystem::path& other) const
-	{
-		return path == other;
-	}
-
-	virtual bool operator!=(const std::filesystem::path& other) const
-	{
-		return !(*this == other);
-	}
-
 };
-
-//bool operator==(const std::shared_ptr<Asset>& ptr, const AssetHandle& other)
-//{
-//	return *ptr.get() == other;
-//}
-//bool operator!=(const std::shared_ptr<Asset>& ptr, const AssetHandle& other)
-//{
-//	return !(*ptr.get() == other);
-//}
-
-//bool operator==(const Asset& self, const Asset& other) 
-//{
-//	return self.GetHandle() == other.GetHandle();
-//}
-//
-// bool operator!=(const Asset& self, const Asset& other) 
-//{
-//	return !(self == other);
-//}
-//
-// bool operator==(const Asset& self, const AssetHandle& other) 
-//{
-//	return Handle == other;
-//}
-//
-// bool operator!=(const Asset& self, const AssetHandle& other) 
-//{
-//	return !(*this == other);
-//}
-//
-// bool operator==(const Asset& self, const std::filesystem::path& other) 
-//{
-//	return path == other;
-//}
-//
-// bool operator!=(const Asset& self, const std::filesystem::path& other) 
-//{
-//	return !(*this == other);
-//}

@@ -11,6 +11,7 @@ enum class FrameBufferFormat
 	RGB16F,
 	RGBA,
 	RGBA32F,
+	CubeMap16F,
 	Depth,
 };
 
@@ -45,13 +46,12 @@ public:
 	void UnBind() const;
 
 	void Resize(unsigned int width, unsigned int height);
-
+	void ChangeCubeMapTextureFace(int color_index, int face_index);
 	unsigned int GetFrameBufferID() const;
 	std::shared_ptr<Texture> GetColorTexture(int index);
 	std::shared_ptr<Texture> GetDepthTexture();
 
 	int GetPixelInt(int colorTextureIndex, int x, int y);
-	unsigned int GetHandle();
 
 	FrameBufferSpecification GetSpecification() const;
 private:

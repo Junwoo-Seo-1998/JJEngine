@@ -107,6 +107,7 @@
     <ClInclude Include="Core\Asset\Asset_Scene.h" />
     <ClInclude Include="Core\Asset\Asset_Texture.h" />
     <ClInclude Include="Core\Asset\Manager\AssetManager.h" />
+    <ClInclude Include="Core\Asset\Metadata.h" />
     <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\Command\CommandQueue.h" />
     <ClInclude Include="Core\Component\BoxCollider2DComponent.h" />
@@ -129,7 +130,6 @@
     <ClInclude Include="Core\Event\WindowEvent.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h" />
     <ClInclude Include="Core\Graphics\Graphics.h" />
-    <ClInclude Include="Core\Graphics\HDRIConverter.h" />
     <ClInclude Include="Core\Graphics\IndexBuffer.h" />
     <ClInclude Include="Core\Graphics\Light.h" />
     <ClInclude Include="Core\Graphics\Material.h" />
@@ -190,7 +190,6 @@
     <ClCompile Include="Core\Event\EventManager.cpp" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Graphics.cpp" />
-    <ClCompile Include="Core\Graphics\HDRIConverter.cpp" />
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Material.cpp" />
     <ClCompile Include="Core\Graphics\Mesh.cpp" />

@@ -7,6 +7,18 @@ End Header-------------------------------------------------------- */
 #include "Texture.h"
 #include "glad.h"
 #include "Core/Utils/Assert.h"
+
+unsigned TextureTargetData::TextureTargetDataToOpenGLType() const
+{
+	switch (target)
+	{
+	case TextureTarget::Texture2D: return GL_TEXTURE_2D;
+	case TextureTarget::CubeMap: return GL_TEXTURE_CUBE_MAP;
+	}
+	ENGINE_ASSERT(false, "Not Supported Texture Channel");
+	return 0;
+}
+
 unsigned TextureChannelData::TextureChannelTypeToOpenGLInnerType() const
 {
 	switch (channel)
@@ -145,20 +157,9 @@ unsigned int Texture::GetTextureID() const
 	return m_TextureID;
 }
 
-unsigned int Texture::GetUnitID() const
-{
-	return m_UnitID;
-}
-
 void Texture::BindTexture(unsigned int unit)
 {
-	m_UnitID = unit;
 	glBindTextureUnit(unit, m_TextureID);
-}
-
-void Texture::UnBindTexture()
-{
-	glBindTextureUnit(m_UnitID, 0);
 }
 
 void Texture::ClearTexture(int value)
@@ -167,37 +168,26 @@ void Texture::ClearTexture(int value)
 }
 
 Texture::Texture(std::shared_ptr<TextureData> texture_data)
-	:m_Width(texture_data->width), m_Height(texture_data->height), m_TextureChannel(texture_data->channel),
+	:m_Width(texture_data->width), m_Height(texture_data->height),
+	m_TextureTarget(texture_data->target),
+	m_TextureChannel(texture_data->channel),
 	m_Wrap(texture_data->wrap), m_Filter(texture_data->filter)
 {
-	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
-	
-	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, m_Wrap.TextureWrapDataToOpenGLType());
-	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, m_Wrap.TextureWrapDataToOpenGLType());
-
-	glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, m_Filter.TextureFilterDataToOpenGLType());
-	glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, m_Filter.TextureFilterDataToOpenGLType());
-
-	if (m_Wrap.wrap == TextureWrap::ClampToBorder)
-	{
-		GLfloat border[] = { 0 };
-		glTextureParameterfv(m_TextureID, GL_TEXTURE_BORDER_COLOR, border);
-	}
-
-	glTextureStorage2D(m_TextureID, 1, texture_data->channel.TextureChannelTypeToOpenGLInnerType(), m_Width, m_Height);
-
-	if (texture_data->data != nullptr)
-	{
-		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, texture_data->channel.TextureChannelTypeToOpenGLType(), m_TextureChannel.TextureChannelTypeToOpenGLDataType(), texture_data->data.get());
-		glGenerateTextureMipmap(m_TextureID);
-	}
+	CreateTextureInner(*texture_data);
 }
 
 Texture::Texture(const TextureData& texture_data)
-	:m_Width(texture_data.width), m_Height(texture_data.height), m_TextureChannel(texture_data.channel),
+	:m_Width(texture_data.width), m_Height(texture_data.height),
+	m_TextureTarget(texture_data.target),
+	m_TextureChannel(texture_data.channel),
 	m_Wrap(texture_data.wrap), m_Filter(texture_data.filter)
 {
-	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
+	CreateTextureInner(texture_data);
+}
+
+void Texture::CreateTextureInner(const TextureData& texture_data)
+{
+	glCreateTextures(texture_data.target.TextureTargetDataToOpenGLType(), 1, &m_TextureID);
 
 	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, m_Wrap.TextureWrapDataToOpenGLType());
 	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, m_Wrap.TextureWrapDataToOpenGLType());
@@ -211,23 +201,43 @@ Texture::Texture(const TextureData& texture_data)
 		glTextureParameterfv(m_TextureID, GL_TEXTURE_BORDER_COLOR, border);
 	}
 
+	//jun: allocate this will handle 6 faces too (https://registry.khronos.org/OpenGL-Refpages/gl4/html/glTexStorage2D.xhtml)
 	glTextureStorage2D(m_TextureID, 1, texture_data.channel.TextureChannelTypeToOpenGLInnerType(), m_Width, m_Height);
 
+	//jun: set data
 	if (texture_data.data != nullptr)
 	{
-		glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height, texture_data.channel.TextureChannelTypeToOpenGLType(), m_TextureChannel.TextureChannelTypeToOpenGLDataType(), texture_data.data.get());
-		glGenerateTextureMipmap(m_TextureID);
+		if (m_TextureTarget.target == TextureTarget::Texture2D)
+		{
+			glTextureSubImage2D(m_TextureID, 0, 0, 0, m_Width, m_Height,
+				texture_data.channel.TextureChannelTypeToOpenGLType(),
+				m_TextureChannel.TextureChannelTypeToOpenGLDataType(), texture_data.data.get());
+			glGenerateTextureMipmap(m_TextureID);
+		}
+		else if(m_TextureTarget.target == TextureTarget::CubeMap)
+		{
+			//jun: we can use 3D to load cube map(https://www.khronos.org/opengl/wiki/Cubemap_Texture#Cubemap_array_textures)
+			float** imagePtrs = (float**)texture_data.data.get();
+			for (int i = 0; i < 6; ++i)
+			{
+				float* imgData = imagePtrs[i];
+				glTextureSubImage3D(m_TextureID, 0, 0, 0, i, m_Width, m_Height, 1,
+					texture_data.channel.TextureChannelTypeToOpenGLType(),
+					m_TextureChannel.TextureChannelTypeToOpenGLDataType(), imgData);
+			}
+		}
 	}
 }
 
 
-
 Texture::Texture(std::shared_ptr<Texture> texture)
-	:m_Width(texture->m_Width), m_Height(texture->m_Height), m_TextureChannel(texture->m_TextureChannel),
+	:m_Width(texture->m_Width), m_Height(texture->m_Height),
+	m_TextureTarget(texture->m_TextureTarget),
+	m_TextureChannel(texture->m_TextureChannel),
 	m_Wrap(texture->m_Wrap), m_Filter(texture->m_Filter)
 
 {
-	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureID);
+	glCreateTextures(texture->m_TextureTarget.TextureTargetDataToOpenGLType(), 1, &m_TextureID);
 
 	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_S, m_Wrap.TextureWrapDataToOpenGLType());
 	glTextureParameteri(m_TextureID, GL_TEXTURE_WRAP_T, m_Wrap.TextureWrapDataToOpenGLType());
@@ -241,8 +251,15 @@ Texture::Texture(std::shared_ptr<Texture> texture)
 		glTextureParameterfv(m_TextureID, GL_TEXTURE_BORDER_COLOR, border);
 	}
 
+	//jun: allocate this will handle 6 faces too (https://registry.khronos.org/OpenGL-Refpages/gl4/html/glTexStorage2D.xhtml)
 	glTextureStorage2D(m_TextureID, 1, texture->m_TextureChannel.TextureChannelTypeToOpenGLInnerType(), m_Width, m_Height);
-	glCopyImageSubData(texture->GetTextureID(), GL_TEXTURE_2D, 0, 0, 0, 0, m_TextureID, GL_TEXTURE_2D, 0, 0, 0, 0, m_Width, m_Height, 1);
+	
+	//set
+	glCopyImageSubData(texture->GetTextureID(),
+		texture->m_TextureTarget.TextureTargetDataToOpenGLType(),
+		0, 0, 0, 0, m_TextureID,
+		texture->m_TextureTarget.TextureTargetDataToOpenGLType(),
+		0, 0, 0, 0, m_Width, m_Height, 1);
 	glGenerateTextureMipmap(m_TextureID);
 
 }

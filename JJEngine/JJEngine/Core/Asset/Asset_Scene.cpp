@@ -7,7 +7,7 @@ bool Asset_Scene::CheckIsDataLoaded() const
 	return data != nullptr;
 }
 
-bool Asset_Scene::LoadData()
+bool Asset_Scene::LoadData(std::filesystem::path path)
 {
 	data = std::make_shared<Scene>(path.filename().string());
 	SceneSerializer see_real(data);

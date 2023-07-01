@@ -24,6 +24,7 @@ public:
 
 	void SetScene(Scene* scene);
 	void SetViewportSize(unsigned int width, unsigned int height);
+
 	void BeginScene(const glm::mat4& view, const glm::mat4& Projection, const glm::vec3& camPos);
 	void EndScene();
 
@@ -33,6 +34,8 @@ public:
 	std::shared_ptr<RenderPass> GetFinalRenderPass();
 private:
 	void Init();
+
+	void BakeCubeMap();
 
 	void CubemapPass();
 
@@ -94,11 +97,12 @@ private:
 	std::shared_ptr<RenderPass> m_BloomBlurRenderPass[2];
 
 	//Cubemap
-	std::shared_ptr<Shader> m_CubemapShader;
-	std::shared_ptr<Mesh> m_CubemapMesh;
+	std::shared_ptr<Shader> m_BakeCubeMapShader;
+	std::shared_ptr<Shader> m_CubeMapShader;
+	std::shared_ptr<Mesh> m_CubeMapMesh;
 	std::shared_ptr<Texture> m_DefaultHDRICubemapTexture;
-	std::shared_ptr<HDRIConverter> m_HDRIConverter;
-	unsigned int m_SkyboxTextureHandle = 0;
+	std::shared_ptr<RenderPass> m_BakeCubeMapRenderPass;
+
 
 	struct DrawCommand
 	{
