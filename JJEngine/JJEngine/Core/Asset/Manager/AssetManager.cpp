@@ -147,6 +147,38 @@ void AssetManager::UpdateAData()
 	}
 }
 
+AssetHandle AssetManager::AddMemoryOnlyAsset(AssetType type)
+{
+	static int dynamicID{0};
+	std::string path{"Resources/MemoryOnlyAsset(" + std::to_string(dynamicID) + ")"};
+	AssetHandle handle{ UUIDGenerator::Generate(path)};
+	std::shared_ptr<Asset> temp;
+	GenAsset(temp, type);
+	assets[handle] = temp;
+	temp->Handle = handle;
+
+	std::shared_ptr<Metadata> Meta_temp = std::make_shared<Metadata>();
+	assetMetadatas[handle] = Meta_temp;
+	Meta_temp->Handle = handle;
+	Meta_temp->path = path;
+	Meta_temp->type = type;
+	Meta_temp->isMemoryOnlyAsset = true;
+
+	return handle;
+}
+
+bool AssetManager::IsMemoryOnlyAsset(AssetHandle handle)
+{
+	ENGINE_ASSERT(IsAssetHandleValid(handle) == true, "Asset handle is not valid");
+	return assetMetadatas[handle]->isMemoryOnlyAsset;
+}
+
+std::shared_ptr<Metadata> AssetManager::GetMetadata(AssetHandle assetHandle)
+{
+	ENGINE_ASSERT(IsAssetHandleValid(assetHandle) == true, "Asset handle is not valid");
+	return assetMetadatas[assetHandle];
+}
+
 AssetType AssetManager::GetAssetType(AssetHandle assetHandle)
 {
 	if (IsAssetHandleValid(assetHandle) == false) return AssetType::None;
@@ -214,6 +246,28 @@ std::shared_ptr<Asset> AssetManager::GetAssetFromPath(std::filesystem::path p)
 	AssetHandle temp = GetHandleFromPath(p);
 	ENGINE_ASSERT(temp != AssetHandle{}, "Path is not an asset");
 	return GetAsset(temp);
+}
+
+std::unordered_set<AssetHandle> AssetManager::GetAllMemoryOnlyAssetHandles()
+{
+	std::unordered_set<AssetHandle> handles{};
+	for (auto& a : assetMetadatas) {
+		if (a.second->isMemoryOnlyAsset == true) {
+			handles.insert(a.second->Handle);
+		}
+	}
+	return handles;
+}
+
+std::unordered_set<AssetHandle> AssetManager::GetAllFileAssetHandles()
+{
+	std::unordered_set<AssetHandle> handles{};
+	for (auto& a : assetMetadatas) {
+		if (a.second->isMemoryOnlyAsset == false) {
+			handles.insert(a.second->Handle);
+		}
+	}
+	return handles;
 }
 
 std::unordered_set<AssetHandle> AssetManager::GetAllAssetsWithType(AssetType type)

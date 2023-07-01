@@ -30,7 +30,9 @@ public:
 	void UpdateAData();
 
 	AssetHandle AddMemoryOnlyAsset(AssetType type);
+	bool IsMemoryOnlyAsset(AssetHandle handle);
 
+	std::shared_ptr<Metadata> GetMetadata(AssetHandle assetHandle);
 	AssetType GetAssetType(AssetHandle assetHandle);
 	std::shared_ptr<Asset> GetAsset(AssetHandle assetHandle);
 
@@ -48,6 +50,8 @@ public:
 	AssetHandle GetHandleFromPath(std::filesystem::path p);
 	std::shared_ptr<Asset> GetAssetFromPath(std::filesystem::path p);
 
+	std::unordered_set<AssetHandle> GetAllMemoryOnlyAssetHandles();
+	std::unordered_set<AssetHandle> GetAllFileAssetHandles();
 	std::unordered_set<AssetHandle> GetAllAssetsWithType(AssetType type);
 	const std::unordered_map<AssetHandle, std::shared_ptr<Asset>>& GetAllAssets();
 	std::unordered_set<AssetHandle> GetAllHandles();
