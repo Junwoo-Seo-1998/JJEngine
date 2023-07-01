@@ -133,6 +133,7 @@ void AssetManager::UpdateAData()
 
 	std::vector<AssetHandle> deletedAssets{};
 	for (auto it = assetMetadatas.begin(); it != assetMetadatas.end(); ++it) {
+		if (it->second->isMemoryOnlyAsset == true) continue;
 		if (File::CheckExists(it->second->path)== false) {
 			deletedAssets.push_back(it->second->Handle);
 		}
