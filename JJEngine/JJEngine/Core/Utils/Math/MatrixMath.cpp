@@ -42,7 +42,7 @@ glm::mat4 MatrixMath::BuildCameraMatrixWithDirection(const glm::vec3& cam_positi
 
 	if (lookAt == world_up)
 		throw "shouldn't be same!";
-	glm::vec3 cam_foward = -lookAt;
+	glm::vec3 cam_foward = -glm::normalize(lookAt);
 	glm::vec3 cam_right = glm::normalize(glm::cross(-cam_foward, world_up));
 	glm::vec3 cam_up = glm::normalize(glm::cross(cam_right, -cam_foward));
 
