@@ -10,6 +10,7 @@ End Header-------------------------------------------------------- */
 #include <unordered_map>
 #include <vector>
 #include <glm/glm.hpp>
+#include <filesystem>
 
 enum class ShaderType
 {
@@ -29,6 +30,7 @@ class Shader
 {
 public:
 	~Shader();
+	static std::shared_ptr<Shader> CreateShader(const std::filesystem::path& glslFile);
 	static std::shared_ptr<Shader> CreateShaderFromString(const ShaderSource& srcs);
 	static std::shared_ptr<Shader> CreateShaderFromFile(const ShaderSource& srcs);
 

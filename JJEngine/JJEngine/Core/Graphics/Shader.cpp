@@ -10,11 +10,23 @@ End Header-------------------------------------------------------- */
 #include "glm/gtc/type_ptr.hpp"
 #include "Core/Utils/File.h"
 #include "Core/Utils/Log.h"
+#include "Core/Utils/ShaderPreprocessor.h"
 
 Shader::~Shader()
 {
 	glUseProgram(0);
 	glDeleteProgram(m_ShaderProgram);
+}
+
+std::shared_ptr<Shader> Shader::CreateShader(const std::filesystem::path& glslFile)
+{
+	std::unordered_map<ShaderType, std::string> map = ShaderPreprocesssor::Preprocess(glslFile);
+	ShaderSource shaderSource;
+	for (auto& [type, src] : map)
+	{
+		shaderSource[type] = { src };
+	}
+	return std::shared_ptr<Shader>(new Shader{ shaderSource, false });
 }
 
 std::shared_ptr<Shader> Shader::CreateShaderFromString(const ShaderSource& srcs)

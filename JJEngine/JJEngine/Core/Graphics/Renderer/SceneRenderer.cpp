@@ -141,10 +141,7 @@ void SceneRenderer::Init()
 		{ ShaderType::GeometryShader,{"Resources/Shaders/version.glsl","Resources/Shaders/DebugNormal.geo"}}
 		});
 
-		m_ShadowShader = Shader::CreateShaderFromFile({
-		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ShadowShader.vert"}},
-		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ShadowShader.frag"} }
-			});
+		m_ShadowShader = Shader::CreateShader("Resources/Shaders/BakeShadow.glsl");
 
 		m_ForwardRenderShader = Shader::CreateShaderFromFile({
 		{ ShaderType::VertexShader,{"Resources/Shaders/version.glsl","Resources/Shaders/ForwardShader.vert"}},
