@@ -5,17 +5,20 @@
 #include "Core/Utils/Log.h"
 #include "FileWatch.hpp"
 #include "Core/Layer/LayerManager.h"
-#include "IngameCameraControllerLayer.h"
-#include "IngameRendererLayer.h"
+//#include "IngameCameraControllerLayer.h"
+//#include "IngameRendererLayer.h"
+#include "RuntimeLayer.h"
 
 #include <filesystem>
 
 class GameApp : public Application
 {
-	virtual void UserDefinedInit() override
+	virtual void UserDefinedInit(std::string GameData) override
 	{
-		GetLayerManager()->PushLayer(std::make_shared<IngameCameraControllerLayer>());
-		GetLayerManager()->PushLayer(std::make_shared<IngameRendererLayer>());
+		Application::UserDefinedInit(GameData);
+		GetLayerManager()->PushLayer(std::make_shared<RuntimeLayer>());
+		//GetLayerManager()->PushLayer(std::make_shared<IngameCameraControllerLayer>());
+		//GetLayerManager()->PushLayer(std::make_shared<IngameRendererLayer>());
 
 		//todo: remove this
 		filewatch::FileWatch<std::string> watch("./Resources/Scripts/JJEngine-ScriptCore.dll", [](const std::string& path, const filewatch::Event change_type) {

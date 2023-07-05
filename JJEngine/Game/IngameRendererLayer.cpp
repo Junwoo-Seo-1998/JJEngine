@@ -99,40 +99,40 @@ void IngameRendererLayer::OnRender()
 	int a = cameraView.size();
 
 
-	for (auto& cam : cameraView)
-	{
-		Entity camEntity(cam, active_scene.get());
-		auto& camera = camEntity.GetComponent<CameraComponent>();
-		auto& cameraTransform = camEntity.GetComponent<TransformComponent>();
-		const glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.Position + cameraTransform.GetForward(), cameraTransform.GetUp());
-		SceneRenderer::BeginSceneCommand(camVP, cameraTransform.Position);
-		SceneRenderer::SetVAO(renderer_vao);
-		SceneRenderer::SetShadowBuffer(shadow_buffer);
-		SceneRenderer::SetGBuffer(g_buffer, FSQ);
-		SceneRenderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
-		for (auto& obj : objectView)
-		{
-			Entity objEntity(obj, active_scene.get());
-			auto& transform = objEntity.GetComponent<TransformComponent>();
-			auto& model = objEntity.GetComponent<Model>();
-			auto& material = objEntity.GetComponent<MaterialComponent>();
-			SceneRenderer::AddModel(model, transform, material);
-		}
-		for (auto& light : lightView)
-		{
-			Entity lightEntity(light, active_scene.get());
-			auto& light = lightEntity.GetComponent<LightComponent>();
-			auto& lightTransform = lightEntity.GetComponent<TransformComponent>();
-			SceneRenderer::AddAffectLight(light, lightTransform);
-		}
-		SceneRenderer::EndSceneCommand();
-	}
+	//for (auto& cam : cameraView)
+	//{
+	//	Entity camEntity(cam, active_scene.get());
+	//	auto& camera = camEntity.GetComponent<CameraComponent>();
+	//	auto& cameraTransform = camEntity.GetComponent<TransformComponent>();
+	//	const glm::mat4 camVP = camera.GetProjection() * MatrixMath::BuildCameraMatrix(cameraTransform.Position, cameraTransform.Position + cameraTransform.GetForward(), cameraTransform.GetUp());
+	//	SceneRenderer::BeginSceneCommand(camVP, cameraTransform.Position);
+	//	SceneRenderer::SetVAO(renderer_vao);
+	//	SceneRenderer::SetShadowBuffer(shadow_buffer);
+	//	SceneRenderer::SetGBuffer(g_buffer, FSQ);
+	//	SceneRenderer::SetShadowInformation(glm::ivec2{ 512, 512 }, glm::ivec2{ 1, 1 });
+	//	for (auto& obj : objectView)
+	//	{
+	//		Entity objEntity(obj, active_scene.get());
+	//		auto& transform = objEntity.GetComponent<TransformComponent>();
+	//		auto& model = objEntity.GetComponent<Model>();
+	//		auto& material = objEntity.GetComponent<MaterialComponent>();
+	//		SceneRenderer::AddModel(model, transform, material);
+	//	}
+	//	for (auto& light : lightView)
+	//	{
+	//		Entity lightEntity(light, active_scene.get());
+	//		auto& light = lightEntity.GetComponent<LightComponent>();
+	//		auto& lightTransform = lightEntity.GetComponent<TransformComponent>();
+	//		SceneRenderer::AddAffectLight(light, lightTransform);
+	//	}
+	//	SceneRenderer::EndSceneCommand();
+	//}
 
 }
 
 void IngameRendererLayer::OnPostRender()
 {
-	SceneRenderer::DrawAllScene();
+	//SceneRenderer::DrawAllScene();
 }
 
 void IngameRendererLayer::OnImGuiRender()

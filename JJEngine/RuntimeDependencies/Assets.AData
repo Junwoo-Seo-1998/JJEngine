@@ -18,9 +18,6 @@ Assets:
   - Handle: 3e1688ac-d1b1-56ea-b3b3-fb4ead56dd7d
     Type: 1
     FilePath: ./Resources\Scenes\Default123.scn
-  - Handle: 6c7237b9-b538-5ffa-8178-f61edc571f8c
-    Type: 1
-    FilePath: ./Resources\Scenes\Test.scn
   - Handle: 6b780608-16db-5fad-afb8-3eeb140fa354
     Type: 1
     FilePath: ./Resources\Scenes\testScene.scn
@@ -48,3 +45,6 @@ Assets:
   - Handle: 6bb43570-8a47-5c2e-9c8a-24b593934005
     Type: 2
     FilePath: ./Resources\Textures\UI\Stop.png
+  - Handle: bae72b15-7ba7-5ac0-af65-dbca069383ae
+    Type: 1
+    FilePath: ./Resources\Scenes\Test.scn

@@ -6,6 +6,8 @@ Date: 12/16/2022
 End Header-------------------------------------------------------- */
 #pragma once
 #include <memory>
+#include <string>
+
 class Event;
 class EventManager;
 class Application;
@@ -32,7 +34,7 @@ public:
 	std::shared_ptr<LayerManager> GetLayerManager();
 	std::shared_ptr<EventManager> GetEventManager();
 	std::shared_ptr<AssetManager> GetAssetManager();
-	virtual void UserDefinedInit() {};
+	virtual void UserDefinedInit(std::string GameData);
 
 
 	static inline Application& Instance() { return *s_Instance; }

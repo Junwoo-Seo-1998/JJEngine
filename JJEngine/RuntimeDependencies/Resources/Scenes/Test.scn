@@ -1,33 +1,109 @@
 Scene: Test
 Entities:
+  - Name: Test 3D Object3
+    UUID: cac54d1e-03ab-4fc9-b763-49571940df5f
+  - Name: Test 3D Object2
+    UUID: a4b03302-c90e-4018-824b-8a3066dcb4ba
+  - Name: Test 3D Object
+    UUID: 199d1dd3-77dc-4f2d-bfb8-1e306e571b3e
+  - Name: Test light1
+    UUID: 0bdd59bc-b213-438e-b3d8-3a336e911ab2
   - Name: Test Texture Entity
-    UUID: f7b4817b-6779-4009-84b1-7bd32e45a3fc
+    UUID: 1d1efc72-7773-4448-ac3a-7397f312e0e4
   - Name: Ground2
-    UUID: 7494ac25-6185-4bb4-8839-12f62a858e73
+    UUID: 21cc5357-dbf8-4ed8-bcc7-d94b5b812c3d
   - Name: Ground
-    UUID: df93926f-13b6-4739-bb5a-15757cd05cf9
+    UUID: 1e8e0bf7-11d4-4bf1-ba83-c28669ce09cc
   - Name: Camera
-    UUID: 5986b917-dd65-47dd-9106-f4dc50600513
+    UUID: 6590d5e7-b2cc-462e-9191-f244df3a1193
 Components:
   Relationship:
-    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
+    cac54d1e-03ab-4fc9-b763-49571940df5f:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    7494ac25-6185-4bb4-8839-12f62a858e73:
+    a4b03302-c90e-4018-824b-8a3066dcb4ba:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    df93926f-13b6-4739-bb5a-15757cd05cf9:
+    199d1dd3-77dc-4f2d-bfb8-1e306e571b3e:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    5986b917-dd65-47dd-9106-f4dc50600513:
+    0bdd59bc-b213-438e-b3d8-3a336e911ab2:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    1d1efc72-7773-4448-ac3a-7397f312e0e4:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    21cc5357-dbf8-4ed8-bcc7-d94b5b812c3d:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    1e8e0bf7-11d4-4bf1-ba83-c28669ce09cc:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    6590d5e7-b2cc-462e-9191-f244df3a1193:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
   Transform:
-    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
+    cac54d1e-03ab-4fc9-b763-49571940df5f:
+      Position:
+        - 0
+        - 1
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 2
+        - 1
+        - 2
+    a4b03302-c90e-4018-824b-8a3066dcb4ba:
+      Position:
+        - 0
+        - -1
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    199d1dd3-77dc-4f2d-bfb8-1e306e571b3e:
+      Position:
+        - 0
+        - -2
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 9
+        - 1
+        - 9
+    0bdd59bc-b213-438e-b3d8-3a336e911ab2:
+      Position:
+        - 3
+        - 3
+        - 3
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    1d1efc72-7773-4448-ac3a-7397f312e0e4:
       Position:
         - 0
         - 2.5
@@ -40,7 +116,7 @@ Components:
         - 1
         - 1
         - 1
-    7494ac25-6185-4bb4-8839-12f62a858e73:
+    21cc5357-dbf8-4ed8-bcc7-d94b5b812c3d:
       Position:
         - 0.670000017
         - 1.21000004
@@ -53,7 +129,7 @@ Components:
         - 1
         - 0.25
         - 1
-    df93926f-13b6-4739-bb5a-15757cd05cf9:
+    1e8e0bf7-11d4-4bf1-ba83-c28669ce09cc:
       Position:
         - 0
         - -1
@@ -66,7 +142,7 @@ Components:
         - 5
         - 0.25
         - 1
-    5986b917-dd65-47dd-9106-f4dc50600513:
+    6590d5e7-b2cc-462e-9191-f244df3a1193:
       Position:
         - 0
         - 1.51999998
@@ -80,24 +156,24 @@ Components:
         - 1
         - 1
   Script:
-    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
+    1d1efc72-7773-4448-ac3a-7397f312e0e4:
       ScriptName: Game.Player
   Sprite:
-    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
-      SpriteHandle: 5d0b7f90-acf7-58d1-9f22-9f6b0d6d60ff
+    1d1efc72-7773-4448-ac3a-7397f312e0e4:
+      SpriteHandle: d954a28c-3331-5eda-9253-fa3586bf4ca9
       SpriteColor:
         - 1
         - 1
         - 1
         - 1
-    7494ac25-6185-4bb4-8839-12f62a858e73:
+    21cc5357-dbf8-4ed8-bcc7-d94b5b812c3d:
       SpriteHandle: 00000000-0000-0000-0000-000000000000
       SpriteColor:
         - 0.5
         - 0.25
         - 0.200000003
         - 1
-    df93926f-13b6-4739-bb5a-15757cd05cf9:
+    1e8e0bf7-11d4-4bf1-ba83-c28669ce09cc:
       SpriteHandle: 00000000-0000-0000-0000-000000000000
       SpriteColor:
         - 0.5
@@ -105,28 +181,25 @@ Components:
         - 0.200000003
         - 1
   Camera:
-    5986b917-dd65-47dd-9106-f4dc50600513:
+    6590d5e7-b2cc-462e-9191-f244df3a1193:
       CameraValues:
         - 0.100000001
         - 0.785398185
-        - 1.58176947
+        - 1.64021158
         - 1
         - 1000000
       CameraBools:
         - true
         - true
   RigidBody2D:
-    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
-      RigidBody2DType: 1
-      RigidBody2DBool: false
-    7494ac25-6185-4bb4-8839-12f62a858e73:
+    21cc5357-dbf8-4ed8-bcc7-d94b5b812c3d:
       RigidBody2DType: 0
       RigidBody2DBool: false
-    df93926f-13b6-4739-bb5a-15757cd05cf9:
+    1e8e0bf7-11d4-4bf1-ba83-c28669ce09cc:
       RigidBody2DType: 0
       RigidBody2DBool: false
   BoxCollider2D:
-    f7b4817b-6779-4009-84b1-7bd32e45a3fc:
+    21cc5357-dbf8-4ed8-bcc7-d94b5b812c3d:
       BoxCollider2D_2DValues:
         -
           - 0
@@ -139,20 +212,7 @@ Components:
         - 0.5
         - 0
         - 0.5
-    7494ac25-6185-4bb4-8839-12f62a858e73:
-      BoxCollider2D_2DValues:
-        -
-          - 0
-          - 0
-        -
-          - 0.5
-          - 0.5
-      BoxCollider2D_1DValues:
-        - 1
-        - 0.5
-        - 0
-        - 0.5
-    df93926f-13b6-4739-bb5a-15757cd05cf9:
+    1e8e0bf7-11d4-4bf1-ba83-c28669ce09cc:
       BoxCollider2D_2DValues:
         -
           - 0
