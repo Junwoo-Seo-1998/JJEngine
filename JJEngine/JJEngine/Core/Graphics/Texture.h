@@ -74,9 +74,15 @@ struct TextureFilterData
 struct TextureData
 {
 	TextureData() :width(0), height(0), data(nullptr), channel(TextureChannel::RGBA) {}
-	TextureData(int width, int height, 
-		std::shared_ptr<void> data = nullptr, TextureChannelData channel = TextureChannel::RGBA)
-		:width(width),height(height), channel(channel), data(data) {}
+	TextureData(int width, int height,
+		std::shared_ptr<void> data = nullptr,
+		TextureTarget target = TextureTarget::Texture2D,
+		TextureChannel channel = TextureChannel::RGBA,
+		TextureWrap wrap = TextureWrap::ClampToEdge,
+		TextureFilter filter = TextureFilter::Linear)
+		:width(width), height(height), data(data),
+		target(target), channel(channel), wrap(wrap), filter(filter) {}
+
 	int width = 0;
 	int height = 0;
 	std::shared_ptr<void> data{};
@@ -84,7 +90,7 @@ struct TextureData
 	TextureTargetData target = TextureTarget::Texture2D;
 	TextureChannelData channel = TextureChannel::RGBA;
 	TextureWrapData wrap = TextureWrap::ClampToEdge;
-	TextureFilter filter = TextureFilter::Linear;
+	TextureFilterData filter = TextureFilter::Linear;
 };
 
 class Texture

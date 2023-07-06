@@ -48,7 +48,7 @@ void FrameBuffer::Resize(unsigned int width, unsigned int height)
 
 void FrameBuffer::ChangeCubeMapTextureFace(int color_index, int face_index)
 {
-	ENGINE_ASSERT(m_ColorFormats[color_index] == FrameBufferFormat::CubeMap16F, "Not a CubeMap!");
+	ENGINE_ASSERT(m_ColorFormats[color_index].FormatType == FrameBufferFormat::CubeMap16F, "Not a CubeMap!");
 	glNamedFramebufferTextureLayer(m_FrameBufferID, GL_COLOR_ATTACHMENT0 + color_index, m_ColorTextures[color_index]->GetTextureID(), 0, face_index);
 }
 
@@ -91,15 +91,15 @@ FrameBuffer::FrameBuffer(const FrameBufferSpecification& spec)
 	ENGINE_ASSERT(m_DescribedFrameBuffer.Formats.Formats.empty() != true, "there is no described Format in FrameBuffer!");
 
 	//todo: not using color format now... might use for docking? 
-	for (auto format : m_DescribedFrameBuffer.Formats)
+	for (auto& format : m_DescribedFrameBuffer.Formats)
 	{
-		if (helper::IsDepth(format))
+		if (helper::IsDepth(format.FormatType))
 		{
-			m_DepthFormat = format;
+			m_DepthFormat = format.FormatType;
 		}
 		else
 		{
-			m_ColorFormats.emplace_back(format);
+			m_ColorFormats.emplace_back(format.FormatType);
 		}
 	}
 
@@ -127,38 +127,44 @@ void FrameBuffer::BuildFrameBuffer()
 		const int height = static_cast<int>(m_DescribedFrameBuffer.Height);
 		for (unsigned int i = 0; i < num_of_textures; ++i)
 		{
-			const FrameBufferFormat format = m_ColorFormats[i];
-			switch (format)
+			const TextureWrap wrap = m_ColorFormats[i].Wrap;
+			const TextureFilter filter = m_ColorFormats[i].Filter;
+			switch (m_ColorFormats[i].FormatType)
 			{
 				case FrameBufferFormat::R_INT:
 				{
-					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width, height, nullptr, TextureChannel::R_INT });
+					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width, height, nullptr, TextureTarget::Texture2D, TextureChannel::R_INT,
+						wrap, filter });
 					break;
 				}
 				case FrameBufferFormat::RGB:
 				{
-					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGB });
+					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr, TextureTarget::Texture2D, TextureChannel::RGB,
+						wrap, filter });
 					break;
 				}
 				case  FrameBufferFormat::RGB16F:
 				{
-					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGB16F });
+					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr, TextureTarget::Texture2D, TextureChannel::RGB16F,
+						wrap, filter });
 					break;
 				}
 				case  FrameBufferFormat::RGBA:
 				{
-					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGBA });
+					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr, TextureTarget::Texture2D, TextureChannel::RGBA,
+						wrap, filter });
 					break;
 				}
 				case  FrameBufferFormat::RGBA32F:
 				{
-					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr,TextureChannel::RGBA32F });
+					m_ColorTextures[i] = Texture::CreateTexture(TextureData{ width,height,nullptr, TextureTarget::Texture2D, TextureChannel::RGBA32F,
+						wrap, filter });
 					break;
 				}
 				case FrameBufferFormat::CubeMap16F:
 				{
-					TextureData textureSpec{ width, height,nullptr,  TextureChannel::RGB16F };
-					textureSpec.target = TextureTarget::CubeMap;
+					TextureData textureSpec{ width, height,nullptr,  TextureTarget::CubeMap, TextureChannel::RGB16F,
+						wrap, filter };
 					m_ColorTextures[i] = Texture::CreateTexture(textureSpec);
 					break;
 				}
@@ -167,7 +173,7 @@ void FrameBuffer::BuildFrameBuffer()
 					break;
 			}
 			unsigned textureID = m_ColorTextures[i]->GetTextureID();
-			if (m_ColorFormats[i] == FrameBufferFormat::CubeMap16F)
+			if (m_ColorFormats[i].FormatType == FrameBufferFormat::CubeMap16F)
 			{
 				glNamedFramebufferTextureLayer(m_FrameBufferID, GL_COLOR_ATTACHMENT0 + i, textureID, 0, 0);
 			}
@@ -179,17 +185,20 @@ void FrameBuffer::BuildFrameBuffer()
 	}
 
 	//make depth
-	if (m_DepthFormat != FrameBufferFormat::None)
+	if (m_DepthFormat.FormatType != FrameBufferFormat::None)
 	{
 		
 		const int width = static_cast<int>(m_DescribedFrameBuffer.Width);
 		const int height = static_cast<int>(m_DescribedFrameBuffer.Height);
 
-		switch (m_DepthFormat)
+		switch (m_DepthFormat.FormatType)
 		{
 			case FrameBufferFormat::Depth:
 			{
-				m_DepthTexture = Texture::CreateTexture(TextureData{ width,height,nullptr, TextureChannel::Depth });
+				m_DepthTexture = Texture::CreateTexture(TextureData{ 
+					width,height,nullptr, TextureTarget::Texture2D, TextureChannel::Depth,
+					m_DepthFormat.Wrap, m_DepthFormat.Filter
+				});
 				break;
 			}
 			default:
