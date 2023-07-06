@@ -143,19 +143,19 @@ float CalcShadow(in LightData light, vec3 currentPos)
 {
     vec4 lighted = light.ViewProjection * vec4(currentPos, 1.f);
     vec3 shadowMapCoords = lighted.xyz / lighted.w;
+    shadowMapCoords = shadowMapCoords * 0.5 + 0.5; 
     
     float shadow = 0.0;
+    float bias = 0.0001; 
     
-    if(shadowMapCoords.z < 1.f)
-    {    
-        vec3 lightVector=light.Position-currentPos;
+ 
+    float currentDepth = shadowMapCoords.z;
+    float closestDepth = texture(light.ShadowMap, shadowMapCoords.xy).r;
+    
+    shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 
-        shadowMapCoords = (shadowMapCoords + 1.f) / 2.f; 
-        float currentDepth = shadowMapCoords.z;
-        float bias =  0.0005f;
-
-        float closestDepth = texture(light.ShadowMap, shadowMapCoords.xy).r;
-                shadow = currentDepth > (closestDepth + bias) ? 1.0 : 0.0;
+    if (lighted.z < 0) {
+        shadow = 1.f;
     }
     return shadow;
 }
