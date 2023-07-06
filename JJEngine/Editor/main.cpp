@@ -11,8 +11,9 @@
 
 class EditorApp : public Application
 {
-	virtual void UserDefinedInit() override
+	virtual void UserDefinedInit(std::string GameData) override
 	{
+		Application::UserDefinedInit(GameData);
 		/*auto test1 = std::make_shared<TestScene>("Test");
 		GetSceneManager()->enrollScene(0, test1);
 		GetSceneManager()->setNextScene(0);*/

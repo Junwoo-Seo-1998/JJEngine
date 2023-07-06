@@ -40,7 +40,7 @@ void EditorLayer::OnAttach()
 {
 	Log::Info("Editor Layer Added");
 	m_EditorCamera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
-	SetNewScene(std::make_shared<TestScene>(""));
+	SetNewScene(std::make_shared<TestScene>("Test"));
 
 	m_SceneRenderer = std::make_shared<SceneRenderer>();
 	//todo: make it class

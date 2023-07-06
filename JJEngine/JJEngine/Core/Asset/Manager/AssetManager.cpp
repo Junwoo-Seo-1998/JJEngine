@@ -139,6 +139,7 @@ void AssetManager::UpdateAData()
 		}
 	}
 	for (auto & d:deletedAssets) {
+		isUpdated = true;
 		assetMetadatas.erase(d);
 		assets.erase(d);
 	}
@@ -192,7 +193,7 @@ std::shared_ptr<Asset> AssetManager::GetAsset(AssetHandle assetHandle)
 	if (latestFoundAsset->second->CheckIsDataLoaded() == false) {
 		ENGINE_ASSERT(latestFoundAsset->second->LoadData(assetMetadatas[assetHandle]->path) == true, "Fail to load asset");
 	}
-	return latestFoundAsset->second;
+	return assets[assetHandle];// latestFoundAsset->second;
 }
 
 bool AssetManager::LoadData(AssetHandle assetHandle)

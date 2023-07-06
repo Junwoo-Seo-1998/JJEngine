@@ -5,7 +5,7 @@
 #include "Utils/Log.h"
 
 extern std::shared_ptr<Application> CoreMain();
-int main(int /*argc*/, char** /*argv*/)
+int main(int /*argc*/, char** argv)
 {
 	std::shared_ptr<Application> application = CoreMain();
 	EngineLog::Info("Engine Init!");
@@ -14,7 +14,7 @@ int main(int /*argc*/, char** /*argv*/)
 		std::cout << "error on init!" << std::endl;
 		return -1;
 	}
-	application->UserDefinedInit();
+	application->UserDefinedInit("Temporary nothing");
 	application->Update();
 	application->Shutdown();
 	return 0;
