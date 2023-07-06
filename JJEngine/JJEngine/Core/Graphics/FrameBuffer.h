@@ -15,16 +15,29 @@ enum class FrameBufferFormat
 	Depth,
 };
 
+struct FrameBufferFormatSpecification
+{
+	FrameBufferFormatSpecification(FrameBufferFormat formatType, 
+		TextureWrap wrap = TextureWrap::ClampToEdge, 
+		TextureFilter filter = TextureFilter::Linear)
+		:FormatType(formatType), Wrap(wrap), Filter(filter){}
+
+	FrameBufferFormat FormatType;
+	TextureWrap Wrap;
+	TextureFilter Filter;
+};
+
 struct DescribedFrameBufferFormats
 {
 	DescribedFrameBufferFormats() = default;
-	DescribedFrameBufferFormats(std::initializer_list<FrameBufferFormat> formats)
+
+	DescribedFrameBufferFormats(std::initializer_list<FrameBufferFormatSpecification> formats)
 		:Formats(formats) {}
 
-	std::vector<FrameBufferFormat>::iterator begin() { return Formats.begin(); }
-	std::vector<FrameBufferFormat>::iterator end() { return Formats.end(); }
+	std::vector<FrameBufferFormatSpecification>::iterator begin() { return Formats.begin(); }
+	std::vector<FrameBufferFormatSpecification>::iterator end() { return Formats.end(); }
 
-	std::vector<FrameBufferFormat> Formats;
+	std::vector<FrameBufferFormatSpecification> Formats;
 };
 
 struct FrameBufferSpecification
@@ -58,8 +71,8 @@ private:
 	FrameBuffer(const FrameBufferSpecification& spec);
 	void BuildFrameBuffer();
 	FrameBufferSpecification m_DescribedFrameBuffer;
-	std::vector<FrameBufferFormat> m_ColorFormats;
-	FrameBufferFormat m_DepthFormat;
+	std::vector<FrameBufferFormatSpecification> m_ColorFormats;
+	FrameBufferFormatSpecification m_DepthFormat;
 	
 	unsigned int m_FrameBufferID;
 	std::vector<std::shared_ptr<Texture>> m_ColorTextures;
