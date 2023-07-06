@@ -60,6 +60,7 @@ bool AssetManager::ReadAData()
 		Meta_temp->type = type;
 		Meta_temp->isMemoryOnlyAsset = false;
 	}
+	file.close();
 	return true;
 }
 
@@ -83,6 +84,7 @@ void AssetManager::SaveAData()
 
 	std::ofstream file{ ADATA_PATH };
 	file << out.c_str();
+	file.close();
 }
 
 void AssetManager::UpdateAData()

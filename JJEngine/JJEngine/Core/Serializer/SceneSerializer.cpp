@@ -1,15 +1,15 @@
 #include "SceneSerializer.h"
-#include "Scene.h"
-#include "Entity/Entity.hpp"
+#include "Core/Scene.h"
+#include "Core/Entity/Entity.hpp"
 #include <fstream>
 #include "Core/Component/TransformComponent.h"
 #include "Core/Entity/RelationshipComponent.h"
 #include "Core/Utils/Log.h"
-#include "Component/SpriteRendererComponent.h"
-#include "Component/CameraComponent.h"
-#include "Component/RigidBody2DComponent.h"
-#include "Component/BoxCollider2DComponent.h"
-#include "Component/ScriptComponent.h"
+#include "Core/Component/SpriteRendererComponent.h"
+#include "Core/Component/CameraComponent.h"
+#include "Core/Component/RigidBody2DComponent.h"
+#include "Core/Component/BoxCollider2DComponent.h"
+#include "Core/Component/ScriptComponent.h"
 #include "Core/Utils/YAML_IMPL.hpp"
 #include "Core/Asset/Asset_Texture.h"
 #include "Core/Application.h"
@@ -192,6 +192,7 @@ void SceneSerializer::Serialize(const std::string filePath)
 
 	std::ofstream file{ filePath };
 	file << out.c_str();
+	file.close();
 }
 
 
@@ -253,7 +254,7 @@ bool SceneSerializer::Deserialize(const std::string filePath)
 			DeserializeBox2D(c, scene);
 		}
 	}
-
+	file.close();
 	return true;
 }
 

@@ -19,10 +19,7 @@ void RuntimeLayer::OnStart()
 {
 	m_SceneRenderer = std::make_shared<SceneRenderer>();
 	AssetHandle handle = Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/Scenes/Test.scn");
-	m_ActiveScene = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(handle);
-	m_ActiveScene->data->Awake();
-	m_ActiveScene->data->Start();
-	m_ActiveScene->data->StartRuntime();
+	SetNewScene(Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(handle));
 }
 
 void RuntimeLayer::OnUpdate()
@@ -48,4 +45,12 @@ void RuntimeLayer::OnImGuiRender()
 
 void RuntimeLayer::OnEvent(Event& event)
 {
+}
+
+void RuntimeLayer::SetNewScene(std::shared_ptr<Asset_Scene> new_scene)
+{
+	m_ActiveScene = new_scene;
+	m_ActiveScene->data->Awake();
+	m_ActiveScene->data->Start();
+	m_ActiveScene->data->StartRuntime();
 }
