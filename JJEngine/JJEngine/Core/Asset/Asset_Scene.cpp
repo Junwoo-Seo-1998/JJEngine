@@ -1,6 +1,6 @@
 #include "Asset_Scene.h"
 #include "Core/Scene.h"
-#include <Core/SceneSerializer.h>
+#include <Core/Serializer/SceneSerializer.h>
 #include <Core/Utils/Log.h>
 bool Asset_Scene::CheckIsDataLoaded() const
 {

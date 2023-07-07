@@ -34,7 +34,7 @@ public:
 	std::shared_ptr<LayerManager> GetLayerManager();
 	std::shared_ptr<EventManager> GetEventManager();
 	std::shared_ptr<AssetManager> GetAssetManager();
-	virtual void UserDefinedInit(std::string GameData);
+	virtual void UserDefinedInit(std::string Data);
 
 
 	static inline Application& Instance() { return *s_Instance; }

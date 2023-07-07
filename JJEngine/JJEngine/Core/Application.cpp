@@ -174,7 +174,8 @@ std::shared_ptr<AssetManager> Application::GetAssetManager()
 	return assetManager;
 }
 
-void Application::UserDefinedInit(std::string GameData)
+void Application::UserDefinedInit(std::string Data)
 {
+	//if (GameData.empty() == true) return;
 
 }

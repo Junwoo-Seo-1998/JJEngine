@@ -20,4 +20,5 @@ public:
 	void OnPostRender() override;
 	void OnImGuiRender() override;
 	void OnEvent(Event& event) override;
+	void SetNewScene(std::shared_ptr<Asset_Scene> new_scene);
 };
