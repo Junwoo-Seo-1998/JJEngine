@@ -87,11 +87,11 @@ void SceneRenderer::EndScene()
 	//jun: it's capturing at every loop but it will be removed later after the asset work
 	BakeCubeMap();
 
-	//GeometryPass();
+	GeometryPass();
 
-	//GeometryPassFSQ();
+	GeometryPassFSQ();
 
-	ForwardPass();
+	//ForwardPass();
 
 	CubemapPass();
 	//post processing
@@ -114,8 +114,8 @@ void SceneRenderer::EndScene()
 void SceneRenderer::SubmitMesh(std::shared_ptr<Mesh> mesh, const glm::mat4& transformMat)
 {
 	//todo: make user defined draw list later
-
-	m_DrawList.emplace_back(mesh, transformMat);
+	m_GeometryDrawList.emplace_back(mesh, transformMat);
+	//m_DrawList.emplace_back(mesh, transformMat);
 }
 
 std::shared_ptr<RenderPass> SceneRenderer::GetFinalRenderPass()
@@ -175,7 +175,7 @@ void SceneRenderer::Init()
 	}
 
 	{//setting up default material
-		m_DefaultMaterial = Material::Create(m_ForwardRenderShader);
+		m_DefaultMaterial = Material::Create(m_GeometryShader);
 		m_DefaultMaterial->Set("MatTexture.Diffuse", Texture::CreateTexture(glm::vec4{ 0.8f, 0.8f, 0.8f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Specular", Texture::CreateTexture(glm::vec4{ 0.5f, 0.5f, 0.5f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Emissive", Renderer::BlackTexture);
@@ -338,7 +338,7 @@ void SceneRenderer::GeometryPass()
 {
 	Renderer::Submit([this]()
 		{
-			Renderer::BeginRenderPass(m_GeometryRenderPass);
+			Renderer::BeginRenderPass(m_GeometryRenderPass, true);
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
