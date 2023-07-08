@@ -3,6 +3,7 @@
 #include "Core/Asset/Asset.h"
 #include "Core/Asset/Asset_Texture.h"
 #include "Core/Asset/Asset_Scene.h"
+#include "Core/Asset/Asset_Mesh.h"
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -20,7 +21,7 @@ class AssetManager
 
 
 	void GenAsset(std::shared_ptr<Asset>& empty_asset, AssetType type);
-
+	std::shared_ptr<Asset> AddAsset(AssetType type, AssetHandle hd, std::filesystem::path path, bool IsMemoryOnly);
 public:
 	AssetManager() = default;
 	virtual ~AssetManager() = default;
@@ -89,4 +90,12 @@ inline std::shared_ptr<Asset_Scene> AssetManager::GetCastedAsset(AssetHandle ass
 	std::shared_ptr<Asset> asset = GetAsset(assetHandle);
 	if (asset->GetAssetType() != AssetType::Scene) ASSERT("Not a appropriate type for asset");
 	return std::dynamic_pointer_cast<Asset_Scene, Asset>(asset);
+}
+
+template<>
+inline std::shared_ptr<Asset_Mesh> AssetManager::GetCastedAsset(AssetHandle assetHandle)
+{
+	std::shared_ptr<Asset> asset = GetAsset(assetHandle);
+	if (asset->GetAssetType() != AssetType::Mesh) ASSERT("Not a appropriate type for asset");
+	return std::dynamic_pointer_cast<Asset_Mesh, Asset>(asset);
 }

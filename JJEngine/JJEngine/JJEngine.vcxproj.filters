@@ -247,6 +247,7 @@
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Core\Serializer\GameDataSerializer.h" />
+    <ClInclude Include="Core\Asset\Asset_Mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
@@ -380,5 +381,6 @@
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\Serializer\GameDataSerializer.cpp" />
+    <ClCompile Include="Core\Asset\Asset_Mesh.cpp" />
   </ItemGroup>
 </Project>
