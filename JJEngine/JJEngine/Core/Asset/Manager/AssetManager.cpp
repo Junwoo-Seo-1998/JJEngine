@@ -11,6 +11,7 @@
 #define SCN ".scn"
 #define PNG ".png"
 #define JPG ".jpg"
+#define MFDATA ".MFData"
 
 // YAML impl
 #define YM_ADATA "ADATA"
@@ -18,6 +19,7 @@
 #define YM_ASSET_HANDLE "Handle"
 #define YM_ASSET_TYPE "Type"
 #define YM_ASSET_PATH "FilePath"
+#define YM_ASSET_ISMEMORYONLY "IsMemoryOnly"
 
 void AssetManager::GenAsset(std::shared_ptr<Asset>& empty_asset, AssetType type)
 {
@@ -29,9 +31,29 @@ void AssetManager::GenAsset(std::shared_ptr<Asset>& empty_asset, AssetType type)
 	case AssetType::Texture:
 		empty_asset = std::make_shared<Asset_Texture>();
 		break;
+	case AssetType::Mesh:
+		empty_asset = std::make_shared<Asset_Mesh>();
+		break;
 	default:
 		ENGINE_ASSERT(false,"Unexpected Asset type");
 	}
+}
+
+std::shared_ptr<Asset> AssetManager::AddAsset(AssetType type, AssetHandle handle, std::filesystem::path path, bool IsMemoryOnly)
+{
+	std::shared_ptr<Asset> temp;
+	GenAsset(temp, type);
+	assets[handle] = temp;
+	temp->Handle = handle;
+
+	std::shared_ptr<Metadata> Meta_temp = std::make_shared<Metadata>();
+	assetMetadatas[handle] = Meta_temp;
+	Meta_temp->Handle = handle;
+	Meta_temp->path = path;
+	Meta_temp->type = type;
+	Meta_temp->isMemoryOnlyAsset = IsMemoryOnly;
+
+	return temp;
 }
 
 bool AssetManager::ReadAData()
@@ -45,20 +67,10 @@ bool AssetManager::ReadAData()
 
 	auto assetDatas = data[YM_ASSETS];
 	for (auto D : assetDatas) {
+		bool isMemoryOnly{ D[YM_ASSET_ISMEMORYONLY].as<bool>() };
 		AssetHandle handle = D[YM_ASSET_HANDLE].as<AssetHandle>();
 		AssetType type = AssetType(D[YM_ASSET_TYPE].as<int>());
-
-		std::shared_ptr<Asset> temp;
-		GenAsset(temp,type);
-		assets[handle] = temp;
-		temp->Handle = handle;
-
-		std::shared_ptr<Metadata> Meta_temp = std::make_shared<Metadata>();
-		assetMetadatas[handle] = Meta_temp;
-		Meta_temp->Handle = handle;
-		Meta_temp->path = D[YM_ASSET_PATH].as<std::string>();
-		Meta_temp->type = type;
-		Meta_temp->isMemoryOnlyAsset = false;
+		AddAsset(type, handle, D[YM_ASSET_PATH].as<std::string>(), isMemoryOnly);
 	}
 	file.close();
 	return true;
@@ -78,6 +90,7 @@ void AssetManager::SaveAData()
 		YAML_KEY_VALUE(out, YM_ASSET_HANDLE, a.second->Handle);
 		YAML_KEY_VALUE(out, YM_ASSET_TYPE, static_cast<int>(a.second->type));
 		YAML_KEY_VALUE(out, YM_ASSET_PATH, a.second->path.string());
+		YAML_KEY_VALUE(out, YM_ASSET_ISMEMORYONLY, a.second->isMemoryOnlyAsset);
 		out << YAML::EndMap;
 	}
 	out << YAML::EndSeq;
@@ -106,6 +119,9 @@ void AssetManager::UpdateAData()
 		else if (extension == SCN) {
 			type = AssetType::Scene;
 		}
+		else if (extension == MFDATA) {
+			type = AssetType::Mesh;
+		}
 		else {
 			continue;
 		}
@@ -118,18 +134,9 @@ void AssetManager::UpdateAData()
 		}
 		if (isNewAsset == true) {
 			isUpdated = true;
-			AssetHandle handle{ UUIDGenerator::Generate(f.string())};// handel generate
-			std::shared_ptr<Asset> temp;
-			GenAsset(temp, type);
-			assets[handle] = temp;
-			temp->Handle = handle;
 
-			std::shared_ptr<Metadata> Meta_temp = std::make_shared<Metadata>();
-			assetMetadatas[handle] = Meta_temp;
-			Meta_temp->Handle = handle;
-			Meta_temp->path = f;
-			Meta_temp->type = type;
-			Meta_temp->isMemoryOnlyAsset = false;
+			AssetHandle handle{ UUIDGenerator::Generate(f.string())};// handel generate
+			AddAsset(type, handle, f, false);
 		}
 	}
 
@@ -154,20 +161,9 @@ void AssetManager::UpdateAData()
 AssetHandle AssetManager::AddMemoryOnlyAsset(AssetType type)
 {
 	static int dynamicID{0};
-	std::string path{"Resources/MemoryOnlyAsset(" + std::to_string(dynamicID) + ")"};
+	std::string path{"Resources/MemoryOnlyAsset(" + std::to_string(dynamicID++) + ")"};
 	AssetHandle handle{ UUIDGenerator::Generate(path)};
-	std::shared_ptr<Asset> temp;
-	GenAsset(temp, type);
-	assets[handle] = temp;
-	temp->Handle = handle;
-
-	std::shared_ptr<Metadata> Meta_temp = std::make_shared<Metadata>();
-	assetMetadatas[handle] = Meta_temp;
-	Meta_temp->Handle = handle;
-	Meta_temp->path = path;
-	Meta_temp->type = type;
-	Meta_temp->isMemoryOnlyAsset = true;
-
+	AddAsset(type, handle,path, true);
 	return handle;
 }
 

@@ -30,6 +30,7 @@ End Header-------------------------------------------------------- */
 #include "Core/Graphics/Renderer/EditorCamera.h"
 
 #include "Application.h"
+#include "Core/Asset/Manager/AssetManager.h"
 #include "Core/Window.h"
 #include "Component/MaterialComponent.h"
 #include "Component/LightComponent.h"
@@ -147,7 +148,8 @@ void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm:
 			for (auto entity : view)
 			{
 				auto [transformComponent, meshComponent] = view.get<TransformComponent, MeshComponent>(entity);
-				sceneRenderer->SubmitMesh(meshComponent.mesh, transformComponent.GetTransform());
+				std::shared_ptr<Asset_Mesh> Mesh = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Mesh>(meshComponent.handle);
+				sceneRenderer->SubmitMesh(Mesh->data, transformComponent.GetTransform());
 			}
 		}
 		sceneRenderer->EndScene();

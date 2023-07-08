@@ -3,48 +3,72 @@ Assets:
   - Handle: 415e89cd-71f4-50c0-9716-cf0c6662cae5
     Type: 2
     FilePath: ./Resources\Textures\TestDiff.png
+    IsMemoryOnly: false
   - Handle: 67ecaac6-797a-5325-a086-24adcc7d9380
     Type: 2
     FilePath: ./Resources\Textures\hdri_skybox.png
+    IsMemoryOnly: false
   - Handle: acf97a73-97e8-51c0-981f-027a69ae0965
     Type: 1
     FilePath: ./Resources\Scenes\testScene22.scn
+    IsMemoryOnly: false
+  - Handle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
+    Type: 3
+    FilePath: ./Resources\MeshFactoryDatas\Box.MFData
+    IsMemoryOnly: false
   - Handle: d12c2f7c-9587-55d8-92d9-78af90787cdd
     Type: 1
     FilePath: ./Resources\Scenes\Default.scn
+    IsMemoryOnly: false
   - Handle: adfc2d32-60ac-568d-b923-a53698c7ab70
     Type: 1
     FilePath: ./Resources\Scenes\Default tt.scn
+    IsMemoryOnly: false
   - Handle: 3e1688ac-d1b1-56ea-b3b3-fb4ead56dd7d
     Type: 1
     FilePath: ./Resources\Scenes\Default123.scn
+    IsMemoryOnly: false
   - Handle: 6b780608-16db-5fad-afb8-3eeb140fa354
     Type: 1
     FilePath: ./Resources\Scenes\testScene.scn
+    IsMemoryOnly: false
   - Handle: 4d2c2996-06d9-55b4-90ec-9b079019f30c
     Type: 2
     FilePath: ./Resources\Textures\Check.png
+    IsMemoryOnly: false
   - Handle: 4574080e-bbc2-5bce-9a58-c21c04bdb0ed
     Type: 2
     FilePath: ./Resources\Textures\FileImage.png
+    IsMemoryOnly: false
   - Handle: ca2140ad-ea7c-55cb-aa70-89f13dc6e5a1
     Type: 2
     FilePath: ./Resources\Textures\FolderImage.png
+    IsMemoryOnly: false
   - Handle: a228b2b7-31ef-5b22-9e2f-48af02f1ffd3
     Type: 2
     FilePath: ./Resources\Textures\hdri_skybox.jpg
+    IsMemoryOnly: false
   - Handle: d954a28c-3331-5eda-9253-fa3586bf4ca9
     Type: 2
     FilePath: ./Resources\Textures\test.jpg
+    IsMemoryOnly: false
   - Handle: afebb1da-b106-5986-bfcd-9e72644a741e
     Type: 2
     FilePath: ./Resources\Textures\TestSpec.png
+    IsMemoryOnly: false
   - Handle: 204ae32a-bfde-59b5-8b37-d639eb9e59fc
     Type: 2
     FilePath: ./Resources\Textures\UI\PlayButton.png
+    IsMemoryOnly: false
   - Handle: 6bb43570-8a47-5c2e-9c8a-24b593934005
     Type: 2
     FilePath: ./Resources\Textures\UI\Stop.png
+    IsMemoryOnly: false
   - Handle: bae72b15-7ba7-5ac0-af65-dbca069383ae
     Type: 1
     FilePath: ./Resources\Scenes\Test.scn
+    IsMemoryOnly: false
+  - Handle: 0ba4e197-8bc5-5b23-a43d-4cf6b5d0eaf6
+    Type: 3
+    FilePath: ./Resources\MeshFactoryDatas\SkyBox.MFData
+    IsMemoryOnly: false

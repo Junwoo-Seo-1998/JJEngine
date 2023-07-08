@@ -104,6 +104,7 @@
     <ClInclude Include="Core\Application.h" />
     <ClInclude Include="Core\Asset\Asset.h" />
     <ClInclude Include="Core\Asset\AssetType.h" />
+    <ClInclude Include="Core\Asset\Asset_Mesh.h" />
     <ClInclude Include="Core\Asset\Asset_Scene.h" />
     <ClInclude Include="Core\Asset\Asset_Texture.h" />
     <ClInclude Include="Core\Asset\Manager\AssetManager.h" />
@@ -178,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Asset\Asset_Mesh.cpp" />
     <ClCompile Include="Core\Asset\Asset_Scene.cpp" />
     <ClCompile Include="Core\Asset\Asset_Texture.cpp" />
     <ClCompile Include="Core\Asset\Manager\AssetManager.cpp" />
