@@ -14,7 +14,7 @@ class GameApp : public Application
 	virtual void UserDefinedInit(std::string GameData) override
 	{
 		if (GameData.empty() == true) {
-			GameData = "./BaseGameData.GData";
+			GameData = "./TestGameData.GData";
 		}
 		GameDataSerializer gData_serializer{ GameData };
 		std::shared_ptr<RuntimeLayer> temp = std::make_shared<RuntimeLayer>();

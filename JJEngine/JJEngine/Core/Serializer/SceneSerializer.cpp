@@ -10,6 +10,8 @@
 #include "Core/Component/RigidBody2DComponent.h"
 #include "Core/Component/BoxCollider2DComponent.h"
 #include "Core/Component/ScriptComponent.h"
+#include "Core/Component/LightComponent.h"
+
 #include "Core/Utils/YAML_IMPL.hpp"
 #include "Core/Asset/Asset_Texture.h"
 #include "Core/Application.h"
@@ -42,6 +44,14 @@
 #define YM_BOXCOLLIDER_2D "BoxCollider2D"
 #define YM_BOXCOLLIDER_2D_2DVALUES "BoxCollider2D_2DValues"
 #define YM_BOXCOLLIDER_2D_1DVALUES "BoxCollider2D_1DValues"
+#define YM_LIGHT "Light"
+#define YM_LIGHT_TYPE "LightType"
+#define YM_LIGHT_ANGLEINNER "LightAngleInner"
+#define YM_LIGHT_ANGLEOUTER "LightAngleOuter"
+#define YM_LIGHT_AMBIENT "LightAmbient"
+#define YM_LIGHT_DIFFUSE "LightDiffuse"
+#define YM_LIGHT_SPECULAR "LightSpecular"
+#define YM_LIGHT_FALLOFF "LightFalloff"
 
 // Helper function
 void SerializeEntity(YAML::Emitter& out, entt::entity ID, std::shared_ptr<Scene> scene);
@@ -52,6 +62,7 @@ void DeserializeSprite(YAML::iterator::value_type& component, std::shared_ptr<Sc
 void DeserializeCamera(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeRidgidBody2D(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeBox2D(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
+void DeserializeLight(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeEntity(YAML::detail::iterator_value entity, std::shared_ptr<Scene> scene);
 
 SceneSerializer::SceneSerializer(std::shared_ptr<Scene> sc): scene(sc)
@@ -187,6 +198,26 @@ void SceneSerializer::Serialize(const std::string filePath)
 			}
 			out << YAML::EndMap;
 		}
+		{
+			out << YAML::Key << YM_LIGHT;
+			out << YAML::Value << YAML::BeginMap;
+			auto components = scene->m_Registry.view<LightComponent>();
+			for (auto c : components)
+			{
+				Entity entity{ c,scene.get() };
+				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap);
+				LightComponent& light = components.get<LightComponent>(c);
+				YAML_KEY_VALUE(out, YM_LIGHT_TYPE, static_cast<int>(light.light.m_LightType));
+				YAML_KEY_VALUE(out, YM_LIGHT_ANGLEINNER, light.light.m_Angle.inner);
+				YAML_KEY_VALUE(out, YM_LIGHT_ANGLEOUTER, light.light.m_Angle.outer);
+				YAML_KEY_VALUE(out, YM_LIGHT_AMBIENT, light.light.Ambient);
+				YAML_KEY_VALUE(out, YM_LIGHT_DIFFUSE, light.light.Diffuse);
+				YAML_KEY_VALUE(out, YM_LIGHT_SPECULAR, light.light.Specular);
+				YAML_KEY_VALUE(out, YM_LIGHT_FALLOFF, light.light.falloff);
+				out << YAML::EndMap;
+			}
+			out << YAML::EndMap;
+		}
 	}
 	out << YAML::EndMap;
 
@@ -252,6 +283,12 @@ bool SceneSerializer::Deserialize(const std::string filePath)
 		auto compos = components[YM_BOXCOLLIDER_2D];
 		for (auto c : compos) {
 			DeserializeBox2D(c, scene);
+		}
+	}
+	{
+		auto compos = components[YM_LIGHT];
+		for (auto c : compos) {
+			DeserializeLight(c, scene);
 		}
 	}
 	file.close();
@@ -341,6 +378,18 @@ void DeserializeBox2D(YAML::iterator::value_type& component, std::shared_ptr<Sce
 	com.Restitution = values1[2].as<float>();
 	com.RestitutionThreshold = values1[3].as<float>();
 }
+void DeserializeLight(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene) {
+	Entity entity = scene->GetEntity(component.first.as<UUIDType>());
+	LightComponent& com = entity.AddComponent<LightComponent>();
+	com.light.m_LightType = static_cast<LightType>(component.second[YM_LIGHT_TYPE].as<int>());
+	com.light.m_Angle.inner = component.second[YM_LIGHT_ANGLEINNER].as<float>();
+	com.light.m_Angle.outer = component.second[YM_LIGHT_ANGLEOUTER].as<float>();
+	com.light.Ambient = component.second[YM_LIGHT_AMBIENT].as<glm::vec3>();
+	com.light.Diffuse = component.second[YM_LIGHT_DIFFUSE].as<glm::vec3>();
+	com.light.Specular = component.second[YM_LIGHT_SPECULAR].as<glm::vec3>();
+	com.light.falloff = component.second[YM_LIGHT_FALLOFF].as<float>();
+}
+
 void DeserializeEntity(YAML::detail::iterator_value entity, std::shared_ptr<Scene> scene) {
 	std::string name{ entity[YM_NAME].as<std::string>() };
 	UUIDType id = entity[YM_UUID].as<UUIDType>();

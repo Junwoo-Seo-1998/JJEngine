@@ -1,32 +1,20 @@
 Scene: Default tt
 Entities:
   - Name: No Name
-    UUID: 1521be2d-1b74-4f85-aaa0-9e72be587c3d
-  - Name: No Name
-    UUID: 89b6f814-80d1-45cd-9687-9b601fd7b06d
-  - Name: No Name
-    UUID: 682d9c3c-248f-4311-b0bf-edbd4d345676
-  - Name: No Name
-    UUID: bb9e392f-7820-445b-84e3-27fd284280f2
+    UUID: edd7159b-7878-4e8c-8d66-55c72c617d96
   - Name: No Name
     UUID: cd84c46b-b665-4987-8b15-ecf86a948c5f
   - Name: No Name
-    UUID: edd7159b-7878-4e8c-8d66-55c72c617d96
+    UUID: bb9e392f-7820-445b-84e3-27fd284280f2
+  - Name: No Name
+    UUID: 682d9c3c-248f-4311-b0bf-edbd4d345676
+  - Name: No Name
+    UUID: 89b6f814-80d1-45cd-9687-9b601fd7b06d
+  - Name: No Name
+    UUID: 1521be2d-1b74-4f85-aaa0-9e72be587c3d
 Components:
   Relationship:
-    1521be2d-1b74-4f85-aaa0-9e72be587c3d:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    89b6f814-80d1-45cd-9687-9b601fd7b06d:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    682d9c3c-248f-4311-b0bf-edbd4d345676:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    bb9e392f-7820-445b-84e3-27fd284280f2:
+    edd7159b-7878-4e8c-8d66-55c72c617d96:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
@@ -34,12 +22,24 @@ Components:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    edd7159b-7878-4e8c-8d66-55c72c617d96:
+    bb9e392f-7820-445b-84e3-27fd284280f2:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    682d9c3c-248f-4311-b0bf-edbd4d345676:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    89b6f814-80d1-45cd-9687-9b601fd7b06d:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    1521be2d-1b74-4f85-aaa0-9e72be587c3d:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
   Transform:
-    1521be2d-1b74-4f85-aaa0-9e72be587c3d:
+    edd7159b-7878-4e8c-8d66-55c72c617d96:
       Position:
         - 0
         - 0
@@ -52,7 +52,20 @@ Components:
         - 1
         - 1
         - 1
-    89b6f814-80d1-45cd-9687-9b601fd7b06d:
+    cd84c46b-b665-4987-8b15-ecf86a948c5f:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    bb9e392f-7820-445b-84e3-27fd284280f2:
       Position:
         - 0
         - 0
@@ -78,7 +91,7 @@ Components:
         - 1
         - 1
         - 1
-    bb9e392f-7820-445b-84e3-27fd284280f2:
+    89b6f814-80d1-45cd-9687-9b601fd7b06d:
       Position:
         - 0
         - 0
@@ -91,7 +104,7 @@ Components:
         - 1
         - 1
         - 1
-    cd84c46b-b665-4987-8b15-ecf86a948c5f:
+    1521be2d-1b74-4f85-aaa0-9e72be587c3d:
       Position:
         - 0
         - 0
@@ -104,20 +117,16 @@ Components:
         - 1
         - 1
         - 1
-    edd7159b-7878-4e8c-8d66-55c72c617d96:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
+  Script:
+    {}
   Sprite:
+    edd7159b-7878-4e8c-8d66-55c72c617d96:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
     682d9c3c-248f-4311-b0bf-edbd4d345676:
       SpriteHandle: 00000000-0000-0000-0000-000000000000
       SpriteColor:
@@ -125,10 +134,11 @@ Components:
         - 1
         - 1
         - 1
-    edd7159b-7878-4e8c-8d66-55c72c617d96:
-      SpriteHandle: 00000000-0000-0000-0000-000000000000
-      SpriteColor:
-        - 1
-        - 1
-        - 1
-        - 1
+  Camera:
+    {}
+  RigidBody2D:
+    {}
+  BoxCollider2D:
+    {}
+  Light:
+    {}

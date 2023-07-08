@@ -3,6 +3,7 @@
 #include <Core/Graphics/Renderer/SceneRenderer.h>
 #include <Core/Application.h>
 #include <Core/Asset/Manager/AssetManager.h>
+#include <Core/Graphics/RenderPass.h>
 RuntimeLayer::~RuntimeLayer()
 {
 }
@@ -33,6 +34,9 @@ void RuntimeLayer::OnPreRender()
 void RuntimeLayer::OnRender()
 {
 	m_ActiveScene->data->UpdateRuntime(m_SceneRenderer);
+
+	
+	m_SceneRenderer->GetFinalRenderPass()->GetSpecification().TargetFramebuffer;
 }
 
 void RuntimeLayer::OnPostRender()

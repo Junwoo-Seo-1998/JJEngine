@@ -6,5 +6,15 @@ Components:
     {}
   Transform:
     {}
+  Script:
+    {}
   Sprite:
+    {}
+  Camera:
+    {}
+  RigidBody2D:
+    {}
+  BoxCollider2D:
+    {}
+  Light:
     {}
