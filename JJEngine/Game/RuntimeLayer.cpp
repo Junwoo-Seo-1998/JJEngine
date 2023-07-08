@@ -4,6 +4,12 @@
 #include <Core/Application.h>
 #include <Core/Asset/Manager/AssetManager.h>
 #include <Core/Graphics/RenderPass.h>
+#include <Core/Graphics/Renderer/Renderer.h>
+
+#include <Core/Window.h>
+#include <Core/Graphics/FrameBuffer.h>
+#include <Core/Scene.h>
+
 RuntimeLayer::~RuntimeLayer()
 {
 }
@@ -25,6 +31,10 @@ void RuntimeLayer::OnStart()
 
 void RuntimeLayer::OnUpdate()
 {
+	auto [width, height] = Application::Instance().GetWindow()->GetWidthAndHeight();
+	//if you want to support dynamic viewport uncomment it
+	//m_ActiveScene->data->ResizeViewport(width, height);
+	m_SceneRenderer->SetViewportSize(width, height);
 }
 
 void RuntimeLayer::OnPreRender()
@@ -34,9 +44,8 @@ void RuntimeLayer::OnPreRender()
 void RuntimeLayer::OnRender()
 {
 	m_ActiveScene->data->UpdateRuntime(m_SceneRenderer);
-
-	
-	m_SceneRenderer->GetFinalRenderPass()->GetSpecification().TargetFramebuffer;
+	//draw final image
+	Renderer::DrawFinalFullScreenQuad(m_SceneRenderer->GetFinalRenderPass()->GetSpecification().TargetFramebuffer->GetColorTexture(0));
 }
 
 void RuntimeLayer::OnPostRender()

@@ -27,7 +27,8 @@ struct RendererData
 {
 	std::shared_ptr<RenderPass> m_ActiveRenderPass;
 
-	std::shared_ptr<Shader> m_FullScreenQuadShader;
+	//for final image
+	std::shared_ptr<Shader> m_FinalFullScreenQuadShader;
 
 	std::shared_ptr<VertexBuffer> m_FullScreenQuadVertexBuffer;
 	std::shared_ptr<IndexBuffer> m_FullScreenQuadIndexBuffer;
@@ -75,6 +76,18 @@ void Renderer::DrawFullScreenQuad()
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
+void Renderer::DrawFinalFullScreenQuad(std::shared_ptr<Texture> textureToShow)
+{
+	//to make sure to render to final buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	s_Data.m_FinalFullScreenQuadShader->Use();
+	textureToShow->BindTexture(0);
+	s_Data.m_FinalFullScreenQuadShader->SetInt("FinalTexture", 0);
+	s_Data.m_FullScreenQuadVertexBuffer->BindToVertexArray();
+	s_Data.m_FullScreenQuadIndexBuffer->BindToVertexArray();
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+}
+
 void Renderer::Render()
 {
 	m_RenderCommandQueue.Execute();
@@ -117,6 +130,10 @@ void Renderer::Init()
 
 		s_Data.m_FullScreenQuadIndexBuffer = IndexBuffer::CreateIndexBuffer(6 * sizeof(uint32_t));
 		s_Data.m_FullScreenQuadIndexBuffer->SetData(6 * sizeof(uint32_t), &quadIndices[0]);
+	}
+
+	{//set final fsq shader
+		s_Data.m_FinalFullScreenQuadShader = Shader::CreateShader("Resources/Shaders/FinalFSQShader.glsl");
 	}
 }
 

@@ -110,6 +110,7 @@ void SceneRenderer::EndScene()
 
 	//real rendering happens here
 	Renderer::Render();
+	RenderCommand::UnBindFrameBuffer();
 
 	m_DrawList.clear();
 	m_GeometryDrawList.clear();

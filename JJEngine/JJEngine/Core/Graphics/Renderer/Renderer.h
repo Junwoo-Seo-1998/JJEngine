@@ -18,7 +18,11 @@ public:
 	static void BeginRenderPass(std::shared_ptr<RenderPass> renderPass, bool clear = true);
 	static void EndRenderPass();
 
+	//for custom shader
 	static void DrawFullScreenQuad();
+
+	//to show final image
+	static void DrawFinalFullScreenQuad(std::shared_ptr<Texture> textureToShow);
 	
 
 	static void Render();

@@ -8,7 +8,6 @@ class RuntimeLayer : public Layer {
 	std::shared_ptr<Asset_Scene> m_ActiveScene;
 	std::shared_ptr<SceneRenderer> m_SceneRenderer;
 
-
 public:
 	~RuntimeLayer()override;
 	void OnAttach() override;
