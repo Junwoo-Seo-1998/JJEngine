@@ -1,8 +1,11 @@
 #include "Asset_Mesh.h"
 #include "Core/Graphics/MeshFactory.h"
 #include <fstream>
+#include <yaml-cpp/yaml.h>
+#include "Core/Utils/Assert.h"
 
 #define MFDATA ".MFData"
+#define TYPE 
 
 enum class MeshFactoryType
 {
@@ -20,8 +23,11 @@ bool Asset_Mesh::CheckIsDataLoaded() const
 bool Asset_Mesh::LoadData(std::filesystem::path p)
 {
 	if (p.extension() == MFDATA) {
-		std::ifstream file{p};
-		int type{ file.get()};
+		std::ifstream file{ p };
+		std::stringstream strStream{};
+		strStream << file.rdbuf();
+		YAML::Node data = YAML::Load(strStream.str());
+		int type{ data["Type"].as<int>() };
 		MeshFactoryDataLoad(type);
 		file.close();
 		return true;
@@ -45,6 +51,7 @@ void Asset_Mesh::MeshFactoryDataLoad(int type) {
 		data = MeshFactory::CreateSkyCube({ 1.f,1.f,1.f });
 		break;
 	default:
+		ENGINE_ASSERT(false, "Not expected Mesh Factory type");
 		break;
 	}
 }

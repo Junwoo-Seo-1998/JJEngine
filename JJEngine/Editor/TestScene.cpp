@@ -79,7 +79,7 @@ void TestScene::Start()
 
 	auto ThreeDObject = CreateEntity("Test 3D Object");
 	auto& meshcomp = ThreeDObject.AddComponent<MeshComponent>();
-	meshcomp.mesh = MeshFactory::CreateBox(glm::vec3{1.f});
+	meshcomp.mesh = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Mesh>(Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/MeshFactoryDatas/Box.MFData"))->data;
 	ThreeDObject.Transform().Position = { 0.f, -2.f, 0.f };
 	ThreeDObject.Transform().Scale = { 9.f, 1.f, 9.f };
 
