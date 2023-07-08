@@ -11,6 +11,7 @@
 #include "Core/Component/BoxCollider2DComponent.h"
 #include "Core/Component/ScriptComponent.h"
 #include "Core/Component/LightComponent.h"
+#include "Core/Component/MeshComponent.h"
 
 #include "Core/Utils/YAML_IMPL.hpp"
 #include "Core/Asset/Asset_Texture.h"
@@ -52,6 +53,8 @@
 #define YM_LIGHT_DIFFUSE "LightDiffuse"
 #define YM_LIGHT_SPECULAR "LightSpecular"
 #define YM_LIGHT_FALLOFF "LightFalloff"
+#define YM_MESH "Mesh"
+#define YM_MESH_HANDLE "MeshHandle"
 
 // Helper function
 void SerializeEntity(YAML::Emitter& out, entt::entity ID, std::shared_ptr<Scene> scene);
@@ -63,6 +66,7 @@ void DeserializeCamera(YAML::iterator::value_type& component, std::shared_ptr<Sc
 void DeserializeRidgidBody2D(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeBox2D(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeLight(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
+void DeserializeMesh(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene);
 void DeserializeEntity(YAML::detail::iterator_value entity, std::shared_ptr<Scene> scene);
 
 SceneSerializer::SceneSerializer(std::shared_ptr<Scene> sc): scene(sc)
@@ -218,6 +222,20 @@ void SceneSerializer::Serialize(const std::string filePath)
 			}
 			out << YAML::EndMap;
 		}
+		{
+			out << YAML::Key << YM_MESH;
+			out << YAML::Value << YAML::BeginMap;
+			auto components = scene->m_Registry.view<MeshComponent>();
+			for (auto c : components)
+			{
+				Entity entity{ c,scene.get() };
+				YAML_KEY_VALUE(out, to_string(entity.GetUUID()), YAML::BeginMap);
+				MeshComponent& comp = components.get<MeshComponent>(c);
+				YAML_KEY_VALUE(out, YM_MESH_HANDLE, comp.handle);
+				out << YAML::EndMap;
+			}
+			out << YAML::EndMap;
+		}
 	}
 	out << YAML::EndMap;
 
@@ -289,6 +307,12 @@ bool SceneSerializer::Deserialize(const std::string filePath)
 		auto compos = components[YM_LIGHT];
 		for (auto c : compos) {
 			DeserializeLight(c, scene);
+		}
+	}
+	{
+		auto compos = components[YM_MESH];
+		for (auto c : compos) {
+			DeserializeMesh(c, scene);
 		}
 	}
 	file.close();
@@ -389,7 +413,11 @@ void DeserializeLight(YAML::iterator::value_type& component, std::shared_ptr<Sce
 	com.light.Specular = component.second[YM_LIGHT_SPECULAR].as<glm::vec3>();
 	com.light.falloff = component.second[YM_LIGHT_FALLOFF].as<float>();
 }
-
+void DeserializeMesh(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene) {
+	Entity entity = scene->GetEntity(component.first.as<UUIDType>());
+	MeshComponent& com = entity.AddComponent<MeshComponent>();
+	com.handle = component.second[YM_MESH_HANDLE].as<UUIDType>();
+}
 void DeserializeEntity(YAML::detail::iterator_value entity, std::shared_ptr<Scene> scene) {
 	std::string name{ entity[YM_NAME].as<std::string>() };
 	UUIDType id = entity[YM_UUID].as<UUIDType>();
