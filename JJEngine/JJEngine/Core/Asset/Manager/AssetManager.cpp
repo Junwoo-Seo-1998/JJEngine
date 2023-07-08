@@ -11,6 +11,7 @@
 #define SCN ".scn"
 #define PNG ".png"
 #define JPG ".jpg"
+#define MFDATA ".MFData"
 
 // YAML impl
 #define YM_ADATA "ADATA"
@@ -18,6 +19,7 @@
 #define YM_ASSET_HANDLE "Handle"
 #define YM_ASSET_TYPE "Type"
 #define YM_ASSET_PATH "FilePath"
+#define YM_ASSET_ISMEMORYONLY "IsMemoryOnly"
 
 void AssetManager::GenAsset(std::shared_ptr<Asset>& empty_asset, AssetType type)
 {
@@ -65,22 +67,11 @@ bool AssetManager::ReadAData()
 
 	auto assetDatas = data[YM_ASSETS];
 	for (auto D : assetDatas) {
+		bool isMemoryOnly{ D[YM_ASSET_ISMEMORYONLY].as<bool>() };
 		AssetHandle handle = D[YM_ASSET_HANDLE].as<AssetHandle>();
 		AssetType type = AssetType(D[YM_ASSET_TYPE].as<int>());
-		AddAsset(type, handle, D[YM_ASSET_PATH].as<std::string>(), false);
+		AddAsset(type, handle, D[YM_ASSET_PATH].as<std::string>(), isMemoryOnly);
 	}
-	{//Mesh factory
-		std::string tempPath{"./Resources/MESH_BOX"};
-		AssetHandle temp = UUIDGenerator::Generate(tempPath);
-
-		EngineLog::Info(UUIDGenerator::Generate(tempPath));
-		EngineLog::Info(UUIDGenerator::Generate(tempPath));
-		EngineLog::Info(UUIDGenerator::Generate(tempPath));
-		EngineLog::Info(UUIDGenerator::Generate(tempPath));
-
-		std::shared_ptr<Asset> temp_asset = AddAsset(AssetType::Mesh, temp, tempPath, true);
-	}
-
 	file.close();
 	return true;
 }
@@ -99,6 +90,7 @@ void AssetManager::SaveAData()
 		YAML_KEY_VALUE(out, YM_ASSET_HANDLE, a.second->Handle);
 		YAML_KEY_VALUE(out, YM_ASSET_TYPE, static_cast<int>(a.second->type));
 		YAML_KEY_VALUE(out, YM_ASSET_PATH, a.second->path.string());
+		YAML_KEY_VALUE(out, YM_ASSET_ISMEMORYONLY, a.second->isMemoryOnlyAsset);
 		out << YAML::EndMap;
 	}
 	out << YAML::EndSeq;
@@ -126,6 +118,9 @@ void AssetManager::UpdateAData()
 		}
 		else if (extension == SCN) {
 			type = AssetType::Scene;
+		}
+		else if (extension == MFDATA) {
+			type = AssetType::Mesh;
 		}
 		else {
 			continue;

@@ -17,6 +17,8 @@ class AssetManager
 	std::unordered_map<AssetHandle, std::shared_ptr<Asset>> assets{};
 	std::unordered_map<AssetHandle, std::shared_ptr<Metadata>> assetMetadatas{};
 
+	//std::unordered_map<int, AssetHandle> meshManager{};
+
 	std::unordered_map<AssetHandle, std::shared_ptr<Asset>>::iterator latestFoundAsset;
 
 

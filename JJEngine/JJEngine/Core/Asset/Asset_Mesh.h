@@ -8,6 +8,7 @@ class Asset_Mesh :public Asset {
 	bool LoadData(std::filesystem::path p)override;
 	void UnloadData()override;
 
+	void MeshFactoryDataLoad(int type);
 public:
 	std::shared_ptr<Mesh> data{ nullptr };
 
