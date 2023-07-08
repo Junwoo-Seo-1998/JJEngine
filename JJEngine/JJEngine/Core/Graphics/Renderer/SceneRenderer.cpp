@@ -65,11 +65,14 @@ void SceneRenderer::BeginScene(const glm::mat4& view, const glm::mat4& Projectio
 
 	{//collect lights
 		auto view = m_ActiveScene->GetRegistry().view<TransformComponent, LightComponent>();
-		int index = 0;
 		for (auto entity : view)
 		{
 			auto [transform, light] = view.get<TransformComponent, LightComponent>(entity);
 			m_ActiveLights.push_back(std::tuple{ transform.Position, transform.GetForward(), light.light });
+			if (light.light.m_LightType == LightType::DirectionLight)
+			{
+				m_ShadowCasters.push_back(std::tuple{ transform.Position, transform.GetForward(), light.light });
+			}
 		}
 
 		if (m_ActiveLights.empty())
@@ -87,11 +90,15 @@ void SceneRenderer::EndScene()
 	//jun: it's capturing at every loop but it will be removed later after the asset work
 	BakeCubeMap();
 
+	BakeShadow();
+
 	GeometryPass();
 
 	GeometryPassFSQ();
 
 	//ForwardPass();
+
+	ShadowPass();
 
 	CubemapPass();
 	//post processing
@@ -107,6 +114,7 @@ void SceneRenderer::EndScene()
 	m_DrawList.clear();
 	m_GeometryDrawList.clear();
 	m_ActiveLights.clear();
+	m_ShadowCasters.clear();
 
 	m_Active = false;
 }
@@ -297,41 +305,15 @@ void SceneRenderer::BakeCubeMap()
 		});
 }
 
-void SceneRenderer::CubemapPass()
+void SceneRenderer::BakeShadow()
 {
-	Renderer::Submit([this]()
-		{
-			Renderer::BeginRenderPass(m_FinalRenderPass, false);
-		});
+	if (m_ShadowCasters.empty())
+		return;
 
 	Renderer::Submit([this]()
-		{
-			glEnable(GL_DEPTH_TEST);
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
-			glDepthFunc(GL_LEQUAL);
-			glDepthMask(GL_FALSE);
-			glDisable(GL_BLEND);
+	{
 
-			m_CubeMapShader->Use();
-			glm::mat4 view = glm::mat4(glm::mat3(m_View));
-			m_CubeMapShader->SetMat4("view", view);
-			m_CubeMapShader->SetMat4("projection", m_Projection);
-			m_BakeCubeMapRenderPass->GetSpecification().TargetFramebuffer->GetColorTexture(0)->BindTexture(0);
-			m_CubeMapShader->SetInt("environmentMap", 0);
-			m_CubeMapMesh->GetMeshVBO()->BindToVertexArray();
-			m_CubeMapMesh->GetMeshEBO()->BindToVertexArray();
-			glDrawElements(GL_TRIANGLES, m_CubeMapMesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
-
-			glDepthFunc(GL_LESS);
-			glDepthMask(GL_TRUE);
-		});
-
-
-	Renderer::Submit([]()
-		{
-			Renderer::EndRenderPass();
-		});
+	});
 }
 
 void SceneRenderer::GeometryPass()
@@ -514,6 +496,54 @@ void SceneRenderer::ForwardPass()
 				glDrawElements(GL_TRIANGLES, toDraw.Mesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
 			}
 
+			Renderer::EndRenderPass();
+		});
+}
+
+void SceneRenderer::ShadowPass()
+{
+	if (m_ShadowCasters.empty())
+		return;
+	//for now one directional light
+	Renderer::Submit([this]()
+	{
+		
+	});
+}
+
+void SceneRenderer::CubemapPass()
+{
+	Renderer::Submit([this]()
+		{
+			Renderer::BeginRenderPass(m_FinalRenderPass, false);
+		});
+
+	Renderer::Submit([this]()
+		{
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glDepthFunc(GL_LEQUAL);
+			glDepthMask(GL_FALSE);
+			glDisable(GL_BLEND);
+
+			m_CubeMapShader->Use();
+			glm::mat4 view = glm::mat4(glm::mat3(m_View));
+			m_CubeMapShader->SetMat4("view", view);
+			m_CubeMapShader->SetMat4("projection", m_Projection);
+			m_BakeCubeMapRenderPass->GetSpecification().TargetFramebuffer->GetColorTexture(0)->BindTexture(0);
+			m_CubeMapShader->SetInt("environmentMap", 0);
+			m_CubeMapMesh->GetMeshVBO()->BindToVertexArray();
+			m_CubeMapMesh->GetMeshEBO()->BindToVertexArray();
+			glDrawElements(GL_TRIANGLES, m_CubeMapMesh->GetNumOfIndices(), GL_UNSIGNED_INT, nullptr);
+
+			glDepthFunc(GL_LESS);
+			glDepthMask(GL_TRUE);
+		});
+
+
+	Renderer::Submit([]()
+		{
 			Renderer::EndRenderPass();
 		});
 }

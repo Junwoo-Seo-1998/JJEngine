@@ -37,7 +37,7 @@ private:
 
 	void BakeCubeMap();
 
-	void CubemapPass();
+	void BakeShadow();
 
 	void GeometryPass();
 
@@ -45,6 +45,9 @@ private:
 
 	void ForwardPass();
 
+	void ShadowPass();
+
+	void CubemapPass();
 
 	//post processing
 	void BloomPass();
@@ -70,6 +73,9 @@ private:
 
 	//scene data
 	std::vector<std::tuple<glm::vec3, glm::vec3, Light>> m_ActiveLights;
+	//to cast shadow
+	std::vector<std::tuple<glm::vec3, glm::vec3, Light>> m_ShadowCasters;
+
 
 
 	//Default Shader
@@ -98,6 +104,8 @@ private:
 	std::shared_ptr<Texture> m_DefaultHDRICubemapTexture;
 	std::shared_ptr<RenderPass> m_BakeCubeMapRenderPass;
 
+	//shadow
+	std::shared_ptr<Shader> m_BakeShadowShader;
 
 	struct DrawCommand
 	{

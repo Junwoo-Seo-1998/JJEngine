@@ -266,9 +266,6 @@
     <ClCompile Include="Core\Component\CameraComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Component\LightComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Component\MaterialComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
