@@ -165,7 +165,7 @@ void SceneSerializer::Serialize(const std::string filePath)
 				YAML_KEY_VALUE(out, YM_CAMERAVALUES, YAML::BeginSeq);
 				out << cacom.cam_speed << cacom.Fov_y << cacom.Aspect_ratio << cacom.Near << cacom.Far << YAML::EndSeq;
 				YAML_KEY_VALUE(out, YM_CAMERABOOLS, YAML::BeginSeq);
-				out << cacom.main_cam << cacom.IsMainCamera << YAML::EndSeq;
+				out << cacom.IsMainCamera << YAML::EndSeq;
 				out << YAML::EndMap;
 			}
 			out << YAML::EndMap;
@@ -380,8 +380,7 @@ void DeserializeCamera(YAML::iterator::value_type& component, std::shared_ptr<Sc
 	com.Near = values[3].as<float>();
 	com.Far = values[4].as<float>();
 	auto bools = component.second[YM_CAMERABOOLS];
-	com.main_cam = bools[0].as<bool>();
-	com.IsMainCamera = bools[1].as<bool>();
+	com.IsMainCamera = bools[0].as<bool>();
 
 }
 void DeserializeRidgidBody2D(YAML::iterator::value_type& component, std::shared_ptr<Scene> scene){

@@ -10,7 +10,6 @@ public:
 	float Aspect_ratio = 1.0f;
 	float Near = 1.0f;
 	float Far = 1000000.f;
-	bool main_cam = true;
 	bool IsMainCamera = false;
 	[[nodiscard]] glm::mat4 GetProjection() const;
 };

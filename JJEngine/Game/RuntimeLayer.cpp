@@ -33,7 +33,7 @@ void RuntimeLayer::OnUpdate()
 {
 	auto [width, height] = Application::Instance().GetWindow()->GetWidthAndHeight();
 	//if you want to support dynamic viewport uncomment it
-	//m_ActiveScene->data->ResizeViewport(width, height);
+	m_ActiveScene->data->ResizeViewport(width, height);
 	m_SceneRenderer->SetViewportSize(width, height);
 }
 

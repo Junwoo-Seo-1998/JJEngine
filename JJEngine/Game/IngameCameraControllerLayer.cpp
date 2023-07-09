@@ -49,31 +49,31 @@ void IngameCameraControllerLayer::OnUpdate()
 		Entity e{ camID, active_scene.get()};
 		auto& camera = e.GetComponent<CameraComponent>();
 		auto& cameraTransform = e.GetComponent<TransformComponent>();		
-		if (e.GetComponent<CameraComponent>().main_cam)
-		{
-			if (Input::IsPressed(KeyCode::W)) {
-				cameraTransform.Position += camera.cam_speed * cameraTransform.GetForward();
-			}
-			if (Input::IsPressed(KeyCode::S)) {
-				cameraTransform.Position -= camera.cam_speed * cameraTransform.GetForward();
-			}
-			if (Input::IsPressed(KeyCode::A)) {
-				cameraTransform.Position -= camera.cam_speed * cameraTransform.GetRight();
-			}
-			if (Input::IsPressed(KeyCode::D)) {
-				cameraTransform.Position += camera.cam_speed * cameraTransform.GetRight();
-			}
-			if (Input::IsPressed(KeyCode::Q)) {
-				cameraTransform.Position.y += camera.cam_speed;
-			}
-			if (Input::IsPressed(KeyCode::E)) {
-				cameraTransform.Position.y -= camera.cam_speed;
-			}
-			if (camMove)
-			{
-				MouseCamControl(cameraTransform, get<0>(Input::GetMousePosition()), get<1>(Input::GetMousePosition()));
-			}
-		}
+		//if (e.GetComponent<CameraComponent>().main_cam)
+		//{
+		//	if (Input::IsPressed(KeyCode::W)) {
+		//		cameraTransform.Position += camera.cam_speed * cameraTransform.GetForward();
+		//	}
+		//	if (Input::IsPressed(KeyCode::S)) {
+		//		cameraTransform.Position -= camera.cam_speed * cameraTransform.GetForward();
+		//	}
+		//	if (Input::IsPressed(KeyCode::A)) {
+		//		cameraTransform.Position -= camera.cam_speed * cameraTransform.GetRight();
+		//	}
+		//	if (Input::IsPressed(KeyCode::D)) {
+		//		cameraTransform.Position += camera.cam_speed * cameraTransform.GetRight();
+		//	}
+		//	if (Input::IsPressed(KeyCode::Q)) {
+		//		cameraTransform.Position.y += camera.cam_speed;
+		//	}
+		//	if (Input::IsPressed(KeyCode::E)) {
+		//		cameraTransform.Position.y -= camera.cam_speed;
+		//	}
+		//	if (camMove)
+		//	{
+		//		MouseCamControl(cameraTransform, get<0>(Input::GetMousePosition()), get<1>(Input::GetMousePosition()));
+		//	}
+		//}
 	}
 	
 }
