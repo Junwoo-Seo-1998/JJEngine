@@ -48,6 +48,8 @@ namespace Game
             if (Input.IsPressed(KeyCode.Space))
             {
                 Entity entity = Scene.CreateEntity("Test");
+                entity.AddComponent<SpriteRendererComponent>();
+                entity.Position = Position;
             }
 
             velocity *= Speed;

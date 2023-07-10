@@ -28,6 +28,13 @@ namespace JJEngine
         }
     }
 
+    //empty for now
+    public class SpriteRendererComponent : Component
+    {
+
+    }
+
+
     public class RigidBody2DComponent : Component   
     {
 
