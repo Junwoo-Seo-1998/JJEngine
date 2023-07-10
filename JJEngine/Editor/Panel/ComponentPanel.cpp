@@ -20,7 +20,10 @@
 
 #include "Core/Script/ScriptEngine.h"
 #include <format>
-#include <Core/Graphics/Mesh.h>
+#include <Core/Component/MeshComponent.h>
+#include <Core/Asset/Manager/AssetManager.h>
+#include <Core/Asset/Metadata.h>
+
 static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
 {
 	ImGuiIO& io = ImGui::GetIO();
@@ -240,21 +243,21 @@ void ComponentPanel::DrawComponents(Entity entity)
 				}
 			}
 
-			if (!entity.HasComponent<MaterialComponent>()) //??
-			{
-				if (ImGui::MenuItem("Material"))
-				{
-					entity.AddComponent<MaterialComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-			}
+			//if (!entity.HasComponent<MaterialComponent>()) //??
+			//{
+			//	if (ImGui::MenuItem("Material"))
+			//	{
+			//		entity.AddComponent<MaterialComponent>();
+			//		ImGui::CloseCurrentPopup();
+			//	}
+			//}
 
-			if (!entity.HasComponent<Model>())
+			if (!entity.HasComponent<MeshComponent>())
 			{
-				if (ImGui::MenuItem("Model"))
+				if (ImGui::MenuItem("Mesh"))
 				{
-					Model& model = entity.AddComponent<Model>();
-					model.GetMeshes().push_back(std::make_shared<Mesh>(Mesh::CreateSphere(10, 10, 10, {})));
+					MeshComponent& comp = entity.AddComponent<MeshComponent>();
+					comp.handle = Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/MeshFactoryDatas/Box.MFData");
 					ImGui::CloseCurrentPopup();
 				}
 			}
@@ -313,6 +316,36 @@ void ComponentPanel::DrawComponents(Entity entity)
 
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 		{
+			std::unordered_set<AssetHandle> handles = Application::Instance().GetAssetManager()->GetAllAssetsWithType(AssetType::Texture);
+			unsigned Asize{ static_cast<unsigned>(handles.size()) };
+			std::vector < std::string > items(Asize);
+			AssetHandle currHandle = component.asset->GetHandle();
+			unsigned nitem = 0;
+			static int item_current_idx = 0;
+			for (auto& h:handles) {
+				if (currHandle == h) item_current_idx = nitem;
+				items[nitem] = Application::Instance().GetAssetManager()->GetMetadata(h)->path.string();
+				++nitem;
+			}
+			const char* combo_preview_value = items[item_current_idx].c_str(); 
+			if (ImGui::BeginCombo("Texture", combo_preview_value))
+			{
+				nitem = 0;
+				for (auto&h:handles)
+				{
+					const bool is_selected = (item_current_idx == nitem);
+					if (ImGui::Selectable(items[nitem].c_str(), is_selected)) {
+						component.asset = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Texture>(h);
+						item_current_idx = nitem;
+					}
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+
+					++nitem;
+				}
+				ImGui::EndCombo();
+			}
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 		});
 
@@ -320,11 +353,11 @@ void ComponentPanel::DrawComponents(Entity entity)
 			{
 			});
 
-		DrawComponent<MaterialComponent>("Material", entity, [](auto& component)
-			{
-			});
+		//DrawComponent<MaterialComponent>("Material", entity, [](auto& component)
+		//	{
+		//	});
 
-		DrawComponent<Model>("Model", entity, [](auto& component)
+		DrawComponent<MeshComponent>("Mesh", entity, [](auto& component)
 			{
 			});
 
