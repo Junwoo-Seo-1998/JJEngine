@@ -319,7 +319,7 @@ void ComponentPanel::DrawComponents(Entity entity)
 			std::unordered_set<AssetHandle> handles = Application::Instance().GetAssetManager()->GetAllAssetsWithType(AssetType::Texture);
 			unsigned Asize{ static_cast<unsigned>(handles.size()) };
 			std::vector < std::string > items(Asize);
-			AssetHandle currHandle = component.asset->GetHandle();
+			AssetHandle currHandle = component.asset == nullptr ? AssetHandle{} :component.asset->GetHandle();
 			unsigned nitem = 0;
 			static int item_current_idx = 0;
 			for (auto& h:handles) {
@@ -327,7 +327,7 @@ void ComponentPanel::DrawComponents(Entity entity)
 				items[nitem] = Application::Instance().GetAssetManager()->GetMetadata(h)->path.string();
 				++nitem;
 			}
-			const char* combo_preview_value = items[item_current_idx].c_str(); 
+			const char* combo_preview_value = currHandle == AssetHandle{} ? "None" : items[item_current_idx].c_str();
 			if (ImGui::BeginCombo("Texture", combo_preview_value))
 			{
 				nitem = 0;
