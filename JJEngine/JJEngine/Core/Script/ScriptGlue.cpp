@@ -15,6 +15,7 @@ namespace Script
 {
 	#define ADD_INTERNAL_CALL(FuncName) mono_add_internal_call("JJEngine.InternalCalls::" #FuncName, FuncName)
 
+	static std::unordered_map<MonoType*, std::function<void(Entity)>> s_EntityAddComponentFuncs;
 	static std::unordered_map<MonoType*, std::function<bool(Entity)>> s_EntityHasComponentFuncs;
 
 	static void Debug_Log(MonoString* monoString)
@@ -22,6 +23,18 @@ namespace Script
 		char* to_print = mono_string_to_utf8(monoString);
 		Log::Info(to_print);
 		mono_free(to_print);
+	}
+
+	static void Entity_AddComponent(UUIDType* uuid, MonoReflectionType* componentType)
+	{
+		Scene* scene = Script::ScriptEngine::GetSceneContext();
+		ENGINE_ASSERT(scene);
+		Entity entity = scene->GetEntity(*uuid);
+		ENGINE_ASSERT(entity);
+
+		MonoType* monoComponentType = mono_reflection_type_get_type(componentType);
+		ENGINE_ASSERT(s_EntityAddComponentFuncs.contains(monoComponentType), "This Component Type was not registered !!");
+		s_EntityAddComponentFuncs.at(monoComponentType)(entity);
 	}
 
 	static bool Entity_HasComponent(UUIDType* uuid, MonoReflectionType* componentType)
@@ -117,6 +130,7 @@ namespace Script
 	{
 		ADD_INTERNAL_CALL(Debug_Log);
 
+		ADD_INTERNAL_CALL(Entity_AddComponent);
 		ADD_INTERNAL_CALL(Entity_HasComponent);
 
 		ADD_INTERNAL_CALL(TransformComponent_GetPosition);
@@ -167,6 +181,7 @@ namespace Script
 				}
 			);
 
+			s_EntityAddComponentFuncs[managedType] = [](Entity entity) { entity.AddComponent<Component>(); };
 			s_EntityHasComponentFuncs[managedType] = [](Entity entity) { return entity.HasComponent<Component>(); };
 		}(),
 		//expand it with templates

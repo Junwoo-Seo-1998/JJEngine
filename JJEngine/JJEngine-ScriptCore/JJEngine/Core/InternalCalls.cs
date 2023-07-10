@@ -15,6 +15,9 @@ namespace JJEngine
         #region Entity
 
         [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern bool Entity_AddComponent(in UUIDType uuid, Type componentType);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern bool Entity_HasComponent(in UUIDType uuid, Type componentType);
 
         #endregion

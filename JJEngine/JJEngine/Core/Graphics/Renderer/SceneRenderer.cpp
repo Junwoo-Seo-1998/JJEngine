@@ -262,6 +262,10 @@ void SceneRenderer::Init()
 		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
 		m_BakeCubeMapRenderPass = RenderPass::Create(spec);
 	}
+
+	{
+		m_BakeShadowShader = Shader::CreateShader("Resources/Shaders/BakeShadow.glsl");
+	}
 }
 
 void SceneRenderer::BakeCubeMap()

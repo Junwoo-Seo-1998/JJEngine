@@ -14,6 +14,17 @@ namespace JJEngine
             UUID = new UUIDType(low, high);
         }
 
+        public T AddComponent<T>() where T : Component, new()
+        {
+            if (HasComponent<T>())
+                return GetComponent<T>();
+
+            Type componentType = typeof(T);
+            InternalCalls.Entity_AddComponent(in UUID, componentType);
+            T component = new T() { Entity = this };
+            return component;
+        }
+
         public bool HasComponent<T>() where T : Component, new()
         {
             Type componentType = typeof(T);
