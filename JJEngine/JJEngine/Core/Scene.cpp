@@ -149,7 +149,8 @@ void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm:
 			{
 				auto [transformComponent, meshComponent] = view.get<TransformComponent, MeshComponent>(entity);
 				std::shared_ptr<Asset_Mesh> Mesh = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Mesh>(meshComponent.handle);
-				sceneRenderer->SubmitMesh(Mesh->data, transformComponent.GetTransform());
+				Entity ent{ entity, this };
+				sceneRenderer->SubmitMesh(Mesh->data, ent.GetWorldSpaceTransformMatrix());
 			}
 		}
 		sceneRenderer->EndScene();
