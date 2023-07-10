@@ -30,6 +30,9 @@ void TestScene::Start()
 	auto& camComp=cam.AddComponent<CameraComponent>();
 	camComp.IsMainCamera = true;
 	cam.Transform().Position = { 0,1.52f,7.5f };
+	auto& camScript = cam.AddComponent<ScriptComponent>();
+	camScript.Name = "Game.CameraControl";
+
 
 	auto ground = CreateEntity("Ground");
 	auto& groundSprite = ground.AddComponent<SpriteRendererComponent>();
@@ -49,7 +52,7 @@ void TestScene::Start()
 	ground2.AddComponent<BoxCollider2DComponent>();
 	ground2.AddComponent<RigidBody2DComponent>();
 
-	auto temp = CreateEntity("Test Texture Entity");
+	auto temp = CreateEntity("Player");
 
 	temp.Transform().Position = { 0.f, 2.50f, 0 };
 	auto& sprite = temp.AddComponent<SpriteRendererComponent>();
