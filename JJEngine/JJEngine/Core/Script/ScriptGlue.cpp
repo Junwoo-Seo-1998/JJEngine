@@ -25,6 +25,16 @@ namespace Script
 		mono_free(to_print);
 	}
 
+	static void Scene_CreateComponent(UUIDType* uuid, MonoString* monoString)
+	{
+		char* name = mono_string_to_utf8(monoString);
+		Scene* scene = Script::ScriptEngine::GetSceneContext();
+		ENGINE_ASSERT(scene);
+		Entity entity = scene->CreateEntity(name);
+		*uuid = entity.GetUUID();
+		mono_free(name);
+	}
+
 	static void Entity_AddComponent(UUIDType* uuid, MonoReflectionType* componentType)
 	{
 		Scene* scene = Script::ScriptEngine::GetSceneContext();
@@ -129,6 +139,8 @@ namespace Script
 	void ScriptGlue::RegisterFunctions()
 	{
 		ADD_INTERNAL_CALL(Debug_Log);
+
+		ADD_INTERNAL_CALL(Scene_CreateComponent);
 
 		ADD_INTERNAL_CALL(Entity_AddComponent);
 		ADD_INTERNAL_CALL(Entity_HasComponent);

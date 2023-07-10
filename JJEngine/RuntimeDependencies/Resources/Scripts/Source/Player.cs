@@ -45,6 +45,11 @@ namespace Game
                 velocity.X -= 1.0f;
             }
 
+            if (Input.IsPressed(KeyCode.Space))
+            {
+                Entity entity = Scene.CreateEntity("Test");
+            }
+
             velocity *= Speed;
             /*if (m_rigidBody != null)
             {
