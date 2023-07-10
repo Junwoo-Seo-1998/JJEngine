@@ -30,6 +30,9 @@ void TestScene::Start()
 	auto& camComp=cam.AddComponent<CameraComponent>();
 	camComp.IsMainCamera = true;
 	cam.Transform().Position = { 0,1.52f,7.5f };
+	//auto& script = cam.AddComponent<ScriptComponent>();
+	//script.Name = "Game.CameraControl";
+
 
 	auto ground = CreateEntity("Ground");
 	auto& groundSprite = ground.AddComponent<SpriteRendererComponent>();
@@ -50,8 +53,7 @@ void TestScene::Start()
 	ground2.AddComponent<RigidBody2DComponent>();
 
 	auto temp = CreateEntity("Test Texture Entity");
-
-	temp.Transform().Position = { 0.f, 2.50f, 0 };
+	temp.Transform().Position = { -2.5f, 2.50f, 0 };
 	auto& sprite = temp.AddComponent<SpriteRendererComponent>();
 	sprite.asset = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Texture>(Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/Textures/test.jpg")); //Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
 
@@ -59,7 +61,7 @@ void TestScene::Start()
 	auto& body = temp.AddComponent<RigidBody2DComponent>();
 	body.Type = RigidBody2DComponent::BodyType::Dynamic;*/
 
-	auto& script=temp.AddComponent<ScriptComponent>();
+	auto & script=temp.AddComponent<ScriptComponent>();
 	script.Name = "Game.Player";
 
 	/*auto light = CreateEntity("Direction Light");
@@ -78,20 +80,30 @@ void TestScene::Start()
 
 
 	AssetHandle BoxHandle = Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/MeshFactoryDatas/Box.MFData");
-	auto ThreeDObject = CreateEntity("Test 3D Object");
+	auto ThreeDObject = CreateEntity("Ground");
 	auto& meshcomp = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
 	ThreeDObject.Transform().Position = { 0.f, -2.f, 0.f };
-	ThreeDObject.Transform().Scale = { 9.f, 1.f, 9.f };
+	ThreeDObject.Transform().Scale = { 100.f, 1.f, 10.f };
 
-	ThreeDObject = CreateEntity("Test 3D Object2");
+	ThreeDObject = CreateEntity("Upper1");
+	auto& meshcomp1 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
+	ThreeDObject.Transform().Position = { 1.f, 5.f, 0.f };
+	ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
+
+	ThreeDObject = CreateEntity("Upper2");
 	auto& meshcomp2 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	ThreeDObject.Transform().Position = { 0.f, -1.f, 0.f };
-	ThreeDObject.Transform().Scale = { 1.f, 1.f, 1.f };
+	ThreeDObject.Transform().Position = { 6.f, 5.f, 0.f };
+	ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
 
-	ThreeDObject = CreateEntity("Test 3D Object3");
+	ThreeDObject = CreateEntity("Lower1");
 	auto& meshcomp3 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	ThreeDObject.Transform().Position = { 0.f, 1.f, 0.f };
-	ThreeDObject.Transform().Scale = { 2.f, 1.f, 2.f };
+	ThreeDObject.Transform().Position = { 1.f, -0.f, 0.f };
+	ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
+
+	ThreeDObject = CreateEntity("Lower2");
+	auto& meshcomp4 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
+	ThreeDObject.Transform().Position = { 6.f, -0.f, 0.f };
+	ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
 }
 
 void TestScene::Update()

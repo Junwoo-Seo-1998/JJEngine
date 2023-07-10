@@ -13,6 +13,8 @@ namespace Game
         
         public float Speed =60.0f;
         public float ttttt = 3.0f;
+        Vector3 velocity = Vector3.Zero;
+
         protected override void OnCreate()
         {
             Console.WriteLine($"Player create");
@@ -22,7 +24,10 @@ namespace Game
 
         protected override void OnUpdate()
         {
-            Vector3 velocity=Vector3.Zero;
+            float gravity = 0.3f;
+
+
+
             if (Input.IsPressed(KeyCode.W))
             {
                 velocity.Y += 1.0f;
@@ -45,7 +50,13 @@ namespace Game
                 velocity.X -= 1.0f;
             }
 
-            velocity *= Speed;
+            if(Input.IsTriggered(KeyCode.Space))
+            {
+                velocity.Y = 8.0f;
+            }
+
+            velocity.Y -= gravity;
+
             /*if (m_rigidBody != null)
             {
                 m_rigidBody.ApplyLinearImpulse(velocity.XY, true);
