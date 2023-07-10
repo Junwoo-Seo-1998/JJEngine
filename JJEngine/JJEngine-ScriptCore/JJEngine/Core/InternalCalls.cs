@@ -15,8 +15,10 @@ namespace JJEngine
         #region Scene
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern bool Scene_CreateComponent(ref UUIDType uuid, string name);
+        internal static extern void Scene_CreateEntity(ref UUIDType uuid, string name);
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern bool Scene_GetEntityWithName(ref UUIDType uuid, string name);
         #endregion
 
 

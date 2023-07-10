@@ -25,7 +25,7 @@ namespace Script
 		mono_free(to_print);
 	}
 
-	static void Scene_CreateComponent(UUIDType* uuid, MonoString* monoString)
+	static void Scene_CreateEntity(UUIDType* uuid, MonoString* monoString)
 	{
 		char* name = mono_string_to_utf8(monoString);
 		Scene* scene = Script::ScriptEngine::GetSceneContext();
@@ -33,6 +33,22 @@ namespace Script
 		Entity entity = scene->CreateEntity(name);
 		*uuid = entity.GetUUID();
 		mono_free(name);
+	}
+
+	static bool Scene_GetEntityWithName(UUIDType* uuid, MonoString* monoString)
+	{
+		char* name = mono_string_to_utf8(monoString);
+		Scene* scene = Script::ScriptEngine::GetSceneContext();
+		ENGINE_ASSERT(scene);
+		Entity entity = scene->TryGetEntity(name);
+		mono_free(name);
+
+		//not valid
+		if(!entity)
+			return false;
+
+		*uuid = entity.GetUUID();
+		return true;
 	}
 
 	static void Entity_AddComponent(UUIDType* uuid, MonoReflectionType* componentType)
@@ -140,7 +156,8 @@ namespace Script
 	{
 		ADD_INTERNAL_CALL(Debug_Log);
 
-		ADD_INTERNAL_CALL(Scene_CreateComponent);
+		ADD_INTERNAL_CALL(Scene_CreateEntity);
+		ADD_INTERNAL_CALL(Scene_GetEntityWithName);
 
 		ADD_INTERNAL_CALL(Entity_AddComponent);
 		ADD_INTERNAL_CALL(Entity_HasComponent);

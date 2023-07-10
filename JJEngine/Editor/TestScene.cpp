@@ -30,8 +30,9 @@ void TestScene::Start()
 	auto& camComp=cam.AddComponent<CameraComponent>();
 	camComp.IsMainCamera = true;
 	cam.Transform().Position = { 0,1.52f,7.5f };
-	//auto& script = cam.AddComponent<ScriptComponent>();
-	//script.Name = "Game.CameraControl";
+
+	auto& camScript = cam.AddComponent<ScriptComponent>();
+	camScript.Name = "Game.CameraControl";
 
 
 	auto ground = CreateEntity("Ground");
@@ -51,8 +52,8 @@ void TestScene::Start()
 	ground2.Transform().Rotation.z = glm::radians(29.23f);
 	ground2.AddComponent<BoxCollider2DComponent>();
 	ground2.AddComponent<RigidBody2DComponent>();
+	auto temp = CreateEntity("Player");
 
-	auto temp = CreateEntity("Test Texture Entity");
 	temp.Transform().Position = { -2.5f, 2.50f, 0 };
 	auto& sprite = temp.AddComponent<SpriteRendererComponent>();
 	sprite.asset = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Texture>(Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/Textures/test.jpg")); //Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));

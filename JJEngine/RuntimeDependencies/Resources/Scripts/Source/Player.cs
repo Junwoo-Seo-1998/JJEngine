@@ -10,13 +10,11 @@ namespace Game
     {
         private TransformComponent m_transform;
         private RigidBody2DComponent m_rigidBody;
-
         private int i = 0;
 
         public float Speed =60.0f;
         public float ttttt = 3.0f;
         Vector3 velocity = Vector3.Zero;
-
         protected override void OnCreate()
         {
             Console.WriteLine($"Player create");

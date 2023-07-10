@@ -10,14 +10,27 @@ namespace Game
     public class CameraControl  : Entity
     {
         private TransformComponent m_transform;
+        private TransformComponent m_playerTransform;
         protected override void OnCreate()
         {
             m_transform = GetComponent<TransformComponent>();
+            Entity player = Scene.GetEntity("Player");
+            if (player != null)
+            {
+                m_playerTransform = player.GetComponent<TransformComponent>();
+            }
         }
 
         protected override void OnUpdate()
         {
-            Vector3 velocity = Vector3.Zero;
+            if (m_playerTransform != null)
+            {
+                Vector2 pos = m_playerTransform.Position.XY;
+                Position = new Vector3(pos.X, pos.Y, Position.Z);
+            }
+
+
+            /*Vector3 velocity = Vector3.Zero;
             if (Input.IsPressed(KeyCode.Up))
             {
                 velocity.Y += 1.0f;
@@ -42,7 +55,7 @@ namespace Game
 
             float speed = 3.0f;
             velocity *= speed;
-            m_transform.Position += velocity * Time.Delta;
+            m_transform.Position += velocity * Time.Delta;*/
         }
     }
 }
