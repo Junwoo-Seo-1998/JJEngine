@@ -1,60 +1,72 @@
 Scene: Test
 Entities:
-  - Name: Test 3D Object3
-    UUID: 8a091d0f-8842-4475-998f-15dc573c120f
-  - Name: Test 3D Object2
-    UUID: 8b85cfbd-edc6-4d31-9bde-b3a2e5a59052
-  - Name: Test 3D Object
-    UUID: ace0b452-c8a5-462c-8a92-208a199a7160
-  - Name: Test light1
-    UUID: 732f0253-7221-40fb-b975-915753391ea8
-  - Name: Test Texture Entity
-    UUID: 2963b0e1-fd5c-478b-927d-eae8f5935cc8
-  - Name: Ground2
-    UUID: ed98ed46-6128-460b-8f5d-7ce3042e10bf
+  - Name: Lower2
+    UUID: 087c00cc-fe70-429a-8b82-ee2453305230
+  - Name: Lower1
+    UUID: a5c80bfd-3168-4139-bf62-3ebc3e6dc0bc
+  - Name: Upper2
+    UUID: 16f09ed1-5158-4a77-bdfb-ed18d85830ed
+  - Name: Upper1
+    UUID: bfab996e-0137-41e8-9f11-9d099b6c8e1d
   - Name: Ground
-    UUID: 174f4d82-f0e4-40d3-969f-4b428e1566e8
+    UUID: 65a5bfc8-a24d-488b-87f6-0301c575efeb
+  - Name: Test light1
+    UUID: a010c55e-7ebb-4658-9313-65f3bf16c70d
+  - Name: Test Texture Entity
+    UUID: 8e8ba0a0-b989-4fdb-8431-f81dc07ca500
+  - Name: Ground2
+    UUID: 73bf132f-bd33-4db7-b4a6-9a2eac399515
+  - Name: Ground
+    UUID: 7bce529d-9647-4543-b1da-872b71bbcca1
   - Name: Camera
-    UUID: 3b6f2982-390b-494e-9b18-92e5216033f1
+    UUID: b17c41ec-ef27-4608-abb1-67d0ca4fc344
 Components:
   Relationship:
-    8a091d0f-8842-4475-998f-15dc573c120f:
+    087c00cc-fe70-429a-8b82-ee2453305230:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    8b85cfbd-edc6-4d31-9bde-b3a2e5a59052:
+    a5c80bfd-3168-4139-bf62-3ebc3e6dc0bc:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    ace0b452-c8a5-462c-8a92-208a199a7160:
+    16f09ed1-5158-4a77-bdfb-ed18d85830ed:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        - bfab996e-0137-41e8-9f11-9d099b6c8e1d
+    bfab996e-0137-41e8-9f11-9d099b6c8e1d:
+      Parent: 16f09ed1-5158-4a77-bdfb-ed18d85830ed
+      Children:
+        []
+    65a5bfc8-a24d-488b-87f6-0301c575efeb:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    732f0253-7221-40fb-b975-915753391ea8:
+    a010c55e-7ebb-4658-9313-65f3bf16c70d:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    2963b0e1-fd5c-478b-927d-eae8f5935cc8:
+    8e8ba0a0-b989-4fdb-8431-f81dc07ca500:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        - b17c41ec-ef27-4608-abb1-67d0ca4fc344
+    73bf132f-bd33-4db7-b4a6-9a2eac399515:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    ed98ed46-6128-460b-8f5d-7ce3042e10bf:
+    7bce529d-9647-4543-b1da-872b71bbcca1:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    174f4d82-f0e4-40d3-969f-4b428e1566e8:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    3b6f2982-390b-494e-9b18-92e5216033f1:
-      Parent: 00000000-0000-0000-0000-000000000000
+    b17c41ec-ef27-4608-abb1-67d0ca4fc344:
+      Parent: 8e8ba0a0-b989-4fdb-8431-f81dc07ca500
       Children:
         []
   Transform:
-    8a091d0f-8842-4475-998f-15dc573c120f:
+    087c00cc-fe70-429a-8b82-ee2453305230:
       Position:
-        - 0
-        - 1
+        - 6
+        - -0
         - 0
       Rotation:
         - 0
@@ -62,22 +74,48 @@ Components:
         - 0
       Scale:
         - 2
-        - 1
+        - 3
         - 2
-    8b85cfbd-edc6-4d31-9bde-b3a2e5a59052:
+    a5c80bfd-3168-4139-bf62-3ebc3e6dc0bc:
       Position:
-        - 0
-        - -1
+        - 1
+        - -0
         - 0
       Rotation:
         - 0
         - 0
         - 0
       Scale:
-        - 1
-        - 1
-        - 1
-    ace0b452-c8a5-462c-8a92-208a199a7160:
+        - 2
+        - 3
+        - 2
+    16f09ed1-5158-4a77-bdfb-ed18d85830ed:
+      Position:
+        - 5.69999981
+        - 5
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 2
+        - 3
+        - 2
+    bfab996e-0137-41e8-9f11-9d099b6c8e1d:
+      Position:
+        - -4.80000019
+        - 1.10000002
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 2
+        - 3
+        - 2
+    65a5bfc8-a24d-488b-87f6-0301c575efeb:
       Position:
         - 0
         - -2
@@ -87,10 +125,10 @@ Components:
         - 0
         - 0
       Scale:
-        - 9
+        - 100
         - 1
-        - 9
-    732f0253-7221-40fb-b975-915753391ea8:
+        - 10
+    a010c55e-7ebb-4658-9313-65f3bf16c70d:
       Position:
         - 3
         - 3
@@ -103,9 +141,9 @@ Components:
         - 1
         - 1
         - 1
-    2963b0e1-fd5c-478b-927d-eae8f5935cc8:
+    8e8ba0a0-b989-4fdb-8431-f81dc07ca500:
       Position:
-        - 0
+        - -2.5
         - 2.5
         - 0
       Rotation:
@@ -116,7 +154,7 @@ Components:
         - 1
         - 1
         - 1
-    ed98ed46-6128-460b-8f5d-7ce3042e10bf:
+    73bf132f-bd33-4db7-b4a6-9a2eac399515:
       Position:
         - 0.670000017
         - 1.21000004
@@ -129,7 +167,7 @@ Components:
         - 1
         - 0.25
         - 1
-    174f4d82-f0e4-40d3-969f-4b428e1566e8:
+    7bce529d-9647-4543-b1da-872b71bbcca1:
       Position:
         - 0
         - -1
@@ -142,7 +180,7 @@ Components:
         - 5
         - 0.25
         - 1
-    3b6f2982-390b-494e-9b18-92e5216033f1:
+    b17c41ec-ef27-4608-abb1-67d0ca4fc344:
       Position:
         - 0
         - 1.51999998
@@ -156,26 +194,24 @@ Components:
         - 1
         - 1
   Script:
-    3b6f2982-390b-494e-9b18-92e5216033f1:
-      ScriptName: Game.CameraControl
-    2963b0e1-fd5c-478b-927d-eae8f5935cc8:
+    8e8ba0a0-b989-4fdb-8431-f81dc07ca500:
       ScriptName: Game.Player
   Sprite:
-    2963b0e1-fd5c-478b-927d-eae8f5935cc8:
+    8e8ba0a0-b989-4fdb-8431-f81dc07ca500:
       SpriteHandle: d954a28c-3331-5eda-9253-fa3586bf4ca9
       SpriteColor:
         - 1
         - 1
         - 1
         - 1
-    ed98ed46-6128-460b-8f5d-7ce3042e10bf:
+    73bf132f-bd33-4db7-b4a6-9a2eac399515:
       SpriteHandle: 00000000-0000-0000-0000-000000000000
       SpriteColor:
         - 0.5
         - 0.25
         - 0.200000003
         - 1
-    174f4d82-f0e4-40d3-969f-4b428e1566e8:
+    7bce529d-9647-4543-b1da-872b71bbcca1:
       SpriteHandle: 00000000-0000-0000-0000-000000000000
       SpriteColor:
         - 0.5
@@ -183,24 +219,24 @@ Components:
         - 0.200000003
         - 1
   Camera:
-    3b6f2982-390b-494e-9b18-92e5216033f1:
+    b17c41ec-ef27-4608-abb1-67d0ca4fc344:
       CameraValues:
         - 0.100000001
         - 0.785398185
-        - 1.66226912
+        - 1.60483873
         - 1
         - 1000000
       CameraBools:
         - true
   RigidBody2D:
-    ed98ed46-6128-460b-8f5d-7ce3042e10bf:
+    73bf132f-bd33-4db7-b4a6-9a2eac399515:
       RigidBody2DType: 0
       RigidBody2DBool: false
-    174f4d82-f0e4-40d3-969f-4b428e1566e8:
+    7bce529d-9647-4543-b1da-872b71bbcca1:
       RigidBody2DType: 0
       RigidBody2DBool: false
   BoxCollider2D:
-    ed98ed46-6128-460b-8f5d-7ce3042e10bf:
+    73bf132f-bd33-4db7-b4a6-9a2eac399515:
       BoxCollider2D_2DValues:
         -
           - 0
@@ -213,7 +249,7 @@ Components:
         - 0.5
         - 0
         - 0.5
-    174f4d82-f0e4-40d3-969f-4b428e1566e8:
+    7bce529d-9647-4543-b1da-872b71bbcca1:
       BoxCollider2D_2DValues:
         -
           - 0
@@ -227,7 +263,7 @@ Components:
         - 0
         - 0.5
   Light:
-    732f0253-7221-40fb-b975-915753391ea8:
+    a010c55e-7ebb-4658-9313-65f3bf16c70d:
       LightType: 0
       LightAngleInner: 30
       LightAngleOuter: 45
@@ -245,9 +281,13 @@ Components:
         - 1
       LightFalloff: 32
   Mesh:
-    8a091d0f-8842-4475-998f-15dc573c120f:
+    087c00cc-fe70-429a-8b82-ee2453305230:
       MeshHandle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
-    8b85cfbd-edc6-4d31-9bde-b3a2e5a59052:
+    a5c80bfd-3168-4139-bf62-3ebc3e6dc0bc:
       MeshHandle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
-    ace0b452-c8a5-462c-8a92-208a199a7160:
+    16f09ed1-5158-4a77-bdfb-ed18d85830ed:
+      MeshHandle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
+    bfab996e-0137-41e8-9f11-9d099b6c8e1d:
+      MeshHandle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
+    65a5bfc8-a24d-488b-87f6-0301c575efeb:
       MeshHandle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
