@@ -65,6 +65,17 @@ void TestScene::Start()
 	auto & script=temp.AddComponent<ScriptComponent>();
 	script.Name = "Game.Player";
 
+
+	auto wallMaker = CreateEntity("WallMaker");
+	auto& script2 = wallMaker.AddComponent<ScriptComponent>();
+	script2.Name = "Game.WallMaker";
+
+	/*temp.AddComponent<BoxCollider2DComponent>();
+	auto& body = temp.AddComponent<RigidBody2DComponent>();
+	body.Type = RigidBody2DComponent::BodyType::Dynamic;*/
+
+	
+
 	/*auto light = CreateEntity("Direction Light");
 	light.Transform().Position = { 0.f, 0.f,0.f };
 	light.Transform().Rotation = glm::radians(glm::vec3{-40.f, 45.f, 0.f});
@@ -80,31 +91,31 @@ void TestScene::Start()
 
 
 
-	AssetHandle BoxHandle = Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/MeshFactoryDatas/Box.MFData");
-	auto ThreeDObject = CreateEntity("Ground");
-	auto& meshcomp = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	ThreeDObject.Transform().Position = { 0.f, -2.f, 0.f };
-	ThreeDObject.Transform().Scale = { 100.f, 1.f, 10.f };
+	//AssetHandle BoxHandle = Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/MeshFactoryDatas/Box.MFData");
+	//auto ThreeDObject = CreateEntity("Ground");
+	//auto& meshcomp = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
+	//ThreeDObject.Transform().Position = { 0.f, -2.f, 0.f };
+	//ThreeDObject.Transform().Scale = { 100.f, 1.f, 10.f };
 
-	ThreeDObject = CreateEntity("Upper1");
-	auto& meshcomp1 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	ThreeDObject.Transform().Position = { 1.f, 5.f, 0.f };
-	ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
+	//ThreeDObject = CreateEntity("Upper1");
+	//auto& meshcomp1 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
+	//ThreeDObject.Transform().Position = { 1.f, 5.f, 0.f };
+	//ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
 
-	ThreeDObject = CreateEntity("Upper2");
-	auto& meshcomp2 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	ThreeDObject.Transform().Position = { 6.f, 5.f, 0.f };
-	ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
+	//ThreeDObject = CreateEntity("Upper2");
+	//auto& meshcomp2 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
+	//ThreeDObject.Transform().Position = { 6.f, 5.f, 0.f };
+	//ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
 
-	ThreeDObject = CreateEntity("Lower1");
-	auto& meshcomp3 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	ThreeDObject.Transform().Position = { 1.f, -0.f, 0.f };
-	ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
+	//ThreeDObject = CreateEntity("Lower1");
+	//auto& meshcomp3 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
+	//ThreeDObject.Transform().Position = { 1.f, -0.f, 0.f };
+	//ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
 
-	ThreeDObject = CreateEntity("Lower2");
-	auto& meshcomp4 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	ThreeDObject.Transform().Position = { 6.f, -0.f, 0.f };
-	ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
+	//ThreeDObject = CreateEntity("Lower2");
+	//auto& meshcomp4 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
+	//ThreeDObject.Transform().Position = { 6.f, -0.f, 0.f };
+	//ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
 }
 
 void TestScene::Update()
