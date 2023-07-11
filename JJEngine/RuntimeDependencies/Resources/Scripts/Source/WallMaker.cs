@@ -10,6 +10,9 @@ namespace Game
     class WallMaker : Entity
     {
         private TransformComponent TargetWallTransform;
+        private TransformComponent m_playerTransform;
+
+        bool gameOver = false;
         int numOfWall = 0;
         float timer = 0.0f;
         Vector3 velocity = Vector3.Zero;
@@ -17,6 +20,12 @@ namespace Game
         protected override void OnCreate()
         {
             velocity.X = -3.0f;
+
+            Entity player = Scene.GetEntity("Player");
+            if (player != null)
+            {
+                m_playerTransform = player.GetComponent<TransformComponent>();
+            }
         }
 
         protected override void OnUpdate()
@@ -29,24 +38,25 @@ namespace Game
                 int a = ranNum.Next(-3, 3);
                 timer = 0.0f;
                 Vector3 wallPos;
+                Vector3 wallSize;
+                wallSize.X = 0.5f;
+                wallSize.Y = 10.0f;
+                wallSize.Z = 1.0f;
                 Entity entity = Scene.CreateEntity("Test" + numOfWall++.ToString());
                 entity.AddComponent<SpriteRendererComponent>();
                 wallPos.X = 2.0f;
-                wallPos.Y = -2.0f + a;
-                wallPos.Z = 0.0f;
-                entity.Position = wallPos;
-                
-                //Give class "Wall"
-                //auto & script = entity.AddComponent<ScriptComponent>();
-                //script.Name = "Game.Player";
-
+                wallPos.Y = -7.0f + a;
+                wallPos.Z = 0.0f;               
+                entity.Position = wallPos;     
+                entity.Scale = wallSize;
 
                 entity = Scene.CreateEntity("Test" + numOfWall++.ToString());
                 entity.AddComponent<SpriteRendererComponent>();
                 wallPos.X = 2.0f;
-                wallPos.Y = 2.0f + a;
+                wallPos.Y = 7.0f + a;
                 wallPos.Z = 0.0f;
                 entity.Position = wallPos;
+                entity.Scale = wallSize;
             }
 
             for(int i = 0; i < numOfWall; i++)
@@ -55,8 +65,21 @@ namespace Game
                 if (wall != null)
                 {
                     TargetWallTransform = wall.GetComponent<TransformComponent>();
-                    TargetWallTransform.Position += velocity * Time.Delta;
 
+                    bool playerRightCollidedCheck = m_playerTransform.Position.X + (m_playerTransform.Scale.X / 2.0f) > TargetWallTransform.Position.X - (TargetWallTransform.Scale.X / 2.0f);
+                    bool playerLeftCollidedCheck = m_playerTransform.Position.X - (m_playerTransform.Scale.X / 2.0f) < TargetWallTransform.Position.X + (TargetWallTransform.Scale.X / 2.0f);
+                    bool playerTopCollidedCheck = m_playerTransform.Position.Y + (m_playerTransform.Scale.Y / 2.0f) > TargetWallTransform.Position.Y - (TargetWallTransform.Scale.Y / 2.0f);
+                    bool playerBottomCollidedCheck = m_playerTransform.Position.Y - (m_playerTransform.Scale.Y / 2.0f) < TargetWallTransform.Position.Y + (TargetWallTransform.Scale.Y / 2.0f);
+
+                    if(playerRightCollidedCheck && playerLeftCollidedCheck && playerTopCollidedCheck && playerBottomCollidedCheck)
+                    {
+                        gameOver = true;
+                    }
+
+                    if(!gameOver)
+                    {
+                        TargetWallTransform.Position += velocity * Time.Delta;
+                    }
                 }
             }
 
