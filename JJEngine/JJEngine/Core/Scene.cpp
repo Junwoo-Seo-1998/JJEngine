@@ -51,18 +51,31 @@ static b2BodyType RigidBody2DTypeToBox2D(RigidBody2DComponent::BodyType bodyType
 }
 
 
-template<typename T>
+template<typename... Component>
 static void CopyComponent(entt::registry& dstRegistry, entt::registry& srcRegistry, const std::unordered_map<UUIDType, entt::entity>& enttIDMap)
 {
-	auto srcEntities = srcRegistry.view<T>();
-	for (auto srcEntity : srcEntities)
+	([&]()
 	{
-		entt::entity destEntity = enttIDMap.at(srcRegistry.get<UUIDComponent>(srcEntity).UUID);
+		auto srcEntities = srcRegistry.view<Component>();
+		for (auto srcEntity : srcEntities)
+		{
+			entt::entity destEntity = enttIDMap.at(srcRegistry.get<UUIDComponent>(srcEntity).UUID);
 
-		auto& srcComponent = srcRegistry.get<T>(srcEntity);
-		auto& destComponent = dstRegistry.emplace_or_replace<T>(destEntity, srcComponent);
-	}
+			auto& srcComponent = srcRegistry.get<Component>(srcEntity);
+			auto& destComponent = dstRegistry.emplace_or_replace<Component>(destEntity, srcComponent);
+		}
+	}(), ...);
 }
+
+
+template<typename... Component>
+static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUIDType, entt::entity>& enttMap)
+{
+	CopyComponent<Component...>(dst, src, enttMap);
+}
+
+
+
 
 std::shared_ptr<Scene> Scene::Copy(std::shared_ptr<Scene> toCopy)
 {
@@ -84,13 +97,14 @@ std::shared_ptr<Scene> Scene::Copy(std::shared_ptr<Scene> toCopy)
 	}
 
 	//copy except UUID and Name components
-	CopyComponent<CameraComponent>(newReg, toCopyReg, enttIDMap);
+	/*CopyComponent<CameraComponent>(newReg, toCopyReg, enttIDMap);
 	CopyComponent<TransformComponent>(newReg, toCopyReg, enttIDMap);
 	CopyComponent<ScriptComponent>(newReg, toCopyReg, enttIDMap);
 	CopyComponent<SpriteRendererComponent>(newReg, toCopyReg, enttIDMap);
 	CopyComponent<RigidBody2DComponent>(newReg, toCopyReg, enttIDMap);
-	CopyComponent<BoxCollider2DComponent>(newReg, toCopyReg, enttIDMap);
+	CopyComponent<BoxCollider2DComponent>(newReg, toCopyReg, enttIDMap);*/
 
+	CopyComponent(AllComponents{}, newReg, toCopyReg, enttIDMap);
 
 	return newScene;
 }
