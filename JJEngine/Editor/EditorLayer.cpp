@@ -251,6 +251,26 @@ void EditorLayer::OnImGuiRender()
 		ImGui::PopStyleVar();
 	}
 
+	{
+		static bool hdr = true;
+		static bool bloom = true;
+		ImGui::Begin("Graphics");
+		ImGui::Checkbox("Bloom", &bloom);
+		ImGui::Checkbox("HDR", &hdr);
+		ImGui::End();
+
+		int flags = 0;
+		if(bloom)
+		{
+			flags |= Bloom;
+		}
+		if(hdr)
+		{
+			flags |= HDR;
+		}
+		m_SceneRenderer->SetFlag(flags);
+	}
+
 	m_SceneHierarchyPanel.OnImGuiRender();
 	m_ComponentPanel.SetSelevted_EntityHandle(m_SelectedEntityID);
 	m_ComponentPanel.OnImGuiRender();
