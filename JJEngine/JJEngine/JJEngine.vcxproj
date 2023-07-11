@@ -128,6 +128,7 @@
     <ClInclude Include="Core\EntryPoint.h" />
     <ClInclude Include="Core\Event\Event.h" />
     <ClInclude Include="Core\Event\EventManager.h" />
+    <ClInclude Include="Core\Event\SceneEvent.h" />
     <ClInclude Include="Core\Event\WindowEvent.h" />
     <ClInclude Include="Core\Graphics\FrameBuffer.h" />
     <ClInclude Include="Core\Graphics\Graphics.h" />
@@ -158,10 +159,10 @@
     <ClInclude Include="Core\Layer\LayerManager.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
-    <ClInclude Include="Core\Serializer\GameDataSerializer.h" />
-    <ClInclude Include="Core\Serializer\SceneSerializer.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h" />
     <ClInclude Include="Core\Script\ScriptGlue.h" />
+    <ClInclude Include="Core\Serializer\GameDataSerializer.h" />
+    <ClInclude Include="Core\Serializer\SceneSerializer.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Core\Type.h" />
     <ClInclude Include="Core\Utils\Assert.h" />
@@ -190,7 +191,6 @@
     <ClCompile Include="Core\Component\TransformComponent.cpp" />
     <ClCompile Include="Core\Entity\Entity.cpp" />
     <ClCompile Include="Core\Event\EventManager.cpp" />
-    <ClCompile Include="Core\Event\SceneEvent.h" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Graphics.cpp" />
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />
@@ -215,10 +215,10 @@
     <ClCompile Include="Core\Layer\LayerManager.cpp" />
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
-    <ClCompile Include="Core\Serializer\GameDataSerializer.cpp" />
-    <ClCompile Include="Core\Serializer\SceneSerializer.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp" />
     <ClCompile Include="Core\Script\ScriptGlue.cpp" />
+    <ClCompile Include="Core\Serializer\GameDataSerializer.cpp" />
+    <ClCompile Include="Core\Serializer\SceneSerializer.cpp" />
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Core\Utils\File.cpp" />
     <ClCompile Include="Core\Utils\IMGUI_IMPL.cpp" />
