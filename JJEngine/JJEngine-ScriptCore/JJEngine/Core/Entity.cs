@@ -61,5 +61,18 @@ namespace JJEngine
             }
         }
 
+        public Vector3 Scale
+        {
+            get
+            {
+                InternalCalls.TransformComponent_GetScale(in UUID, out Vector3 scale);
+                return scale;
+            }
+            set
+            {
+                InternalCalls.TransformComponent_SetScale(in UUID, in value);
+            }
+        }
+
     }
 }

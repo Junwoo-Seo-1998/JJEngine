@@ -5,7 +5,8 @@
 #include "RigidBody2DComponent.h"
 #include "BoxCollider2DComponent.h"
 #include "MeshComponent.h"
-
+#include "CameraComponent.h"
+#include "LightComponent.h"
 template<typename ... Comp>
 struct ComponentGroup
 {
@@ -15,9 +16,12 @@ struct ComponentGroup
 using AllComponents =
 ComponentGroup
 <
+	CameraComponent,
 	TransformComponent,
 	SpriteRendererComponent,
 	ScriptComponent,
 	RigidBody2DComponent,
-	BoxCollider2DComponent
+	BoxCollider2DComponent,
+	LightComponent,
+	MeshComponent
 >;

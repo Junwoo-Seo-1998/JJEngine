@@ -65,7 +65,21 @@ namespace JJEngine
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void TransformComponent_SetPosition(in UUIDType uuid, in Vector3 toSet);
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void TransformComponent_GetScale(in UUIDType uuid, out Vector3 returnParam);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void TransformComponent_SetScale(in UUIDType uuid, in Vector3 toSet);
+
         #endregion
+
+        #region ScriptComponent
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void ScriptComponent_SetName(in UUIDType uuid, string name);
+
+        #endregion
+
 
         #region RigidBody2DComponent
 

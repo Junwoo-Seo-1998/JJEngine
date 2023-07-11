@@ -93,6 +93,24 @@ namespace Script
 		entity.Transform().Position = *toSet;
 	}
 
+	static void TransformComponent_GetScale(UUIDType* uuid, glm::vec3* returnParam)
+	{
+		Scene* scene = Script::ScriptEngine::GetSceneContext();
+		ENGINE_ASSERT(scene);
+		Entity entity = scene->GetEntity(*uuid);
+		ENGINE_ASSERT(entity);
+		*returnParam = entity.Transform().Scale;
+	}
+
+	static void TransformComponent_SetScale(UUIDType* uuid, glm::vec3* toSet)
+	{
+		Scene* scene = Script::ScriptEngine::GetSceneContext();
+		ENGINE_ASSERT(scene);
+		Entity entity = scene->GetEntity(*uuid);
+		ENGINE_ASSERT(entity);
+		entity.Transform().Scale = *toSet;
+	}
+
 	static void RigidBody2DComponent_ApplyLinearImpulseToCenter(UUIDType* uuid, glm::vec2* impulse, bool wake)
 	{
 		Scene* scene = Script::ScriptEngine::GetSceneContext();
@@ -164,6 +182,8 @@ namespace Script
 
 		ADD_INTERNAL_CALL(TransformComponent_GetPosition);
 		ADD_INTERNAL_CALL(TransformComponent_SetPosition);
+		ADD_INTERNAL_CALL(TransformComponent_GetScale);
+		ADD_INTERNAL_CALL(TransformComponent_SetScale);
 
 		ADD_INTERNAL_CALL(Input_IsPressed_Key);
 		ADD_INTERNAL_CALL(Input_IsPressed_Mouse);
