@@ -7,7 +7,8 @@ enum class EventType
 	None = 0,
 	WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 	KeyPressed, KeyReleased, KeyTyped,
-	MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
+	MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
+	LoadScene,
 };
 
 //# make it string ## make it's connected

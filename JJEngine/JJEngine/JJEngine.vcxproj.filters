@@ -382,5 +382,6 @@
     <ClCompile Include="Core\Window.cpp" />
     <ClCompile Include="Core\Serializer\GameDataSerializer.cpp" />
     <ClCompile Include="Core\Asset\Asset_Mesh.cpp" />
+    <ClCompile Include="Core\Event\SceneEvent.h" />
   </ItemGroup>
 </Project>

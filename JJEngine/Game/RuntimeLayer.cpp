@@ -10,6 +10,8 @@
 #include <Core/Graphics/FrameBuffer.h>
 #include <Core/Scene.h>
 
+#include "Core/Event/SceneEvent.h"
+
 RuntimeLayer::~RuntimeLayer()
 {
 }
@@ -58,6 +60,12 @@ void RuntimeLayer::OnImGuiRender()
 
 void RuntimeLayer::OnEvent(Event& event)
 {
+	EventDispatcher dispatcher(event);
+	dispatcher.Dispatch<LoadSceneEvent>([&](LoadSceneEvent& e)
+	{
+		EngineLog::Info("Load Scene {}!", e.ToString());
+		return true;
+	});
 }
 
 void RuntimeLayer::SetNewScene(std::shared_ptr<Asset_Scene> new_scene)

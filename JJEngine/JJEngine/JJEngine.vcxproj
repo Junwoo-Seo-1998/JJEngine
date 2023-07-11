@@ -190,6 +190,7 @@
     <ClCompile Include="Core\Component\TransformComponent.cpp" />
     <ClCompile Include="Core\Entity\Entity.cpp" />
     <ClCompile Include="Core\Event\EventManager.cpp" />
+    <ClCompile Include="Core\Event\SceneEvent.h" />
     <ClCompile Include="Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Core\Graphics\Graphics.cpp" />
     <ClCompile Include="Core\Graphics\IndexBuffer.cpp" />

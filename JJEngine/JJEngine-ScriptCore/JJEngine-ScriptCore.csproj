@@ -21,7 +21,8 @@
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>Intermediates\Debug\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -33,7 +34,8 @@
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>Intermediates\Release\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -48,6 +50,7 @@
     <Compile Include="JJEngine\Core\InputKeyCodes.cs" />
     <Compile Include="JJEngine\Core\InternalCalls.cs" />
     <Compile Include="JJEngine\Core\Scene.cs" />
+    <Compile Include="JJEngine\Core\SceneManager.cs" />
     <Compile Include="JJEngine\Core\Time.cs" />
     <Compile Include="JJEngine\Core\UUIDType.cs" />
     <Compile Include="JJEngine\Math\Vector2.cs" />
