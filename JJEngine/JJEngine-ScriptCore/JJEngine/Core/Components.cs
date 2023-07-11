@@ -26,6 +26,19 @@ namespace JJEngine
                 InternalCalls.TransformComponent_SetPosition(in Entity.UUID, in value);
             }
         }
+
+        public Vector3 Scale
+        {
+            get
+            {
+                InternalCalls.TransformComponent_GetScale(in Entity.UUID, out Vector3 scale);
+                return scale;
+            }
+            set
+            {
+                InternalCalls.TransformComponent_SetScale(in Entity.UUID, in value);
+            }
+        }
     }
 
     //empty for now
