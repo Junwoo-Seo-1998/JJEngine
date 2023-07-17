@@ -90,13 +90,16 @@ void EditorLayer::OnUpdate()
 	shouldOpenFile.clear();
 	
 	//Message handling
-	if (messenger.HasMessage()){
+	while (messenger.HasMessage()){
 		MessageType message = messenger.ReadMessage();
 		if (message.title == ENTITY_SELECTED) {
 			m_SelectedEntityID = std::static_pointer_cast<ContentType<entt::entity>, void>(message.attach)->content;
 		}
 		else if (message.title == FILE_OPEN) {
 			shouldOpenFile = std::static_pointer_cast<ContentType<std::string>, void>(message.attach)->content;
+		}
+		else if(message.title == ENTITY_DELETE){
+			m_EditorScene->DestroyEntity(Entity{ std::static_pointer_cast<ContentType<entt::entity>, void>(message.attach)->content, m_EditorScene.get() });
 		}
 		else {
 			//send message to panels

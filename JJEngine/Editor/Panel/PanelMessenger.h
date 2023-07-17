@@ -2,6 +2,7 @@
 #include <queue>
 #include <memory>
 #define ENTITY_SELECTED "EntitySelected"
+#define ENTITY_DELETE "EntityDelete"
 #define FILE_OPEN "FileOpen"
 
 template<typename t>

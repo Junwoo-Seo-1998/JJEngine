@@ -135,9 +135,9 @@ void SceneHierarchyPanel::OnImGuiRender()
 
 	if (shouldRemoveEntity != entt::null && ImGui::BeginPopupContextWindow("Entity option"))
 	{
-		if (ImGui::Button("Remove")) { // will change into event-driven
-			scene->DestroyEntity(Entity{ shouldRemoveEntity, scene.get() });
+		if (ImGui::Button("Remove")) { 
 			EntitySlectedFunc(entt::null);//jun: don't forget
+			messenger.LeaveMessage({ ENTITY_DELETE,std::make_shared<ContentType<entt::entity>>(shouldRemoveEntity) });
 			shouldRemoveEntity = entt::null;
 			clickedEntity = entt::null;
 			ImGui::CloseCurrentPopup();
