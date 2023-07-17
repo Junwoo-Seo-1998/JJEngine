@@ -93,7 +93,10 @@ void Application::Update()
 				}
 				event = eventManager->PollEvent();
 			}
-			
+
+			m_CommandQueueLock.lock();
+			m_CommandQueue.Execute();
+			m_CommandQueueLock.unlock();
 
 			sceneManager->update();// this will be moved up later
 
