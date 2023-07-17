@@ -7,11 +7,10 @@ ProjectSettingPanel::ProjectSettingPanel(PanelMessenger& mg): messenger(mg)
 
 void ProjectSettingPanel::OnImGuiRender()
 {
-	if (isOpened == true) {
-		ImGui::Begin("Project setting");
-		if (ImGui::Button("Close") == true) {
-			isOpened = false;
-		}
+	if (isOpened == true) 
+	{
+		ImGui::Begin("Project setting", &isOpened, 0/*ImGuiWindowFlags*/);
+
 		ImGui::End();
 	}
 }
