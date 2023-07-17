@@ -95,7 +95,7 @@ void EditorLayer::OnUpdate()
 	shouldOpenFile.clear();
 	
 	//Message handling
-	if (messenger.HasMessage()){
+	while (messenger.HasMessage()){
 		MessageType message = messenger.ReadMessage();
 		if (message.title == ENTITY_SELECTED) {
 			m_SelectedEntityID = std::static_pointer_cast<ContentType<entt::entity>, void>(message.attach)->content;
