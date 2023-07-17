@@ -17,6 +17,9 @@
 #include "Core/Time.h"
 #include "Core/Component/ScriptComponent.h"
 
+#include "FileWatch.hpp"
+#include "Core/Application.h"
+
 namespace Script
 {
 	//todo: move this out to other class
@@ -96,6 +99,8 @@ namespace Script
 
 		MonoAssembly* AppAssembly = nullptr;
 		MonoImage* AppAssemblyImage = nullptr;
+		std::unique_ptr<filewatch::FileWatch<std::string>> AppAssemblyFileWatcher;
+		bool ReloadPending = false;
 
 		MonoMethod* UpdateDelta = nullptr;
 		ScriptClass EntityClass;
@@ -170,12 +175,31 @@ namespace Script
 		//PrintAssemblyTypes(s_Data->CoreAssembly);
 	}
 
+	static void OnAssemblyFileWatchEvent(const std::string& path, const filewatch::Event change_type)
+	{
+		if (change_type == filewatch::Event::modified && !s_Data->ReloadPending)
+		{
+			s_Data->ReloadPending = true;
+			using std::chrono_literals::operator ""ms;
+			std::this_thread::sleep_for(500ms);
+			Application::Instance().SubmitCommand([path]()
+			{
+				EngineLog::Info("Script : {} - Reloaded!", path);
+				
+				s_Data->AppAssemblyFileWatcher.reset();
+				ScriptEngine::ReloadAssembly();
+			});
+		}
+	}
+
 	void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filepath)
 	{
 		s_Data->AppAssembly = LoadMonoAssembly(filepath.string());
 		s_Data->AppAssemblyImage = mono_assembly_get_image(s_Data->AppAssembly);
 		//debug
 		//PrintAssemblyTypes(s_Data->AppAssembly);
+		s_Data->AppAssemblyFileWatcher = std::make_unique<filewatch::FileWatch<std::string>>("./Resources/Scripts/GameScript.dll", OnAssemblyFileWatchEvent);
+		s_Data->ReloadPending = false;
 	}
 
 	void ScriptEngine::ReloadAssembly()

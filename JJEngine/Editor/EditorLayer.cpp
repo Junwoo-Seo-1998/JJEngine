@@ -67,11 +67,6 @@ void EditorLayer::OnStart()
 
 void EditorLayer::OnUpdate()
 {
-	if(Input::IsTriggered(KeyCode::P))
-	{
-		Script::ScriptEngine::ReloadAssembly();
-	}
-
 	switch (m_SceneState)
 	{
 	case SceneState::Edit:

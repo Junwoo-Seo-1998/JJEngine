@@ -41,6 +41,7 @@ public:
 
 	static inline Application& Instance() { return *s_Instance; }
 
+	//never call submit inside of submit
 	template<typename FuncT>
 	void SubmitCommand(FuncT&& func)
 	{
