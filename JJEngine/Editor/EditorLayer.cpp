@@ -189,6 +189,13 @@ void EditorLayer::OnImGuiRender()
 	ImGuiRenderer::Instance()->GuiDrawDockSpaceBegin();
 	if (ImGui::BeginMenuBar()) // testing for now
 	{
+		if (ImGui::BeginMenu("Project"))
+		{
+			if (ImGui::MenuItem("Setting")) {
+				m_ProjectSettingPanel.SetIsOpened(true);
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Make scene")) {
@@ -274,6 +281,7 @@ void EditorLayer::OnImGuiRender()
 		m_SceneRenderer->SetFlag(flags);
 	}
 
+	m_ProjectSettingPanel.OnImGuiRender();
 	m_SceneHierarchyPanel.OnImGuiRender();
 	m_ComponentPanel.SetSelevted_EntityHandle(m_SelectedEntityID);
 	m_ComponentPanel.OnImGuiRender();

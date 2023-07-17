@@ -2,6 +2,7 @@
 #include "Core/Layer/Layer.h"
 #include "Panel/SceneHierarchyPanel.h"
 #include "Panel/AssetBrowserPanel.h"
+#include "Panel/ProjectSettingPanel.h"
 #include "Panel/ComponentPanel.h"
 #include "Core/Graphics/Renderer/EditorCamera.h"
 #include <entt/entt.hpp>
@@ -66,6 +67,7 @@ private:
 	ComponentPanel m_ComponentPanel{messenger};
 	SceneHierarchyPanel m_SceneHierarchyPanel{messenger};
 	AssetBrowserPanel m_AssetBrowserPanel{messenger};
+	ProjectSettingPanel m_ProjectSettingPanel{messenger};
 
 	ImGuiSubWindow m_AssetBrowserWindow{ "Asset browser" };
 
