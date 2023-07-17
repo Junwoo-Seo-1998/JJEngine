@@ -103,6 +103,9 @@ void EditorLayer::OnUpdate()
 		else if (message.title == FILE_OPEN) {
 			shouldOpenFile = std::static_pointer_cast<ContentType<std::string>, void>(message.attach)->content;
 		}
+		else if(message.title == ENTITY_DELETE){
+			m_EditorScene->DestroyEntity(Entity{ std::static_pointer_cast<ContentType<entt::entity>, void>(message.attach)->content, m_EditorScene.get() });
+		}
 		else {
 			//send message to panels
 		}
