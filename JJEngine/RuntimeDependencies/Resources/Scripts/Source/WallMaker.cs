@@ -65,22 +65,26 @@ namespace Game
                 if (wall != null)
                 {
                     TargetWallTransform = wall.GetComponent<TransformComponent>();
-
-                    bool playerRightCollidedCheck = m_playerTransform.Position.X + (m_playerTransform.Scale.X / 2.0f) > TargetWallTransform.Position.X - (TargetWallTransform.Scale.X / 2.0f);
-                    bool playerLeftCollidedCheck = m_playerTransform.Position.X - (m_playerTransform.Scale.X / 2.0f) < TargetWallTransform.Position.X + (TargetWallTransform.Scale.X / 2.0f);
-                    bool playerTopCollidedCheck = m_playerTransform.Position.Y + (m_playerTransform.Scale.Y / 2.0f) > TargetWallTransform.Position.Y - (TargetWallTransform.Scale.Y / 2.0f);
-                    bool playerBottomCollidedCheck = m_playerTransform.Position.Y - (m_playerTransform.Scale.Y / 2.0f) < TargetWallTransform.Position.Y + (TargetWallTransform.Scale.Y / 2.0f);
-
-                    if(playerRightCollidedCheck && playerLeftCollidedCheck && playerTopCollidedCheck && playerBottomCollidedCheck)
+                    if(TargetWallTransform != null)
                     {
-                        gameOver = true;
-                    }
+                        bool playerRightCollidedCheck = m_playerTransform.Position.X + (m_playerTransform.Scale.X / 2.0f) > TargetWallTransform.Position.X - (TargetWallTransform.Scale.X / 2.0f);
+                        bool playerLeftCollidedCheck = m_playerTransform.Position.X - (m_playerTransform.Scale.X / 2.0f) < TargetWallTransform.Position.X + (TargetWallTransform.Scale.X / 2.0f);
+                        bool playerTopCollidedCheck = m_playerTransform.Position.Y + (m_playerTransform.Scale.Y / 2.0f) > TargetWallTransform.Position.Y - (TargetWallTransform.Scale.Y / 2.0f);
+                        bool playerBottomCollidedCheck = m_playerTransform.Position.Y - (m_playerTransform.Scale.Y / 2.0f) < TargetWallTransform.Position.Y + (TargetWallTransform.Scale.Y / 2.0f);
 
-                    if(!gameOver)
-                    {
-                        TargetWallTransform.Position += velocity * Time.Delta;
+                        if (playerRightCollidedCheck && playerLeftCollidedCheck && playerTopCollidedCheck && playerBottomCollidedCheck)
+                        {
+                            gameOver = true;
+                        }
+
+                        if (!gameOver)
+                        {
+                            TargetWallTransform.Position += velocity * Time.Delta;
+                        }
                     }
+                   
                 }
+
             }
 
         }
