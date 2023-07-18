@@ -14,6 +14,7 @@
 #include "Panel/PanelMessenger.h"
 class Scene;
 class FrameBuffer;
+class Asset_Scene;
 class EditorLayer : public Layer
 {
 public:
@@ -33,7 +34,7 @@ private:
 	void DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType);
 	void OnScenePlay();
 	void OnSceneStop();
-	void SetNewScene(std::shared_ptr<Scene> new_scene);
+	void SetNewScene(std::shared_ptr<Asset_Scene> new_scene);
 
 private:
 	enum class SceneState
