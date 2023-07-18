@@ -9,6 +9,9 @@
 #include <Core/Window.h>
 #include <Core/Graphics/FrameBuffer.h>
 #include <Core/Scene.h>
+#include <Core/Event/Event.h>
+
+#include "Core/Event/SceneEvent.h"
 
 RuntimeLayer::~RuntimeLayer()
 {
@@ -33,7 +36,7 @@ void RuntimeLayer::OnUpdate()
 {
 	auto [width, height] = Application::Instance().GetWindow()->GetWidthAndHeight();
 	//if you want to support dynamic viewport uncomment it
-	m_ActiveScene->data->ResizeViewport(width, height);
+	m_ActiveScene->ResizeViewport(width, height);
 	m_SceneRenderer->SetViewportSize(width, height);
 }
 
@@ -43,7 +46,7 @@ void RuntimeLayer::OnPreRender()
 
 void RuntimeLayer::OnRender()
 {
-	m_ActiveScene->data->UpdateRuntime(m_SceneRenderer);
+	m_ActiveScene->UpdateRuntime(m_SceneRenderer);
 	//draw final image
 	Renderer::DrawFinalFullScreenQuad(m_SceneRenderer->GetFinalRenderPass()->GetSpecification().TargetFramebuffer->GetColorTexture(0));
 }
@@ -58,12 +61,23 @@ void RuntimeLayer::OnImGuiRender()
 
 void RuntimeLayer::OnEvent(Event& event)
 {
+	EventDispatcher dispatcher(event);
+	dispatcher.Dispatch<LoadSceneEvent>([&](LoadSceneEvent& e)
+	{
+			//std::shared_ptr<Asset_Scene> temp = Application::Instance().GetAssetManager()->GetEnrolledScene(e.GetSceneName());
+			AssetHandle handle{ Application::Instance().GetAssetManager()->GetHandleFromPath(e.GetSceneName()) };
+			std::shared_ptr<Asset_Scene> temp = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(handle);
+			if (temp == nullptr) return false;
+			SetNewScene(temp);
+			return true;
+	});
 }
 
 void RuntimeLayer::SetNewScene(std::shared_ptr<Asset_Scene> new_scene)
 {
-	m_ActiveScene = new_scene;
-	m_ActiveScene->data->Awake();
-	m_ActiveScene->data->Start();
-	m_ActiveScene->data->StartRuntime();
+	if (m_ActiveScene != nullptr) m_ActiveScene->StopRuntime();
+	m_ActiveScene = Scene::Copy(new_scene->data);
+	m_ActiveScene->Awake();
+	m_ActiveScene->Start();
+	m_ActiveScene->StartRuntime();
 }

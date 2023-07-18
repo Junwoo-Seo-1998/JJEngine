@@ -4,6 +4,16 @@
 #include "Core/Graphics/Light.h"
 #include "Core/Graphics/Mesh.h"
 #include "glm/glm.hpp"
+
+
+enum RenderFlag
+{
+	Bloom = 1 << 0,
+	HDR = 1 << 1,
+};
+
+
+
 class Shader;
 class Scene;
 class Application;
@@ -17,11 +27,12 @@ class RenderPass;
 class Texture;
 class HDRIConverter;
 
+
 class SceneRenderer
 {
 public:
 	SceneRenderer();
-
+	void SetFlag(int flags);
 	void SetScene(Scene* scene);
 	void SetViewportSize(unsigned int width, unsigned int height);
 
@@ -54,6 +65,8 @@ private:
 	void HDRPass();
 
 	void DebugRenderingPass();
+
+	int m_RenderFlags = (Bloom | HDR);
 
 	//todo change it to shared ptr later 
 	Scene* m_ActiveScene = nullptr;

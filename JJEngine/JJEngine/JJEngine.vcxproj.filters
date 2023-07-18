@@ -37,6 +37,9 @@
     <Filter Include="Script">
       <UniqueIdentifier>{9AFBBAD0-869D-E5A6-6F58-F9FA5B996CF7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Serializer">
+      <UniqueIdentifier>{5F9D492C-4B55-8B79-B45C-64D5A033266A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
     </Filter>
@@ -50,6 +53,9 @@
       <Filter>Asset</Filter>
     </ClInclude>
     <ClInclude Include="Core\Asset\AssetType.h">
+      <Filter>Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Asset\Asset_Mesh.h">
       <Filter>Asset</Filter>
     </ClInclude>
     <ClInclude Include="Core\Asset\Asset_Scene.h">
@@ -115,6 +121,9 @@
       <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="Core\Event\EventManager.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Event\SceneEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="Core\Event\WindowEvent.h">
@@ -203,12 +212,17 @@
     </ClInclude>
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\SceneManager.h" />
-    <ClInclude Include="Core\Serializer\SceneSerializer.h" />
     <ClInclude Include="Core\Script\ScriptEngine.h">
       <Filter>Script</Filter>
     </ClInclude>
     <ClInclude Include="Core\Script\ScriptGlue.h">
       <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Serializer\GameDataSerializer.h">
+      <Filter>Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Serializer\SceneSerializer.h">
+      <Filter>Serializer</Filter>
     </ClInclude>
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Core\Type.h" />
@@ -246,11 +260,12 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Window.h" />
-    <ClInclude Include="Core\Serializer\GameDataSerializer.h" />
-    <ClInclude Include="Core\Asset\Asset_Mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Asset\Asset_Mesh.cpp">
+      <Filter>Asset</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Asset\Asset_Scene.cpp">
       <Filter>Asset</Filter>
     </ClCompile>
@@ -347,12 +362,17 @@
     </ClCompile>
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
-    <ClCompile Include="Core\Serializer\SceneSerializer.cpp" />
     <ClCompile Include="Core\Script\ScriptEngine.cpp">
       <Filter>Script</Filter>
     </ClCompile>
     <ClCompile Include="Core\Script\ScriptGlue.cpp">
       <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Serializer\GameDataSerializer.cpp">
+      <Filter>Serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Serializer\SceneSerializer.cpp">
+      <Filter>Serializer</Filter>
     </ClCompile>
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Core\Utils\File.cpp">
@@ -380,7 +400,5 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\Serializer\GameDataSerializer.cpp" />
-    <ClCompile Include="Core\Asset\Asset_Mesh.cpp" />
   </ItemGroup>
 </Project>

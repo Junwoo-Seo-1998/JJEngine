@@ -6,6 +6,7 @@
 #include "Core/Asset/Asset_Mesh.h"
 #include <memory>
 #include <unordered_map>
+#include <map>
 #include <unordered_set>
 #include "Core/Utils/Assert.h"
 
@@ -16,8 +17,8 @@ class AssetManager
 {
 	std::unordered_map<AssetHandle, std::shared_ptr<Asset>> assets{};
 	std::unordered_map<AssetHandle, std::shared_ptr<Metadata>> assetMetadatas{};
-
-	//std::unordered_map<int, AssetHandle> meshManager{};
+	std::map<std::string, AssetHandle> projectScenes{};
+ 	//std::unordered_map<int, AssetHandle> meshManager{};
 
 	std::unordered_map<AssetHandle, std::shared_ptr<Asset>>::iterator latestFoundAsset;
 
@@ -43,6 +44,8 @@ public:
 	std::shared_ptr<t> GetCastedAsset(AssetHandle assetHandle);
 	//template<typename t>
 	//std::shared_ptr<t> GetAssetData(AssetHandle assetHandle);
+
+	std::shared_ptr<Asset_Scene> GetEnrolledScene(std::string name);
 
 	bool LoadData(AssetHandle assetHandle);
 	bool ReloadData(AssetHandle assetHandle);

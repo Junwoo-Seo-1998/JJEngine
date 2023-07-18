@@ -21,6 +21,13 @@ namespace JJEngine
         internal static extern bool Scene_GetEntityWithName(ref UUIDType uuid, string name);
         #endregion
 
+        #region SceneManager
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void SceneManager_LoadScene(string sceneName);
+
+        #endregion
+
 
         #region Entity
 

@@ -67,11 +67,6 @@ void EditorLayer::OnStart()
 
 void EditorLayer::OnUpdate()
 {
-	if(Input::IsTriggered(KeyCode::P))
-	{
-		Script::ScriptEngine::ReloadAssembly();
-	}
-
 	switch (m_SceneState)
 	{
 	case SceneState::Edit:
@@ -95,13 +90,16 @@ void EditorLayer::OnUpdate()
 	shouldOpenFile.clear();
 	
 	//Message handling
-	if (messenger.HasMessage()){
+	while (messenger.HasMessage()){
 		MessageType message = messenger.ReadMessage();
 		if (message.title == ENTITY_SELECTED) {
 			m_SelectedEntityID = std::static_pointer_cast<ContentType<entt::entity>, void>(message.attach)->content;
 		}
 		else if (message.title == FILE_OPEN) {
 			shouldOpenFile = std::static_pointer_cast<ContentType<std::string>, void>(message.attach)->content;
+		}
+		else if(message.title == ENTITY_DELETE){
+			m_EditorScene->DestroyEntity(Entity{ std::static_pointer_cast<ContentType<entt::entity>, void>(message.attach)->content, m_EditorScene.get() });
 		}
 		else {
 			//send message to panels
@@ -249,6 +247,26 @@ void EditorLayer::OnImGuiRender()
 			DrawGuizmo(m_EditorCamera, { m_SelectedEntityID, m_ActiveScene.get() }, m_GizmoType);
 		ImGui::End();
 		ImGui::PopStyleVar();
+	}
+
+	{
+		static bool hdr = true;
+		static bool bloom = true;
+		ImGui::Begin("Graphics");
+		ImGui::Checkbox("Bloom", &bloom);
+		ImGui::Checkbox("HDR", &hdr);
+		ImGui::End();
+
+		int flags = 0;
+		if(bloom)
+		{
+			flags |= Bloom;
+		}
+		if(hdr)
+		{
+			flags |= HDR;
+		}
+		m_SceneRenderer->SetFlag(flags);
 	}
 
 	m_SceneHierarchyPanel.OnImGuiRender();

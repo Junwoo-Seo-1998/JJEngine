@@ -194,6 +194,13 @@ std::shared_ptr<Asset> AssetManager::GetAsset(AssetHandle assetHandle)
 	return assets[assetHandle];// latestFoundAsset->second;
 }
 
+std::shared_ptr<Asset_Scene> AssetManager::GetEnrolledScene(std::string name)
+{
+	if(projectScenes.contains(name) == false ) 
+		return nullptr;
+	return GetCastedAsset<Asset_Scene>(projectScenes[name]);
+}
+
 bool AssetManager::LoadData(AssetHandle assetHandle)
 {
 	if (IsAssetHandleValid(assetHandle) == false) return false;

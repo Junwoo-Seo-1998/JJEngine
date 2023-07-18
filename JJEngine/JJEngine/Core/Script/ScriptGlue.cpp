@@ -2,12 +2,15 @@
 #include <iostream>
 #include "ScriptEngine.h"
 #include "box2d/b2_body.h"
+#include "Core/Application.h"
+#include "Core/Event/EventManager.h"
 #include "Core/Input/Input.h"
 #include "Core/Utils/Log.h"
 #include "Core/Utils/UUIDHelper.h"
 #include "mono/jit/jit.h"
 
 #include "Core/Component/Components.h"
+#include "Core/Event/SceneEvent.h"
 #include "Core/Utils/DebugOnly.h"
 
 
@@ -49,6 +52,13 @@ namespace Script
 
 		*uuid = entity.GetUUID();
 		return true;
+	}
+
+	static void SceneManager_LoadScene(MonoString* sceneName)
+	{
+		char* name = mono_string_to_utf8(sceneName);
+		Application::Instance().GetEventManager()->AddEvent(std::make_shared<LoadSceneEvent>(name));
+		mono_free(name);
 	}
 
 	static void Entity_AddComponent(UUIDType* uuid, MonoReflectionType* componentType)
@@ -176,6 +186,8 @@ namespace Script
 
 		ADD_INTERNAL_CALL(Scene_CreateEntity);
 		ADD_INTERNAL_CALL(Scene_GetEntityWithName);
+
+		ADD_INTERNAL_CALL(SceneManager_LoadScene);
 
 		ADD_INTERNAL_CALL(Entity_AddComponent);
 		ADD_INTERNAL_CALL(Entity_HasComponent);

@@ -25,6 +25,11 @@ SceneRenderer::SceneRenderer()
 	Init();
 }
 
+void SceneRenderer::SetFlag(int flags)
+{
+	m_RenderFlags = flags;
+}
+
 void SceneRenderer::SetScene(Scene* scene)
 {
 	m_ActiveScene = scene;
@@ -102,8 +107,11 @@ void SceneRenderer::EndScene()
 
 	CubemapPass();
 	//post processing
-	BloomPass();
-	HDRPass();
+	if (m_RenderFlags & Bloom)
+		BloomPass();
+
+	if (m_RenderFlags & HDR)
+		HDRPass();
 
 	//todo: make flags for it
 	//DebugRenderingPass();
@@ -188,7 +196,7 @@ void SceneRenderer::Init()
 		m_DefaultMaterial->Set("MatTexture.Diffuse", Texture::CreateTexture(glm::vec4{ 0.8f, 0.8f, 0.8f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Specular", Texture::CreateTexture(glm::vec4{ 0.5f, 0.5f, 0.5f, 1.f }));
 		m_DefaultMaterial->Set("MatTexture.Emissive", Renderer::BlackTexture);
-		m_DefaultMaterial->Set("MatTexture.Shininess", 12.0f);
+		m_DefaultMaterial->Set("MatTexture.Shininess", 32.0f);
 	}
 
 	{//geo

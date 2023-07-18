@@ -2,10 +2,11 @@
 #include <Core/Layer/Layer.h>
 #include <memory>
 
+class Scene;
 class Asset_Scene;
 class SceneRenderer;
 class RuntimeLayer : public Layer {
-	std::shared_ptr<Asset_Scene> m_ActiveScene;
+	std::shared_ptr<Scene> m_ActiveScene;
 	std::shared_ptr<SceneRenderer> m_SceneRenderer;
 
 public:
