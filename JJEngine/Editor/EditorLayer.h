@@ -2,6 +2,7 @@
 #include "Core/Layer/Layer.h"
 #include "Panel/SceneHierarchyPanel.h"
 #include "Panel/AssetBrowserPanel.h"
+#include "Panel/ProjectSettingPanel.h"
 #include "Panel/ComponentPanel.h"
 #include "Core/Graphics/Renderer/EditorCamera.h"
 #include <entt/entt.hpp>
@@ -13,6 +14,7 @@
 #include "Panel/PanelMessenger.h"
 class Scene;
 class FrameBuffer;
+class Asset_Scene;
 class EditorLayer : public Layer
 {
 public:
@@ -32,7 +34,7 @@ private:
 	void DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType);
 	void OnScenePlay();
 	void OnSceneStop();
-	void SetNewScene(std::shared_ptr<Scene> new_scene);
+	void SetNewScene(std::shared_ptr<Asset_Scene> new_scene);
 
 private:
 	enum class SceneState
@@ -66,6 +68,7 @@ private:
 	ComponentPanel m_ComponentPanel{messenger};
 	SceneHierarchyPanel m_SceneHierarchyPanel{messenger};
 	AssetBrowserPanel m_AssetBrowserPanel{messenger};
+	ProjectSettingPanel m_ProjectSettingPanel{messenger};
 
 	ImGuiSubWindow m_AssetBrowserWindow{ "Asset browser" };
 

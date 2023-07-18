@@ -17,7 +17,6 @@ class AssetManager
 {
 	std::unordered_map<AssetHandle, std::shared_ptr<Asset>> assets{};
 	std::unordered_map<AssetHandle, std::shared_ptr<Metadata>> assetMetadatas{};
-	std::map<std::string, AssetHandle> projectScenes{};
  	//std::unordered_map<int, AssetHandle> meshManager{};
 
 	std::unordered_map<AssetHandle, std::shared_ptr<Asset>>::iterator latestFoundAsset;
@@ -28,6 +27,7 @@ class AssetManager
 public:
 	AssetManager() = default;
 	virtual ~AssetManager() = default;
+
 
 	bool ReadAData();
 	void SaveAData();
@@ -45,6 +45,7 @@ public:
 	//template<typename t>
 	//std::shared_ptr<t> GetAssetData(AssetHandle assetHandle);
 
+	std::map < AssetHandle, std::string> projectScenes{};
 	std::shared_ptr<Asset_Scene> GetEnrolledScene(std::string name);
 
 	bool LoadData(AssetHandle assetHandle);

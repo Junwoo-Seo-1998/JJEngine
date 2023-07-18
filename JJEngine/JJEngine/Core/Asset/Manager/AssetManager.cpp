@@ -169,13 +169,15 @@ AssetHandle AssetManager::AddMemoryOnlyAsset(AssetType type)
 
 bool AssetManager::IsMemoryOnlyAsset(AssetHandle handle)
 {
-	ENGINE_ASSERT(IsAssetHandleValid(handle) == true, "Asset handle is not valid");
+	bool res{IsAssetHandleValid(handle)};
+	ENGINE_ASSERT(res == true, "Asset handle is not valid");
 	return assetMetadatas[handle]->isMemoryOnlyAsset;
 }
 
 std::shared_ptr<Metadata> AssetManager::GetMetadata(AssetHandle assetHandle)
 {
-	ENGINE_ASSERT(IsAssetHandleValid(assetHandle) == true, "Asset handle is not valid");
+	bool res{IsAssetHandleValid(assetHandle)};
+	ENGINE_ASSERT(res == true, "Asset handle is not valid");
 	return assetMetadatas[assetHandle];
 }
 
@@ -187,18 +189,21 @@ AssetType AssetManager::GetAssetType(AssetHandle assetHandle)
 
 std::shared_ptr<Asset> AssetManager::GetAsset(AssetHandle assetHandle)
 {
-	ENGINE_ASSERT(IsAssetHandleValid(assetHandle) == true, "No asset is there");
+	bool res{ IsAssetHandleValid(assetHandle) };
+	ENGINE_ASSERT(res == true, "No asset is there");
 	if (latestFoundAsset->second->CheckIsDataLoaded() == false) {
-		ENGINE_ASSERT(latestFoundAsset->second->LoadData(assetMetadatas[assetHandle]->path) == true, "Fail to load asset");
+		bool temp{ latestFoundAsset->second->LoadData(assetMetadatas[assetHandle]->path) };
+		ENGINE_ASSERT(temp == true, "Fail to load asset");
 	}
 	return assets[assetHandle];// latestFoundAsset->second;
 }
 
 std::shared_ptr<Asset_Scene> AssetManager::GetEnrolledScene(std::string name)
 {
-	if(projectScenes.contains(name) == false ) 
-		return nullptr;
-	return GetCastedAsset<Asset_Scene>(projectScenes[name]);
+	//if(projectScenes.contains(name) == false ) 
+	//	return nullptr;
+	//return GetCastedAsset<Asset_Scene>(projectScenes[name]);
+	return std::shared_ptr<Asset_Scene>();
 }
 
 bool AssetManager::LoadData(AssetHandle assetHandle)

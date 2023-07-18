@@ -151,6 +151,11 @@ void Scene::OnDestroy()
 {
 }
 
+bool Scene::IsRunning() const
+{
+	return m_IsRunning;
+}
+
 void Scene::RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm::mat4& view, const glm::mat4& projection, const glm::vec3& cameraPos)
 {
 	sceneRenderer->SetScene(this);
@@ -210,6 +215,7 @@ void Scene::RenderEntityID(EditorCamera& camera)
 
 void Scene::StartRuntime()
 {
+	m_IsRunning = true;
 	StartPhysics2D();
 
 	//scripting
@@ -281,6 +287,7 @@ void Scene::UpdateRuntime(std::shared_ptr<SceneRenderer> sceneRenderer)
 
 void Scene::StopRuntime()
 {
+	m_IsRunning = false;
 	//scripting
 	{
 		Script::ScriptEngine::StopRuntime();
