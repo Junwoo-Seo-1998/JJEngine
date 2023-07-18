@@ -43,6 +43,7 @@ void EditorLayer::OnAttach()
 	Log::Info("Editor Layer Added");
 	m_EditorCamera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
 	std::shared_ptr<Scene> testScene = std::make_shared<TestScene>("Test");
+	testScene->Start();
 	std::shared_ptr<Asset_Scene> asset_testScene = std::make_shared<Asset_Scene>();
 	asset_testScene->data = testScene;
 	SetNewScene(asset_testScene);
@@ -87,11 +88,8 @@ void EditorLayer::OnUpdate()
 	
 	if (shouldOpenFile.extension().string() == ".scn") {
 		//TODO: ask save now scene
-		AssetHandle temp = Application::Instance().GetAssetManager()->GetHandleFromPath(shouldOpenFile.filename().string());
+		AssetHandle temp = Application::Instance().GetAssetManager()->GetHandleFromPath(shouldOpenFile);
 		SetNewScene(Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(temp));
-		SceneSerializer see_real(m_ActiveScene);
-		m_ActiveScene->SetScenePath(shouldOpenFile);
-		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize Scene: " + shouldOpenFile.filename().string());
 	}
 	shouldOpenFile.clear();
 	

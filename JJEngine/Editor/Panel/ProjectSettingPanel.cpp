@@ -36,7 +36,6 @@ void ProjectSettingPanel::OnImGuiRender()
 			projectScenes.erase(d);
 		}
 
-
 		std::unordered_set<AssetHandle> scenes = assetManager->GetAllAssetsWithType(AssetType::Scene);
 		unsigned Asize{ static_cast<unsigned>(scenes.size()) };
 		std::vector < std::string > items(Asize);
