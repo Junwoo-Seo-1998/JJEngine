@@ -16,7 +16,6 @@ void ProjectSettingPanel::OnImGuiRender()
 		std::shared_ptr<AssetManager> assetManager{Application::Instance().GetAssetManager()};
 
 		ImGui::Begin("Project setting", &isOpened, 0/*ImGuiWindowFlags*/);
-		ImGui::Text("Scene setting");
 		std::unordered_set<AssetHandle> scenes = assetManager->GetAllAssetsWithType(AssetType::Scene);
 		unsigned Asize{ static_cast<unsigned>(scenes.size()) };
 		std::vector < std::string > items(Asize);
@@ -26,6 +25,10 @@ void ProjectSettingPanel::OnImGuiRender()
 			items[nitem] = assetManager->GetMetadata(h)->path.string();
 			++nitem;
 		}
+		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::Text("Scene setting section");
 		ImGui::Separator();
 		{
 			ImGui::Text("Start scene: ");
@@ -117,14 +120,21 @@ void ProjectSettingPanel::OnImGuiRender()
 				projectScenes[currhandle] = "None";
 		}
 		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::Separator();
 		//if (ImGui::Button("Make Project") == true) {
 		//}
 		//if (ImGui::Button("Opwn Project") == true) {
 		//}
 		if (ImGui::Button("Save Project") == true) {
 			GameDataSerializer g_data_serializer{"./TestGameData.GData"};
+			g_data_serializer.startScene = startScene;
 			g_data_serializer.projectScenes = projectScenes;
+			g_data_serializer.Deserialize();
 		}
+		ImGui::Separator();
+		ImGui::Separator();
+		ImGui::Separator();
 		ImGui::End();
 	}
 }
