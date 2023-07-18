@@ -1,0 +1,72 @@
+Scene: unnamed-scene
+Entities:
+  - Name: Camera
+    UUID: ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3
+  - Name: GameOver
+    UUID: d0c2e26f-1b4a-4cea-8fd2-84975c00fe38
+Components:
+  Relationship:
+    ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+  Transform:
+    ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 16
+        - 9
+        - 1
+  Script:
+    d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
+      ScriptName: Game.EndScene
+  Sprite:
+    d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
+      SpriteHandle: 0db9165b-95a2-51c7-a8d7-0fcff3e74bdd
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+  Camera:
+    ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3:
+      CameraValues:
+        - 0.100000001
+        - 0.785398185
+        - 1
+        - 1
+        - 1000000
+      CameraBools:
+        - false
+  RigidBody2D:
+    {}
+  BoxCollider2D:
+    {}
+  Light:
+    {}
+  Mesh:
+    {}

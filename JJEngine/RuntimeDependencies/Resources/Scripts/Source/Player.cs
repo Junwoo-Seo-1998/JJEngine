@@ -29,7 +29,7 @@ namespace Game
             if (Input.IsPressed(KeyCode.F))
             {
                 //just test
-                SceneManager.LoadScene("./Resources/Scenes/Test.scn");
+                SceneManager.LoadScene("./Resources/Scenes/endScene.scn");
             }
 
             if (Input.IsPressed(KeyCode.W))
