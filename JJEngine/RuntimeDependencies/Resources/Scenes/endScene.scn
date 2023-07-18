@@ -1,25 +1,25 @@
-Scene: endScene
+Scene: unnamed-scene
 Entities:
   - Name: Camera
-    UUID: 6819e2d3-d385-452c-8643-58eee60944dc
-  - Name: gameOver
-    UUID: a547f2ca-4a21-4e52-85c7-a784c8fcb46d
+    UUID: ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3
+  - Name: GameOver
+    UUID: d0c2e26f-1b4a-4cea-8fd2-84975c00fe38
 Components:
   Relationship:
-    6819e2d3-d385-452c-8643-58eee60944dc:
+    ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    a547f2ca-4a21-4e52-85c7-a784c8fcb46d:
+    d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
   Transform:
-    6819e2d3-d385-452c-8643-58eee60944dc:
+    ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3:
       Position:
         - 0
         - 0
-        - -1
+        - 0
       Rotation:
         - 0
         - 0
@@ -28,23 +28,24 @@ Components:
         - 1
         - 1
         - 1
-    a547f2ca-4a21-4e52-85c7-a784c8fcb46d:
+    d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
       Position:
         - 0
         - 0
         - 0
       Rotation:
         - 0
-        - -0
+        - 0
         - 0
       Scale:
         - 16
         - 9
         - 1
   Script:
-    {}
+    d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
+      ScriptName: Game.EndScene
   Sprite:
-    a547f2ca-4a21-4e52-85c7-a784c8fcb46d:
+    d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
       SpriteHandle: 0db9165b-95a2-51c7-a8d7-0fcff3e74bdd
       SpriteColor:
         - 1
@@ -52,7 +53,7 @@ Components:
         - 1
         - 1
   Camera:
-    6819e2d3-d385-452c-8643-58eee60944dc:
+    ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3:
       CameraValues:
         - 0.100000001
         - 0.785398185

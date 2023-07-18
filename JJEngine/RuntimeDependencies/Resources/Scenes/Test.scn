@@ -1,0 +1,212 @@
+Scene: unnamed-scene
+Entities:
+  - Name: Test light1
+    UUID: d9e431c3-81f4-4acd-970c-631ef69ddff5
+  - Name: WallMaker
+    UUID: 17e03f0d-3ff4-48be-b7a1-0146b7876e1d
+  - Name: Player
+    UUID: 4c200fdd-0472-46f6-9cf1-2407dd8a5d78
+  - Name: Ground2
+    UUID: f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e
+  - Name: Ground
+    UUID: 3e716c42-c4e4-407b-b1db-24a21078deb8
+  - Name: Camera
+    UUID: 1b186f62-ead4-46b7-974a-6d2af886b73d
+Components:
+  Relationship:
+    d9e431c3-81f4-4acd-970c-631ef69ddff5:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    17e03f0d-3ff4-48be-b7a1-0146b7876e1d:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    4c200fdd-0472-46f6-9cf1-2407dd8a5d78:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    3e716c42-c4e4-407b-b1db-24a21078deb8:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    1b186f62-ead4-46b7-974a-6d2af886b73d:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+  Transform:
+    d9e431c3-81f4-4acd-970c-631ef69ddff5:
+      Position:
+        - 3
+        - 3
+        - 3
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    17e03f0d-3ff4-48be-b7a1-0146b7876e1d:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    4c200fdd-0472-46f6-9cf1-2407dd8a5d78:
+      Position:
+        - -2.5
+        - 2.5
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e:
+      Position:
+        - 0.670000017
+        - 1.21000004
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0.510159731
+      Scale:
+        - 1
+        - 0.25
+        - 1
+    3e716c42-c4e4-407b-b1db-24a21078deb8:
+      Position:
+        - 0
+        - -1
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 5
+        - 0.25
+        - 1
+    1b186f62-ead4-46b7-974a-6d2af886b73d:
+      Position:
+        - 0
+        - 1.51999998
+        - 7.5
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+  Script:
+    1b186f62-ead4-46b7-974a-6d2af886b73d:
+      ScriptName: Game.CameraControl
+    4c200fdd-0472-46f6-9cf1-2407dd8a5d78:
+      ScriptName: Game.Player
+    17e03f0d-3ff4-48be-b7a1-0146b7876e1d:
+      ScriptName: Game.WallMaker
+  Sprite:
+    3e716c42-c4e4-407b-b1db-24a21078deb8:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 0.5
+        - 0.25
+        - 0.200000003
+        - 1
+    f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 0.5
+        - 0.25
+        - 0.200000003
+        - 1
+    4c200fdd-0472-46f6-9cf1-2407dd8a5d78:
+      SpriteHandle: d954a28c-3331-5eda-9253-fa3586bf4ca9
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+  Camera:
+    1b186f62-ead4-46b7-974a-6d2af886b73d:
+      CameraValues:
+        - 0.100000001
+        - 0.785398185
+        - 1.69014084
+        - 1
+        - 1000000
+      CameraBools:
+        - true
+  RigidBody2D:
+    3e716c42-c4e4-407b-b1db-24a21078deb8:
+      RigidBody2DType: 0
+      RigidBody2DBool: false
+    f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e:
+      RigidBody2DType: 0
+      RigidBody2DBool: false
+  BoxCollider2D:
+    3e716c42-c4e4-407b-b1db-24a21078deb8:
+      BoxCollider2D_2DValues:
+        -
+          - 0
+          - 0
+        -
+          - 0.5
+          - 0.5
+      BoxCollider2D_1DValues:
+        - 1
+        - 0.5
+        - 0
+        - 0.5
+    f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e:
+      BoxCollider2D_2DValues:
+        -
+          - 0
+          - 0
+        -
+          - 0.5
+          - 0.5
+      BoxCollider2D_1DValues:
+        - 1
+        - 0.5
+        - 0
+        - 0.5
+  Light:
+    d9e431c3-81f4-4acd-970c-631ef69ddff5:
+      LightType: 0
+      LightAngleInner: 30
+      LightAngleOuter: 45
+      LightAmbient:
+        - 1
+        - 1
+        - 1
+      LightDiffuse:
+        - 1
+        - 1
+        - 1
+      LightSpecular:
+        - 1
+        - 1
+        - 1
+      LightFalloff: 32
+  Mesh:
+    {}

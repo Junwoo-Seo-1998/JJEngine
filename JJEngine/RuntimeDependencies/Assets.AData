@@ -64,15 +64,15 @@ Assets:
     Type: 2
     FilePath: ./Resources\Textures\endScene.png
     IsMemoryOnly: false
-  - Handle: 264f78b0-a777-584a-b0ed-e418c16f616c
-    Type: 1
-    FilePath: ./Resources\Scenes\unnamed-scene.scn
-    IsMemoryOnly: false
   - Handle: 3793f586-c018-5a06-a4e9-53221ab6733c
     Type: 2
     FilePath: ./Resources\Textures\endScene.jpg
     IsMemoryOnly: false
-  - Handle: 2492be3c-b8f1-5873-ba05-3e1965db9028
+  - Handle: 814c7292-f6fa-560c-94b6-916a9cf55082
     Type: 1
     FilePath: ./Resources\Scenes\endScene.scn
+    IsMemoryOnly: false
+  - Handle: a1ec5e1c-2797-5e36-b199-d77a7c0bc971
+    Type: 1
+    FilePath: ./Resources\Scenes\Test.scn
     IsMemoryOnly: false

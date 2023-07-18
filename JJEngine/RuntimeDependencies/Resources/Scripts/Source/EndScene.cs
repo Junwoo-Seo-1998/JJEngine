@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameScript.Source
+namespace Game
 {
-    internal class EndScene : Entity
+    class EndScene : Entity
     {
         protected override void OnUpdate()
         {
