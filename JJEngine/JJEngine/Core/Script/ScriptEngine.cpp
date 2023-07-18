@@ -108,6 +108,8 @@ namespace Script
 		std::unordered_map<std::string, std::shared_ptr<ScriptClass>> EntityClasses;
 		std::unordered_map<UUIDType, std::shared_ptr<ScriptInstance>> EntityInstances;
 
+		std::unordered_map<UUIDType, ScriptFieldMap> EntityScriptFields;
+
 		//runtime stuff
 		Scene* SceneContext = nullptr;
 	};
@@ -228,6 +230,14 @@ namespace Script
 			std::shared_ptr<ScriptInstance> instance = std::make_shared<ScriptInstance>(s_Data->EntityClasses[script.Name], entity);
 			s_Data->EntityInstances[entity.GetUUID()] = instance;
 
+			// Copy field values
+			if (s_Data->EntityScriptFields.contains(entity.GetUUID()))
+			{
+				const ScriptFieldMap& fieldMap = s_Data->EntityScriptFields.at(entity.GetUUID());
+				for (const auto& [name, fieldInstance] : fieldMap)
+					instance->SetFieldValueInternal(name, fieldInstance.m_Buffer);
+			}
+
 			instance->InvokeOnCreate();
 		}
 	}
@@ -253,6 +263,22 @@ namespace Script
 	std::unordered_map<std::string, std::shared_ptr<ScriptClass>> ScriptEngine::GetEntityClasses()
 	{
 		return s_Data->EntityClasses;
+	}
+
+	std::shared_ptr<ScriptClass> ScriptEngine::GetEntityClass(const std::string& fullName)
+	{
+		if(!EntityClassExists(fullName))
+			return nullptr;
+
+		return s_Data->EntityClasses.at(fullName);
+
+	}
+
+	ScriptFieldMap& ScriptEngine::GetScriptFieldMap(Entity entity)
+	{
+		ENGINE_ASSERT(entity);
+
+		return  s_Data->EntityScriptFields[entity.GetUUID()];
 	}
 
 	std::shared_ptr<ScriptInstance> ScriptEngine::GetEntityScriptInstance(UUIDType entityUUID)

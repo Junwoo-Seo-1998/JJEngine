@@ -192,7 +192,8 @@ void Testing(std::string& sourceString)
 	std::string str{sourceString};
 	const static std::regex re(R"([#][^\w]*(\w+)([^#]*))", std::regex_constants::optimize);
 	std::smatch m;
-	ENGINE_ASSERT(std::regex_search(str, m, re), "");
+	bool res{std::regex_search(str, m, re)};
+	ENGINE_ASSERT(res, "");
 
 
 	EngineLog::Warn("Testing regex prefix : {}", m.prefix());
@@ -241,8 +242,9 @@ const std::string TranslateShaderTypeToStr(const ShaderType& type)
 std::vector<std::string_view> SplitStringWithCommand(const std::string_view& sourceString, std::string regex_command)
 {
 	const std::regex reg(regex_command);
-	std::cmatch m;
-	ENGINE_ASSERT(std::regex_search(sourceString.data(), m, reg), "Can't find Command option");
+	std::cmatch m{};
+	bool res{ std::regex_search(sourceString.data(), m, reg) };
+	ENGINE_ASSERT(res, "Can't find Command option");
 
 	std::vector<std::string_view> result;
 	for (auto& s:m) {

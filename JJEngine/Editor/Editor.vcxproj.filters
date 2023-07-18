@@ -21,6 +21,7 @@
     </ClInclude>
     <ClInclude Include="Test3DScene.h" />
     <ClInclude Include="TestScene.h" />
+    <ClInclude Include="Panel\ProjectSettingPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EditorLayer.cpp" />
@@ -39,5 +40,6 @@
     <ClCompile Include="Test3DScene.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Panel\ProjectSettingPanel.cpp" />
   </ItemGroup>
 </Project>
