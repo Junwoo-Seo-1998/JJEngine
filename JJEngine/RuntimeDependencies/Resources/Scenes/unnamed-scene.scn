@@ -1,11 +1,9 @@
-Scene: Default tt
+Scene: unnamed-scene
 Entities:
   - Name: No Name
-    UUID: b73d7fff-b0d5-4c3a-91a3-565a38c2fbcf
-  - Name: No Name
-    UUID: d5544cf2-f99e-466b-b536-363e18ffa933
+    UUID: ab2e1f32-9dc5-44ab-8522-27c8365489cc
   - Name: Camera
-    UUID: 4feb50c2-afe3-40a3-874a-4f883fe7feb8
+    UUID: 96350b43-357e-4b16-8715-54be9217ac6e
   - Name: No Name
     UUID: edd7159b-7878-4e8c-8d66-55c72c617d96
   - Name: No Name
@@ -20,15 +18,11 @@ Entities:
     UUID: 1521be2d-1b74-4f85-aaa0-9e72be587c3d
 Components:
   Relationship:
-    b73d7fff-b0d5-4c3a-91a3-565a38c2fbcf:
+    ab2e1f32-9dc5-44ab-8522-27c8365489cc:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    d5544cf2-f99e-466b-b536-363e18ffa933:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    4feb50c2-afe3-40a3-874a-4f883fe7feb8:
+    96350b43-357e-4b16-8715-54be9217ac6e:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
@@ -57,7 +51,7 @@ Components:
       Children:
         []
   Transform:
-    b73d7fff-b0d5-4c3a-91a3-565a38c2fbcf:
+    ab2e1f32-9dc5-44ab-8522-27c8365489cc:
       Position:
         - 0
         - 0
@@ -70,20 +64,7 @@ Components:
         - 1
         - 1
         - 1
-    d5544cf2-f99e-466b-b536-363e18ffa933:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    4feb50c2-afe3-40a3-874a-4f883fe7feb8:
+    96350b43-357e-4b16-8715-54be9217ac6e:
       Position:
         - 0
         - 0
@@ -192,7 +173,7 @@ Components:
         - 1
         - 1
   Camera:
-    4feb50c2-afe3-40a3-874a-4f883fe7feb8:
+    96350b43-357e-4b16-8715-54be9217ac6e:
       CameraValues:
         - 0.100000001
         - 0.785398185

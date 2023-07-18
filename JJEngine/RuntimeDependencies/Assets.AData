@@ -1,5 +1,17 @@
 ADATA: All engine resorce assets
 Assets:
+  - Handle: adfc2d32-60ac-568d-b923-a53698c7ab70
+    Type: 1
+    FilePath: ./Resources\Scenes\Default tt.scn
+    IsMemoryOnly: false
+  - Handle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
+    Type: 3
+    FilePath: ./Resources\MeshFactoryDatas\Box.MFData
+    IsMemoryOnly: false
+  - Handle: d12c2f7c-9587-55d8-92d9-78af90787cdd
+    Type: 1
+    FilePath: ./Resources\Scenes\Default.scn
+    IsMemoryOnly: false
   - Handle: 415e89cd-71f4-50c0-9716-cf0c6662cae5
     Type: 2
     FilePath: ./Resources\Textures\TestDiff.png
@@ -11,18 +23,6 @@ Assets:
   - Handle: acf97a73-97e8-51c0-981f-027a69ae0965
     Type: 1
     FilePath: ./Resources\Scenes\testScene22.scn
-    IsMemoryOnly: false
-  - Handle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
-    Type: 3
-    FilePath: ./Resources\MeshFactoryDatas\Box.MFData
-    IsMemoryOnly: false
-  - Handle: d12c2f7c-9587-55d8-92d9-78af90787cdd
-    Type: 1
-    FilePath: ./Resources\Scenes\Default.scn
-    IsMemoryOnly: false
-  - Handle: adfc2d32-60ac-568d-b923-a53698c7ab70
-    Type: 1
-    FilePath: ./Resources\Scenes\Default tt.scn
     IsMemoryOnly: false
   - Handle: 3e1688ac-d1b1-56ea-b3b3-fb4ead56dd7d
     Type: 1
@@ -71,4 +71,8 @@ Assets:
   - Handle: 0ba4e197-8bc5-5b23-a43d-4cf6b5d0eaf6
     Type: 3
     FilePath: ./Resources\MeshFactoryDatas\SkyBox.MFData
+    IsMemoryOnly: false
+  - Handle: 40c63726-6a5f-54cb-9cb8-18d61c318d3e
+    Type: 1
+    FilePath: ./Resources\Scenes\unnamed-scene.scn
     IsMemoryOnly: false

@@ -89,6 +89,7 @@ void EditorLayer::OnUpdate()
 	if (shouldOpenFile.extension().string() == ".scn") {
 		//TODO: ask save now scene
 		AssetHandle temp = Application::Instance().GetAssetManager()->GetHandleFromPath(shouldOpenFile);
+		Application::Instance().GetAssetManager()->UnloadData(temp);
 		SetNewScene(Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(temp));
 	}
 	shouldOpenFile.clear();
