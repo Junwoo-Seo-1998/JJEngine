@@ -17,6 +17,9 @@
 #include "Core/Time.h"
 #include "Core/Component/ScriptComponent.h"
 
+#include "FileWatch.hpp"
+#include "Core/Application.h"
+
 namespace Script
 {
 	//todo: move this out to other class
@@ -96,12 +99,16 @@ namespace Script
 
 		MonoAssembly* AppAssembly = nullptr;
 		MonoImage* AppAssemblyImage = nullptr;
+		std::unique_ptr<filewatch::FileWatch<std::string>> AppAssemblyFileWatcher;
+		bool ReloadPending = false;
 
 		MonoMethod* UpdateDelta = nullptr;
 		ScriptClass EntityClass;
 
 		std::unordered_map<std::string, std::shared_ptr<ScriptClass>> EntityClasses;
 		std::unordered_map<UUIDType, std::shared_ptr<ScriptInstance>> EntityInstances;
+
+		std::unordered_map<UUIDType, ScriptFieldMap> EntityScriptFields;
 
 		//runtime stuff
 		Scene* SceneContext = nullptr;
@@ -170,12 +177,31 @@ namespace Script
 		//PrintAssemblyTypes(s_Data->CoreAssembly);
 	}
 
+	static void OnAssemblyFileWatchEvent(const std::string& path, const filewatch::Event change_type)
+	{
+		if (change_type == filewatch::Event::modified && !s_Data->ReloadPending)
+		{
+			s_Data->ReloadPending = true;
+			using std::chrono_literals::operator ""ms;
+			std::this_thread::sleep_for(500ms);
+			Application::Instance().SubmitCommand([path]()
+			{
+				EngineLog::Info("Script : {} - Reloaded!", path);
+				
+				s_Data->AppAssemblyFileWatcher.reset();
+				ScriptEngine::ReloadAssembly();
+			});
+		}
+	}
+
 	void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filepath)
 	{
 		s_Data->AppAssembly = LoadMonoAssembly(filepath.string());
 		s_Data->AppAssemblyImage = mono_assembly_get_image(s_Data->AppAssembly);
 		//debug
 		//PrintAssemblyTypes(s_Data->AppAssembly);
+		s_Data->AppAssemblyFileWatcher = std::make_unique<filewatch::FileWatch<std::string>>("./Resources/Scripts/GameScript.dll", OnAssemblyFileWatchEvent);
+		s_Data->ReloadPending = false;
 	}
 
 	void ScriptEngine::ReloadAssembly()
@@ -204,6 +230,14 @@ namespace Script
 			std::shared_ptr<ScriptInstance> instance = std::make_shared<ScriptInstance>(s_Data->EntityClasses[script.Name], entity);
 			s_Data->EntityInstances[entity.GetUUID()] = instance;
 
+			// Copy field values
+			if (s_Data->EntityScriptFields.contains(entity.GetUUID()))
+			{
+				const ScriptFieldMap& fieldMap = s_Data->EntityScriptFields.at(entity.GetUUID());
+				for (const auto& [name, fieldInstance] : fieldMap)
+					instance->SetFieldValueInternal(name, fieldInstance.m_Buffer);
+			}
+
 			instance->InvokeOnCreate();
 		}
 	}
@@ -229,6 +263,22 @@ namespace Script
 	std::unordered_map<std::string, std::shared_ptr<ScriptClass>> ScriptEngine::GetEntityClasses()
 	{
 		return s_Data->EntityClasses;
+	}
+
+	std::shared_ptr<ScriptClass> ScriptEngine::GetEntityClass(const std::string& fullName)
+	{
+		if(!EntityClassExists(fullName))
+			return nullptr;
+
+		return s_Data->EntityClasses.at(fullName);
+
+	}
+
+	ScriptFieldMap& ScriptEngine::GetScriptFieldMap(Entity entity)
+	{
+		ENGINE_ASSERT(entity);
+
+		return  s_Data->EntityScriptFields[entity.GetUUID()];
 	}
 
 	std::shared_ptr<ScriptInstance> ScriptEngine::GetEntityScriptInstance(UUIDType entityUUID)

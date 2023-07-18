@@ -42,6 +42,8 @@ public:
 	virtual void OnDisable();
 	virtual void OnDestroy();
 
+	bool IsRunning() const;
+
 	void RenderScene(std::shared_ptr<SceneRenderer> sceneRenderer, const glm::mat4& view, const glm::mat4& projection, const glm::vec3& cameraPos);
 
 	//editor only
@@ -98,6 +100,7 @@ protected:
 
 	unsigned int m_ViewportWidth = 0, m_ViewportHeight = 0;
 
+	bool m_IsRunning = false;
 	std::string m_scene_name;
 	std::filesystem::path scenePath;
 	entt::registry m_Registry;
