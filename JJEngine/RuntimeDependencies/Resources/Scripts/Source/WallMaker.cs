@@ -87,6 +87,11 @@ namespace Game
 
             }
 
+            if(gameOver)
+            {
+                SceneManager.LoadScene("./Resources/Scenes/endScene.scn"); // Needs to be changed to game over scene
+            }
+
         }
     }
 }

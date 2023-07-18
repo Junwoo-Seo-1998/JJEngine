@@ -25,7 +25,6 @@ TestScene::TestScene(std::string t)
 
 void TestScene::Start()
 {
-
 	auto cam=CreateEntity("Camera");
 	auto& camComp=cam.AddComponent<CameraComponent>();
 	camComp.IsMainCamera = true;
@@ -34,6 +33,13 @@ void TestScene::Start()
 	auto& camScript = cam.AddComponent<ScriptComponent>();
 	camScript.Name = "Game.CameraControl";
 
+	//auto endScreen = CreateEntity("gameover");
+	//endScreen.Transform().Position = { 0.f, 1.52f, 0.f };
+	//endScreen.Transform().Scale = { 16.f, 8.f, 1.f };
+	//auto& sprite = endScreen.AddComponent<SpriteRendererComponent>();
+	//sprite.asset = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Texture>(Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/Textures/endScene.png")); //Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
+	//auto& script = endScreen.AddComponent<ScriptComponent>();
+	//script.Name = "Game.WallMaker";
 
 	auto ground = CreateEntity("Ground");
 	auto& groundSprite = ground.AddComponent<SpriteRendererComponent>();
@@ -42,7 +48,7 @@ void TestScene::Start()
 	ground.Transform().Position.y = -1.f;
 	ground.AddComponent<BoxCollider2DComponent>();
 	ground.AddComponent<RigidBody2DComponent>();
-
+	
 	auto ground2 = CreateEntity("Ground2");
 	auto& groundSprite2 = ground2.AddComponent<SpriteRendererComponent>();
 	groundSprite2.color = { 0.5f,0.25f, 0.2f, 1.f };
@@ -52,70 +58,43 @@ void TestScene::Start()
 	ground2.Transform().Rotation.z = glm::radians(29.23f);
 	ground2.AddComponent<BoxCollider2DComponent>();
 	ground2.AddComponent<RigidBody2DComponent>();
+	
 	auto temp = CreateEntity("Player");
-
+	
 	temp.Transform().Position = { -2.5f, 2.50f, 0 };
 	auto& sprite = temp.AddComponent<SpriteRendererComponent>();
 	sprite.asset = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Texture>(Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/Textures/test.jpg")); //Texture::CreateTexture(File::ReadImageToTexture("Resources/Textures/test.jpg"));
-
+	
 	/*temp.AddComponent<BoxCollider2DComponent>();
 	auto& body = temp.AddComponent<RigidBody2DComponent>();
 	body.Type = RigidBody2DComponent::BodyType::Dynamic;*/
-
+	
 	auto & script=temp.AddComponent<ScriptComponent>();
 	script.Name = "Game.Player";
-
-
+	
+	
 	auto wallMaker = CreateEntity("WallMaker");
 	auto& script2 = wallMaker.AddComponent<ScriptComponent>();
 	script2.Name = "Game.WallMaker";
-
+	
 	/*temp.AddComponent<BoxCollider2DComponent>();
 	auto& body = temp.AddComponent<RigidBody2DComponent>();
 	body.Type = RigidBody2DComponent::BodyType::Dynamic;*/
-
 	
-
+	
+	
 	/*auto light = CreateEntity("Direction Light");
 	light.Transform().Position = { 0.f, 0.f,0.f };
 	light.Transform().Rotation = glm::radians(glm::vec3{-40.f, 45.f, 0.f});
 	auto& lightComp = light.AddComponent<LightComponent>();
 	lightComp.light.m_LightType = LightType::DirectionLight;*/
-
-
+	
+	
 	auto light = CreateEntity("Test light1");
 	light.Transform().Position = { 3.f,3.f,3.f };
 	//light.Transform().LookAtDir({ -1.f, -1.f,0.f });
-
+	
 	light.AddComponent<LightComponent>();
-
-
-
-	//AssetHandle BoxHandle = Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/MeshFactoryDatas/Box.MFData");
-	//auto ThreeDObject = CreateEntity("Ground");
-	//auto& meshcomp = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	//ThreeDObject.Transform().Position = { 0.f, -2.f, 0.f };
-	//ThreeDObject.Transform().Scale = { 100.f, 1.f, 10.f };
-
-	//ThreeDObject = CreateEntity("Upper1");
-	//auto& meshcomp1 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	//ThreeDObject.Transform().Position = { 1.f, 5.f, 0.f };
-	//ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
-
-	//ThreeDObject = CreateEntity("Upper2");
-	//auto& meshcomp2 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	//ThreeDObject.Transform().Position = { 6.f, 5.f, 0.f };
-	//ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
-
-	//ThreeDObject = CreateEntity("Lower1");
-	//auto& meshcomp3 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	//ThreeDObject.Transform().Position = { 1.f, -0.f, 0.f };
-	//ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
-
-	//ThreeDObject = CreateEntity("Lower2");
-	//auto& meshcomp4 = ThreeDObject.AddComponent<MeshComponent>(BoxHandle);
-	//ThreeDObject.Transform().Position = { 6.f, -0.f, 0.f };
-	//ThreeDObject.Transform().Scale = { 2.f, 3.f, 2.f };
 }
 
 void TestScene::Update()

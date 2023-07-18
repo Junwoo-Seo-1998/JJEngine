@@ -1,5 +1,13 @@
 ADATA: All engine resorce assets
 Assets:
+  - Handle: adfc2d32-60ac-568d-b923-a53698c7ab70
+    Type: 1
+    FilePath: ./Resources\Scenes\Default tt.scn
+    IsMemoryOnly: false
+  - Handle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
+    Type: 3
+    FilePath: ./Resources\MeshFactoryDatas\Box.MFData
+    IsMemoryOnly: false
   - Handle: 415e89cd-71f4-50c0-9716-cf0c6662cae5
     Type: 2
     FilePath: ./Resources\Textures\TestDiff.png
@@ -11,18 +19,6 @@ Assets:
   - Handle: acf97a73-97e8-51c0-981f-027a69ae0965
     Type: 1
     FilePath: ./Resources\Scenes\testScene22.scn
-    IsMemoryOnly: false
-  - Handle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
-    Type: 3
-    FilePath: ./Resources\MeshFactoryDatas\Box.MFData
-    IsMemoryOnly: false
-  - Handle: d12c2f7c-9587-55d8-92d9-78af90787cdd
-    Type: 1
-    FilePath: ./Resources\Scenes\Default.scn
-    IsMemoryOnly: false
-  - Handle: adfc2d32-60ac-568d-b923-a53698c7ab70
-    Type: 1
-    FilePath: ./Resources\Scenes\Default tt.scn
     IsMemoryOnly: false
   - Handle: 3e1688ac-d1b1-56ea-b3b3-fb4ead56dd7d
     Type: 1
@@ -52,10 +48,6 @@ Assets:
     Type: 2
     FilePath: ./Resources\Textures\test.jpg
     IsMemoryOnly: false
-  - Handle: afebb1da-b106-5986-bfcd-9e72644a741e
-    Type: 2
-    FilePath: ./Resources\Textures\TestSpec.png
-    IsMemoryOnly: false
   - Handle: 204ae32a-bfde-59b5-8b37-d639eb9e59fc
     Type: 2
     FilePath: ./Resources\Textures\UI\PlayButton.png
@@ -64,11 +56,23 @@ Assets:
     Type: 2
     FilePath: ./Resources\Textures\UI\Stop.png
     IsMemoryOnly: false
-  - Handle: bae72b15-7ba7-5ac0-af65-dbca069383ae
-    Type: 1
-    FilePath: ./Resources\Scenes\Test.scn
-    IsMemoryOnly: false
   - Handle: 0ba4e197-8bc5-5b23-a43d-4cf6b5d0eaf6
     Type: 3
     FilePath: ./Resources\MeshFactoryDatas\SkyBox.MFData
+    IsMemoryOnly: false
+  - Handle: 0db9165b-95a2-51c7-a8d7-0fcff3e74bdd
+    Type: 2
+    FilePath: ./Resources\Textures\endScene.png
+    IsMemoryOnly: false
+  - Handle: 264f78b0-a777-584a-b0ed-e418c16f616c
+    Type: 1
+    FilePath: ./Resources\Scenes\unnamed-scene.scn
+    IsMemoryOnly: false
+  - Handle: 3793f586-c018-5a06-a4e9-53221ab6733c
+    Type: 2
+    FilePath: ./Resources\Textures\endScene.jpg
+    IsMemoryOnly: false
+  - Handle: 2492be3c-b8f1-5873-ba05-3e1965db9028
+    Type: 1
+    FilePath: ./Resources\Scenes\endScene.scn
     IsMemoryOnly: false

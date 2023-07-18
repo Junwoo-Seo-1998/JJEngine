@@ -1,0 +1,680 @@
+Scene: unnamed-scene
+Entities:
+  - Name: Test17
+    UUID: 3c149cab-fe5b-41fe-9c24-f70544e20697
+  - Name: Test16
+    UUID: b25412f6-e899-44c5-8d65-f2341df657a9
+  - Name: Test15
+    UUID: 31de9395-b093-4e95-b753-ad913193e83f
+  - Name: Test14
+    UUID: b90e3175-22a9-4b9b-a657-f09c3c4277a7
+  - Name: Test13
+    UUID: cffae65d-4e1a-4f75-aa82-513a2b5fc5ac
+  - Name: Test12
+    UUID: 4dfd744d-5876-4a06-aa4c-9447488bb637
+  - Name: Test11
+    UUID: ee2416ef-96b4-46c2-a439-c733912288b6
+  - Name: Test10
+    UUID: 63e4bed9-5c2d-46e4-998e-d4298641f2a8
+  - Name: Test9
+    UUID: 2e631178-54ec-43d8-943b-47be46c36984
+  - Name: Test8
+    UUID: 3228fd71-0b10-4018-95fc-d420d27cfb5c
+  - Name: Test7
+    UUID: d4a1c447-a38b-41ac-9b0b-8cb53b667f61
+  - Name: Test6
+    UUID: 4e7ae5cc-7445-4706-a3a5-db5772529441
+  - Name: Test5
+    UUID: 95e04e4b-5265-4851-a417-5919dfe3c9ed
+  - Name: Test4
+    UUID: 8f39ccd9-b3ee-4501-bce0-0ddef7a13dde
+  - Name: Test3
+    UUID: f7812125-68ee-46c4-8d07-b1d1e4dd1b71
+  - Name: Test2
+    UUID: 342fc6f2-6204-4055-ba75-12cc40d291d2
+  - Name: Test1
+    UUID: 13ee5d92-bf5b-4b27-a84b-b5f238996249
+  - Name: Test0
+    UUID: 0fca0e73-ebac-4f6c-a864-1a8768197a61
+  - Name: Test light1
+    UUID: cdac7771-7e8b-4c70-8e20-77ecc6c0ad28
+  - Name: WallMaker
+    UUID: a1255e98-6a42-494c-98c3-97d70969efe3
+  - Name: Player
+    UUID: fefa20dc-5fb6-4295-acd8-d1de8491e5c4
+  - Name: Ground2
+    UUID: c68ef376-6456-40df-912b-b412cb3b00dc
+  - Name: Ground
+    UUID: 1c2dde76-bf35-48e1-8b2d-63b7393edfa7
+  - Name: Camera
+    UUID: ae96d15a-6372-4285-84af-1ad22f18b9c7
+Components:
+  Relationship:
+    3c149cab-fe5b-41fe-9c24-f70544e20697:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    b25412f6-e899-44c5-8d65-f2341df657a9:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    31de9395-b093-4e95-b753-ad913193e83f:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    b90e3175-22a9-4b9b-a657-f09c3c4277a7:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    cffae65d-4e1a-4f75-aa82-513a2b5fc5ac:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    4dfd744d-5876-4a06-aa4c-9447488bb637:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    ee2416ef-96b4-46c2-a439-c733912288b6:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    63e4bed9-5c2d-46e4-998e-d4298641f2a8:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    2e631178-54ec-43d8-943b-47be46c36984:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    3228fd71-0b10-4018-95fc-d420d27cfb5c:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    d4a1c447-a38b-41ac-9b0b-8cb53b667f61:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    4e7ae5cc-7445-4706-a3a5-db5772529441:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    95e04e4b-5265-4851-a417-5919dfe3c9ed:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    8f39ccd9-b3ee-4501-bce0-0ddef7a13dde:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    f7812125-68ee-46c4-8d07-b1d1e4dd1b71:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    342fc6f2-6204-4055-ba75-12cc40d291d2:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    13ee5d92-bf5b-4b27-a84b-b5f238996249:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    0fca0e73-ebac-4f6c-a864-1a8768197a61:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    cdac7771-7e8b-4c70-8e20-77ecc6c0ad28:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    a1255e98-6a42-494c-98c3-97d70969efe3:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    fefa20dc-5fb6-4295-acd8-d1de8491e5c4:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    c68ef376-6456-40df-912b-b412cb3b00dc:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    1c2dde76-bf35-48e1-8b2d-63b7393edfa7:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+    ae96d15a-6372-4285-84af-1ad22f18b9c7:
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+  Transform:
+    3c149cab-fe5b-41fe-9c24-f70544e20697:
+      Position:
+        - -1.02466774
+        - 8
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    b25412f6-e899-44c5-8d65-f2341df657a9:
+      Position:
+        - -1.02466774
+        - -6
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    31de9395-b093-4e95-b753-ad913193e83f:
+      Position:
+        - -5.5493927
+        - 8
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    b90e3175-22a9-4b9b-a657-f09c3c4277a7:
+      Position:
+        - -5.5493927
+        - -6
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    cffae65d-4e1a-4f75-aa82-513a2b5fc5ac:
+      Position:
+        - -10.0550632
+        - 9
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    4dfd744d-5876-4a06-aa4c-9447488bb637:
+      Position:
+        - -10.0550632
+        - -5
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    ee2416ef-96b4-46c2-a439-c733912288b6:
+      Position:
+        - -14.5886745
+        - 8
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    63e4bed9-5c2d-46e4-998e-d4298641f2a8:
+      Position:
+        - -14.5886745
+        - -6
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    2e631178-54ec-43d8-943b-47be46c36984:
+      Position:
+        - -19.0858994
+        - 5
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    3228fd71-0b10-4018-95fc-d420d27cfb5c:
+      Position:
+        - -19.0858994
+        - -9
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    d4a1c447-a38b-41ac-9b0b-8cb53b667f61:
+      Position:
+        - -23.6149387
+        - 8
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    4e7ae5cc-7445-4706-a3a5-db5772529441:
+      Position:
+        - -23.6149387
+        - -6
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    95e04e4b-5265-4851-a417-5919dfe3c9ed:
+      Position:
+        - -28.1345081
+        - 7
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    8f39ccd9-b3ee-4501-bce0-0ddef7a13dde:
+      Position:
+        - -28.1345081
+        - -7
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    f7812125-68ee-46c4-8d07-b1d1e4dd1b71:
+      Position:
+        - -32.6372604
+        - 6
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    342fc6f2-6204-4055-ba75-12cc40d291d2:
+      Position:
+        - -32.6372604
+        - -8
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    13ee5d92-bf5b-4b27-a84b-b5f238996249:
+      Position:
+        - -37.1424255
+        - 4
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    0fca0e73-ebac-4f6c-a864-1a8768197a61:
+      Position:
+        - -37.1424255
+        - -10
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 0.5
+        - 10
+        - 1
+    cdac7771-7e8b-4c70-8e20-77ecc6c0ad28:
+      Position:
+        - 3
+        - 3
+        - 3
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    a1255e98-6a42-494c-98c3-97d70969efe3:
+      Position:
+        - 0
+        - 0
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    fefa20dc-5fb6-4295-acd8-d1de8491e5c4:
+      Position:
+        - -2.5
+        - 0.291938931
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    c68ef376-6456-40df-912b-b412cb3b00dc:
+      Position:
+        - 0.670000017
+        - 1.21000004
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0.510159731
+      Scale:
+        - 1
+        - 0.25
+        - 1
+    1c2dde76-bf35-48e1-8b2d-63b7393edfa7:
+      Position:
+        - 0
+        - -1
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 5
+        - 0.25
+        - 1
+    ae96d15a-6372-4285-84af-1ad22f18b9c7:
+      Position:
+        - -2.5
+        - 0.306635261
+        - 7.5
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+  Script:
+    ae96d15a-6372-4285-84af-1ad22f18b9c7:
+      ScriptName: Game.CameraControl
+    fefa20dc-5fb6-4295-acd8-d1de8491e5c4:
+      ScriptName: Game.Player
+    a1255e98-6a42-494c-98c3-97d70969efe3:
+      ScriptName: Game.WallMaker
+  Sprite:
+    3c149cab-fe5b-41fe-9c24-f70544e20697:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    b25412f6-e899-44c5-8d65-f2341df657a9:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    31de9395-b093-4e95-b753-ad913193e83f:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    b90e3175-22a9-4b9b-a657-f09c3c4277a7:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    cffae65d-4e1a-4f75-aa82-513a2b5fc5ac:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    4dfd744d-5876-4a06-aa4c-9447488bb637:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    ee2416ef-96b4-46c2-a439-c733912288b6:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    63e4bed9-5c2d-46e4-998e-d4298641f2a8:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    2e631178-54ec-43d8-943b-47be46c36984:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    3228fd71-0b10-4018-95fc-d420d27cfb5c:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    d4a1c447-a38b-41ac-9b0b-8cb53b667f61:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    4e7ae5cc-7445-4706-a3a5-db5772529441:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    95e04e4b-5265-4851-a417-5919dfe3c9ed:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    8f39ccd9-b3ee-4501-bce0-0ddef7a13dde:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    f7812125-68ee-46c4-8d07-b1d1e4dd1b71:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    342fc6f2-6204-4055-ba75-12cc40d291d2:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    13ee5d92-bf5b-4b27-a84b-b5f238996249:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    0fca0e73-ebac-4f6c-a864-1a8768197a61:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+    1c2dde76-bf35-48e1-8b2d-63b7393edfa7:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 0.5
+        - 0.25
+        - 0.200000003
+        - 1
+    c68ef376-6456-40df-912b-b412cb3b00dc:
+      SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 0.5
+        - 0.25
+        - 0.200000003
+        - 1
+    fefa20dc-5fb6-4295-acd8-d1de8491e5c4:
+      SpriteHandle: d954a28c-3331-5eda-9253-fa3586bf4ca9
+      SpriteColor:
+        - 1
+        - 1
+        - 1
+        - 1
+  Camera:
+    ae96d15a-6372-4285-84af-1ad22f18b9c7:
+      CameraValues:
+        - 0.100000001
+        - 0.785398185
+        - 1.63157892
+        - 1
+        - 1000000
+      CameraBools:
+        - true
+  RigidBody2D:
+    1c2dde76-bf35-48e1-8b2d-63b7393edfa7:
+      RigidBody2DType: 0
+      RigidBody2DBool: false
+    c68ef376-6456-40df-912b-b412cb3b00dc:
+      RigidBody2DType: 0
+      RigidBody2DBool: false
+  BoxCollider2D:
+    1c2dde76-bf35-48e1-8b2d-63b7393edfa7:
+      BoxCollider2D_2DValues:
+        -
+          - 0
+          - 0
+        -
+          - 0.5
+          - 0.5
+      BoxCollider2D_1DValues:
+        - 1
+        - 0.5
+        - 0
+        - 0.5
+    c68ef376-6456-40df-912b-b412cb3b00dc:
+      BoxCollider2D_2DValues:
+        -
+          - 0
+          - 0
+        -
+          - 0.5
+          - 0.5
+      BoxCollider2D_1DValues:
+        - 1
+        - 0.5
+        - 0
+        - 0.5
+  Light:
+    cdac7771-7e8b-4c70-8e20-77ecc6c0ad28:
+      LightType: 0
+      LightAngleInner: 30
+      LightAngleOuter: 45
+      LightAmbient:
+        - 1
+        - 1
+        - 1
+      LightDiffuse:
+        - 1
+        - 1
+        - 1
+      LightSpecular:
+        - 1
+        - 1
+        - 1
+      LightFalloff: 32
+  Mesh:
+    {}
