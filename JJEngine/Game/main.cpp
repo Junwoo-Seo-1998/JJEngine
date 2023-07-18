@@ -17,6 +17,7 @@ class GameApp : public Application
 			GameData = "./TestGameData.GData";
 		}
 		GameDataSerializer gData_serializer{ GameData };
+		gData_serializer.Serialize();
 		std::shared_ptr<RuntimeLayer> temp = std::make_shared<RuntimeLayer>();
 		temp->SetNewScene(gData_serializer.GetStartScene());
 		GetLayerManager()->PushLayer(temp);

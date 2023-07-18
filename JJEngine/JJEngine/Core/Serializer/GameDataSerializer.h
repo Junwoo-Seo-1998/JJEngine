@@ -8,11 +8,15 @@ using AssetHandle = uuids::uuid;
 
 class Asset_Scene;
 class GameDataSerializer {
-	AssetHandle startScene{};
-	std::map<std::string, AssetHandle> projectScenes{};
+	std::string path{};
 public:
 	GameDataSerializer(std::string game_data);
 
+	void Serialize();
+	void Deserialize();
+
+	AssetHandle startScene{};
+	std::map<AssetHandle, std::string> projectScenes{};
 	std::shared_ptr<Asset_Scene> GetStartScene();
-	std::map<std::string, AssetHandle> GetProjectScenes();
+	std::map<AssetHandle, std::string> GetProjectScenes();
 };

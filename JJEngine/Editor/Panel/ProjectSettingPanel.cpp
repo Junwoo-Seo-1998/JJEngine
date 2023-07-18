@@ -3,6 +3,7 @@
 #include <Core/Asset/Manager/AssetManager.h>
 #include <Core/Asset/Metadata.h>
 #include <Core/Application.h>
+#include <Core/Serializer/GameDataSerializer.h>
 
 ProjectSettingPanel::ProjectSettingPanel(PanelMessenger& mg): messenger(mg)
 {
@@ -12,9 +13,52 @@ void ProjectSettingPanel::OnImGuiRender()
 {
 	if (isOpened == true) 
 	{
+		std::shared_ptr<AssetManager> assetManager{Application::Instance().GetAssetManager()};
+
 		ImGui::Begin("Project setting", &isOpened, 0/*ImGuiWindowFlags*/);
 		ImGui::Text("Scene setting");
-		std::shared_ptr<AssetManager> assetManager{Application::Instance().GetAssetManager()};
+		std::unordered_set<AssetHandle> scenes = assetManager->GetAllAssetsWithType(AssetType::Scene);
+		unsigned Asize{ static_cast<unsigned>(scenes.size()) };
+		std::vector < std::string > items(Asize);
+		unsigned nitem = 0;
+		AssetHandle startScene{};
+		for (auto& h : scenes) {
+			items[nitem] = assetManager->GetMetadata(h)->path.string();
+			++nitem;
+		}
+		ImGui::Separator();
+		{
+			ImGui::Text("Start scene: ");
+			ImGui::SameLine();
+			static unsigned curr_item_idx_startScene{};
+			for (auto& h : scenes) {
+				if (curr_item_idx_startScene == nitem) {
+					startScene = h;
+				}
+				++nitem;
+			}
+			const char* combo_preview_value = items[curr_item_idx_startScene].c_str();
+			if (ImGui::BeginCombo("Choose start scene", combo_preview_value))
+			{
+				nitem = 0;
+				for (auto& h : scenes)
+				{
+					const bool is_selected = (curr_item_idx_startScene == nitem + 1);
+					if (ImGui::Selectable(items[nitem].c_str(), is_selected)) {
+						curr_item_idx_startScene = nitem;
+						startScene = h;
+					}
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+
+					++nitem;
+				}
+				ImGui::EndCombo();
+			}
+			
+		}
+		ImGui::Separator();
 		std::map< AssetHandle, std::string>& projectScenes = assetManager->projectScenes;
 		std::vector<AssetHandle> destroyList{};
 		
@@ -23,7 +67,7 @@ void ProjectSettingPanel::OnImGuiRender()
 			ImGui::SameLine();
 			std::array<char, 256> inputText{ 0, };
 			std::copy(s.second.begin(), s.second.end(), inputText.data());
-			if (ImGui::InputText("##", inputText.data(), inputText.size())) {
+			if (ImGui::InputText(std::format("##{}", to_string(s.first)).c_str(), inputText.data(), inputText.size())) {
 				s.second = inputText.data();
 			}
 			ImGui::SameLine();
@@ -36,22 +80,17 @@ void ProjectSettingPanel::OnImGuiRender()
 			projectScenes.erase(d);
 		}
 
-		std::unordered_set<AssetHandle> scenes = assetManager->GetAllAssetsWithType(AssetType::Scene);
-		unsigned Asize{ static_cast<unsigned>(scenes.size()) };
-		std::vector < std::string > items(Asize);
-		unsigned nitem = 0;
+		nitem = 0;
 		static unsigned curr_item_idx{};
 		std::string currPath{"None"};
 		AssetHandle currhandle{};
 		for (auto& h : scenes) {
-			items[nitem] = assetManager->GetMetadata(h)->path.string();
 			if (curr_item_idx == nitem + 1) {
 				currPath = items[nitem];
 				currhandle = h;
 			}
 			++nitem;
 		}
-		nitem = 0;
 
 		const char* combo_preview_value = currPath.c_str();
 		if (ImGui::BeginCombo("Scene path", combo_preview_value))
@@ -78,6 +117,14 @@ void ProjectSettingPanel::OnImGuiRender()
 				projectScenes[currhandle] = "None";
 		}
 		ImGui::Separator();
+		//if (ImGui::Button("Make Project") == true) {
+		//}
+		//if (ImGui::Button("Opwn Project") == true) {
+		//}
+		if (ImGui::Button("Save Project") == true) {
+			GameDataSerializer g_data_serializer{"./TestGameData.GData"};
+			g_data_serializer.projectScenes = projectScenes;
+		}
 		ImGui::End();
 	}
 }
