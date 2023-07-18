@@ -196,9 +196,10 @@ std::shared_ptr<Asset> AssetManager::GetAsset(AssetHandle assetHandle)
 
 std::shared_ptr<Asset_Scene> AssetManager::GetEnrolledScene(std::string name)
 {
-	if(projectScenes.contains(name) == false ) 
-		return nullptr;
-	return GetCastedAsset<Asset_Scene>(projectScenes[name]);
+	//if(projectScenes.contains(name) == false ) 
+	//	return nullptr;
+	//return GetCastedAsset<Asset_Scene>(projectScenes[name]);
+	return std::shared_ptr<Asset_Scene>();
 }
 
 bool AssetManager::LoadData(AssetHandle assetHandle)

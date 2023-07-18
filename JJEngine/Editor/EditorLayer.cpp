@@ -31,6 +31,8 @@
 #include "Core/Graphics/RenderPass.h"
 #include "Core/Graphics/Renderer/SceneRenderer.h"
 #include "Core/Script/ScriptEngine.h"
+#include <Core/Event/SceneEvent.h>
+#include <Core/Asset/Manager/AssetManager.h>
 
 EditorLayer::~EditorLayer()
 {
@@ -40,7 +42,11 @@ void EditorLayer::OnAttach()
 {
 	Log::Info("Editor Layer Added");
 	m_EditorCamera = EditorCamera{ 45.f, 1.f, 0.01f, 100.f };
-	SetNewScene(std::make_shared<TestScene>("Test"));
+	std::shared_ptr<Scene> testScene = std::make_shared<TestScene>("Test");
+	testScene->Start();
+	std::shared_ptr<Asset_Scene> asset_testScene = std::make_shared<Asset_Scene>();
+	asset_testScene->data = testScene;
+	SetNewScene(asset_testScene);
 
 	m_SceneRenderer = std::make_shared<SceneRenderer>();
 	//todo: make it class
@@ -82,10 +88,8 @@ void EditorLayer::OnUpdate()
 	
 	if (shouldOpenFile.extension().string() == ".scn") {
 		//TODO: ask save now scene
-		SetNewScene(std::make_shared<Scene>(shouldOpenFile.filename().string()));
-		SceneSerializer see_real(m_ActiveScene);
-		m_ActiveScene->SetScenePath(shouldOpenFile);
-		if (see_real.Deserialize(shouldOpenFile.string()) == false) Log::Error("Fail to deserialize Scene: " + shouldOpenFile.filename().string());
+		AssetHandle temp = Application::Instance().GetAssetManager()->GetHandleFromPath(shouldOpenFile);
+		SetNewScene(Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(temp));
 	}
 	shouldOpenFile.clear();
 	
@@ -184,6 +188,13 @@ void EditorLayer::OnImGuiRender()
 	ImGuiRenderer::Instance()->GuiDrawDockSpaceBegin();
 	if (ImGui::BeginMenuBar()) // testing for now
 	{
+		if (ImGui::BeginMenu("Project"))
+		{
+			if (ImGui::MenuItem("Setting")) {
+				m_ProjectSettingPanel.SetIsOpened(true);
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Make scene")) {
@@ -205,13 +216,15 @@ void EditorLayer::OnImGuiRender()
 	}
 
 	if (openMakeSceneWindow == true) { // Scene generator window
-		ImGui::Begin("Scene generator");
+		ImGui::Begin("Scene generator", &openMakeSceneWindow);
 		static char newSceneName[128] = "Default";
 		ImGui::InputText("Input scene name", newSceneName, IM_ARRAYSIZE(newSceneName));
 		//ImGui::SameLine();
 		if (ImGui::Button("Make") == true) {
 			openMakeSceneWindow = false;
-			SetNewScene(std::make_shared<Scene>(newSceneName));
+			std::shared_ptr<Asset_Scene> temp = std::make_shared<Asset_Scene>();
+			temp->data = std::make_shared<Scene>(newSceneName);
+			SetNewScene(temp);
 			SceneSerializer see_real(m_ActiveScene);
 			see_real.Serialize("./Resources/Scenes/" + m_ActiveScene->GetSceneName() + ".scn");
 		}
@@ -269,6 +282,7 @@ void EditorLayer::OnImGuiRender()
 		m_SceneRenderer->SetFlag(flags);
 	}
 
+	m_ProjectSettingPanel.OnImGuiRender();
 	m_SceneHierarchyPanel.OnImGuiRender();
 	m_ComponentPanel.SetSelevted_EntityHandle(m_SelectedEntityID);
 	m_ComponentPanel.OnImGuiRender();
@@ -288,6 +302,17 @@ void EditorLayer::OnEvent(Event& event)
 		EngineLog::Info("Got {}!", e.ToString());
 		return true;
 	});
+
+	EventDispatcher LoadSceneDispatcher(event);
+	LoadSceneDispatcher.Dispatch<LoadSceneEvent>([&](LoadSceneEvent& e)
+		{
+			//std::shared_ptr<Asset_Scene> temp = Application::Instance().GetAssetManager()->GetEnrolledScene(e.GetSceneName());
+			AssetHandle handle{ Application::Instance().GetAssetManager()->GetHandleFromPath(e.GetSceneName()) };
+			std::shared_ptr<Asset_Scene> temp = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(handle);
+			if (temp == nullptr) return false;
+			SetNewScene(temp);
+			return true;
+		});
 }
 
 void EditorLayer::DrawToolBar()
@@ -399,12 +424,12 @@ void EditorLayer::OnSceneStop()
 	m_ActiveScene = m_EditorScene;
 }
 
-void EditorLayer::SetNewScene(std::shared_ptr<Scene> new_scene) {
+void EditorLayer::SetNewScene(std::shared_ptr<Asset_Scene> new_scene) {
 	m_SelectedEntityID = entt::null;
 	if (m_SceneState != SceneState::Edit)
 		OnSceneStop();
 
-	m_EditorScene = new_scene;
+	m_EditorScene = Scene::Copy(new_scene->data);
 	m_EditorScene->ResizeViewport((unsigned)m_ViewportSize.x, (unsigned)m_ViewportSize.y);
 	m_SceneHierarchyPanel.SetScene(m_EditorScene);
 	m_ComponentPanel.SetScene(m_EditorScene);
