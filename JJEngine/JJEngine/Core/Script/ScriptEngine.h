@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "Core/Entity/Entity.hpp"
+#include "Core/Utils/Assert.h"
 
 class Scene;
 
@@ -22,6 +23,29 @@ extern "C" {
 
 namespace Script
 {
+	enum class ScriptFieldType
+	{
+		None = 0,
+		Float, Double,
+		Bool,
+		Char,
+		Byte, Short, Int, Long,
+		UShort, UInt, ULong,
+		Vector2, Vector3, Vector4,
+		Entity,
+	};
+
+	struct ScriptField
+	{
+		ScriptFieldType Type;
+		std::string Name;
+		MonoClassField* ClassField;
+	};
+
+	struct ScriptFieldInstance;
+	using ScriptFieldMap = std::unordered_map<std::string, ScriptFieldInstance>;
+
+
 	class ScriptClass;
 	class ScriptGlue;
 	class ScriptInstance;
@@ -43,6 +67,8 @@ namespace Script
 		static void ReloadAssembly();
 
 		static std::unordered_map<std::string, std::shared_ptr<ScriptClass>> GetEntityClasses();
+		static std::shared_ptr<ScriptClass> GetEntityClass(const std::string& fullName);
+		static ScriptFieldMap& GetScriptFieldMap(Entity entity);
 		static std::shared_ptr<ScriptInstance> GetEntityScriptInstance(UUIDType entityUUID);
 
 		static bool EntityClassExists(const std::string& fullName);
@@ -66,25 +92,6 @@ namespace Script
 		static MonoObject* InstantiateClass(MonoClass* monoClass);
 	};
 
-	enum class ScriptFieldType
-	{
-		None = 0,
-		Float, Double,
-		Bool,
-		Char,
-		Byte, Short, Int, Long,
-		UShort, UInt, ULong,
-		Vector2, Vector3, Vector4,
-		Entity,
-	};
-
-	struct ScriptField
-	{
-		ScriptFieldType Type;
-		std::string Name;
-		MonoClassField* ClassField;
-	};
-
 	class ScriptClass
 	{
 		friend ScriptEngine;
@@ -105,8 +112,42 @@ namespace Script
 		std::map<std::string, ScriptField> m_Fields;
 	};
 
+
+	//script field + data storage
+	struct ScriptFieldInstance
+	{
+		friend class ScriptEngine;
+
+		ScriptField Field;
+
+		ScriptFieldInstance()
+		{
+			memset(m_Buffer, 0, sizeof(m_Buffer));
+		}
+
+		template<typename T>
+		T GetValue()
+		{
+			ENGINE_ASSERT(sizeof(T)<=8, "Too Large!");
+
+			return *(T*)m_Buffer;
+		}
+
+		template<typename T>
+		void SetValue(T value)
+		{
+			ENGINE_ASSERT(sizeof(T) <= 8, "Too Large!");
+
+			memcpy(m_Buffer, &value, sizeof(T));
+		}
+
+	private:
+		uint8_t m_Buffer[8];
+	};
+
 	class ScriptInstance
 	{
+		friend class ScriptEngine;
 	public:
 		ScriptInstance(std::shared_ptr<ScriptClass> scriptClass, Entity entity);
 
@@ -118,6 +159,8 @@ namespace Script
 		template<typename T>
 		T GetFieldValue(const std::string& name)
 		{
+			ENGINE_ASSERT(sizeof(T) <= 8, "Too Large!");
+
 			bool success = GetFieldValueInternal(name, s_FieldValueBuffer);
 			if (!success)
 				return T();
@@ -125,8 +168,10 @@ namespace Script
 		}
 
 		template<typename T>
-		void SetFieldValue(const std::string& name, const T& value)
+		void SetFieldValue(const std::string& name, T value)
 		{
+			ENGINE_ASSERT(sizeof(T) <= 8, "Too Large!");
+
 			SetFieldValueInternal(name, &value);
 		}
 	private:

@@ -276,7 +276,7 @@ void ComponentPanel::DrawComponents(Entity entity)
 		});
 
 
-		DrawComponent<ScriptComponent>("C# Script", entity, [entity](auto& component)
+		DrawComponent<ScriptComponent>("C# Script", entity, [entity, this](auto& component)
 		{
 			bool scriptClassExists = Script::ScriptEngine::EntityClassExists(component.Name);
 
@@ -293,19 +293,66 @@ void ComponentPanel::DrawComponents(Entity entity)
 
 			//fields
 
-			std::shared_ptr<Script::ScriptInstance> scriptInstance = Script::ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
-			if(scriptInstance)
+			//if scene is running
+			auto scene = m_scene.lock();
+			bool sceneRunning = scene->IsRunning();
+			if(sceneRunning)
 			{
-				const auto& fields = scriptInstance->GetScriptClass()->GetFields();
-				for(const auto& [name, field] : fields)
+				std::shared_ptr<Script::ScriptInstance> scriptInstance = Script::ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
+				if (scriptInstance)
 				{
-					if(field.Type==Script::ScriptFieldType::Float)
+					const auto& fields = scriptInstance->GetScriptClass()->GetFields();
+					for (const auto& [name, field] : fields)
 					{
-						float data = scriptInstance->GetFieldValue<float>(name);
-						if(ImGui::DragFloat(name.c_str(), &data))
+						if (field.Type == Script::ScriptFieldType::Float)
 						{
-							scriptInstance->SetFieldValue<float>(name, data);
+							float data = scriptInstance->GetFieldValue<float>(name);
+							if (ImGui::DragFloat(name.c_str(), &data))
+							{
+								scriptInstance->SetFieldValue(name, data);
+							}
 						}
+					}
+				}
+			}
+			else
+			{
+				if(scriptClassExists)
+				{
+					std::shared_ptr<Script::ScriptClass> entityClass = Script::ScriptEngine::GetEntityClass(component.Name);
+					const auto& fields = entityClass->GetFields();
+
+					auto& entityFields = Script::ScriptEngine::GetScriptFieldMap(entity);
+
+					for (const auto& [name, field] : fields)
+					{
+						//field has been set in editor
+						if (entityFields.contains(name))
+						{
+							Script::ScriptFieldInstance& scriptField = entityFields.at(name);
+							//display
+							if (field.Type == Script::ScriptFieldType::Float)
+							{
+								float data = scriptField.GetValue<float>();
+								if (ImGui::DragFloat(name.c_str(), &data))
+									entityFields.at(name).SetValue(data);
+							}
+						}
+						else
+						{
+							//display control to set it maybe
+							if (field.Type == Script::ScriptFieldType::Float)
+							{
+								float data = 0.f;
+								if (ImGui::DragFloat(name.c_str(), &data))
+								{
+									Script::ScriptFieldInstance& fieldInstance = entityFields[name];
+									fieldInstance.Field = field;
+									fieldInstance.SetValue(data);
+								}
+							}
+						}
+
 					}
 				}
 			}
