@@ -26,7 +26,7 @@ namespace Game
         {
             float gravity = 0.3f;
 
-            if (Input.IsPressed(KeyCode.F))
+            if (Input.IsTriggered(KeyCode.F))
             {
                 //just test
                 SceneManager.LoadScene("./Resources/Scenes/endScene.scn");

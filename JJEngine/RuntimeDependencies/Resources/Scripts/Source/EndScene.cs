@@ -11,7 +11,7 @@ namespace Game
     {
         protected override void OnUpdate()
         {
-            if (Input.IsPressed(KeyCode.F))
+            if (Input.IsTriggered(KeyCode.F))
             {
                 //just test
                 SceneManager.LoadScene("./Resources/Scenes/Test.scn");
