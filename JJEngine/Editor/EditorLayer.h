@@ -34,7 +34,9 @@ private:
 	void DrawGuizmo(EditorCamera& camera, Entity entity, int GizmoType);
 	void OnScenePlay();
 	void OnSceneStop();
-	void SetNewScene(std::shared_ptr<Asset_Scene> new_scene);
+	void SetNewSceneEditor(std::shared_ptr<Asset_Scene> new_scene);
+
+	void SetNewSceneRuntime(std::shared_ptr<Asset_Scene> new_scene);
 
 private:
 	enum class SceneState

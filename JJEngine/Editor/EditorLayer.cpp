@@ -46,7 +46,7 @@ void EditorLayer::OnAttach()
 	testScene->Start();
 	std::shared_ptr<Asset_Scene> asset_testScene = std::make_shared<Asset_Scene>();
 	asset_testScene->data = testScene;
-	SetNewScene(asset_testScene);
+	SetNewSceneEditor(asset_testScene);
 
 	m_SceneRenderer = std::make_shared<SceneRenderer>();
 	//todo: make it class
@@ -90,7 +90,7 @@ void EditorLayer::OnUpdate()
 		//TODO: ask save now scene
 		AssetHandle temp = Application::Instance().GetAssetManager()->GetHandleFromPath(shouldOpenFile);
 		Application::Instance().GetAssetManager()->UnloadData(temp);
-		SetNewScene(Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(temp));
+		SetNewSceneEditor(Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(temp));
 	}
 	shouldOpenFile.clear();
 	
@@ -225,7 +225,7 @@ void EditorLayer::OnImGuiRender()
 			openMakeSceneWindow = false;
 			std::shared_ptr<Asset_Scene> temp = std::make_shared<Asset_Scene>();
 			temp->data = std::make_shared<Scene>(newSceneName);
-			SetNewScene(temp);
+			SetNewSceneEditor(temp);
 			SceneSerializer see_real(m_ActiveScene);
 			see_real.Serialize("./Resources/Scenes/" + m_ActiveScene->GetSceneName() + ".scn");
 		}
@@ -311,7 +311,7 @@ void EditorLayer::OnEvent(Event& event)
 			AssetHandle handle{ Application::Instance().GetAssetManager()->GetHandleFromPath(e.GetSceneName()) };
 			std::shared_ptr<Asset_Scene> temp = Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(handle);
 			if (temp == nullptr) return false;
-			SetNewScene(temp);
+			SetNewSceneRuntime(temp);
 			return true;
 		});
 }
@@ -425,7 +425,7 @@ void EditorLayer::OnSceneStop()
 	m_ActiveScene = m_EditorScene;
 }
 
-void EditorLayer::SetNewScene(std::shared_ptr<Asset_Scene> new_scene) {
+void EditorLayer::SetNewSceneEditor(std::shared_ptr<Asset_Scene> new_scene) {
 	m_SelectedEntityID = entt::null;
 	if (m_SceneState != SceneState::Edit)
 		OnSceneStop();
@@ -438,4 +438,14 @@ void EditorLayer::SetNewScene(std::shared_ptr<Asset_Scene> new_scene) {
 	m_ActiveScene = m_EditorScene;
 	m_ActiveScene->Awake();
 	m_ActiveScene->Start();
+}
+
+void EditorLayer::SetNewSceneRuntime(std::shared_ptr<Asset_Scene> new_scene)
+{
+	if (m_ActiveScene != nullptr) m_ActiveScene->StopRuntime();
+
+	m_ActiveScene = Scene::Copy(new_scene->data);
+	m_ActiveScene->Awake();
+	m_ActiveScene->Start();
+	m_ActiveScene->StartRuntime();
 }
