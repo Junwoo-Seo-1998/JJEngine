@@ -76,3 +76,11 @@ Assets:
     Type: 1
     FilePath: ./Resources\Scenes\Test.scn
     IsMemoryOnly: false
+  - Handle: 55505e6d-cc9e-5a57-823d-5612ce4b6a3b
+    Type: 1
+    FilePath: ./Resources\Scenes\unnamed-scene.scn
+    IsMemoryOnly: false
+  - Handle: 0747c045-36ac-5f59-a9d9-40c0cf2cc354
+    Type: 1
+    FilePath: ./Resources\Scenes\3DTst.scn
+    IsMemoryOnly: false

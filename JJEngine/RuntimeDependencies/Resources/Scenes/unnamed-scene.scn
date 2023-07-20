@@ -1,57 +1,97 @@
 Scene: unnamed-scene
 Entities:
-  - Name: No Name
-    UUID: ab2e1f32-9dc5-44ab-8522-27c8365489cc
   - Name: Camera
-    UUID: 96350b43-357e-4b16-8715-54be9217ac6e
-  - Name: No Name
-    UUID: edd7159b-7878-4e8c-8d66-55c72c617d96
-  - Name: No Name
-    UUID: cd84c46b-b665-4987-8b15-ecf86a948c5f
-  - Name: No Name
-    UUID: bb9e392f-7820-445b-84e3-27fd284280f2
-  - Name: No Name
-    UUID: 682d9c3c-248f-4311-b0bf-edbd4d345676
-  - Name: No Name
-    UUID: 89b6f814-80d1-45cd-9687-9b601fd7b06d
-  - Name: No Name
-    UUID: 1521be2d-1b74-4f85-aaa0-9e72be587c3d
+    UUID: 1b186f62-ead4-46b7-974a-6d2af886b73d
+  - Name: Ground
+    UUID: 3e716c42-c4e4-407b-b1db-24a21078deb8
+  - Name: Ground2
+    UUID: f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e
+  - Name: Player
+    UUID: 4c200fdd-0472-46f6-9cf1-2407dd8a5d78
+  - Name: WallMaker
+    UUID: 17e03f0d-3ff4-48be-b7a1-0146b7876e1d
+  - Name: Test light1
+    UUID: d9e431c3-81f4-4acd-970c-631ef69ddff5
 Components:
   Relationship:
-    ab2e1f32-9dc5-44ab-8522-27c8365489cc:
+    1b186f62-ead4-46b7-974a-6d2af886b73d:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    96350b43-357e-4b16-8715-54be9217ac6e:
+    3e716c42-c4e4-407b-b1db-24a21078deb8:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    edd7159b-7878-4e8c-8d66-55c72c617d96:
+    f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    cd84c46b-b665-4987-8b15-ecf86a948c5f:
+    4c200fdd-0472-46f6-9cf1-2407dd8a5d78:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    bb9e392f-7820-445b-84e3-27fd284280f2:
+    17e03f0d-3ff4-48be-b7a1-0146b7876e1d:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-    682d9c3c-248f-4311-b0bf-edbd4d345676:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    89b6f814-80d1-45cd-9687-9b601fd7b06d:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
-    1521be2d-1b74-4f85-aaa0-9e72be587c3d:
+    d9e431c3-81f4-4acd-970c-631ef69ddff5:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
   Transform:
-    ab2e1f32-9dc5-44ab-8522-27c8365489cc:
+    1b186f62-ead4-46b7-974a-6d2af886b73d:
+      Position:
+        - 0
+        - 1.51999998
+        - 7.5
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    3e716c42-c4e4-407b-b1db-24a21078deb8:
+      Position:
+        - 0
+        - -1
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 5
+        - 0.25
+        - 1
+    f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e:
+      Position:
+        - -11.4176693
+        - -0.586803913
+        - 0
+      Rotation:
+        - 0
+        - -0
+        - 0.510159612
+      Scale:
+        - 0.99999994
+        - 0.249999985
+        - 1
+    4c200fdd-0472-46f6-9cf1-2407dd8a5d78:
+      Position:
+        - -2.5
+        - 2.5
+        - 0
+      Rotation:
+        - 0
+        - 0
+        - 0
+      Scale:
+        - 1
+        - 1
+        - 1
+    17e03f0d-3ff4-48be-b7a1-0146b7876e1d:
       Position:
         - 0
         - 0
@@ -64,89 +104,11 @@ Components:
         - 1
         - 1
         - 1
-    96350b43-357e-4b16-8715-54be9217ac6e:
+    d9e431c3-81f4-4acd-970c-631ef69ddff5:
       Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    edd7159b-7878-4e8c-8d66-55c72c617d96:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    cd84c46b-b665-4987-8b15-ecf86a948c5f:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    bb9e392f-7820-445b-84e3-27fd284280f2:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    682d9c3c-248f-4311-b0bf-edbd4d345676:
-      Position:
-        - 2
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    89b6f814-80d1-45cd-9687-9b601fd7b06d:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
-    1521be2d-1b74-4f85-aaa0-9e72be587c3d:
-      Position:
-        - 0
-        - 0
-        - 0
+        - 3
+        - 3
+        - 3
       Rotation:
         - 0
         - 0
@@ -156,37 +118,95 @@ Components:
         - 1
         - 1
   Script:
-    {}
+    1b186f62-ead4-46b7-974a-6d2af886b73d:
+      ScriptName: Game.CameraControl
+    4c200fdd-0472-46f6-9cf1-2407dd8a5d78:
+      ScriptName: Game.Player
+    17e03f0d-3ff4-48be-b7a1-0146b7876e1d:
+      ScriptName: Game.WallMaker
   Sprite:
-    682d9c3c-248f-4311-b0bf-edbd4d345676:
+    3e716c42-c4e4-407b-b1db-24a21078deb8:
       SpriteHandle: 00000000-0000-0000-0000-000000000000
       SpriteColor:
+        - 0.5
+        - 0.25
+        - 0.200000003
         - 1
-        - 1
-        - 1
-        - 1
-    edd7159b-7878-4e8c-8d66-55c72c617d96:
+    f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e:
       SpriteHandle: 00000000-0000-0000-0000-000000000000
+      SpriteColor:
+        - 0.5
+        - 0.25
+        - 0.200000003
+        - 1
+    4c200fdd-0472-46f6-9cf1-2407dd8a5d78:
+      SpriteHandle: d954a28c-3331-5eda-9253-fa3586bf4ca9
       SpriteColor:
         - 1
         - 1
         - 1
         - 1
   Camera:
-    96350b43-357e-4b16-8715-54be9217ac6e:
+    1b186f62-ead4-46b7-974a-6d2af886b73d:
       CameraValues:
         - 0.100000001
         - 0.785398185
-        - 1
+        - 1.72394371
         - 1
         - 1000000
       CameraBools:
-        - false
+        - true
   RigidBody2D:
-    {}
+    3e716c42-c4e4-407b-b1db-24a21078deb8:
+      RigidBody2DType: 0
+      RigidBody2DBool: false
+    f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e:
+      RigidBody2DType: 0
+      RigidBody2DBool: false
   BoxCollider2D:
-    {}
+    3e716c42-c4e4-407b-b1db-24a21078deb8:
+      BoxCollider2D_2DValues:
+        -
+          - 0
+          - 0
+        -
+          - 0.5
+          - 0.5
+      BoxCollider2D_1DValues:
+        - 1
+        - 0.5
+        - 0
+        - 0.5
+    f34097fd-5e7a-48a5-9fcd-8aeec5d94c4e:
+      BoxCollider2D_2DValues:
+        -
+          - 0
+          - 0
+        -
+          - 0.5
+          - 0.5
+      BoxCollider2D_1DValues:
+        - 1
+        - 0.5
+        - 0
+        - 0.5
   Light:
-    {}
+    d9e431c3-81f4-4acd-970c-631ef69ddff5:
+      LightType: 0
+      LightAngleInner: 30
+      LightAngleOuter: 45
+      LightAmbient:
+        - 1
+        - 1
+        - 1
+      LightDiffuse:
+        - 1
+        - 1
+        - 1
+      LightSpecular:
+        - 1
+        - 1
+        - 1
+      LightFalloff: 32
   Mesh:
     {}
