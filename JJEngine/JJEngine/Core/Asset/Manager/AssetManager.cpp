@@ -4,6 +4,7 @@
 #include "Core/Utils/UUIDGenerator.h"
 #include "Core/Asset/Metadata.h"
 
+
 #define ADATA_PATH "./Assets.AData"
 #define RESORCE_PATH "./Resources"
 
@@ -12,6 +13,7 @@
 #define PNG ".png"
 #define JPG ".jpg"
 #define MFDATA ".MFData"
+#define HDR_TEXTURE ".hdr"
 
 // YAML impl
 #define YM_ADATA "ADATA"
@@ -33,6 +35,9 @@ void AssetManager::GenAsset(std::shared_ptr<Asset>& empty_asset, AssetType type)
 		break;
 	case AssetType::Mesh:
 		empty_asset = std::make_shared<Asset_Mesh>();
+		break;
+	case AssetType::HDR_Texture:
+		empty_asset = std::make_shared<Asset_HDRTexture>();
 		break;
 	default:
 		ENGINE_ASSERT(false,"Unexpected Asset type");
@@ -121,6 +126,9 @@ void AssetManager::UpdateAData()
 		}
 		else if (extension == MFDATA) {
 			type = AssetType::Mesh;
+		}
+		else if (extension == HDR_TEXTURE) {
+			type = AssetType::HDR_Texture;
 		}
 		else {
 			continue;

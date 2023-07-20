@@ -7,5 +7,6 @@ enum class AssetType
 	Scene,
 	Texture,
 	Mesh,
+	HDR_Texture,
 	Count
 };

@@ -34,6 +34,11 @@ void GameDataSerializer::Serialize()
 
 void GameDataSerializer::Deserialize()
 {
+	YAML::Emitter out;
+	out << YAML::BeginMap;
+	out << YAML::Key << YM_SCENE;
+	out << YAML::Value << scene->m_scene_name;
+
 }
 
 std::shared_ptr<Asset_Scene> GameDataSerializer::GetStartScene()

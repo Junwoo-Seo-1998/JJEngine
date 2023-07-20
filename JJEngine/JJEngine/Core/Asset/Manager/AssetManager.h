@@ -4,6 +4,7 @@
 #include "Core/Asset/Asset_Texture.h"
 #include "Core/Asset/Asset_Scene.h"
 #include "Core/Asset/Asset_Mesh.h"
+#include "Core/Asset/Asset_HDRTexture.h"
 #include <memory>
 #include <unordered_map>
 #include <map>
@@ -68,7 +69,7 @@ public:
 template<typename t>
 inline std::shared_ptr<t> AssetManager::GetCastedAsset(AssetHandle assetHandle)
 {
-	ASSERT("Not a appropriate type for asset");
+	ENGINE_ASSERT(false, "Not a appropriate type for asset");
 	return std::shared_ptr<t>();
 }
 
@@ -86,7 +87,7 @@ template<>
 inline std::shared_ptr<Asset_Texture> AssetManager::GetCastedAsset(AssetHandle assetHandle)
 {
 	std::shared_ptr<Asset> asset = GetAsset(assetHandle);
-	if (asset->GetAssetType() != AssetType::Texture) ASSERT("Not a appropriate type for asset");
+	ENGINE_ASSERT(asset->GetAssetType() == AssetType::Texture, "Not a appropriate type for asset");
 	return std::dynamic_pointer_cast<Asset_Texture, Asset>(asset);
 }
 
@@ -94,7 +95,7 @@ template<>
 inline std::shared_ptr<Asset_Scene> AssetManager::GetCastedAsset(AssetHandle assetHandle)
 {
 	std::shared_ptr<Asset> asset = GetAsset(assetHandle);
-	if (asset->GetAssetType() != AssetType::Scene) ASSERT("Not a appropriate type for asset");
+	ENGINE_ASSERT(asset->GetAssetType() == AssetType::Scene, "Not a appropriate type for asset");
 	return std::dynamic_pointer_cast<Asset_Scene, Asset>(asset);
 }
 
@@ -102,6 +103,14 @@ template<>
 inline std::shared_ptr<Asset_Mesh> AssetManager::GetCastedAsset(AssetHandle assetHandle)
 {
 	std::shared_ptr<Asset> asset = GetAsset(assetHandle);
-	if (asset->GetAssetType() != AssetType::Mesh) ASSERT("Not a appropriate type for asset");
+	ENGINE_ASSERT(asset->GetAssetType() == AssetType::Mesh, "Not a appropriate type for asset");
 	return std::dynamic_pointer_cast<Asset_Mesh, Asset>(asset);
+}
+
+template<>
+inline std::shared_ptr<Asset_HDRTexture> AssetManager::GetCastedAsset(AssetHandle assetHandle)
+{
+	std::shared_ptr<Asset> asset = GetAsset(assetHandle);
+	ENGINE_ASSERT(asset->GetAssetType() == AssetType::HDR_Texture, "Not a appropriate type for asset");
+	return std::dynamic_pointer_cast<Asset_HDRTexture, Asset>(asset);
 }
