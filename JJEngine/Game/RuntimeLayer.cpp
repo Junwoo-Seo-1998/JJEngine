@@ -28,8 +28,8 @@ void RuntimeLayer::OnDetach()
 void RuntimeLayer::OnStart()
 {
 	m_SceneRenderer = std::make_shared<SceneRenderer>();
-	AssetHandle handle = Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/Scenes/Test.scn");
-	SetNewScene(Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(handle));
+	//AssetHandle handle = Application::Instance().GetAssetManager()->GetHandleFromPath("./Resources/Scenes/Test.scn");
+	//SetNewScene(Application::Instance().GetAssetManager()->GetCastedAsset<Asset_Scene>(handle));
 }
 
 void RuntimeLayer::OnUpdate()
