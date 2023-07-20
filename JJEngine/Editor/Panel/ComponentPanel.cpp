@@ -12,6 +12,7 @@
 #include "Core/Component/RigidBody2DComponent.h"
 #include "Core/Component/ScriptComponent.h"
 #include "Core/Component/SpriteRendererComponent.h"
+#include "Core/Component/CameraComponent.h"
 
 #include "Core/Component/LightComponent.h"
 #include "Core/Component/MaterialComponent.h"
@@ -398,6 +399,11 @@ void ComponentPanel::DrawComponents(Entity entity)
 
 		DrawComponent<LightComponent>("Light", entity, [](auto& component)
 			{
+			});
+
+		DrawComponent<CameraComponent>("Camera", entity, [](auto& component)
+			{
+				ImGui::Checkbox("IsMainCamera", &component.IsMainCamera);
 			});
 
 		//DrawComponent<MaterialComponent>("Material", entity, [](auto& component)

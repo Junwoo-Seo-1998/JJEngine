@@ -1,33 +1,20 @@
 Scene: unnamed-scene
 Entities:
-  - Name: Camera
-    UUID: ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3
   - Name: GameOver
     UUID: d0c2e26f-1b4a-4cea-8fd2-84975c00fe38
+  - Name: Camera
+    UUID: ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3
 Components:
   Relationship:
-    ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3:
-      Parent: 00000000-0000-0000-0000-000000000000
-      Children:
-        []
     d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
       Parent: 00000000-0000-0000-0000-000000000000
       Children:
         []
-  Transform:
     ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3:
-      Position:
-        - 0
-        - 0
-        - 0
-      Rotation:
-        - 0
-        - 0
-        - 0
-      Scale:
-        - 1
-        - 1
-        - 1
+      Parent: 00000000-0000-0000-0000-000000000000
+      Children:
+        []
+  Transform:
     d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
       Position:
         - 0
@@ -40,6 +27,19 @@ Components:
       Scale:
         - 16
         - 9
+        - 1
+    ec2e8659-6eb1-4e01-bc4a-a2d03a19eda3:
+      Position:
+        - 0
+        - 0
+        - 9.40830708
+      Rotation:
+        - 0
+        - -0
+        - 0
+      Scale:
+        - 1
+        - 1
         - 1
   Script:
     d0c2e26f-1b4a-4cea-8fd2-84975c00fe38:
@@ -57,11 +57,11 @@ Components:
       CameraValues:
         - 0.100000001
         - 0.785398185
-        - 1
+        - 1.72394371
         - 1
         - 1000000
       CameraBools:
-        - false
+        - true
   RigidBody2D:
     {}
   BoxCollider2D:

@@ -80,7 +80,7 @@ static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, ent
 std::shared_ptr<Scene> Scene::Copy(std::shared_ptr<Scene> toCopy)
 {
 	std::shared_ptr<Scene> newScene = std::make_shared<Scene>(toCopy->GetSceneName());
-
+	newScene->SetScenePath(toCopy->GetScenePath());
 	newScene->ResizeViewport(toCopy->m_ViewportWidth, toCopy->m_ViewportHeight);
 
 	auto& toCopyReg = toCopy->GetRegistry();
