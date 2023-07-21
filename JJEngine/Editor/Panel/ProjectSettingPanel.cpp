@@ -34,6 +34,7 @@ void ProjectSettingPanel::OnImGuiRender()
 			ImGui::Text("Start scene: ");
 			ImGui::SameLine();
 			static unsigned curr_item_idx_startScene{};
+			nitem = 0;
 			for (auto& h : scenes) {
 				if (curr_item_idx_startScene == nitem) {
 					startScene = h;
@@ -83,10 +84,10 @@ void ProjectSettingPanel::OnImGuiRender()
 			projectScenes.erase(d);
 		}
 
-		nitem = 0;
 		static unsigned curr_item_idx{};
 		std::string currPath{"None"};
 		AssetHandle currhandle{};
+		nitem = 0;
 		for (auto& h : scenes) {
 			if (curr_item_idx == nitem + 1) {
 				currPath = items[nitem];

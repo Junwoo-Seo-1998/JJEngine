@@ -256,7 +256,7 @@ void SceneRenderer::Init()
 		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.frag"} }
 			});
 
-		m_DefaultHDRICubemapTexture = Texture::CreateTexture(File::ReadHDRImageToTexture("Resources/Textures/hdri_skybox.png"));
+		m_DefaultHDRICubemapTexture = Texture::CreateTexture(File::ReadHDRImageToTexture("Resources/Textures/hdri_skybox.hdr"));
 
 		m_CubeMapMesh = MeshFactory::CreateSkyCube({ 2.f, 2.f, 2.f });
 
