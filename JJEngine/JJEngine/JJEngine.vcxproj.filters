@@ -86,6 +86,9 @@
     <ClInclude Include="Core\Component\Components.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Component\EnvironmentComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Component\LightComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -406,6 +409,5 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
-    <ClCompile Include="Core\Component\EnvironmentComponent.h" />
   </ItemGroup>
 </Project>

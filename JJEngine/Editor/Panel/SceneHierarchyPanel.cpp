@@ -7,6 +7,7 @@
 #include "Core/Utils/Log.h"
 #include "Core/Utils/Assert.h"
 #include "Core/Component/CameraComponent.h"
+#include <Core/Component/EnvironmentComponent.h>
 
 SceneHierarchyPanel::SceneHierarchyPanel(PanelMessenger& mg) : messenger(mg)
 {
@@ -88,6 +89,10 @@ void SceneHierarchyPanel::OnImGuiRender()
 			if (ImGui::MenuItem("Create Camera") == true) {
 				Entity entity = scene->CreateEntity("Camera");
 				entity.AddComponent<CameraComponent>();
+			}
+			if (ImGui::MenuItem("Create Environment") == true) {
+				Entity entity = scene->CreateEntity("Environment");
+				entity.AddComponent<EnvironmentComponent>();
 			}
 			ImGui::EndMenu();
 		}

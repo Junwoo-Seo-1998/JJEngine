@@ -13,6 +13,7 @@
 #include "Core/Component/ScriptComponent.h"
 #include "Core/Component/SpriteRendererComponent.h"
 #include "Core/Component/CameraComponent.h"
+#include "Core/Component/EnvironmentComponent.h"
 
 #include "Core/Component/LightComponent.h"
 #include "Core/Component/MaterialComponent.h"
@@ -396,6 +397,40 @@ void ComponentPanel::DrawComponents(Entity entity)
 			}
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 		});
+
+		DrawComponent<EnvironmentComponent>("Environment Renderer", entity, [](auto& component)
+			{
+				std::unordered_set<AssetHandle> handles = Application::Instance().GetAssetManager()->GetAllAssetsWithType(AssetType::HDR_Texture);
+				unsigned Asize{ static_cast<unsigned>(handles.size()) };
+				std::vector < std::string > items(Asize);
+				AssetHandle currHandle = component.EnvTextureHandle;
+				unsigned nitem = 0;
+				static int item_current_idx = 0;
+				for (auto& h : handles) {
+					if (currHandle == h) item_current_idx = nitem;
+					items[nitem] = Application::Instance().GetAssetManager()->GetMetadata(h)->path.string();
+					++nitem;
+				}
+				const char* combo_preview_value = currHandle == AssetHandle{} ? "None" : items[item_current_idx].c_str();
+				if (ImGui::BeginCombo("HDR Texture", combo_preview_value))
+				{
+					nitem = 0;
+					for (auto& h : handles)
+					{
+						const bool is_selected = (item_current_idx == nitem);
+						if (ImGui::Selectable(items[nitem].c_str(), is_selected)) {
+							component.EnvTextureHandle = h;// Application::Instance().GetAssetManager()->GetCastedAsset<Asset_HDRTexture>(h);
+							item_current_idx = nitem;
+						}
+
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();
+
+						++nitem;
+					}
+					ImGui::EndCombo();
+				}
+			});
 
 		DrawComponent<LightComponent>("Light", entity, [](auto& component)
 			{

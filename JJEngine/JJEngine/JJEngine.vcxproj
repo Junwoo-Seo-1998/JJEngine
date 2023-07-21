@@ -115,6 +115,7 @@
     <ClInclude Include="Core\Component\BoxCollider2DComponent.h" />
     <ClInclude Include="Core\Component\CameraComponent.h" />
     <ClInclude Include="Core\Component\Components.h" />
+    <ClInclude Include="Core\Component\EnvironmentComponent.h" />
     <ClInclude Include="Core\Component\LightComponent.h" />
     <ClInclude Include="Core\Component\MaterialComponent.h" />
     <ClInclude Include="Core\Component\MeshComponent.h" />
@@ -189,7 +190,6 @@
     <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\Command\CommandQueue.cpp" />
     <ClCompile Include="Core\Component\CameraComponent.cpp" />
-    <ClCompile Include="Core\Component\EnvironmentComponent.h" />
     <ClCompile Include="Core\Component\MaterialComponent.cpp" />
     <ClCompile Include="Core\Component\TransformComponent.cpp" />
     <ClCompile Include="Core\Entity\Entity.cpp" />
