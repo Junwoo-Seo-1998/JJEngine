@@ -21,6 +21,7 @@
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
 #include "imgui.h"
+#include "Core/Component/EnvironmentComponent.h"
 
 SceneRenderer::SceneRenderer()
 {
@@ -85,6 +86,20 @@ void SceneRenderer::BeginScene(const glm::mat4& view, const glm::mat4& Projectio
 		if (m_ActiveLights.empty())
 		{
 			EngineLog::Warn("There is no light");
+		}
+	}
+
+	//Set Env
+	{
+		auto view = m_ActiveScene->GetRegistry().view<EnvironmentComponent>();
+		if (view.size() == 0)
+		{
+			//use default
+			m_SceneEnv = uuids::uuid();
+		}
+		else
+		{
+			m_SceneEnv = view.get<EnvironmentComponent>(view[0]).EnvTextureHandle;
 		}
 	}
 }

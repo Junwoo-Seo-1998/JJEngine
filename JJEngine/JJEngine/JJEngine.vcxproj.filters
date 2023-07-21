@@ -406,5 +406,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Core\Component\EnvironmentComponent.h" />
   </ItemGroup>
 </Project>
