@@ -3,7 +3,7 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{FA0C0005-666E-DD12-EFDB-23C55B3C14D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -13,33 +13,33 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Win64|x64' ">
     <PlatformTarget>x64</PlatformTarget>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
-    <BaseIntermediateOutputPath>Intermediates\Debug\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>Intermediates\Win64\Debug\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
     <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Win64|x64' ">
     <PlatformTarget>x64</PlatformTarget>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <Optimize>true</Optimize>
     <OutputPath>..\RuntimeDependencies\Resources\Scripts\</OutputPath>
-    <BaseIntermediateOutputPath>Intermediates\Release\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>Intermediates\Win64\Release\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
     <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Win64|x64' ">
   </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+  <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Win64|x64' ">
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JJEngine\Core\Components.cs" />

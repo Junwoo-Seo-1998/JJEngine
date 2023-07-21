@@ -6,6 +6,7 @@
 #include "BoxCollider2DComponent.h"
 #include "MeshComponent.h"
 #include "CameraComponent.h"
+#include "EnvironmentComponent.h"
 #include "LightComponent.h"
 template<typename ... Comp>
 struct ComponentGroup
@@ -23,5 +24,6 @@ ComponentGroup
 	RigidBody2DComponent,
 	BoxCollider2DComponent,
 	LightComponent,
-	MeshComponent
+	MeshComponent,
+	EnvironmentComponent
 >;

@@ -8,6 +8,10 @@ Assets:
     Type: 1
     FilePath: ./Resources\Scenes\testScene22.scn
     IsMemoryOnly: false
+  - Handle: c421459e-9231-5e24-bc89-c5beb9a783a1
+    Type: 4
+    FilePath: ./Resources\Textures\hdri_skybox.hdr
+    IsMemoryOnly: false
   - Handle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
     Type: 3
     FilePath: ./Resources\MeshFactoryDatas\Box.MFData
@@ -80,7 +84,7 @@ Assets:
     Type: 1
     FilePath: ./Resources\Scenes\3DTst.scn
     IsMemoryOnly: false
-  - Handle: 024a47d8-b094-5c6a-998e-d2f7e2659a03
+  - Handle: 822cb0f0-6db2-5001-9d5b-795aaec816ba
     Type: 4
-    FilePath: ./Resources\Textures\hdri_skybox.hdr
+    FilePath: ./Resources\Textures\PureSky.hdr
     IsMemoryOnly: false

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+#include "Core/Asset/Asset.h"
 #include "Core/Graphics/Light.h"
 #include "Core/Graphics/Mesh.h"
 #include "glm/glm.hpp"
@@ -46,7 +47,7 @@ public:
 private:
 	void Init();
 
-	void BakeCubeMap();
+	void BakeCubeMap(bool force = false);
 
 	void BakeShadow();
 
@@ -116,6 +117,8 @@ private:
 	std::shared_ptr<Mesh> m_CubeMapMesh;
 	std::shared_ptr<Texture> m_DefaultHDRICubemapTexture;
 	std::shared_ptr<RenderPass> m_BakeCubeMapRenderPass;
+	AssetHandle m_SceneEnv;
+	AssetHandle m_PrevEnv;
 
 	//shadow
 	std::shared_ptr<Shader> m_BakeShadowShader;
