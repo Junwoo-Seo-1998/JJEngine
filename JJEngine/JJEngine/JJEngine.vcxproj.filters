@@ -55,6 +55,9 @@
     <ClInclude Include="Core\Asset\AssetType.h">
       <Filter>Asset</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Asset\Asset_HDRTexture.h">
+      <Filter>Asset</Filter>
+    </ClInclude>
     <ClInclude Include="Core\Asset\Asset_Mesh.h">
       <Filter>Asset</Filter>
     </ClInclude>
@@ -263,6 +266,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Asset\Asset_HDRTexture.cpp">
+      <Filter>Asset</Filter>
+    </ClCompile>
     <ClCompile Include="Core\Asset\Asset_Mesh.cpp">
       <Filter>Asset</Filter>
     </ClCompile>

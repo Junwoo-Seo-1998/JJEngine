@@ -1,24 +1,24 @@
 ADATA: All engine resorce assets
 Assets:
-  - Handle: adfc2d32-60ac-568d-b923-a53698c7ab70
+  - Handle: 415e89cd-71f4-50c0-9716-cf0c6662cae5
+    Type: 2
+    FilePath: ./Resources\Textures\TestDiff.png
+    IsMemoryOnly: false
+  - Handle: acf97a73-97e8-51c0-981f-027a69ae0965
     Type: 1
-    FilePath: ./Resources\Scenes\Default tt.scn
+    FilePath: ./Resources\Scenes\testScene22.scn
+    IsMemoryOnly: false
+  - Handle: c421459e-9231-5e24-bc89-c5beb9a783a1
+    Type: 4
+    FilePath: ./Resources\Textures\hdri_skybox.hdr
     IsMemoryOnly: false
   - Handle: 712a2f4c-72f8-5f28-a3eb-fe0a16236a2d
     Type: 3
     FilePath: ./Resources\MeshFactoryDatas\Box.MFData
     IsMemoryOnly: false
-  - Handle: 415e89cd-71f4-50c0-9716-cf0c6662cae5
-    Type: 2
-    FilePath: ./Resources\Textures\TestDiff.png
-    IsMemoryOnly: false
-  - Handle: 67ecaac6-797a-5325-a086-24adcc7d9380
-    Type: 2
-    FilePath: ./Resources\Textures\hdri_skybox.png
-    IsMemoryOnly: false
-  - Handle: acf97a73-97e8-51c0-981f-027a69ae0965
+  - Handle: adfc2d32-60ac-568d-b923-a53698c7ab70
     Type: 1
-    FilePath: ./Resources\Scenes\testScene22.scn
+    FilePath: ./Resources\Scenes\Default tt.scn
     IsMemoryOnly: false
   - Handle: 3e1688ac-d1b1-56ea-b3b3-fb4ead56dd7d
     Type: 1
@@ -83,4 +83,8 @@ Assets:
   - Handle: 0747c045-36ac-5f59-a9d9-40c0cf2cc354
     Type: 1
     FilePath: ./Resources\Scenes\3DTst.scn
+    IsMemoryOnly: false
+  - Handle: 822cb0f0-6db2-5001-9d5b-795aaec816ba
+    Type: 4
+    FilePath: ./Resources\Textures\PureSky.hdr
     IsMemoryOnly: false

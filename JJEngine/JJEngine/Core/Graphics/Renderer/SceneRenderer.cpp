@@ -15,6 +15,8 @@
 #include "Core/Graphics/Material.h"
 #include "Core/Graphics/RenderCommand.h"
 
+#include "Core/Asset/Manager/AssetManager.h"
+
 #include "Core/Utils/Assert.h"
 #include "Core/Utils/File.h"
 #include "Core/Utils/Math/MatrixMath.h"
@@ -104,11 +106,12 @@ void SceneRenderer::EndScene()
 	//ForwardPass();
 
 	ShadowPass();
-
-	CubemapPass();
+	
 	//post processing
 	if (m_RenderFlags & Bloom)
 		BloomPass();
+
+	CubemapPass();
 
 	if (m_RenderFlags & HDR)
 		HDRPass();
@@ -256,7 +259,7 @@ void SceneRenderer::Init()
 		{ ShaderType::FragmentShader,{"Resources/Shaders/version.glsl","Resources/Shaders/CubemapShader.frag"} }
 			});
 
-		m_DefaultHDRICubemapTexture = Texture::CreateTexture(File::ReadHDRImageToTexture("Resources/Textures/hdri_skybox.png"));
+		m_DefaultHDRICubemapTexture = Texture::CreateTexture(File::ReadHDRImageToTexture("Resources/Textures/PureSky.hdr"));
 
 		m_CubeMapMesh = MeshFactory::CreateSkyCube({ 2.f, 2.f, 2.f });
 
@@ -269,6 +272,10 @@ void SceneRenderer::Init()
 		fb_spec.Formats = { FrameBufferFormat::CubeMap16F, FrameBufferFormat::Depth };
 		spec.TargetFramebuffer = FrameBuffer::CreateFrameBuffer(fb_spec);
 		m_BakeCubeMapRenderPass = RenderPass::Create(spec);
+
+		//pre bake
+		Renderer::Submit([this]() {m_VertexArray->Bind(); });
+		BakeCubeMap(true);
 	}
 
 	{
@@ -276,8 +283,20 @@ void SceneRenderer::Init()
 	}
 }
 
-void SceneRenderer::BakeCubeMap()
+void SceneRenderer::BakeCubeMap(bool force)
 {
+	if (!force)
+	{
+		if (m_SceneEnv != m_PrevEnv)
+		{
+			m_PrevEnv = m_SceneEnv;
+		}
+		else
+		{
+			//skip baking
+			return;
+		}
+	}
 
 	Renderer::Submit([this]()
 		{
@@ -301,7 +320,16 @@ void SceneRenderer::BakeCubeMap()
 			Renderer::BeginRenderPass(m_BakeCubeMapRenderPass, true);
 			m_BakeCubeMapShader->Use();
 			m_BakeCubeMapShader->SetMat4("projection", captureProjection);
-			m_DefaultHDRICubemapTexture->BindTexture(0);
+
+			if(m_SceneEnv.is_nil())
+			{
+				m_DefaultHDRICubemapTexture->BindTexture(0);
+			}
+			else
+			{
+				Application::Instance().GetAssetManager()->GetCastedAsset<Asset_HDRTexture>(m_SceneEnv)->data->BindTexture(0);
+			}
+
 			m_BakeCubeMapShader->SetInt("equirectangularMap", 0);
 			for (unsigned int i = 0; i < 6; ++i)
 			{
